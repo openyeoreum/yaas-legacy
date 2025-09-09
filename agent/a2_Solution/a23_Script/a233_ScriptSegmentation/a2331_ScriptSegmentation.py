@@ -105,31 +105,15 @@ class ScriptLoadProcess:
 
         return [Inputs], [""]
 
-    ## InputList 생성 ##
-    def _CreateInputList(self):
-        """InputList를 생성하는 메서드"""
-        # Inputs 생성
-        Inputs, ComparisonInputs = self._CreateProcessInfoToInputs()
-
-        # InputList 생성 및 리턴
-        InputList = []
-        for i, Input in enumerate(Inputs):
-            InputList.append(
-                {
-                    "Id": i + 1,
-                    "Input": Input,
-                    "ComparisonInput": ComparisonInputs[i]
-                }
-            )
-            
-        return InputList
+    ## Output을 통한 ... ##
+    def _CreateOutput(self):
+        return None
 
     ## ScriptLoadProcess 실행 메서드 ##
     def Run(self):
         """스크립트 로드 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        InputList = self._CreateInputList()
-        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._CreateProcessInfoToInputs(), self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutpitFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit, self.FileExtension, self.UploadedScriptFilePath, self.UploadScriptFilePath
@@ -299,31 +283,15 @@ class PDFMainLangCheckProcess:
 
         return [Inputs], [""]
 
-    ## InputList 생성 ##
-    def _CreateInputList(self):
-        """InputList를 생성하는 메서드"""
-        # Inputs 생성
-        Inputs, ComparisonInputs = self._CreateLabeledSamplePathToInputs()
-
-        # InputList 생성 및 리턴
-        InputList = []
-        for i, Input in enumerate(Inputs):
-            InputList.append(
-                {
-                    "Id": i + 1,
-                    "Input": Input,
-                    "ComparisonInput": ComparisonInputs[i]
-                }
-            )
-            
-        return InputList
+    ## Output을 통한 ... ##
+    def _CreateOutput(self):
+        return None
 
     ## PDFMainLangCheckProcess 실행 ##
     def Run(self):
         """PDF 언어 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        InputList = self._CreateInputList()
-        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._CreateLabeledSamplePathToInputs(), self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutpitFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         # MainLang 추출
@@ -387,31 +355,15 @@ class PDFLayoutCheckProcess:
 
         return [Inputs], [""]
 
-    ## InputList 생성 ##
-    def _CreateInputList(self):
-        """InputList를 생성하는 메서드"""
-        # Inputs 생성
-        Inputs, ComparisonInputs = self._LoadPDFToLabeledSampleJPEGToInputs()
+    ## Output을 통한 ... ##
+    def _CreateOutput(self):
+        return None
 
-        # InputList 생성 및 리턴
-        InputList = []
-        for i, Input in enumerate(Inputs):
-            InputList.append(
-                {
-                    "Id": i + 1,
-                    "Input": Input,
-                    "ComparisonInput": ComparisonInputs[i]
-                }
-            )
-            
-        return InputList
-    
     ## PDFLayoutCheckProcess 실행 ##
     def Run(self):
         """PDF 인쇄 파일 형식인 단면, 양면 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        InputList = self._CreateInputList()
-        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._LoadPDFToLabeledSampleJPEGToInputs(), self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutpitFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -483,9 +435,10 @@ class PDFResizeProcess:
             NumberFont = ImageFont.load_default()
 
         # 공통 스타일
+        self.IntervalRatio = 0.03  # 간격 비율 (전체 크기에 대한 비율)
         LineWidth          = max(1, int(2 * Scale))
-        IntervalY          = max(1, int(BaseImg.height * 0.03))
-        IntervalX          = max(1, int(BaseImg.width  * 0.03))
+        IntervalY          = max(1, int(BaseImg.height * self.IntervalRatio))
+        IntervalX          = max(1, int(BaseImg.width  * self.IntervalRatio))
         NumberPad          = int(3 * Scale)
         NumberBaselineLift = int(2 * Scale)
         RoundedRadius      = max(2, int(6 * Scale))
@@ -743,31 +696,65 @@ class PDFResizeProcess:
 
         return Inputs, ComparisonInputs
 
-    ## InputList 생성 ##
-    def _CreateInputList(self):
-        """InputList를 생성하는 메서드"""
-        # Inputs 생성
-        Inputs, ComparisonInputs = self._CreateTrimLineJPEGToInputs()
+    ## Output을 통한 PDF 재단 ##
+    def _CreateOutputToPDFCrop(self, SolutionEditProcess):
+        """Response 결과에 따른 PDF를 재단"""
+        # SolutionEditProcess값 중 가장 빈도가 높은 값 구하기
+        LeftNumberList = []
+        RightNumberList = []
+        UpNumberList = []
+        DownNumberList = []
+        for SolutionEditProcessDic in SolutionEditProcess:
+            for SolutionEditProcessDicItem in SolutionEditProcessDic:
+                CropLineDirection = SolutionEditProcessDicItem['CropLineDirection']
+                if CropLineDirection == 'Left':
+                    LeftNumberList.append(SolutionEditProcessDicItem["BodyCropLineNumber"])
+                elif CropLineDirection == 'Right':
+                    RightNumberList.append(SolutionEditProcessDicItem["BodyCropLineNumber"])
+                elif CropLineDirection == 'Up':
+                    UpNumberList.append(SolutionEditProcessDicItem["BodyCropLineNumber"])
+                elif CropLineDirection == 'Down':
+                    DownNumberList.append(SolutionEditProcessDicItem["BodyCropLineNumber"])
 
-        # InputList 생성 및 리턴
-        InputList = []
-        for i, Input in enumerate(Inputs):
-            InputList.append(
-                {
-                    "Id": i + 1,
-                    "Input": Input,
-                    "ComparisonInput": ComparisonInputs[i]
-                }
-            )
-            
-        return InputList
+        LeftNumber = max(set(LeftNumberList), key=LeftNumberList.count)
+        RightNumber = max(set(RightNumberList), key=RightNumberList.count)
+        UpNumber = max(set(UpNumberList), key=UpNumberList.count)
+        DownNumber = max(set(DownNumberList), key=DownNumberList.count)
+
+        # PDF 재단
+        PdfDocument = fitz.open(self.UploadedScriptFilePath)
+        for PdfPage in PdfDocument:
+            rect = PdfPage.rect
+            w, h = rect.width, rect.height
+
+            dx = w * self.IntervalRatio
+            dy = h * self.IntervalRatio
+
+            left = rect.x0 + (LeftNumber * dx)
+            right = rect.x1 - (RightNumber * dx)
+            top = rect.y0 + (UpNumber * dy)
+            bottom = rect.y1 - (DownNumber * dy)
+
+            # 좌표 유효성 보정 (경계 안쪽으로 클램프)
+            left = max(rect.x0, min(left, rect.x1))
+            right = max(rect.x0, min(right, rect.x1))
+            top = max(rect.y0, min(top, rect.y1))
+            bottom = max(rect.y0, min(bottom, rect.y1))
+            CropRect = fitz.Rect(left, top, right, bottom)
+
+            # 항상 적용
+            PdfPage.set_cropbox(CropRect)
+            PdfPage.set_mediabox(CropRect)
+
+        # 같은 경로에 덮어쓰기 저장
+        PdfDocument.save(self.UploadedScriptFilePath, garbage=4, deflate=True)
+        PdfDocument.close()
 
     ## PDFResizeProcess 실행 ##
     def Run(self):
         """PDF 가로 재단 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        InputList = self._CreateInputList()
-        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._CreateTrimLineJPEGToInputs(), self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutpitFunc = self._CreateOutputToPDFCrop(), MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -790,6 +777,9 @@ class PDFSplitProcess:
         self.AutoTemplate = AutoTemplate
         self.MainLang = MainLang
         self.ResponseMethod = ResponseMethod
+        self.EditMode = "Auto"
+        if self.ResponseMethod == "Manual":
+            self.EditMode = self.ResponseMethod
         self.UploadedScriptFilePath = UploadedScriptFilePath
         
         # Process 설정
@@ -842,31 +832,15 @@ class PDFSplitProcess:
 
         return Inputs, ComparisonInputs
 
-    ## InputList 생성 ##
-    def _CreateInputList(self):
-        """InputList를 생성하는 메서드"""
-        # Inputs 생성
-        Inputs, ComparisonInputs = self._SplitPDFToInputs()
-
-        # InputList 생성 및 리턴
-        InputList = []
-        for i, Input in enumerate(Inputs):
-            InputList.append(
-                {
-                    "Id": i + 1,
-                    "Input": Input,
-                    "ComparisonInput": ComparisonInputs[i]
-                }
-            )
-
-        return InputList
+    ## Output을 통한 ... ##
+    def _CreateOutput(self):
+        return None
 
     ## PDFSplitProcess 실행 ##
     def Run(self):
         """PDF 분할 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        InputList = self._CreateInputList()
-        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._SplitPDFToInputs(), self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutpitFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -889,6 +863,9 @@ class PDFFormCheckProcess:
         self.AutoTemplate = AutoTemplate
         self.MainLang = MainLang
         self.ResponseMethod = ResponseMethod
+        self.EditMode = "Auto"
+        if self.ResponseMethod == "Manual":
+            self.EditMode = self.ResponseMethod
         self.Model = Model
         self.UploadedScriptFilePath = UploadedScriptFilePath
 
@@ -1018,31 +995,15 @@ class PDFFormCheckProcess:
 
         return Inputs, ComparisonInputs
 
-    ## InputList 생성 ##
-    def _CreateInputList(self):
-        """InputList를 생성하는 메서드"""
-        # Inputs 생성
-        Inputs, ComparisonInputs = self._CreateLabeledJPEGsToInputs()
-
-        # InputList 생성 및 리턴
-        InputList = []
-        for i, Input in enumerate(Inputs):
-            InputList.append(
-                {
-                    "Id": i + 1,
-                    "Input": Input,
-                    "ComparisonInput": ComparisonInputs[i]
-                }
-            )
-
-        return InputList
+    ## Output을 통한 ... ##
+    def _CreateOutput(self):
+        return None
 
     ## PDFFormCheckProcess 실행 ##
     def Run(self):
         """PDF 페이지 형식 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        InputList = self._CreateInputList()
-        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._CreateLabeledJPEGsToInputs(), self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutpitFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -1070,6 +1031,9 @@ class TXTMainLangCheckProcess:
         self.NextSolution = NextSolution
         self.Model = Model
         self.ResponseMethod = ResponseMethod
+        self.EditMode = "Auto"
+        if self.ResponseMethod == "Manual":
+            self.EditMode = self.ResponseMethod
         self.UploadedScriptFilePath = UploadedScriptFilePath
 
         # Process 설정
@@ -1081,7 +1045,7 @@ class TXTMainLangCheckProcess:
         self.MessagesReview = MessagesReview
 
     ## TXT 샘플 생성 ##
-    def _CreateTXTToSampleText(self):
+    def _CreateTXTToSampleTextToInputs(self):
         """텍스트 파일에서 3개의 샘플 텍스트를 추출하여 하나의 문자열로 반환하는 메서드"""
         # 업로드된 스크립트 파일 읽기
         with open(self.UploadedScriptFilePath, 'r', encoding = 'utf-8') as f:
@@ -1133,31 +1097,15 @@ class TXTMainLangCheckProcess:
 
         return [Inputs], [""]
 
-    ## InputList 생성 ##
-    def _CreateInputList(self):
-        """InputList를 생성하는 메서드"""
-        # Inputs 생성
-        Inputs, ComparisonInputs = self._CreateTXTToSampleText()
-
-        # InputList 생성 및 리턴
-        InputList = []
-        for i, Input in enumerate(Inputs):
-            InputList.append(
-                {
-                    "Id": i + 1,
-                    "Input": Input,
-                    "ComparisonInput": ComparisonInputs[i]
-                }
-            )
-
-        return InputList
+    ## Output을 통한 ... ##
+    def _CreateOutput(self):
+        return None
 
     ## TXTMainLangCheckProcess 실행 ##
     def Run(self):
         """TXT 언어 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        InputList = self._CreateInputList()
-        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._CreateTXTToSampleTextToInputs(), self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutpitFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         # MainLang 추출
@@ -1183,6 +1131,9 @@ class TXTSplitProcess:
         self.AutoTemplate = AutoTemplate
         self.MainLang = MainLang
         self.ResponseMethod = ResponseMethod
+        self.EditMode = "Auto"
+        if self.ResponseMethod == "Manual":
+            self.EditMode = self.ResponseMethod
         self.UploadedScriptFilePath = UploadedScriptFilePath
         
         # Process 설정
@@ -1313,31 +1264,15 @@ class TXTSplitProcess:
 
         return Inputs, ComparisonInputs
 
-    ## InputList 생성 ##
-    def _CreateInputList(self):
-        """InputList를 생성하는 메서드"""
-        # Inputs 생성
-        Inputs, ComparisonInputs = self._SplitTXTToInputs()
-        
-        # InputList 생성 및 리턴
-        InputList = []
-        for i, Input in enumerate(Inputs):
-            InputList.append(
-                {
-                    "Id": i + 1,
-                    "Input": Input,
-                    "ComparisonInput": ComparisonInputs[i]
-                }
-            )
-
-        return InputList
+    ## Output을 통한 ... ##
+    def _CreateOutput(self):
+        return None
 
     ## TXTSplitProcess 실행 ##
     def Run(self):
         """TXT 분할 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        InputList = self._CreateInputList()
-        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._SplitTXTToInputs(), self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutpitFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit

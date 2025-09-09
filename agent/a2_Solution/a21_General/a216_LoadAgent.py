@@ -22,7 +22,7 @@ class LoadAgent:
     PromptDataPath = "/yaas/agent/a5_Database/a54_PromptData"
 
     ## LoadAgent 초기화 ##
-    def __init__(self, InputList, Email, ProjectName, Solution, ProcessNumber, ProcessName, MainLang = "ko", Model = "OpenAI", ResponseMethod = "Prompt", MessagesReview = "off", SubSolution = None, NextSolution = None, EditMode = "Auto", AutoTemplate = "on", OutputsPerInput = 1, InputCountKey = None, IgnoreCountCheck = False, FilterPass = False):
+    def __init__(self, InputListFunc, Email, ProjectName, Solution, ProcessNumber, ProcessName, MainLang = "ko", Model = "OpenAI", ResponseMethod = "Prompt", OutputFunc = None, MessagesReview = "off", SubSolution = None, NextSolution = None, EditMode = "Auto", AutoTemplate = "on", OutputsPerInput = 1, InputCountKey = None, IgnoreCountCheck = False, FilterPass = False):
         """클래스 초기화"""
         # Process 설정
         self.Email = Email
@@ -76,18 +76,49 @@ class LoadAgent:
 
         # InputList 설정
         self.CheckCount = 0
-        self.InputList = InputList
+        self.InputListFunc = InputListFunc
+        self.InputList = self._CreateInputList()
         self.TotalInputCount = len(self.InputList)
 
         # InputCount 및 DataFrameCompletion 설정
         self.InputCount, self.DataFrameCompletion = self._ProcessDataFrameCheck()
 
-        # EditCheck 및 EditCompletion 설정
+        # EditCheck 및 EditResponseCompletion 설정
         self.OutputsPerInput = OutputsPerInput # 출력 배수 설정 (하나의 인풋으로 몇개의 아웃풋이 출력되는지 확인)
         self.InputCountKey = InputCountKey # 입력 수의 기준키 설정 (InputCount의 수가 단순 데이터 리스트의 총 개수랑 맞지 않는 경우)
         self.IgnoreCountCheck = IgnoreCountCheck # 입력 수 체크 안함 (입력의 카운트가 의미가 없는 경우 예시로 IndexDefine 등)
         self.FilterPass = FilterPass # 핃터 오류 3회가 넘어가는 경우 그냥 패스 (에러의 수준이 글자 1000자 중 1자 수준으로 매우 작으나, Response 오류 회수가 너무 빈번한 경우 예시로 TranslationProofreading 등)
-        self.EditCheck, self.EditCompletion = self._SolutionEditCheck(OutputsPerInput, InputCountKey, IgnoreCountCheck)
+        self.EditCheck, self.EditResponseCompletion, self.EditOutputCompletion = self._SolutionEditCheck(OutputsPerInput, InputCountKey, IgnoreCountCheck)
+
+        # Output 설정
+        self.OutputFunc = OutputFunc
+
+    ## InputList 생성 메서드 ##
+    def _CreateInputList(self):
+        """InputList를 생성하는 메서드"""
+        # Inputs 생성
+        Inputs, ComparisonInputs = self.InputListFunc()
+
+        # InputList 생성 및 리턴
+        InputList = []
+        for i, Input in enumerate(Inputs):
+            InputList.append(
+                {
+                    "Id": i + 1,
+                    "Input": Input,
+                    "ComparisonInput": ComparisonInputs[i]
+                }
+            )
+            
+        return InputList
+
+    ## Input을 동적으로 지정하는 메서드 ##
+
+    
+
+    ## ComparisonInput을 동적으로 지정하는 메서드 ##
+
+
 
     ## Solution 및 SubSolution 경로에서 DataFrame 경로 가져오기 메서드 ##
     def _GetSolutionDataFramePath(self, DataFrameType, DataFramePath):
@@ -148,9 +179,25 @@ class LoadAgent:
     ## 솔루션 Edit의 파일, 완료 체크 메서드 ##
     def _SolutionEditCheck(self, OutputsPerInput = 1, InputCountKey = None, IgnoreCountCheck = False):
         """프로세스 Edit 및 Completion을 확인하는 메서드"""
-        # EditCheck 및 EditCompletion 초기화
+        # EditCheck 및 EditResponseCompletion 및 EditOutputCompletion 설정 함수
+        def EditCheckFunc(EditCheck, EditResponseCompletion, EditOutputCompletion):
+            # Edit.json' 확인
+            EditCheck = True
+
+            # ProcessCompletion 확인
+            if SolutionEdit[f"{self.ProcessName}ResponseCompletion"] == 'Completion':
+                EditResponseCompletion = True
+                
+            # ProcessOutputCompletion 확인
+            if SolutionEdit[f"{self.ProcessName}OutputCompletion"] == 'Completion':
+                EditOutputCompletion = True
+                
+            return EditCheck, EditResponseCompletion, EditOutputCompletion
+
+        # EditCheck 및 EditResponseCompletion 및 EditOutputCompletion 초기화
         EditCheck = False
-        EditCompletion = False
+        EditResponseCompletion = False
+        EditOutputCompletion = False
 
         # SolutionEdit 경로가 존재하는지 확인 후 불러오기
         if os.path.exists(self.SolutionEditPath):
@@ -161,30 +208,19 @@ class LoadAgent:
             # 입력 수 체크 안함 (입력의 카운트가 의미가 없는 경우 예시로 IndexDefine 등)
             if IgnoreCountCheck:
                 if self.ProcessName in SolutionEdit.keys():
-                    EditCheck = True
-
-                    # 'ProcessCompletion' 확인
-                    if SolutionEdit[f"{self.ProcessName}Completion"] == 'Completion':
-                        EditCompletion = True
+                    EditCheck, EditResponseCompletion, EditOutputCompletion = EditCheckFunc()
             else:
                 # 입력 수의 기준키 설정 (InputCount의 수가 단순 데이터 리스트의 총 개수랑 맞지 않는 경우)
                 if InputCountKey:
                     if self.ProcessName in SolutionEdit.keys() and SolutionEdit[self.ProcessName][-1][InputCountKey] == self.TotalInputCount * OutputsPerInput:
-                        EditCheck = True
-
-                        # 'ProcessCompletion' 확인
-                        if SolutionEdit[f"{self.ProcessName}Completion"] == 'Completion':
-                            EditCompletion = True
+                        EditCheck, EditResponseCompletion, EditOutputCompletion = EditCheckFunc()
+                        
                 # 일반적인 입력 수 체크
                 else:
                     if self.ProcessName in SolutionEdit and len(SolutionEdit[self.ProcessName]) == self.TotalInputCount * OutputsPerInput:
-                        EditCheck = True
+                        EditCheck, EditResponseCompletion, EditOutputCompletion = EditCheckFunc()
 
-                        # 'ProcessCompletion' 확인
-                        if SolutionEdit[f"{self.ProcessName}Completion"] == 'Completion':
-                            EditCompletion = True
-            
-        return EditCheck, EditCompletion
+        return EditCheck, EditResponseCompletion, EditOutputCompletion
 
     ## ProcessResponse 생성 메서드 ##
     def _ProcessResponse(self, Input, InputCount, ComparisonInput, memoryNote = ""):
@@ -695,6 +731,8 @@ class LoadAgent:
         with open(self.SolutionProjectDataFramePath, 'w', encoding = 'utf-8') as DataFrameJson:
             json.dump(SolutionProcessDataFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
+    ## Response 통합 메서드 ## (Response global, ko 통합)
+
     ## SolutionEdit 업데이트 메서드 ##
     def _UpdateSolutionEdit(self):
         """SolutionEdit을 업데이트하는 메서드"""
@@ -712,9 +750,13 @@ class LoadAgent:
             ## TranslationEdit 업데이트
             SolutionEdit[self.ProcessName] = []
             if self.EditMode == "Manual":
-                SolutionEdit[f"{self.ProcessName}Completion"] = '완료 후 Completion'
+                SolutionEdit[f"{self.ProcessName}ResponseCompletion"] = '완료 후 Completion'
             elif self.EditMode == "Auto":
-                SolutionEdit[f"{self.ProcessName}Completion"] = 'Completion'
+                SolutionEdit[f"{self.ProcessName}ResponseCompletion"] = 'Completion'
+            if self.OutputFunc is not None:
+                SolutionEdit[f"{self.ProcessName}OutputCompletion"] = '완료 후 Completion'
+            else:
+                SolutionEdit[f"{self.ProcessName}OutputCompletion"] = 'Completion'
             SolutionProjectDataList = SolutionProjectDataFrame[1]
             for i in range(1, len(SolutionProjectDataList)):
                 SolutionProjectData = SolutionProjectDataList[i]
@@ -738,12 +780,16 @@ class LoadAgent:
                 SolutionEdit = json.load(SolutionEditJson)
         return SolutionEdit
 
-
-    ## Input을 동적으로 지정하는 메서드 ##
-
-
-    ## ComparisonInput을 동적으로 지정하는 메서드 ##
-
+    ## Output 생성 메서드 ##
+    def _CreateOutput(self, SolutionEdit):
+        """Output을 생성하는 메서드"""
+        if self.OutputFunc is not None:
+            # SolutionEditProcess 불러오기 및 Output 실행
+            SolutionEditProcess = SolutionEdit[self.ProcessName]
+            self.OutputFunc(SolutionEditProcess)
+            
+            # OutputCompletion 설정
+            SolutionEdit[f"{self.ProcessName}OutputCompletion"] = "Completion"
 
     ## Response 생성 및 프로세스 실행 메서드 ##
     def Run(self):
@@ -774,14 +820,22 @@ class LoadAgent:
 
         if self.EditMode == "Manual":
             if self.EditCheck:
-                if not self.EditCompletion:
+                if not self.EditResponseCompletion:
                     ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                     sys.exit(f"[ {self.ProjectName}_Script_Edit -> {self.ProcessName}: (({self.ProcessName}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({self.ProcessName}Completion: Completion))으로 변경 ]\n\n{self.SolutionEditPath}")
-        if self.EditCompletion:
+        if self.EditResponseCompletion:
             print(f"[ {self.ProcessInfo}Update는 이미 완료됨 ]\n")
 
         ## Edit 불러오기
-        return self._LoadEdit()
+        SolutionEdit = self._LoadEdit()
+
+        ## Output 실행
+        if self.EditOutputCompletion:
+            print(f"[ {self.ProcessInfo}Output은 이미 완료됨 ]\n")
+        else:
+            self._CreateOutput(SolutionEdit)
+
+        return SolutionEdit
 
 if __name__ == "__main__":
     

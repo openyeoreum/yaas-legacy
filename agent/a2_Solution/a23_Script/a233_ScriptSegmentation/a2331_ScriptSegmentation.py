@@ -8,7 +8,7 @@ import spacy
 import sys
 sys.path.append("/yaas")
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageChops
 from PyPDF2 import PdfReader, PdfWriter
 from agent.a2_Solution.a21_General.a216_LoadAgent import LoadAgent
 
@@ -576,15 +576,15 @@ class PDFResizeProcess:
             NumberFont = ImageFont.load_default()
 
         # 공통 스타일
-        self.IntervalRatio = 0.03  # 간격 비율 (전체 크기에 대한 비율)
+        self.IntervalRatio = 0.03  # 간격 비율
         LineWidth          = max(1, int(2 * Scale))
         IntervalY          = max(1, int(BaseImg.height * self.IntervalRatio))
         IntervalX          = max(1, int(BaseImg.width  * self.IntervalRatio))
         NumberPad          = int(3 * Scale)
         NumberBaselineLift = int(2 * Scale)
         RoundedRadius      = max(2, int(6 * Scale))
-        LabelGap           = int(8 * Scale)    # 라벨과 선 사이 간격
-        ExtraMargin        = int(15 * Scale)   # 추가 여유
+        LabelGap           = int(8 * Scale)
+        ExtraMargin        = int(15 * Scale)
 
         CircledNums = ["","①","②","③","④","⑤","⑥","⑦","⑧","⑨","⑩"]
 
@@ -600,12 +600,12 @@ class PDFResizeProcess:
 
         FilenameSuffix = {"Left":"Left","Right":"Right","Top":"Top","Bottom":"Bottom"}
 
-        # 방향별 색상 매핑
+        # 방향별 색상
         DirectionColors = {
-            "Left": (255, 0, 0),  # 빨강
-            "Right": (0, 0, 255),  # 파랑
-            "Top": (0, 128, 0),  # 녹색
-            "Bottom": (128, 0, 128),  # 보라색
+            "Left": (255, 0, 0),     # 빨강
+            "Right": (0, 0, 255),    # 파랑
+            "Top": (0, 128, 0),      # 녹색
+            "Bottom": (128, 0, 128), # 보라
         }
 
         def DrawTextWithWhiteBg(Draw, XY, Text, Font, Pad=NumberPad, Rounded=True, text_fill="red"):
@@ -621,9 +621,7 @@ class PDFResizeProcess:
                 Draw.rectangle([(L-Pad, T-Pad), (R+Pad, B+Pad)], fill="white")
             Draw.text((X, Y), Text, font=Font, fill=text_fill)
 
-        def DrawTextWithWhiteBgCenter(
-            Draw, CenterXY, Text, Font, Pad=NumberPad, Rounded=True, BaselineLift=0, text_fill="red"
-        ):
+        def DrawTextWithWhiteBgCenter(Draw, CenterXY, Text, Font, Pad=NumberPad, Rounded=True, BaselineLift=0, text_fill="red"):
             Cx, Cy = CenterXY
             try:
                 Est = Draw.textbbox((0,0), Text, font=Font)
@@ -637,7 +635,6 @@ class PDFResizeProcess:
 
         # 라벨 이미지를 만들어(테두리 포함) 회전 후 붙이는 헬퍼
         def MakeLabelImage(LabelText):
-            # 텍스트 크기 산출
             TextBBox = LabelFont.getbbox(LabelText)
             Tw = TextBBox[2] - TextBBox[0]
             Th = TextBBox[3] - TextBBox[1]
@@ -645,11 +642,9 @@ class PDFResizeProcess:
             LabelH = Th + 2*Padding
             LabelImg = Image.new("RGB", (LabelW, LabelH), "white")
             LDraw = ImageDraw.Draw(LabelImg)
-            # 외곽선
             LDraw.rectangle([(0,0),(LabelW-1,LabelH-1)], outline="black", width=BorderW)
-            # 중앙 정렬 (세로 살짝 올림)
             Tx = (LabelW - Tw)//2
-            Ty = (LabelH - Th)//2 + int(-0.3 * LabelFontSize)
+            Ty = (LabelH - Th)//2 + int(-0.3 * LabelFontSize)  # 살짝 위로
             Ty = max(Padding//2, min(Ty, LabelH - Th - Padding//2))
             LDraw.text((Tx, Ty), LabelText, font=LabelFont, fill="black")
             return LabelImg
@@ -663,102 +658,143 @@ class PDFResizeProcess:
                 for i in range(1, 11):
                     y = i * IntervalY
                     Draw.line([(0, y), (Img.width, y)], fill=Color, width=LineWidth)
-                    DrawTextWithWhiteBgCenter(
-                        Draw, (ImgCx, y), CircledNums[i], NumberFont,
-                        Pad=NumberPad, Rounded=True, BaselineLift=NumberBaselineLift, text_fill=Color
-                    )
-
+                    DrawTextWithWhiteBgCenter(Draw, (ImgCx, y), CircledNums[i], NumberFont,
+                                            Pad=NumberPad, Rounded=True, BaselineLift=NumberBaselineLift, text_fill=Color)
             elif Direction == "Bottom":
                 for i in range(1, 11):
                     y = Img.height - (i * IntervalY)
                     Draw.line([(0, y), (Img.width, y)], fill=Color, width=LineWidth)
-                    DrawTextWithWhiteBgCenter(
-                        Draw, (ImgCx, y), CircledNums[i], NumberFont,
-                        Pad=NumberPad, Rounded=True, BaselineLift=NumberBaselineLift, text_fill=Color
-                    )
-
+                    DrawTextWithWhiteBgCenter(Draw, (ImgCx, y), CircledNums[i], NumberFont,
+                                            Pad=NumberPad, Rounded=True, BaselineLift=NumberBaselineLift, text_fill=Color)
             elif Direction == "Left":
                 for i in range(1, 11):
                     x = i * IntervalX
                     Draw.line([(x, 0), (x, Img.height)], fill=Color, width=LineWidth)
-                    DrawTextWithWhiteBgCenter(
-                        Draw, (x, ImgCy), CircledNums[i], NumberFont,
-                        Pad=NumberPad, Rounded=True, BaselineLift=NumberBaselineLift, text_fill=Color
-                    )
-
+                    DrawTextWithWhiteBgCenter(Draw, (x, ImgCy), CircledNums[i], NumberFont,
+                                            Pad=NumberPad, Rounded=True, BaselineLift=NumberBaselineLift, text_fill=Color)
             elif Direction == "Right":
                 for i in range(1, 11):
                     x = Img.width - (i * IntervalX)
                     Draw.line([(x, 0), (x, Img.height)], fill=Color, width=LineWidth)
-                    DrawTextWithWhiteBgCenter(
-                        Draw, (x, ImgCy), CircledNums[i], NumberFont,
-                        Pad=NumberPad, Rounded=True, BaselineLift=NumberBaselineLift, text_fill=Color
-                    )
+                    DrawTextWithWhiteBgCenter(Draw, (x, ImgCy), CircledNums[i], NumberFont,
+                                            Pad=NumberPad, Rounded=True, BaselineLift=NumberBaselineLift, text_fill=Color)
 
-        def SaveImage(Img, SuffixText):
-            OutName = f"{self.ProjectName}_HTrimScript({self.NextSolution})({InputId})({SuffixText}).jpeg"
+        def SaveImage(Img, SuffixText, input_id=None):
+            use_id = InputId if input_id is None else input_id
+            OutName = f"{self.ProjectName}_HTrimScript({self.NextSolution})({use_id})({SuffixText}).jpeg"
             OutPath = os.path.join(self.TrimScriptJPEGDirPath, OutName)
             Img.save(OutPath, "JPEG", quality=92, optimize=True, progressive=True, subsampling=1)
             return OutPath
 
+        # 흰색을 투명 처리(near-white tolerance 적용)
+        def WhiteToTransparent(img_rgb, tolerance=8):
+            """img_rgb: 'RGB' 또는 'RGBA', tolerance: 0~255, 높을수록 더 많은 밝은 영역을 투명화"""
+            if img_rgb.mode != "RGBA":
+                img = img_rgb.convert("RGBA")
+            else:
+                img = img_rgb.copy()
+
+            datas = img.getdata()
+            new_data = []
+            tol = max(0, min(255, tolerance))
+            thr = 255 - tol
+            for r, g, b, a in datas:
+                # 거의 흰색이면 투명 처리
+                if r >= thr and g >= thr and b >= thr:
+                    new_data.append((r, g, b, 0))
+                else:
+                    new_data.append((r, g, b, a))
+            img.putdata(new_data)
+            return img
+
         OutputPaths = []
 
         if self.ResponseMethod == "Prompt":
-            # 방향별로 개별 저장 + 중앙 라벨 (각 방향 색상 적용)
+            # 방향별로 개별 저장 + 중앙 라벨
             for DirKey in ["Left", "Right", "Top", "Bottom"]:
                 Img = BaseImg.copy()
                 DrawDirection(Img, DirKey, DirectionColors[DirKey])
-                # 중앙 라벨
                 CenterLabel = MakeLabelImage(DirLabelMap[DirKey])
                 Px = (Img.width - CenterLabel.width)//2
                 Py = (Img.height - CenterLabel.height)//2
                 Img.paste(CenterLabel, (Px, Py))
                 OutPath = SaveImage(Img, FilenameSuffix[DirKey])
                 OutputPaths.append(OutPath)
+
         if self.ResponseMethod == "Manual":
-            # 한 장에 4방향 모두 + 라벨 4개 '안쪽' 배치 (선과 절대 겹치지 않도록), 방향별 색 적용
-            Img = BaseImg.copy()
+            # 1) 4방향 'RGB(흰 배경)' 레이어 생성 (투명처리 없음)
+            layer_dict = {}
             for DirKey in ["Left", "Right", "Top", "Bottom"]:
-                DrawDirection(Img, DirKey, DirectionColors[DirKey])
+                layer = Image.new("RGB", (BaseImg.width, BaseImg.height), "white")
+                DrawDirection(layer, DirKey, DirectionColors[DirKey])
+                layer_dict[DirKey] = layer  # 그대로 RGB 보관
 
-            # ---- 라벨 위치 계산 (⑩번째 선 기준) ----
-            LabelInnerOffset = LabelGap + LineWidth + NumberPad + ExtraMargin  # 선/숫자와 라벨 간 충분한 이격
+            # 2) BaseImg와 각 레이어를 곱하기(Multiply)로 합성
+            merged_rgb = BaseImg.convert("RGB")
+            for DirKey in ["Left", "Right", "Top", "Bottom"]:
+                merged_rgb = ImageChops.multiply(merged_rgb, layer_dict[DirKey])
 
-            # Top: y = 10*IntervalY → 그 "아래(안쪽)"에 라벨, 180°
+            # 3) 라벨은 별도 캔버스(RGBA)에 배치 후, 최종 이미지 위에 알파 합성
+            label_canvas = Image.new("RGBA", (BaseImg.width, BaseImg.height), (255, 255, 255, 0))
+            LabelInnerOffset = LabelGap + LineWidth + NumberPad + ExtraMargin
+
+            # Top
             up_y10 = 10 * IntervalY
             up_label = MakeLabelImage(DirLabelMap["Top"]).rotate(180, expand=True)
-            up_px = (Img.width - up_label.width) // 2
-            up_py = up_y10 + LabelInnerOffset
-            up_py = min(max(0, up_py), Img.height - up_label.height)
-            Img.paste(up_label, (up_px, up_py))
+            up_px = (BaseImg.width - up_label.width) // 2
+            up_py = min(max(0, up_y10 + LabelInnerOffset), BaseImg.height - up_label.height)
+            label_canvas.paste(up_label.convert("RGBA"), (up_px, up_py))
 
-            # Bottom: y = Img.height - 10*IntervalY → 그 "위(안쪽)"에 라벨, 0°
-            down_y10 = Img.height - 10 * IntervalY
+            # Bottom
+            down_y10 = BaseImg.height - 10 * IntervalY
             down_label = MakeLabelImage(DirLabelMap["Bottom"])
-            down_px = (Img.width - down_label.width) // 2
-            down_py = down_y10 - LabelInnerOffset - down_label.height
-            down_py = min(max(0, down_py), Img.height - down_label.height)
-            Img.paste(down_label, (down_px, down_py))
+            down_px = (BaseImg.width - down_label.width) // 2
+            down_py = min(max(0, down_y10 - LabelInnerOffset - down_label.height), BaseImg.height - down_label.height)
+            label_canvas.paste(down_label.convert("RGBA"), (down_px, down_py))
 
-            # Left: x = 10*IntervalX → 그 "오른쪽(안쪽)"에 라벨, 270°
+            # Left
             left_x10 = 10 * IntervalX
             left_label = MakeLabelImage(DirLabelMap["Left"]).rotate(270, expand=True)
-            left_px = left_x10 + LabelInnerOffset
-            left_px = min(max(0, left_px), Img.width - left_label.width)
-            left_py = (Img.height - left_label.height) // 2
-            Img.paste(left_label, (left_px, left_py))
+            left_px = min(max(0, left_x10 + LabelInnerOffset), BaseImg.width - left_label.width)
+            left_py = (BaseImg.height - left_label.height) // 2
+            label_canvas.paste(left_label.convert("RGBA"), (left_px, left_py))
 
-            # Right: x = Img.width - 10*IntervalX → 그 "왼쪽(안쪽)"에 라벨, 90°
-            right_x10 = Img.width - 10 * IntervalX
+            # Right
+            right_x10 = BaseImg.width - 10 * IntervalX
             right_label = MakeLabelImage(DirLabelMap["Right"]).rotate(90, expand=True)
-            right_px = right_x10 - LabelInnerOffset - right_label.width
-            right_px = min(max(0, right_px), Img.width - right_label.width)
-            right_py = (Img.height - right_label.height) // 2
-            Img.paste(right_label, (right_px, right_py))
+            right_px = min(max(0, right_x10 - LabelInnerOffset - right_label.width), BaseImg.width - right_label.width)
+            right_py = (BaseImg.height - right_label.height) // 2
+            label_canvas.paste(right_label.convert("RGBA"), (right_px, right_py))
 
-            OutPath = SaveImage(Img, MultiDirSuffix)
+            # 4) 라벨을 merged_rgb 위에 합성
+            final_rgba = merged_rgb.convert("RGBA")
+            final_rgba = Image.alpha_composite(final_rgba, label_canvas)
+            final_rgb = final_rgba.convert("RGB")
+
+            # 저장: ({InputId})(네방향).jpeg -> OutputPaths에 포함
+            OutPath = SaveImage(final_rgb, MultiDirSuffix)
             OutputPaths.append(OutPath)
-        
+
+            # 저장: (multiply)(네방향).jpeg -> 누적 Multiply 저장 (OutputPaths에는 포함 X)
+            zero_name = f"{self.ProjectName}_HTrimScript({self.NextSolution})(multiply)({MultiDirSuffix}).jpeg"
+            zero_path = os.path.join(self.TrimScriptJPEGDirPath, zero_name)
+
+            # 파일이 이미 있으면 불러와서 곱하기 누적, 없으면 이번 결과로 시작
+            if os.path.exists(zero_path):
+                try:
+                    prev = Image.open(zero_path).convert("RGB")
+                    # 흰색은 항등(255)이라 누적될수록 공통된 요소만 진해짐
+                    accum = ImageChops.multiply(prev, final_rgb)
+                except Exception:
+                    # 문제가 있으면 이번 결과를 그대로 사용
+                    accum = final_rgb
+            else:
+                accum = final_rgb
+
+            # 덮어쓰기 저장 (누적본 유지)
+            accum.save(zero_path, "JPEG", quality=92, optimize=True, progressive=True, subsampling=1)
+            # OutputPaths.append(zero_path)
+
         return OutputPaths
 
     ## 방향별 보조선 샘플 이미지 Inputs 생성 ##

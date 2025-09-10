@@ -987,7 +987,6 @@ class PDFResizeProcess:
         os.remove(self.UploadedScriptFilePath)
         shutil.move(BackUpPdfDocumentPath, self.UploadedScriptFilePath)
 
-
     ## PDFResizeProcess 실행 ##
     def Run(self):
         """PDF 가로 재단 전체 프로세스 실행"""

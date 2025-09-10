@@ -3,6 +3,7 @@ import fitz
 import random
 import shutil
 import json
+import math
 import spacy
 import sys
 sys.path.append("/yaas")
@@ -82,9 +83,10 @@ class ScriptLoadProcess:
                 ScriptFileName = f"{self.ProjectName}_Script({self.NextSolution}).{self.FileExtension}"
                 self.UploadedScriptFilePath = os.path.join(self.UploadScriptFilePath, ScriptFileName)
 
-                # 파일명이 다르면 표준화된 이름으로 복사
-                if ScriptFiles[0] != ScriptFileName:
-                    shutil.copy2(RawUploadedScriptFilePath, self.UploadedScriptFilePath)
+                # 파일명이 다르면 표준화된 이름으로 복사 (기존 파일이 존재하면 복사하지 않음)
+                if not os.path.exists(self.UploadedScriptFilePath):
+                    if ScriptFiles[0] != ScriptFileName:
+                        shutil.copy2(RawUploadedScriptFilePath, self.UploadedScriptFilePath)
                     
                 FileExistsError = False
 
@@ -252,30 +254,46 @@ class PDFMainLangCheckProcess:
 
     ## 라벨 샘플 경로의 Inputs 생성 ##
     def _CreateLabeledSamplePathToInputs(self):
-        """샘플 입력을 생성해서 list 형태로 반환"""
-        # 폴더에 JPEG가 5개 이상 있으면 그대로 사용
+        """샘플 입력을 생성해서 list 형태로 반환, 앞 5페이지와 전체 랜덤 5페이지를 합쳐 총 10개의 샘플을 생성"""
+        # 폴더에 JPEG가 10개 이상 있으면 그대로 사용
         if os.path.exists(self.SampleScriptJPEGDirPath):
             ScriptJpegs = sorted(
                 f for f in os.listdir(self.SampleScriptJPEGDirPath)
                 if f.lower().endswith(".jpeg")
             )
-            if len(ScriptJpegs) >= 5:
+            if len(ScriptJpegs) >= 10:
                 Inputs = [
                     os.path.join(self.SampleScriptJPEGDirPath, fn)
                     for fn in ScriptJpegs
                 ]
                 return [Inputs], [""]
 
-        # 없으면 PDF에서 5페이지 뽑아 라벨 JPEG 생성
+        # 없으면 PDF에서 10페이지를 선정하여 라벨 JPEG 생성
         PdfDocument = fitz.open(self.UploadedScriptFilePath)
         TotalPages = len(PdfDocument)
-
-        if TotalPages < 5:
-            Selected = random.choices(range(TotalPages), k = 5)
-        else:
-            Selected = random.sample(range(TotalPages), 5)
-
         os.makedirs(self.SampleScriptJPEGDirPath, exist_ok=True)
+
+        SelectedPages = set()
+        TargetCount = min(10, TotalPages) # 목표 개수는 최대 10개 또는 전체 페이지 수
+
+        # 1. 가장 앞에서부터 5페이지 선택 (문서가 5페이지 미만일 경우 가능한 페이지만큼 선택)
+        front_pages = range(min(5, TotalPages))
+        SelectedPages.update(front_pages)
+
+        # 2. 목표 개수(10개)에 도달할 때까지 나머지 페이지 중에서 랜덤으로 추가
+        #    중복을 피하기 위해 아직 선택되지 않은 페이지들 중에서 선택
+        if len(SelectedPages) < TargetCount:
+            remaining_pool = [Page for Page in range(TotalPages) if Page not in SelectedPages]
+            NumToAdd = TargetCount - len(SelectedPages)
+            
+            # 만약 풀에 있는 페이지 수보다 더 많이 뽑아야 하는 경우를 대비 (실제로는 발생하지 않음)
+            NumToSample = min(NumToAdd, len(remaining_pool))
+
+            randomly_added_pages = random.sample(remaining_pool, k = NumToSample)
+            SelectedPages.update(randomly_added_pages)
+
+        # 최종 선택된 페이지 인덱스를 정렬
+        Selected = sorted(list(SelectedPages))
 
         Inputs = []
         for InputId, PageIdx in enumerate(Selected, 1):
@@ -352,10 +370,10 @@ class PDFLayoutCheckProcess:
     ## PDF 라벨 샘플 이미지 Inputs 생성 ##
     def _LoadPDFToLabeledSampleJPEGToInputs(self):
         """SampleScriptJPEGDirPath에 저장된 JPEG 파일 경로를 리스트로 반환"""
-        # SampleScriptJPEGDirPath에 ScriptJPEG 파일 5개 파일명 추출
+        # SampleScriptJPEGDirPath에 ScriptJPEG 파일 10개 파일명 추출
         ScriptJPEGFiles = sorted([FileName for FileName in os.listdir(self.SampleScriptJPEGDirPath) if FileName.lower().endswith('.jpeg')])
 
-        # SampleScriptJPEGDirPath에 JPEG 파일 5개 경로 Inputs 생성 및 리턴
+        # SampleScriptJPEGDirPath에 JPEG 파일 10개 경로 Inputs 생성 및 리턴
         Inputs = []
         for FileName in ScriptJPEGFiles:
             FilePath = os.path.join(self.SampleScriptJPEGDirPath, FileName)
@@ -363,19 +381,130 @@ class PDFLayoutCheckProcess:
 
         return [Inputs], [""]
 
-    ## Output을 통한 ... ##
-    def _CreateOutput(self, SolutionEditProcess):
-        """Output을 통한 ..."""
+    ## Output을 통한 PDF 레이아웃 조정 ##
+    def _CreateOutputToAdjustedLayoutPDF(self, SolutionEditProcess):
+        """Output을 통한 PDF 레이아웃 조정"""
         # _CreateOutputSwitch
         if SolutionEditProcess is None:
-            return False
-        return False
+            return True
+    
+        # PDFLayout Check (최소 한 페이지라도 Spread면 수행)
+        AdjustedLayout = False
+        for SolutionEditProcessDic in SolutionEditProcess[0]:
+            if SolutionEditProcessDic.get('Size') == 'Spread':
+                AdjustedLayout = True
+                break
+            
+        # 레이아웃 조정이 필요한 경우
+        if AdjustedLayout:
+
+            # 1) PDF 열기
+            PdfDocument = fitz.open(self.UploadedScriptFilePath)
+            BackUpPdfDocumentPath = self.UploadedScriptFilePath.replace(".pdf", "_backup.pdf")
+
+            if len(PdfDocument) == 0:
+                PdfDocument.close()
+                return True
+
+            # 2) 모든 페이지 가로폭 수집
+            Widths = []
+            for Page in PdfDocument:
+                R = Page.rect  # mediabox 기준
+                W = float(R.width)
+                Widths.append(W)
+
+            # 숫자 안정화용 반올림 기반 고유 폭
+            UniqueWidths = sorted(set(round(w, 3) for w in Widths))
+
+            # 3) 혼합본(단면+스프레드) 가정에서 x, y 추정 조건 확인
+            #    - 단면 폭(가장 작은 폭) = 2x + y = w_s
+            #    - 스프레드 폭(가장 큰 폭) = 2x + 2y = w_l
+            #    - w_s > w_l/2  이면  x > 0  (재단영역 존재)
+            UseXYTrim = False
+            XTrim = 0.0
+            SingleWidth = min(Widths)
+            SpreadThreshold = 1.5 - 1e-6  # fallback용
+
+            if len(UniqueWidths) >= 2:
+                SmallW = min(UniqueWidths)
+                LargeW = max(UniqueWidths)
+                if SmallW > (LargeW / 2.0) + 1e-6:
+                    # y = w_l - w_s, x = w_s - w_l/2
+                    YContent = LargeW - SmallW
+                    XTrim = SmallW - (LargeW / 2.0)
+                    if XTrim < 0:
+                        XTrim = 0.0
+                    UseXYTrim = XTrim > 0.0
+                # 단면 기준 폭은 혼합본에서 가장 작은 가로폭
+                SingleWidth = SmallW
+
+            # 4) 결과 PDF 생성
+            AdjustedLayoutPdfDocument = fitz.open()
+
+            # 다시 처음부터 순회 (PyMuPDF는 재순회 가능)
+            for PageIndex, Page in enumerate(PdfDocument):
+                Rect = Page.rect
+                W, H = float(Rect.width), float(Rect.height)
+
+                # 기본 스프레드 판정 (fallback 겸용)
+                IsSpread = (W / SingleWidth) >= SpreadThreshold
+
+                # 우선 재단(x) 적용
+                if UseXYTrim and XTrim > 0.0:
+                    # 상하좌우 x 만큼 크롭 (클램프)
+                    Left   = max(Rect.x0, Rect.x0 + XTrim)
+                    Right  = min(Rect.x1, Rect.x1 - XTrim)
+                    Top    = max(Rect.y0, Rect.y0 + XTrim)
+                    Bottom = min(Rect.y1, Rect.y1 - XTrim)
+
+                    # 역전 방지 (너무 큰 x로 인해 폭/높이가 0 이하가 되지 않도록 최소폭 2pt 보장)
+                    if Right - Left < 2:
+                        MidX = (Rect.x0 + Rect.x1) / 2.0
+                        Left, Right = MidX - 1, MidX + 1
+                    if Bottom - Top < 2:
+                        MidY = (Rect.y0 + Rect.y1) / 2.0
+                        Top, Bottom = MidY - 1, MidY + 1
+
+                    CropRect = fitz.Rect(Left, Top, Right, Bottom)
+                else:
+                    # 재단 미적용 시 원본 박스 사용
+                    CropRect = Rect
+
+                # 재단 후 박스의 폭/높이
+                CW = float(CropRect.width)
+                CH = float(CropRect.height)
+
+                if IsSpread:
+                    # 재단 후 좌/우 절반 분할 (가로 절반)
+                    HalfW = CW / 2.0
+
+                    # 좌측(앞페이지)
+                    LeftClip = fitz.Rect(CropRect.x0, CropRect.y0, CropRect.x0 + HalfW, CropRect.y1)
+                    LeftPage = AdjustedLayoutPdfDocument.new_page(width=HalfW, height=CH)
+                    LeftPage.show_pdf_page(LeftPage.rect, PdfDocument, Page.number, clip=LeftClip)
+
+                    # 우측(뒷페이지)
+                    RightClip = fitz.Rect(CropRect.x0 + HalfW, CropRect.y0, CropRect.x1, CropRect.y1)
+                    RightPage = AdjustedLayoutPdfDocument.new_page(width=HalfW, height=CH)
+                    RightPage.show_pdf_page(RightPage.rect, PdfDocument, Page.number, clip=RightClip)
+                else:
+                    # 단면 페이지: x 재단만 적용한 채로 그대로 복사
+                    NewPage = AdjustedLayoutPdfDocument.new_page(width=CW, height=CH)
+                    NewPage.show_pdf_page(NewPage.rect, PdfDocument, Page.number, clip=CropRect)
+
+            # 5) 저장 및 교체
+            AdjustedLayoutPdfDocument.save(BackUpPdfDocumentPath, garbage=4, deflate=True)
+            AdjustedLayoutPdfDocument.close()
+            PdfDocument.close()
+
+            os.remove(self.UploadedScriptFilePath)
+            shutil.move(BackUpPdfDocumentPath, self.UploadedScriptFilePath)
 
     ## PDFLayoutCheckProcess 실행 ##
     def Run(self):
         """PDF 인쇄 파일 형식인 단면, 양면 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._LoadPDFToLabeledSampleJPEGToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._LoadPDFToLabeledSampleJPEGToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutputFunc = self._CreateOutputToAdjustedLayoutPDF, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -709,7 +838,7 @@ class PDFResizeProcess:
         return Inputs, ComparisonInputs
 
     ## Output을 통한 PDF 재단 ##
-    def _CreateOutputToPDFCrop(self, SolutionEditProcess):
+    def _CreateOutputToResizedPDF(self, SolutionEditProcess):
         """Output을 통한 PDF를 재단"""
         # _CreateOutputSwitch
         if SolutionEditProcess is None:
@@ -740,7 +869,7 @@ class PDFResizeProcess:
 
         # 3) PDF 열기
         PdfDocument = fitz.open(self.UploadedScriptFilePath)
-        BackUpPdfDocumentPath = self.UploadedScriptFilePath.replace(".pdf", "_temp.pdf")
+        BackUpPdfDocumentPath = self.UploadedScriptFilePath.replace(".pdf", "_backup.pdf")
 
         # 회전에 따른 "시각 방향 -> PDF 엣지" 매핑
         # rot는 0, 90, 180, 270 중 하나
@@ -816,7 +945,7 @@ class PDFResizeProcess:
             page.set_mediabox(CropRect)
 
         # 7) 저장 및 교체
-        PdfDocument.save(BackUpPdfDocumentPath, garbage=4, deflate=True)
+        PdfDocument.save(BackUpPdfDocumentPath, garbage = 4, deflate = True)
         PdfDocument.close()
 
         os.remove(self.UploadedScriptFilePath)
@@ -827,7 +956,7 @@ class PDFResizeProcess:
     def Run(self):
         """PDF 가로 재단 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._CreateTrimLineJPEGToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutputFunc = self._CreateOutputToPDFCrop, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._CreateTrimLineJPEGToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutputFunc = self._CreateOutputToResizedPDF, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit

@@ -22,7 +22,7 @@
             "ValueCheckList": [
                 {
                     "ValueCheck": "listDataLengthCheck",
-                    "ValueCheckItem": "5"
+                    "ValueCheckItem": "10"
                 }
             ],
             "Value": [
@@ -32,7 +32,7 @@
                     "ValueCheckList": [
                         {
                             "ValueCheck": "intDataAnswerRangeCheck",
-                            "ValueCheckItem": "1, 2, 3, 4, 5"
+                            "ValueCheckItem": "1, 2, 3, 4, 5, 6, 7, 8, 9, 10"
                         }
                     ],
                     "Value": ""
@@ -54,7 +54,7 @@
             {
                 "Role": "system",
                 "Mark": "(역할 및 업무)\n",
-                "Message": "당신은 도서인쇄 검수 전문가 입니다. 주어진 <도서인쇄> 자료 5개를 보고 각각 (도서인쇄레이아웃)을 지정하여 <도서인쇄레이아웃.json>로 완성하는 업무를 수행합니다."
+                "Message": "당신은 도서인쇄 검수 전문가 입니다. 주어진 <도서인쇄> 자료 10개를 보고 각각 (도서인쇄레이아웃)을 지정하여 <도서인쇄레이아웃.json>로 완성하는 업무를 수행합니다."
             },
             {
                 "Role": "user",
@@ -69,7 +69,7 @@
                     },
                     {
                         "Mark": "\n\n(<도서인쇄레이아웃.json> 완성 절차 및 방법)\n",
-                        "Message": "1. <도서인쇄> 자료는 이미지 파일 5개이며 각 파일별로 중앙 상단에 '자료번호: n'이 표기되어 있습니다.\n2. (<도서인쇄레이아웃.json>의 구조 및 내용)에 따라, 각 <도서인쇄> 자료를 보고 '자료번호'와 '레이아웃'을 작성하여 <도서인쇄레이아웃.json>을 완성합니다."
+                        "Message": "1. <도서인쇄> 자료는 이미지 파일 10개이며 각 파일별로 중앙 상단에 '자료번호: n'이 표기되어 있습니다.\n2. (<도서인쇄레이아웃.json>의 구조 및 내용)에 따라, 각 <도서인쇄> 자료를 보고 '자료번호'와 '레이아웃'을 작성하여 <도서인쇄레이아웃.json>을 완성합니다."
                     },
                     {
                         "Mark": "",
@@ -93,7 +93,7 @@
                         "OutputMaster": ""
                     },
                     {
-                        "Mark": "\n\n\n(주어진 <도서인쇄> 자료 5개를 보고 각각 (도서인쇄레이아웃)을 지정하여 <도서인쇄레이아웃.json>로 완성해주세요)\n\n",
+                        "Mark": "\n\n\n(주어진 <도서인쇄> 자료 10개를 보고 각각 (도서인쇄레이아웃)을 지정하여 <도서인쇄레이아웃.json>로 완성해주세요)\n\n",
                         "InputMark": "",
                         "Input": "INPUT",
                         "InputMark2": "",
@@ -133,7 +133,7 @@
             "ValueCheckList": [
                 {
                     "ValueCheck": "listDataLengthCheck",
-                    "ValueCheckItem": "5"
+                    "ValueCheckItem": "10"
                 }
             ],
             "Value": [
@@ -143,7 +143,7 @@
                     "ValueCheckList": [
                         {
                             "ValueCheck": "intDataAnswerRangeCheck",
-                            "ValueCheckItem": "1, 2, 3, 4, 5"
+                            "ValueCheckItem": "1, 2, 3, 4, 5, 6, 7, 8, 9, 10"
                         }
                     ],
                     "Value": ""
@@ -165,7 +165,7 @@
             {
                 "Role": "system",
                 "Mark": "(Role and Task)\n",
-                "Message": "You are a Book Printing Inspection Expert. Your task is to analyze five given  data items, determine the (BookPrintingLayout) for each, and complete them into a <BookPrintingLayout.json> file."
+                "Message": "You are a Book Printing Inspection Expert. Your task is to analyze ten given  data items, determine the (BookPrintingLayout) for each, and complete them into a <BookPrintingLayout.json> file."
             },
             {
                 "Role": "user",
@@ -180,7 +180,7 @@
                     },
                     {
                         "Mark": "\n\n(Procedure for completing <BookPrintingLayout.json>)\n",
-                        "Message": "1. The  data consists of 5 image files. Each file is marked with 'DataNumber: n' in the top-center.\n2. Following the structure and content of <BookPrintingLayout.json>, analyze each  item and record its 'DataNumber' and 'Layout' to complete the <BookPrintingLayout.json> file."
+                        "Message": "1. The  data consists of 10 image files. Each file is marked with 'DataNumber: n' in the top-center.\n2. Following the structure and content of <BookPrintingLayout.json>, analyze each  item and record its 'DataNumber' and 'Layout' to complete the <BookPrintingLayout.json> file."
                     },
                     {
                         "Mark": "",
@@ -204,7 +204,7 @@
                         "OutputMaster": ""
                     },
                     {
-                        "Mark": "\n\n\n(Please analyze the five given  data items, assign the (BookPrintingLayout) for each, and provide the output in the <BookPrintingLayout.json> format)\n\n",
+                        "Mark": "\n\n\n(Please analyze the ten given  data items, assign the (BookPrintingLayout) for each, and provide the output in the <BookPrintingLayout.json> format)\n\n",
                         "InputMark": "",
                         "Input": "INPUT",
                         "InputMark2": "",

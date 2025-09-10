@@ -63,7 +63,7 @@ PDF는 무조건 전체이며, TXT 간소화는 내부 TXT파일 구조를 통�
 언어 -> Ko, En, Ja ...
 [한글]
 (역할 및 업무)
-당신은 언어 데이터 전문가 입니다. 주어진 <도서페이지> 자료 5개를 보고 해당 도서의 (언어태그)를 지정하여 <도서언어태그.json>로 완성하는 업무를 수행합니다.
+당신은 언어 데이터 전문가 입니다. 주어진 <도서페이지> 자료 10개를 보고 해당 도서의 (언어태그)를 지정하여 <도서언어태그.json>로 완성하는 업무를 수행합니다.
 
 (언어태그)
 ko: Korean - 한국어 - 한국어
@@ -88,13 +88,13 @@ pl: Polish - Polski - 폴란드어
     }
 }
 
-(주어진 <도서페이지> 자료 5개를 보고 해당 도서의 (언어태그)를 지정하여 <도서언어태그.json>로 완성해주세요)
+(주어진 <도서페이지> 자료 10개를 보고 해당 도서의 (언어태그)를 지정하여 <도서언어태그.json>로 완성해주세요)
 <도서언어태그.json>
 
 
 [English]
 (Role and Task)
-You are a Language Data Expert. Your task is to analyze the five given <BookPage> data items, determine the single (LanguageTag) for the book, and complete the task by generating a <BookLanguageTag.json> file.
+You are a Language Data Expert. Your task is to analyze the ten given <BookPage> data items, determine the single (LanguageTag) for the book, and complete the task by generating a <BookLanguageTag.json> file.
 
 (LanguageTags)
 ko: Korean - 한국어
@@ -119,7 +119,7 @@ pl: Polish - Polski
     }
 }
 
-(Please analyze the five given <BookPage> data items, determine the single (LanguageTag) for the book, and provide the output in the <BookLanguageTag.json> format)
+(Please analyze the ten given <BookPage> data items, determine the single (LanguageTag) for the book, and provide the output in the <BookLanguageTag.json> format)
 <BookLanguageTag.json>
 
 
@@ -128,7 +128,7 @@ pl: Polish - Polski
 #P03 PDFLayoutCheck (PDF 인쇄 파일 형식인 단면, 양면 체크)
 [한글]
 (역할 및 업무)
-당신은 도서인쇄 검수 전문가 입니다. 주어진 <도서인쇄> 자료 5개를 보고 각각 (도서인쇄레이아웃)을 지정하여 <도서인쇄레이아웃.json>로 완성하는 업무를 수행합니다.
+당신은 도서인쇄 검수 전문가 입니다. 주어진 <도서인쇄> 자료 10개를 보고 각각 (도서인쇄레이아웃)을 지정하여 <도서인쇄레이아웃.json>로 완성하는 업무를 수행합니다.
 
 (도서인쇄레이아웃)
 단면: 한장의 인쇄물이 도서 한페이지로 되어 있는 경우로 보통 세로가 가로보다 길다.
@@ -154,16 +154,16 @@ pl: Polish - Polski
 }
 
 (<도서인쇄레이아웃.json> 완성 절차 및 방법)
-1. <도서인쇄> 자료는 이미지 파일 5개이며 각 파일별로 중앙 상단에 '자료번호: n'이 표기되어 있습니다.
+1. <도서인쇄> 자료는 이미지 파일 10개이며 각 파일별로 중앙 상단에 '자료번호: n'이 표기되어 있습니다.
 2. (<도서인쇄레이아웃.json>의 구조 및 내용)에 따라, 각 <도서인쇄> 자료를 보고 '자료번호'와 '레이아웃'을 작성하여 <도서인쇄레이아웃.json>을 완성합니다.
 
-(주어진 <도서인쇄> 자료 5개를 보고 각각 (도서인쇄레이아웃)을 지정하여 <도서인쇄레이아웃.json>로 완성해주세요)
+(주어진 <도서인쇄> 자료 10개를 보고 각각 (도서인쇄레이아웃)을 지정하여 <도서인쇄레이아웃.json>로 완성해주세요)
 <도서인쇄레이아웃.json>
 
 
 [English]
 (Role and Task)
-You are a Book Printing Inspection Expert. Your task is to analyze five given  data items, determine the (BookPrintingLayout) for each, and complete them into a <BookPrintingLayout.json> file.
+You are a Book Printing Inspection Expert. Your task is to analyze ten given  data items, determine the (BookPrintingLayout) for each, and complete them into a <BookPrintingLayout.json> file.
 
 (BookPrintingLayouts)
 Single: When one printed sheet corresponds to one page of the book, usually with the vertical dimension longer than the horizontal.
@@ -189,10 +189,10 @@ Spread: When one printed sheet corresponds to two facing pages of the book, usua
 }
 
 (Procedure for completing <BookPrintingLayout.json>)
-1. The  data consists of 5 image files. Each file is marked with 'DataNumber: n' in the top-center.
+1. The  data consists of 10 image files. Each file is marked with 'DataNumber: n' in the top-center.
 2. Following the structure and content of <BookPrintingLayout.json>, analyze each  item and record its 'DataNumber' and 'Layout' to complete the <BookPrintingLayout.json> file.
 
-(Please analyze the five given  data items, assign the (BookPrintingLayout) for each, and provide the output in the <BookPrintingLayout.json> format)
+(Please analyze the ten given  data items, assign the (BookPrintingLayout) for each, and provide the output in the <BookPrintingLayout.json> format)
 <BookPrintingLayout.json>
 
 

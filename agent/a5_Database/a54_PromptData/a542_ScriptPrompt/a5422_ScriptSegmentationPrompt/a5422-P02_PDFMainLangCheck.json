@@ -43,7 +43,7 @@
             {
                 "Role": "system",
                 "Mark": "(역할 및 업무)\n",
-                "Message": "당신은 언어 데이터 전문가 입니다. 주어진 <도서페이지> 자료 5개를 보고 해당 도서의 주요 언어 1개를 (언어태그)에서 지정하여 <도서언어태그.json>로 완성하는 업무를 수행합니다."
+                "Message": "당신은 언어 데이터 전문가 입니다. 주어진 <도서페이지> 자료 10개를 보고 해당 도서의 주요 언어 1개를 (언어태그)에서 지정하여 <도서언어태그.json>로 완성하는 업무를 수행합니다."
             },
             {
                 "Role": "user",
@@ -54,7 +54,7 @@
                     },
                     {
                         "Mark": "\n\n(<도서언어태그.json>의 구조 및 내용)\n",
-                        "Message": "{'언어': {'태그': 'ko, en, de ... pl 중 <도서페이지> 자료 5개를 보고 해당 도서의 주요 언어 1개를 (언어태그)에서 지정하여 작성'}}"
+                        "Message": "{'언어': {'태그': 'ko, en, de ... pl 중 <도서페이지> 자료 10개를 보고 해당 도서의 주요 언어 1개를 (언어태그)에서 지정하여 작성'}}"
                     },
                     {
                         "Mark": "",
@@ -143,7 +143,7 @@
             {
                 "Role": "system",
                 "Mark": "(Role and Task)\n",
-                "Message": "You are a Language Data Expert. Your task is to analyze the five given <BookPage> data items, determine the single (LanguageTag) for the book, and complete the task by generating a <BookLanguageTag.json> file."
+                "Message": "You are a Language Data Expert. Your task is to analyze the ten given <BookPage> data items, determine the single (LanguageTag) for the book, and complete the task by generating a <BookLanguageTag.json> file."
             },
             {
                 "Role": "user",
@@ -182,7 +182,7 @@
                         "OutputMaster": ""
                     },
                     {
-                        "Mark": "\n\n\n(Please analyze the five given <BookPage> data items, determine the single (LanguageTag) for the book, and provide the output in the <BookLanguageTag.json> format)\n\n",
+                        "Mark": "\n\n\n(Please analyze the ten given <BookPage> data items, determine the single (LanguageTag) for the book, and provide the output in the <BookLanguageTag.json> format)\n\n",
                         "InputMark": "",
                         "Input": "INPUT",
                         "InputMark2": "",

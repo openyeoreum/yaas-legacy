@@ -62,5 +62,12 @@
                 }
             ]
         ]
+    ],
+    "wordpairs": [
+        {
+            "key": "CropLineDirection",
+            "ko": ["좌", "우", "위", "아래"],
+            "global": ["Left", "Right", "Top", "Bottom"]
+        }
     ]
 }

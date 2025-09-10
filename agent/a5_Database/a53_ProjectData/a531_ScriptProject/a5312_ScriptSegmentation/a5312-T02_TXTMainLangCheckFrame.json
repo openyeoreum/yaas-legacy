@@ -32,5 +32,6 @@
                 "MainLang": "eval(Response['Tag'])"
             }
         ]
-    ]
+    ],
+    "wordpairs": []
 }

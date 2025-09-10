@@ -70,5 +70,12 @@
                 }
             ]
         ]
+    ],
+    "wordpairs": [
+        {
+            "key": "Size",
+            "ko": ["단면", "양면"],
+            "global": ["Single", "Spread"]
+        }
     ]
 }

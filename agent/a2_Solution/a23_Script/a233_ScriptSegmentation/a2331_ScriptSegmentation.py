@@ -106,14 +106,18 @@ class ScriptLoadProcess:
         return [Inputs], [""]
 
     ## Output을 통한 ... ##
-    def _CreateOutput(self):
-        return None
+    def _CreateOutput(self, SolutionEditProcess):
+        """Output을 통한 ..."""
+        # _CreateOutputSwitch
+        if SolutionEditProcess is None:
+            return False
+        return False
 
     ## ScriptLoadProcess 실행 메서드 ##
     def Run(self):
         """스크립트 로드 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._CreateProcessInfoToInputs(), self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutpitFunc = self._CreateOutput(), MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._CreateProcessInfoToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit, self.FileExtension, self.UploadedScriptFilePath, self.UploadScriptFilePath
@@ -284,14 +288,18 @@ class PDFMainLangCheckProcess:
         return [Inputs], [""]
 
     ## Output을 통한 ... ##
-    def _CreateOutput(self):
-        return None
+    def _CreateOutput(self, SolutionEditProcess):
+        """Output을 통한 ..."""
+        # _CreateOutputSwitch
+        if SolutionEditProcess is None:
+            return False
+        return False
 
     ## PDFMainLangCheckProcess 실행 ##
     def Run(self):
         """PDF 언어 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._CreateLabeledSamplePathToInputs(), self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutpitFunc = self._CreateOutput(), MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._CreateLabeledSamplePathToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         # MainLang 추출
@@ -356,14 +364,18 @@ class PDFLayoutCheckProcess:
         return [Inputs], [""]
 
     ## Output을 통한 ... ##
-    def _CreateOutput(self):
-        return None
+    def _CreateOutput(self, SolutionEditProcess):
+        """Output을 통한 ..."""
+        # _CreateOutputSwitch
+        if SolutionEditProcess is None:
+            return False
+        return False
 
     ## PDFLayoutCheckProcess 실행 ##
     def Run(self):
         """PDF 인쇄 파일 형식인 단면, 양면 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._LoadPDFToLabeledSampleJPEGToInputs(), self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutpitFunc = self._CreateOutput(), MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._LoadPDFToLabeledSampleJPEGToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -451,20 +463,20 @@ class PDFResizeProcess:
         BorderW = max(2, int(4 * Scale))
 
         if self.MainLang == "ko":
-            DirLabelMap = {"Left":"자료방향: 좌","Right":"자료방향: 우","Up":"자료방향: 위","Down":"자료방향: 아래"}
+            DirLabelMap = {"Left":"자료방향: 좌","Right":"자료방향: 우","Top":"자료방향: 위","Bottom":"자료방향: 아래"}
             MultiDirSuffix = "네방향"
         else:
-            DirLabelMap = {"Left":"Direction: Left","Right":"Direction: Right","Up":"Direction: Up","Down":"Direction: Down"}
+            DirLabelMap = {"Left":"Direction: Left","Right":"Direction: Right","Top":"Direction: Top","Bottom":"Direction: Bottom"}
             MultiDirSuffix = "FourDirections"
 
-        FilenameSuffix = {"Left":"Left","Right":"Right","Up":"Up","Down":"Down"}
+        FilenameSuffix = {"Left":"Left","Right":"Right","Top":"Top","Bottom":"Bottom"}
 
         # 방향별 색상 매핑
         DirectionColors = {
-            "Left":  (255,   0,   0),  # 빨강
-            "Right": (  0,   0, 255),  # 파랑
-            "Up":    (  0, 128,   0),  # 녹색(가독성 위해 약간 어둡게)
-            "Down":  (255, 215,   0),  # 노랑(골드 톤으로 가독성↑)
+            "Left": (255, 0, 0),  # 빨강
+            "Right": (0, 0, 255),  # 파랑
+            "Top": (0, 128, 0),  # 녹색
+            "Bottom": (128, 0, 128),  # 보라색
         }
 
         def DrawTextWithWhiteBg(Draw, XY, Text, Font, Pad=NumberPad, Rounded=True, text_fill="red"):
@@ -518,7 +530,7 @@ class PDFResizeProcess:
             ImgCx = Img.width // 2
             ImgCy = Img.height // 2
 
-            if Direction == "Up":
+            if Direction == "Top":
                 for i in range(1, 11):
                     y = i * IntervalY
                     Draw.line([(0, y), (Img.width, y)], fill=Color, width=LineWidth)
@@ -527,7 +539,7 @@ class PDFResizeProcess:
                         Pad=NumberPad, Rounded=True, BaselineLift=NumberBaselineLift, text_fill=Color
                     )
 
-            elif Direction == "Down":
+            elif Direction == "Bottom":
                 for i in range(1, 11):
                     y = Img.height - (i * IntervalY)
                     Draw.line([(0, y), (Img.width, y)], fill=Color, width=LineWidth)
@@ -564,7 +576,7 @@ class PDFResizeProcess:
 
         if self.ResponseMethod == "Prompt":
             # 방향별로 개별 저장 + 중앙 라벨 (각 방향 색상 적용)
-            for DirKey in ["Left", "Right", "Up", "Down"]:
+            for DirKey in ["Left", "Right", "Top", "Bottom"]:
                 Img = BaseImg.copy()
                 DrawDirection(Img, DirKey, DirectionColors[DirKey])
                 # 중앙 라벨
@@ -577,23 +589,23 @@ class PDFResizeProcess:
         if self.ResponseMethod == "Manual":
             # 한 장에 4방향 모두 + 라벨 4개 '안쪽' 배치 (선과 절대 겹치지 않도록), 방향별 색 적용
             Img = BaseImg.copy()
-            for DirKey in ["Left", "Right", "Up", "Down"]:
+            for DirKey in ["Left", "Right", "Top", "Bottom"]:
                 DrawDirection(Img, DirKey, DirectionColors[DirKey])
 
             # ---- 라벨 위치 계산 (⑩번째 선 기준) ----
             LabelInnerOffset = LabelGap + LineWidth + NumberPad + ExtraMargin  # 선/숫자와 라벨 간 충분한 이격
 
-            # Up: y = 10*IntervalY → 그 "아래(안쪽)"에 라벨, 180°
+            # Top: y = 10*IntervalY → 그 "아래(안쪽)"에 라벨, 180°
             up_y10 = 10 * IntervalY
-            up_label = MakeLabelImage(DirLabelMap["Up"]).rotate(180, expand=True)
+            up_label = MakeLabelImage(DirLabelMap["Top"]).rotate(180, expand=True)
             up_px = (Img.width - up_label.width) // 2
             up_py = up_y10 + LabelInnerOffset
             up_py = min(max(0, up_py), Img.height - up_label.height)
             Img.paste(up_label, (up_px, up_py))
 
-            # Down: y = Img.height - 10*IntervalY → 그 "위(안쪽)"에 라벨, 0°
+            # Bottom: y = Img.height - 10*IntervalY → 그 "위(안쪽)"에 라벨, 0°
             down_y10 = Img.height - 10 * IntervalY
-            down_label = MakeLabelImage(DirLabelMap["Down"])
+            down_label = MakeLabelImage(DirLabelMap["Bottom"])
             down_px = (Img.width - down_label.width) // 2
             down_py = down_y10 - LabelInnerOffset - down_label.height
             down_py = min(max(0, down_py), Img.height - down_label.height)
@@ -678,11 +690,11 @@ class PDFResizeProcess:
                             "BodyCropLineNumber": 0
                         },
                         {
-                            "CropLineDirection": "Up",
+                            "CropLineDirection": "Top",
                             "BodyCropLineNumber": 0
                         },
                         {
-                            "CropLineDirection": "Down",
+                            "CropLineDirection": "Bottom",
                             "BodyCropLineNumber": 0
                         }
                     ]
@@ -698,63 +710,124 @@ class PDFResizeProcess:
 
     ## Output을 통한 PDF 재단 ##
     def _CreateOutputToPDFCrop(self, SolutionEditProcess):
-        """Response 결과에 따른 PDF를 재단"""
-        # SolutionEditProcess값 중 가장 빈도가 높은 값 구하기
-        LeftNumberList = []
-        RightNumberList = []
-        UpNumberList = []
-        DownNumberList = []
+        """Output을 통한 PDF를 재단"""
+        # _CreateOutputSwitch
+        if SolutionEditProcess is None:
+            return True
+
+        # 1) 다수결로 방향별 선택 숫자 결정
+        LeftNumberList, RightNumberList, TopNumberList, BottomNumberList = [], [], [], []
         for SolutionEditProcessDic in SolutionEditProcess:
-            for SolutionEditProcessDicItem in SolutionEditProcessDic:
-                CropLineDirection = SolutionEditProcessDicItem['CropLineDirection']
-                if CropLineDirection == 'Left':
-                    LeftNumberList.append(SolutionEditProcessDicItem["BodyCropLineNumber"])
-                elif CropLineDirection == 'Right':
-                    RightNumberList.append(SolutionEditProcessDicItem["BodyCropLineNumber"])
-                elif CropLineDirection == 'Up':
-                    UpNumberList.append(SolutionEditProcessDicItem["BodyCropLineNumber"])
-                elif CropLineDirection == 'Down':
-                    DownNumberList.append(SolutionEditProcessDicItem["BodyCropLineNumber"])
+            for item in SolutionEditProcessDic:
+                d = item['CropLineDirection']
+                n = item['BodyCropLineNumber']
+                if d == 'Left':
+                    LeftNumberList.append(n)
+                elif d == 'Right':
+                    RightNumberList.append(n)
+                elif d == 'Top':
+                    TopNumberList.append(n)
+                elif d == 'Bottom':
+                    BottomNumberList.append(n)
 
-        LeftNumber = max(set(LeftNumberList), key=LeftNumberList.count)
-        RightNumber = max(set(RightNumberList), key=RightNumberList.count)
-        UpNumber = max(set(UpNumberList), key=UpNumberList.count)
-        DownNumber = max(set(DownNumberList), key=DownNumberList.count)
+        LeftNumber   = max(set(LeftNumberList), key = LeftNumberList.count)
+        RightNumber  = max(set(RightNumberList), key = RightNumberList.count)
+        TopNumber    = max(set(TopNumberList), key = TopNumberList.count)
+        BottomNumber = max(set(BottomNumberList), key = BottomNumberList.count)
 
-        # PDF 재단
+        # 2) 공통 비율 (이미지 생성과 동일)
+        interval_ratio = getattr(self, "IntervalRatio", 0.03)  # 이미지 코드에서 세팅한 값과 동일해야 함
+
+        # 3) PDF 열기
         PdfDocument = fitz.open(self.UploadedScriptFilePath)
-        for PdfPage in PdfDocument:
-            rect = PdfPage.rect
+        BackUpPdfDocumentPath = self.UploadedScriptFilePath.replace(".pdf", "_temp.pdf")
+
+        # 회전에 따른 "시각 방향 -> PDF 엣지" 매핑
+        # rot는 0, 90, 180, 270 중 하나
+        def _edge_map(rot_deg):
+            # 반환값: { 'left': 시각적으로 어느 방향의 숫자를 쓸지,
+            #           'right': ...,
+            #           'top': ...,
+            #           'bottom': ... }
+            # 예) rot=90이면 화면의 'Top' 간격이 PDF의 'Left' 엣지 간격으로 적용됨
+            if rot_deg == 0:
+                return {'left': 'Left', 'right': 'Right', 'top': 'Top', 'bottom': 'Bottom'}
+            elif rot_deg == 90:
+                return {'left': 'Top', 'right': 'Bottom', 'top': 'Right', 'bottom': 'Left'}
+            elif rot_deg == 180:
+                return {'left': 'Right', 'right': 'Left', 'top': 'Bottom', 'bottom': 'Top'}
+            elif rot_deg == 270:
+                return {'left': 'Bottom', 'right': 'Top', 'top': 'Left', 'bottom': 'Right'}
+            else:
+                # 예외적으로 다른 값이면 회전 없다고 간주
+                return {'left': 'Left', 'right': 'Right', 'top': 'Top', 'bottom': 'Bottom'}
+
+        # 시각 방향 숫자 → 값 조회 헬퍼
+        dir_to_num = {
+            'Left': LeftNumber,
+            'Right': RightNumber,
+            'Top': TopNumber,
+            'Bottom': BottomNumber
+        }
+
+        for page in PdfDocument:
+            rect = page.rect
             w, h = rect.width, rect.height
 
-            dx = w * self.IntervalRatio
-            dy = h * self.IntervalRatio
+            # 페이지 회전 각도
+            try:
+                rot = int(page.rotation) % 360
+            except Exception:
+                rot = 0
 
-            left = rect.x0 + (LeftNumber * dx)
-            right = rect.x1 - (RightNumber * dx)
-            top = rect.y0 + (UpNumber * dy)
-            bottom = rect.y1 - (DownNumber * dy)
+            m = _edge_map(rot)  # 회전 보정 매핑
 
-            # 좌표 유효성 보정 (경계 안쪽으로 클램프)
-            left = max(rect.x0, min(left, rect.x1))
-            right = max(rect.x0, min(right, rect.x1))
-            top = max(rect.y0, min(top, rect.y1))
+            # 4) 각 엣지별 오프셋 계산
+            #    - left/right는 너비 w를 기준으로, top/bottom은 높이 h를 기준으로
+            left_offset   = dir_to_num[m['left']]   * interval_ratio * w
+            right_offset  = dir_to_num[m['right']]  * interval_ratio * w
+            top_offset    = dir_to_num[m['top']]    * interval_ratio * h
+            bottom_offset = dir_to_num[m['bottom']] * interval_ratio * h
+
+            # 5) 최종 크롭 박스 계산
+            left   = rect.x0 + left_offset
+            right  = rect.x1 - right_offset
+            top    = rect.y1 - top_offset
+            bottom = rect.y0 + bottom_offset
+
+            # 유효 범위로 클램프 + 뒤집힘 방지
+            left   = max(rect.x0, min(left, rect.x1))
+            right  = max(rect.x0, min(right, rect.x1))
+            top    = max(rect.y0, min(top, rect.y1))
             bottom = max(rect.y0, min(bottom, rect.y1))
+
+            # 혹시라도 역전된 경우 보정
+            if right <= left:
+                mid = (rect.x0 + rect.x1) / 2.0
+                left, right = mid - 1, mid + 1  # 최소 폭 2pt 보장
+            if bottom <= top:
+                mid = (rect.y0 + rect.y1) / 2.0
+                top, bottom = mid - 1, mid + 1  # 최소 높이 2pt 보장
+
             CropRect = fitz.Rect(left, top, right, bottom)
 
-            # 항상 적용
-            PdfPage.set_cropbox(CropRect)
-            PdfPage.set_mediabox(CropRect)
+            # 6) 크롭 적용
+            page.set_cropbox(CropRect)
+            page.set_mediabox(CropRect)
 
-        # 같은 경로에 덮어쓰기 저장
-        PdfDocument.save(self.UploadedScriptFilePath, garbage=4, deflate=True)
+        # 7) 저장 및 교체
+        PdfDocument.save(BackUpPdfDocumentPath, garbage=4, deflate=True)
         PdfDocument.close()
+
+        os.remove(self.UploadedScriptFilePath)
+        shutil.move(BackUpPdfDocumentPath, self.UploadedScriptFilePath)
+
 
     ## PDFResizeProcess 실행 ##
     def Run(self):
         """PDF 가로 재단 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._CreateTrimLineJPEGToInputs(), self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutpitFunc = self._CreateOutputToPDFCrop(), MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._CreateTrimLineJPEGToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutputFunc = self._CreateOutputToPDFCrop, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -775,6 +848,7 @@ class PDFSplitProcess:
         self.SubSolution = SubSolution
         self.NextSolution = NextSolution
         self.AutoTemplate = AutoTemplate
+        self.Model = Model
         self.MainLang = MainLang
         self.ResponseMethod = ResponseMethod
         self.EditMode = "Auto"
@@ -833,14 +907,18 @@ class PDFSplitProcess:
         return Inputs, ComparisonInputs
 
     ## Output을 통한 ... ##
-    def _CreateOutput(self):
-        return None
+    def _CreateOutput(self, SolutionEditProcess):
+        """Output을 통한 ..."""
+        # _CreateOutputSwitch
+        if SolutionEditProcess is None:
+            return False
+        return False
 
     ## PDFSplitProcess 실행 ##
     def Run(self):
         """PDF 분할 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._SplitPDFToInputs(), self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutpitFunc = self._CreateOutput(), MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._SplitPDFToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -861,6 +939,7 @@ class PDFFormCheckProcess:
         self.SubSolution = SubSolution
         self.NextSolution = NextSolution
         self.AutoTemplate = AutoTemplate
+        self.Model = Model
         self.MainLang = MainLang
         self.ResponseMethod = ResponseMethod
         self.EditMode = "Auto"
@@ -996,14 +1075,18 @@ class PDFFormCheckProcess:
         return Inputs, ComparisonInputs
 
     ## Output을 통한 ... ##
-    def _CreateOutput(self):
-        return None
+    def _CreateOutput(self, SolutionEditProcess):
+        """Output을 통한 ..."""
+        # _CreateOutputSwitch
+        if SolutionEditProcess is None:
+            return False
+        return False
 
     ## PDFFormCheckProcess 실행 ##
     def Run(self):
         """PDF 페이지 형식 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._CreateLabeledJPEGsToInputs(), self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutpitFunc = self._CreateOutput(), MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._CreateLabeledJPEGsToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -1029,6 +1112,8 @@ class TXTMainLangCheckProcess:
         self.Solution = Solution
         self.SubSolution = SubSolution
         self.NextSolution = NextSolution
+        self.AutoTemplate = AutoTemplate
+        self.MainLang = MainLang
         self.Model = Model
         self.ResponseMethod = ResponseMethod
         self.EditMode = "Auto"
@@ -1040,6 +1125,9 @@ class TXTMainLangCheckProcess:
         self.ProcessNumber = "T02"
         self.ProcessName = "TXTMainLangCheck"
         self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
+
+        # 경로설정
+        self.UploadScriptFilePath = UploadScriptFilePath
 
         # 출력설정
         self.MessagesReview = MessagesReview
@@ -1098,14 +1186,18 @@ class TXTMainLangCheckProcess:
         return [Inputs], [""]
 
     ## Output을 통한 ... ##
-    def _CreateOutput(self):
-        return None
+    def _CreateOutput(self, SolutionEditProcess):
+        """Output을 통한 ..."""
+        # _CreateOutputSwitch
+        if SolutionEditProcess is None:
+            return False
+        return False
 
     ## TXTMainLangCheckProcess 실행 ##
     def Run(self):
         """TXT 언어 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._CreateTXTToSampleTextToInputs(), self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutpitFunc = self._CreateOutput(), MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._CreateTXTToSampleTextToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         # MainLang 추출
@@ -1130,6 +1222,7 @@ class TXTSplitProcess:
         self.NextSolution = NextSolution
         self.AutoTemplate = AutoTemplate
         self.MainLang = MainLang
+        self.Model = Model
         self.ResponseMethod = ResponseMethod
         self.EditMode = "Auto"
         if self.ResponseMethod == "Manual":
@@ -1265,14 +1358,18 @@ class TXTSplitProcess:
         return Inputs, ComparisonInputs
 
     ## Output을 통한 ... ##
-    def _CreateOutput(self):
-        return None
+    def _CreateOutput(self, SolutionEditProcess):
+        """Output을 통한 ..."""
+        # _CreateOutputSwitch
+        if SolutionEditProcess is None:
+            return False
+        return False
 
     ## TXTSplitProcess 실행 ##
     def Run(self):
         """TXT 분할 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._SplitTXTToInputs(), self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutpitFunc = self._CreateOutput(), MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._SplitTXTToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit

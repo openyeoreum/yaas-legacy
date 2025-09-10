@@ -32,5 +32,6 @@
                 "UploadedScriptFilePath": "eval(Response['UploadedScriptFilePath'])"
             }
         ]
-    ]
+    ],
+    "wordpairs": []
 }

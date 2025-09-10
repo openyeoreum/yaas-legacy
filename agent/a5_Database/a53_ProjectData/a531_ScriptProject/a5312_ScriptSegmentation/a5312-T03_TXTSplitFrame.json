@@ -34,5 +34,6 @@
                 "SplitedText": "eval(Response['SplitedText'])"
             }
         ]
-    ]
+    ],
+    "wordpairs": []
 }

@@ -208,17 +208,17 @@ class LoadAgent:
             # 입력 수 체크 안함 (입력의 카운트가 의미가 없는 경우 예시로 IndexDefine 등)
             if IgnoreCountCheck:
                 if self.ProcessName in SolutionEdit.keys():
-                    EditCheck, EditResponseCompletion, EditOutputCompletion = EditCheckFunc()
+                    EditCheck, EditResponseCompletion, EditOutputCompletion = EditCheckFunc(EditCheck, EditResponseCompletion, EditOutputCompletion)
             else:
                 # 입력 수의 기준키 설정 (InputCount의 수가 단순 데이터 리스트의 총 개수랑 맞지 않는 경우)
                 if InputCountKey:
                     if self.ProcessName in SolutionEdit.keys() and SolutionEdit[self.ProcessName][-1][InputCountKey] == self.TotalInputCount * OutputsPerInput:
-                        EditCheck, EditResponseCompletion, EditOutputCompletion = EditCheckFunc()
+                        EditCheck, EditResponseCompletion, EditOutputCompletion = EditCheckFunc(EditCheck, EditResponseCompletion, EditOutputCompletion)
                         
                 # 일반적인 입력 수 체크
                 else:
                     if self.ProcessName in SolutionEdit and len(SolutionEdit[self.ProcessName]) == self.TotalInputCount * OutputsPerInput:
-                        EditCheck, EditResponseCompletion, EditOutputCompletion = EditCheckFunc()
+                        EditCheck, EditResponseCompletion, EditOutputCompletion = EditCheckFunc(EditCheck, EditResponseCompletion, EditOutputCompletion)
 
         return EditCheck, EditResponseCompletion, EditOutputCompletion
 
@@ -691,7 +691,6 @@ class LoadAgent:
             
             SolutionProcessDataFrame[0][key] = ActualValue
 
-
         ## SolutionProcessData 데이터 업데이트
         ## Response가 dict인 경우
         SolutionProcessData = copy.deepcopy(SolutionProcessDataFrame[1][0])
@@ -720,7 +719,7 @@ class LoadAgent:
                     SolutionProcessData[i][key] = ActualValue
 
         ## SolutionProcessDataFrame 데이터 프레임 업데이트
-        SolutionProcessDataFrame[1].append(SolutionProcessData)
+        SolutionProcessDataFrame[1].append(self._ConvertSolutionProcessDataGlobal(SolutionProcessData))
 
         ## SolutionProjectDataFrame ProcessCount 및 Completion 업데이트
         SolutionProcessDataFrame[0]['InputCount'] = InputCount
@@ -731,7 +730,30 @@ class LoadAgent:
         with open(self.SolutionProjectDataFramePath, 'w', encoding = 'utf-8') as DataFrameJson:
             json.dump(SolutionProcessDataFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
-    ## Response 통합 메서드 ## (Response global, ko 통합)
+    ## Response의 global 통합 메서드 ##
+    def _ConvertSolutionProcessDataGlobal(self, SolutionProcessData):
+        """Response global, ko 통합 메서드"""
+        if self.MainLangTag == 'ko':
+            # SolutionProjectDataFrame wordpairs 불러오기
+            with open(self.SolutionProjectFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+                SolutionProjectWordPairs = json.load(DataFrameJson)['wordpairs']
+            
+            # SolutionProcessData global 통합
+            if SolutionProjectWordPairs != []:
+                if isinstance(SolutionProcessData, dict):
+                    for SolutionProjectWordPairsDic in SolutionProjectWordPairs:
+                        for i, KoValue in enumerate(SolutionProjectWordPairsDic['ko']):
+                            if SolutionProcessData[SolutionProjectWordPairsDic['key']] == KoValue:
+                                SolutionProcessData[SolutionProjectWordPairsDic['key']] = SolutionProjectWordPairsDic['global'][i]
+                            
+                elif isinstance(SolutionProcessData, list):
+                    for SolutionProjectWordPairsDic in SolutionProjectWordPairs:
+                        for i in range(len(SolutionProcessData)):
+                            for j, KoValue in enumerate(SolutionProjectWordPairsDic['ko']):
+                                if SolutionProcessData[i][SolutionProjectWordPairsDic['key']] == KoValue:
+                                    SolutionProcessData[i][SolutionProjectWordPairsDic['key']] = SolutionProjectWordPairsDic['global'][j]
+
+        return SolutionProcessData
 
     ## SolutionEdit 업데이트 메서드 ##
     def _UpdateSolutionEdit(self):
@@ -753,8 +775,8 @@ class LoadAgent:
                 SolutionEdit[f"{self.ProcessName}ResponseCompletion"] = '완료 후 Completion'
             elif self.EditMode == "Auto":
                 SolutionEdit[f"{self.ProcessName}ResponseCompletion"] = 'Completion'
-            if self.OutputFunc is not None:
-                SolutionEdit[f"{self.ProcessName}OutputCompletion"] = '완료 후 Completion'
+            if self.OutputFunc(None):
+                SolutionEdit[f"{self.ProcessName}OutputCompletion"] = '완료 후 자동 Completion'
             else:
                 SolutionEdit[f"{self.ProcessName}OutputCompletion"] = 'Completion'
             SolutionProjectDataList = SolutionProjectDataFrame[1]
@@ -783,13 +805,18 @@ class LoadAgent:
     ## Output 생성 메서드 ##
     def _CreateOutput(self, SolutionEdit):
         """Output을 생성하는 메서드"""
-        if self.OutputFunc is not None:
+        SolutionEditProcess = SolutionEdit[self.ProcessName]
+        
+        if self.OutputFunc(None):
             # SolutionEditProcess 불러오기 및 Output 실행
-            SolutionEditProcess = SolutionEdit[self.ProcessName]
             self.OutputFunc(SolutionEditProcess)
             
             # OutputCompletion 설정
             SolutionEdit[f"{self.ProcessName}OutputCompletion"] = "Completion"
+            
+            # SolutionEdit 저장
+            with open(self.SolutionEditPath, 'w', encoding = 'utf-8') as SolutionEditJson:
+                json.dump(SolutionEdit, SolutionEditJson, indent = 4, ensure_ascii = False)
 
     ## Response 생성 및 프로세스 실행 메서드 ##
     def Run(self):

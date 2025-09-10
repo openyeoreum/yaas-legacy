@@ -70,5 +70,12 @@
                 }
             ]
         ]
+    ],
+    "wordpairs": [
+        {
+            "key": "Form",
+            "ko": ["표지", "목차", "서문-머리말", "장-부", "장-부-본문", "본문", "후기-에필로그", "참고자료", "빈지", "간지", "저작권-판권", "광고"],
+            "global": ["Cover", "TableOfContents", "Preface-Introduction", "Chapter-Part-Start", "Chapter-Part-Body", "Body", "Afterword-Epilogue", "ReferenceMaterial", "BlankPage", "DividerPage", "Copyright-Colophon", "Advertisement"]
+        }
     ]
 }

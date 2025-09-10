@@ -31,7 +31,8 @@
         [
             {
                 "ScriptId": "eval(Response['ScriptId'])",
-                "PageFilePath": "eval(Response['PageFilePath'])"
+                "PageFilePath": "eval(Response['PageFilePath'])",
+                "ResizePageFilePath": "eval(Response['ResizePageFilePath'])"
             }
         ]
     ],

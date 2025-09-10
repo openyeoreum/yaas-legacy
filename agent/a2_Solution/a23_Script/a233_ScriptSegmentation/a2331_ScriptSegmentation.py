@@ -22,7 +22,7 @@ class ScriptLoadProcess:
     ProjectStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
 
     ## ScriptLoad 초기화 ##
-    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview):
         """클래스 초기화"""
         # 업데이트 정보
         self.Email = Email
@@ -42,9 +42,12 @@ class ScriptLoadProcess:
         # 업로드 스크립트 파일 확장자
         self.FileExtension = None
 
-        # 경로설정
+        # 경로 설정
         self.UploadScriptFilePath = UploadScriptFilePath
         self._InitializePaths()
+
+        # Edit 설정
+        self.SolutionEdit = SolutionEdit
 
         # Process 설정
         self._FindAndProcessScriptFile()
@@ -138,7 +141,7 @@ class ScriptLoadProcess:
 class PDFMainLangCheckProcess:
 
     ## PDFMainLangCheck 초기화 ##
-    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview):
         """클래스 초기화"""
         # 업데이트 정보
         self.Email = Email
@@ -160,9 +163,12 @@ class PDFMainLangCheckProcess:
         self.ProcessName = "PDFMainLangCheck"
         self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
 
-        # 경로설정
+        # 경로 설정
         self.UploadScriptFilePath = UploadScriptFilePath
         self._InitializePaths()
+
+        # Edit 설정
+        self.SolutionEdit = SolutionEdit
 
         # 출력설정
         self.MessagesReview = MessagesReview
@@ -332,7 +338,7 @@ class PDFMainLangCheckProcess:
 class PDFLayoutCheckProcess:
 
     ## PDFLayoutCheck 초기화 ##
-    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview):
         """클래스 초기화"""
         # 업데이트 정보
         self.Email = Email
@@ -354,9 +360,12 @@ class PDFLayoutCheckProcess:
         self.ProcessName = "PDFLayoutCheck"
         self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
 
-        # 경로설정
+        # 경로 설정
         self.UploadScriptFilePath = UploadScriptFilePath
         self._InitializePaths()
+
+        # Edit 설정
+        self.SolutionEdit = SolutionEdit
 
         # 출력설정
         self.MessagesReview = MessagesReview
@@ -516,7 +525,7 @@ class PDFLayoutCheckProcess:
 class PDFResizeProcess:
 
     ## PDFResize 초기화 ##
-    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview):
         """클래스 초기화"""
         # 업데이트 정보
         self.Email = Email
@@ -538,9 +547,12 @@ class PDFResizeProcess:
         self.ProcessName = "PDFResize"
         self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
 
-        # 경로설정
+        # 경로 설정
         self.UploadScriptFilePath = UploadScriptFilePath
         self._InitializePaths()
+
+        # Edit 설정
+        self.SolutionEdit = SolutionEdit
 
         # 출력설정
         self.MessagesReview = MessagesReview
@@ -905,7 +917,7 @@ class PDFResizeProcess:
 
         # 3) PDF 열기
         PdfDocument = fitz.open(self.UploadedScriptFilePath)
-        BackUpPdfDocumentPath = self.UploadedScriptFilePath.replace(".pdf", "_backup.pdf")
+        ResizePdfDocumentPath = self.UploadedScriptFilePath.replace(".pdf", "_Resize.pdf")
 
         # 회전에 따른 "시각 방향 -> PDF 엣지" 매핑
         # rot는 0, 90, 180, 270 중 하나
@@ -980,12 +992,9 @@ class PDFResizeProcess:
             page.set_cropbox(CropRect)
             page.set_mediabox(CropRect)
 
-        # 7) 저장 및 교체
-        PdfDocument.save(BackUpPdfDocumentPath, garbage = 4, deflate = True)
+        # 7) 저장
+        PdfDocument.save(ResizePdfDocumentPath, garbage = 4, deflate = True)
         PdfDocument.close()
-
-        os.remove(self.UploadedScriptFilePath)
-        shutil.move(BackUpPdfDocumentPath, self.UploadedScriptFilePath)
 
     ## PDFResizeProcess 실행 ##
     def Run(self):
@@ -1003,7 +1012,7 @@ class PDFResizeProcess:
 class PDFSplitProcess:
 
     ## PDFSplit 초기화 ##
-    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview):
         """클래스 초기화"""
         # 업데이트 정보
         self.Email = Email
@@ -1025,10 +1034,13 @@ class PDFSplitProcess:
         self.ProcessName = "PDFSplit"
         self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
         
-        # 경로설정
+        # 경로 설정
         self.UploadScriptFilePath = UploadScriptFilePath
         self._InitializePaths()
-        
+
+        # Edit 설정
+        self.SolutionEdit = SolutionEdit
+
         # 출력설정
         self.MessagesReview = MessagesReview
 
@@ -1038,32 +1050,48 @@ class PDFSplitProcess:
         # SplitedPDF 경로 및 디렉토리 생성
         self.SplitScriptPDFDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_Script({self.NextSolution})_pdf")
         os.makedirs(self.SplitScriptPDFDirPath, exist_ok = True)
+        self.SplitScriptResizePDFDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_Script({self.NextSolution})_Resize_pdf")
+        os.makedirs(self.SplitScriptResizePDFDirPath, exist_ok = True)
 
     ## PDF 파일을 페이지별로 분할 및 저장 및 Inputs 생성 ##
     def _SplitPDFToInputs(self):
         """PDF 파일을 페이지별로 분할하고 저장"""
         # PDF 파일 읽고 총 페이지 수 계산
-        Reader = PdfReader(self.UploadedScriptFilePath)
-        TotalPages = len(Reader.pages)
-        
+        PdfDocument = PdfReader(self.UploadedScriptFilePath)
+        ResizePDFPath = self.UploadedScriptFilePath.replace(".pdf", "_Resize.pdf")
+        ResizePdfDocument = PdfReader(ResizePDFPath)
+        TotalPages = len(PdfDocument.pages)
+
         # 각 페이지를 개별 PDF 파일로 저장 및 Inputs 생성
         Inputs = []
         ComparisonInputs = []
         for PageNum in range(TotalPages):
+            # 페이지별 PDF 분할
             Writer = PdfWriter()
-            Writer.add_page(Reader.pages[PageNum])
-            
+            Writer.add_page(PdfDocument.pages[PageNum])
             OutputFileName = f"{self.ProjectName}_Script({self.NextSolution})({PageNum + 1}).pdf"
             OutputFilePath = os.path.join(self.SplitScriptPDFDirPath, OutputFileName)
-            
+
             # 페이지별 PDF 파일 저장
             with open(OutputFilePath, "wb") as OutputFile:
                 Writer.write(OutputFile)
+
+            # 페이지별 Resize PDF 분할
+            ResizeWriter = PdfWriter()
+            ResizeWriter.add_page(ResizePdfDocument.pages[PageNum])
+            ResizeOutputFileName = f"{self.ProjectName}_Script({self.NextSolution})({PageNum + 1}).pdf"
+            ResizeOutputFilePath = os.path.join(self.SplitScriptResizePDFDirPath, ResizeOutputFileName)
+
+            # 페이지별 Resize PDF 파일 저장
+            with open(ResizeOutputFilePath, "wb") as ResizeOutputFile:
+                ResizeWriter.write(ResizeOutputFile)
+            
             # 페이지별 파일 경로를 리스트에 추가
             Inputs.append(
                 {
                     "ScriptId": PageNum + 1,
-                    "PageFilePath": OutputFilePath
+                    "PageFilePath": OutputFilePath,
+                    "ResizePageFilePath": ResizeOutputFilePath
                 }
             )
             ComparisonInputs.append("")
@@ -1094,7 +1122,7 @@ class PDFSplitProcess:
 class PDFFormCheckProcess:
 
     ## PDFFormCheck 초기화 ##
-    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview):
         """클래스 초기화"""
         # 업데이트 정보
         self.Email = Email
@@ -1117,9 +1145,12 @@ class PDFFormCheckProcess:
         self.ProcessName = "PDFFormCheck"
         self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
 
-        # 경로설정
+        # 경로 설정
         self.UploadScriptFilePath = UploadScriptFilePath
         self._InitializePaths()
+
+        # Edit 설정
+        self.SolutionEdit = SolutionEdit
 
         # 출력설정
         self.MessagesReview = MessagesReview
@@ -1268,7 +1299,7 @@ class PDFFormCheckProcess:
 class TXTMainLangCheckProcess:
 
     ## TXTMainLangCheck 초기화 ##
-    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview):
         """클래스 초기화"""
         # 업데이트 정보
         self.Email = Email
@@ -1290,8 +1321,11 @@ class TXTMainLangCheckProcess:
         self.ProcessName = "TXTMainLangCheck"
         self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
 
-        # 경로설정
+        # 경로 설정
         self.UploadScriptFilePath = UploadScriptFilePath
+
+        # Edit 설정
+        self.SolutionEdit = SolutionEdit
 
         # 출력설정
         self.MessagesReview = MessagesReview
@@ -1376,7 +1410,7 @@ class TXTMainLangCheckProcess:
 class TXTSplitProcess:
 
     ## TXTSplit 초기화 ##
-    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview):
         """클래스 초기화"""
         # 업데이트 정보
         self.Email = Email
@@ -1403,9 +1437,12 @@ class TXTSplitProcess:
         self.BaseTokens = 3000
         self.MaxTokens = self._DetermineMaxTokens()
 
-        # 경로설정
+        # 경로 설정
         self.UploadScriptFilePath = UploadScriptFilePath
-        
+
+        # Edit 설정
+        self.SolutionEdit = SolutionEdit
+
         # 출력설정
         self.MessagesReview = MessagesReview
 
@@ -1552,40 +1589,40 @@ def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTempla
     ResponseMethod = "Prompt"
     
     ## PT01 통합: (PDF)ScriptLoad (업로드 된 스크립트 파일 확인)
-    ScriptLoadInstance = ScriptLoadProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, "Algorithm", None, None, MessagesReview)
+    ScriptLoadInstance = ScriptLoadProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, "Algorithm", None, None, None, MessagesReview)
     SolutionEdit, FileExtension, UploadedScriptFilePath, UploadScriptFilePath = ScriptLoadInstance.Run()
 
     ## 파일 확장자에 따라 후속 프로세스 실행
     if FileExtension == 'pdf':
 
         ## P02 PDFMainLangCheck (PDF 언어 체크)
-        PDFMainLangCheckProcessInstance = PDFMainLangCheckProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
+        PDFMainLangCheckProcessInstance = PDFMainLangCheckProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
         SolutionEdit, MainLang = PDFMainLangCheckProcessInstance.Run()
         
         ## P03 PDFLayoutCheck (PDF 인쇄 파일 형식인 단면, 양면 체크) <- 여기서 페이지 분할 동시 진행
-        PDFLayoutCheckInstance = PDFLayoutCheckProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
+        PDFLayoutCheckInstance = PDFLayoutCheckProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
         SolutionEdit = PDFLayoutCheckInstance.Run()
         
         ## P04 PDFResize (PDF 파일 재단)
-        PDFResizeInstance = PDFResizeProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, "Google", "Manual", UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
+        PDFResizeInstance = PDFResizeProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, "Google", "Manual", UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
         SolutionEdit = PDFResizeInstance.Run()
         
         ## P05 PDFSplit (PDF 파일 페이지 분할)
-        PDFSplitterInstance = PDFSplitProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, "Algorithm", UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
+        PDFSplitterInstance = PDFSplitProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, "Algorithm", UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
         SolutionEdit = PDFSplitterInstance.Run()
 
         ## P06 PDFFormCheck (PDF 파일 페이지 형식 체크)
-        PDFFormCheckInstance = PDFFormCheckProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, "Google", ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
+        PDFFormCheckInstance = PDFFormCheckProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, "Google", ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
         SolutionEdit = PDFFormCheckInstance.Run()
         
     elif FileExtension == 'txt':
 
         # T02 TXTMainLangCheck (TXT 언어 체크)
-        TXTMainLangCheckInstance = TXTMainLangCheckProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
+        TXTMainLangCheckInstance = TXTMainLangCheckProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
         SolutionEdit, MainLang = TXTMainLangCheckInstance.Run()
 
         # T03 TXTSplit (텍스트 파일 지정 토큰수 분할)
-        TXTSplitterInstance = TXTSplitProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, "Algorithm", UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
+        TXTSplitterInstance = TXTSplitProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, "Algorithm", UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
         SolutionEdit = TXTSplitterInstance.Run()
 
 if __name__ == "__main__":

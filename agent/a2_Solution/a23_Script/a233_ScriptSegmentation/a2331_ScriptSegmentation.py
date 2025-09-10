@@ -786,14 +786,14 @@ class PDFResizeProcess:
             #    - left/right는 너비 w를 기준으로, top/bottom은 높이 h를 기준으로
             left_offset   = dir_to_num[m['left']]   * interval_ratio * w
             right_offset  = dir_to_num[m['right']]  * interval_ratio * w
-            top_offset    = dir_to_num[m['top']]    * interval_ratio * h
-            bottom_offset = dir_to_num[m['bottom']] * interval_ratio * h
+            top_offset    = dir_to_num[m['bottom']] * interval_ratio * h
+            bottom_offset = dir_to_num[m['top']]    * interval_ratio * h
 
             # 5) 최종 크롭 박스 계산
             left   = rect.x0 + left_offset
             right  = rect.x1 - right_offset
-            top    = rect.y1 - top_offset
-            bottom = rect.y0 + bottom_offset
+            top    = rect.y0 + top_offset
+            bottom = rect.y1 - bottom_offset
 
             # 유효 범위로 클램프 + 뒤집힘 방지
             left   = max(rect.x0, min(left, rect.x1))

@@ -375,40 +375,88 @@ Advertisement: A page promoting other books or products.
 프롤로그, 에필로그 -> Logue
 [한글]
 (역할 및 업무)
-당신은 도서 데이터 전문가 입니다. 주어진 <도서목차페이지> 자료를 보고 해당 도서의 목차를 (목차태그)에 따라서 하나하나를 분리하고 태그를 지정하여 <도서목차.json>로 완성하는 업무를 수행합니다.
+당신은 도서 데이터 전문가 입니다. 주어진 <도서표지및목차페이지> 자료들을 보고 해당 도서의 목차를 (목차태그)에 따라서 하나하나를 분리하고 태그를 지정하고 목차를 작성하여 <도서목차.json>로 완성하는 업무를 수행합니다.
 
 (목차태그)
-제목: 
-부제목: 
-부: 
-장: 
-항목: 
-로그: 
+제목: 도서의 제목
+부제목: 도서의 부제목
+부: 책의 가장 큰 단위 구성
+장: 부 안에서 더 세부적으로 나눈 단위, 단 부가 생략되고 장부터 존재하는 경우도 있음
+항목: 부, 장 안의 소주제나 세부 항목
+로그: 본문 전후의 글로서 서문, 프롤로그, 에필로그 등
+부록: 본문 뒤에 추가된 참고자료, 자료집, 색인 등
 
 (<도서목차.json>의 구조 및 내용)
 {
     '목차': [
         {
             '목차태크': '제목', '부제목', '부', '장', '항목', '로그' 중 <도서목차페이지>에 적합한 목차태그를 지정,
-            '목차': '분리된 목차를 그대로 작성'
+            '목차': '분리된 제목 또는 목차를 그대로 작성'
         },
         {
             '목차태크': '제목', '부제목', '부', '장', '항목', '로그' 중 <도서목차페이지>에 적합한 목차태그를 지정,
-            '목차': '분리된 목차를 그대로 작성'
+            '목차': '분리된 제목 또는 목차를 그대로 작성'
         },
         ...
         {
             '목차태크': '제목', '부제목', '부', '장', '항목', '로그' 중 <도서목차페이지>에 적합한 목차태그를 지정,
-            '목차': '분리된 목차를 그대로 작성'
+            '목차': '분리된 제목 또는 목차를 그대로 작성'
         },
     ]
 }
 
 (<도서목차.json> 완성 절차 및 방법)
-1. 
------ 해당 프롬프트는 목차가 1개일때와 2개일때는 분리해야 할까? -----
+1. <도서표지및목차페이지>는 도서의 표지나 목차로 예상되는 페이지로서 파일별로 중앙 상단에 '표지: n', '목차: 1', '목차: 2' ... 가 표기되어 있습니다.
+2. (<도서목차.json>의 구조 및 내용)에 따라 <도서표지및목차페이지> 자료를 '표지: n', '목차: 1', '목차: 2' ... 순서대로 보고, 각각의 제목과 목차들을 분리합니다.
+3. 분리된 제목과 목차를 순서대로 '목차태그'를 지정하고 '목차'로 작성하여 <도서목차.json>를 완성합니다.
+4. 동일한 제목 또는 목차가 중복으로 있는 경우에는 하나만 작성합니다.
+5. 제목, 부제목, 부, 장, 항목, 로그 하단 등에 부가설명이 있어도 부가설명은 따로 작성하지 않습니다.
+
+(주어진 <도서표지및목차페이지> 자료들을 보고 해당 도서의 목차를 (목차태그)에 따라서 하나하나를 분리하고 태그를 지정하고 목차를 작성하여 <도서목차.json>로 완성해주세요)
+<도서목차.json>
 
 
+[English]
+(Role and Task)
+You are a Book Data Expert. Your task is to analyze the given <BookCoverAndContentsPage> data, segment each item of the book's table of contents, assign a (ContentsTag) to each segment, and generate a <BookTableOfContents.json> file with the transcribed content.
+
+(ContentsTag)
+Title: The title of the book.
+Subtitle: The subtitle of the book.
+Part: The largest division of the book.
+Chapter: A more detailed division within a Part. In some cases, a book may start with Chapters without being divided into Parts.
+Section: A sub-topic or detailed item within a Part or Chapter.
+Logue: Text that appears before or after the main body, such as a preface, prologue, or epilogue.
+Appendix: Supplementary material added at the end of the book, such as references, data collections, or an index.
+
+(Structure and Content of <BookTableOfContents.json>)
+{
+    'TableOfContents': [
+        {
+            'ContentsTag': 'Assign the appropriate tag from the list: Title, Subtitle, Part, Chapter, Section, Logue, Appendix for the item from the <BookCoverAndContentsPage>',
+            'Content': 'Transcribe the segmented title or contents item exactly as it appears'
+        },
+        {
+            'ContentsTag': 'Assign the appropriate tag from the list: Title, Subtitle, Part, Chapter, Section, Logue, Appendix for the item from the <BookCoverAndContentsPage>',
+            'Content': 'Transcribe the segmented title or contents item exactly as it appears'
+        },
+        ...
+        {
+            'ContentsTag': 'Assign the appropriate tag from the list: Title, Subtitle, Part, Chapter, Section, Logue, Appendix for the item from the <BookCoverAndContentsPage>',
+            'Content': 'Transcribe the segmented title or contents item exactly as it appears'
+        }
+    ]
+}
+
+(Procedure for completing <BookTableOfContents.json>)
+1. The <BookCoverAndContentsPage> data consists of pages presumed to be the book's cover or table of contents. Each file is marked in the top-center with 'Cover: n', 'Contents: 1', 'Contents: 2', etc.
+2. Following the JSON structure defined above, process the <BookCoverAndContentsPage> data in the order of 'Cover: n', 'Contents: 1', 'Contents: 2', etc., and segment each title and contents item.
+3. For each segmented title and contents item, assign the appropriate 'ContentsTag' and transcribe it under 'Content' in sequential order to complete the <BookTableOfContents.json> file.
+4. If an identical title or contents item appears more than once, include it only once.
+5. Do not include any supplementary descriptions that may appear below the Title, Subtitle, Part, Chapter, Section, or Logue entries.
+
+(Please analyze the given <BookCoverAndContentsPage> data, segment each item of the book's table of contents according to the (ContentsTag), assign the appropriate tag, transcribe the content, and provide the output in the <BookTableOfContents.json> format)
+<BookTableOfContents.json>
 
 
 #P08 PDFIndexMatching (PDF 파일 목차와 본문 속 목차 매칭)

@@ -1509,6 +1509,7 @@ def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTempla
         TXTSplitterInstance = TXTSplitProcess(email, projectName, NextSolution, AutoTemplate, MainLang, Model, "Algorithm", UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
         SolutionEdit = TXTSplitterInstance.Run()
 
+
 if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################

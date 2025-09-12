@@ -569,7 +569,7 @@ class PDFResizeProcess:
     ## PDF 방향별 보조선 샘플 이미지 생성 ##
     def _CreatePDFToTrimLineJPEGs(self, Page, InputId):
         """PDF 페이지에서 보조선 샘플 이미지를 생성"""
-        Pixmap = Page.get_pixmap(dpi=150)
+        Pixmap = Page.get_pixmap(dpi = 150)
         BaseImg = Image.frombytes("RGB", (Pixmap.width, Pixmap.height), Pixmap.samples)
 
         RefWidth = 1240
@@ -697,27 +697,6 @@ class PDFResizeProcess:
             OutPath = os.path.join(self.TrimScriptJPEGDirPath, OutName)
             Img.save(OutPath, "JPEG", quality=92, optimize=True, progressive=True, subsampling=1)
             return OutPath
-
-        # 흰색을 투명 처리(near-white tolerance 적용)
-        def WhiteToTransparent(img_rgb, tolerance=8):
-            """img_rgb: 'RGB' 또는 'RGBA', tolerance: 0~255, 높을수록 더 많은 밝은 영역을 투명화"""
-            if img_rgb.mode != "RGBA":
-                img = img_rgb.convert("RGBA")
-            else:
-                img = img_rgb.copy()
-
-            datas = img.getdata()
-            new_data = []
-            tol = max(0, min(255, tolerance))
-            thr = 255 - tol
-            for r, g, b, a in datas:
-                # 거의 흰색이면 투명 처리
-                if r >= thr and g >= thr and b >= thr:
-                    new_data.append((r, g, b, 0))
-                else:
-                    new_data.append((r, g, b, a))
-            img.putdata(new_data)
-            return img
 
         OutputPaths = []
 

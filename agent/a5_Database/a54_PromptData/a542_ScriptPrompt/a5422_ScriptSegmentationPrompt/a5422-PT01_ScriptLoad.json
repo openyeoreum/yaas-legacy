@@ -1,10 +1,10 @@
 {
     "ko": {
-        "TaskName": "TXTLoad",
+        "TaskName": "ScriptLoad",
         "OutputStructure": {}
     },
     "global": {
-        "TaskName": "TXTLoad",
+        "TaskName": "ScriptLoad",
         "OutputStructure": {}
     }
 }

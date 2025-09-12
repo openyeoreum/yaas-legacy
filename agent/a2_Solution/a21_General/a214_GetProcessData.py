@@ -66,14 +66,12 @@ def GetPromptFrame(Process, MainLang):
         "ShortScriptGen": "/a542_ScriptPrompt/a5421_BookScriptGenPrompt/a5421-11_ShortScriptGen.json",
         "ShortScriptGenFeedback": "/a542_ScriptPrompt/a5421_BookScriptGenPrompt/a5421-12_ShortScriptGenFeedback.json",
         # ScriptSegmentationPrompt
-        "PDFLoad": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P01_PDFLoad.json",
+        "ScriptLoad": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-PT01_ScriptLoad.json",
         "PDFMainLangCheck": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P02_PDFMainLangCheck.json",
         "PDFLayoutCheck": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P03_PDFLayoutCheck.json",
         "PDFResize": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P04_PDFResize.json",
         "PDFSplit": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P05_PDFSplit.json",
         "PDFFormCheck": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P06_PDFFormCheck.json",
-        "TXTLoad": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-T01_TXTLoad.json",
-        "TXTMainLangCheck": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-T02_TXTMainLangCheck.json",
         "TXTSplit": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-T03_TXTSplit.json",
         # TranslationPrompt
         "TranslationIndexDefine": "/a543_TranslationPrompt/a543-01_TranslationIndexDefine.json",

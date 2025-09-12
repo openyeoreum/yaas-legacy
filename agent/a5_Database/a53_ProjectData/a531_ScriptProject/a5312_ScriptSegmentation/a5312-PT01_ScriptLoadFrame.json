@@ -1,29 +1,39 @@
 {
     "ko": [
         {
-            "ProjectName": "eval(self.ProjectName)",
+            "ProjectName": "eval(Response['ProjectName'])",
             "TaskName": "ScriptLoad",
-            "NextSolution": "eval(self.NextSolution)",
-            "AutoTemplate": "eval(self.AutoTemplate)",
-            "FileExtension": "eval(self.FileExtension)",
+            "NextSolution": "eval(Response['NextSolution'])",
+            "AutoTemplate": "eval(Response['AutoTemplate'])",
+            "FileExtension": "eval(Response['FileExtension'])",
             "MainLang": "",
             "InputCount": 0,
             "Completion": "No"
         },
-        []
+        [
+            {
+                "FileExtension": "eval(Response['FileExtension'])",
+                "UploadedScriptFilePath": "eval(Response['UploadedScriptFilePath'])"
+            }
+        ]
     ],
     "global": [
         {
-            "ProjectName": "eval(self.ProjectName)",
+            "ProjectName": "eval(Response['ProjectName'])",
             "TaskName": "ScriptLoad",
-            "NextSolution": "eval(self.NextSolution)",
-            "AutoTemplate": "eval(self.AutoTemplate)",
-            "FileExtension": "eval(self.FileExtension)",
+            "NextSolution": "eval(Response['NextSolution'])",
+            "AutoTemplate": "eval(Response['AutoTemplate'])",
+            "FileExtension": "eval(Response['FileExtension'])",
             "MainLang": "",
             "InputCount": 0,
             "Completion": "No"
         },
-        []
+        [
+            {
+                "FileExtension": "eval(Response['FileExtension'])",
+                "UploadedScriptFilePath": "eval(Response['UploadedScriptFilePath'])"
+            }
+        ]
     ],
     "wordpairs": []
 }

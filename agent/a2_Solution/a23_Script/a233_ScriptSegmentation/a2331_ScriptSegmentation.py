@@ -24,15 +24,13 @@ class ScriptSegmentationSolution:
 
 
     ## [Method] Init: ScriptSegmentation 초기화 ##
-    def __init__(self, Email, ProjectName, ProcessNumber, ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview):
+    def __init__(self, Email, ProjectName, ProcessNumber, ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview):
         """솔루션 초기화"""
         # 업데이트 정보
         self.Email = Email
         self.ProjectName = ProjectName
         self.ProcessNumber = ProcessNumber
         self.ProcessName = ProcessName
-        self.Solution = Solution
-        self.SubSolution = SubSolution
         self.NextSolution = NextSolution
         self.AutoTemplate = AutoTemplate
         self.MainLang = MainLang
@@ -41,6 +39,7 @@ class ScriptSegmentationSolution:
         self.EditMode = "Auto"
         if self.ResponseMethod == "Manual":
             self.EditMode = self.ResponseMethod
+        self.UploadScriptFileDirPath = UploadScriptFileDirPath
         self.UploadedScriptFilePath = UploadedScriptFilePath
 
         # 업로드 스크립트 파일 확장자
@@ -97,9 +96,9 @@ class ScriptLoadProcess(ScriptSegmentationSolution):
 
 
     ## Init: ScriptLoad 초기화 ##
-    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview):
         """솔루션 상속 및 프로세스 초기화"""
-        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
+        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview)
 
         # 출력정보 및 경로 설정
         self.ProcessInfo = self._ProcessInfo()
@@ -111,7 +110,7 @@ class ScriptLoadProcess(ScriptSegmentationSolution):
         """프로세스와 관련된 모든 경로를 초기화 메서드"""
         # project_script 관련 경로
         self.ScriptDirPath = os.path.join(self.StoragePath, self.Email, self.ProjectName, f"{self.ProjectName}_script")
-        self.UploadScriptFilePath = os.path.join(self.ScriptDirPath, f"{self.ProjectName}_upload_script_file")
+        self.UploadScriptFileDirPath = os.path.join(self.ScriptDirPath, f"{self.ProjectName}_upload_script_file")
 
 
     ## Preprocess: 스크립트 파일 확장자 확인 및 표준화 전처리 메서드 ##
@@ -120,14 +119,14 @@ class ScriptLoadProcess(ScriptSegmentationSolution):
         FileExistsError = True
 
         SupportedExtensions = ['.txt', '.pdf']
-        AllFiles = os.listdir(self.UploadScriptFilePath)
+        AllFiles = os.listdir(self.UploadScriptFileDirPath)
         for Extension in SupportedExtensions:
             ScriptFiles = [File for File in AllFiles if File.lower().endswith(Extension)]
             if ScriptFiles:
-                RawUploadedScriptFilePath = os.path.join(self.UploadScriptFilePath, ScriptFiles[0])
+                RawUploadedScriptFilePath = os.path.join(self.UploadScriptFileDirPath, ScriptFiles[0])
                 self.FileExtension = Extension[1:]
                 ScriptFileName = f"{self.ProjectName}_Script({self.NextSolution}).{self.FileExtension}"
-                self.UploadedScriptFilePath = os.path.join(self.UploadScriptFilePath, ScriptFileName)
+                self.UploadedScriptFilePath = os.path.join(self.UploadScriptFileDirPath, ScriptFileName)
 
                 # 파일명이 다르면 표준화된 이름으로 복사 (기존 파일이 존재하면 복사하지 않음)
                 if not os.path.exists(self.UploadedScriptFilePath):
@@ -138,7 +137,7 @@ class ScriptLoadProcess(ScriptSegmentationSolution):
 
         if FileExistsError:
             # txt 또는 pdf 파일이 없으면 오류메세지 출력
-            sys.exit(f"\n\n[ 원고 파일(txt, pdf)을 아래 경로에 복사해주세요. ]\n({self.UploadScriptFilePath})\n\n")
+            sys.exit(f"\n\n[ 원고 파일(txt, pdf)을 아래 경로에 복사해주세요. ]\n({self.UploadScriptFileDirPath})\n\n")
 
 
     ## Inputs: 솔루션 정보 Inputs 생성 메서드 ##
@@ -153,6 +152,7 @@ class ScriptLoadProcess(ScriptSegmentationSolution):
             "NextSolution": self.NextSolution,
             "AutoTemplate": self.AutoTemplate,
             "FileExtension": self.FileExtension,
+            "UploadedScriptFilePath": self.UploadedScriptFilePath
         }
 
         return [Inputs], [""]
@@ -165,7 +165,11 @@ class ScriptLoadProcess(ScriptSegmentationSolution):
         LoadAgentInstance = LoadAgent(self._CreateSolutionInfoToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
-        return SolutionEdit, self.FileExtension, self.UploadedScriptFilePath, self.UploadScriptFilePath
+        # SolutionEdit 추출
+        FileExtension = SolutionEdit[self.ProcessName][0]["FileExtension"]
+        UploadedScriptFilePath = SolutionEdit[self.ProcessName][0]["UploadedScriptFilePath"]
+
+        return SolutionEdit, FileExtension, UploadedScriptFilePath, self.UploadScriptFileDirPath
 
 
 #################################
@@ -185,9 +189,9 @@ class PDFMainLangCheckProcess(ScriptSegmentationSolution):
 
 
     ## Init: PDFMainLangCheck 초기화 ##
-    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview):
         """솔루션 상속 및 프로세스 초기화"""
-        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
+        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview)
 
         # 출력정보 및 경로 설정
         self.ProcessInfo = self._ProcessInfo()
@@ -198,7 +202,7 @@ class PDFMainLangCheckProcess(ScriptSegmentationSolution):
     def _InitPaths(self):
         """프로세스와 관련된 모든 경로를 초기화 메서드"""
         # SplitedPDF 경로 및 디렉토리 생성
-        self.SampleScriptJPEGDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_SampleScript({self.NextSolution})_jpeg")
+        self.SampleScriptJPEGDirPath = os.path.join(self.UploadScriptFileDirPath, f"{self.ProjectName}_SampleScript({self.NextSolution})_jpeg")
         os.makedirs(self.SampleScriptJPEGDirPath, exist_ok = True)
         self.FontDirPath = "/usr/share/fonts/"
         self.NotoSansCJKRegular = os.path.join(self.FontDirPath, "opentype/noto/NotoSansCJK-Regular.ttc")
@@ -327,7 +331,7 @@ class PDFMainLangCheckProcess(ScriptSegmentationSolution):
         Inputs = []
         for InputId, PageIdx in enumerate(Selected, 1):
             page = PdfDocument.load_page(PageIdx)
-            OutPath = self._PreprocessNormalizedScriptFile(page, InputId)
+            OutPath = self._PreprocessLabeledSampleJPEGs(page, InputId)
             Inputs.append(OutPath)
 
         PdfDocument.close()
@@ -342,7 +346,7 @@ class PDFMainLangCheckProcess(ScriptSegmentationSolution):
         LoadAgentInstance = LoadAgent(self._CreateLabeledSamplePathToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
-        # MainLang 추출
+        # SolutionEdit 추출
         MainLang = SolutionEdit[self.ProcessName][0]["MainLang"]
 
         return SolutionEdit, MainLang
@@ -358,9 +362,9 @@ class PDFLayoutCheckProcess(ScriptSegmentationSolution):
 
 
     ## Init: PDFLayoutCheck 초기화 ##
-    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview):
         """솔루션 상속 및 프로세스 초기화"""
-        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
+        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview)
 
         # 출력정보 및 경로 설정
         self.ProcessInfo = self._ProcessInfo()
@@ -371,7 +375,7 @@ class PDFLayoutCheckProcess(ScriptSegmentationSolution):
     def _InitPaths(self):
         """프로세스와 관련된 모든 경로를 초기화 메서드"""
         # SplitedPDF 경로 및 디렉토리 생성
-        self.SampleScriptJPEGDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_SampleScript({self.NextSolution})_jpeg")
+        self.SampleScriptJPEGDirPath = os.path.join(self.UploadScriptFileDirPath, f"{self.ProjectName}_SampleScript({self.NextSolution})_jpeg")
 
 
     ## Inputs: PDF 라벨 샘플 이미지 Inputs 생성 메서드##
@@ -528,9 +532,9 @@ class PDFResizeProcess(ScriptSegmentationSolution):
 
 
     ## Init: PDFResize 초기화 ##
-    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview):
         """솔루션 상속 및 프로세스 초기화"""
-        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
+        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview)
 
         # 출력정보 및 경로 설정
         self.ProcessInfo = self._ProcessInfo()
@@ -541,7 +545,7 @@ class PDFResizeProcess(ScriptSegmentationSolution):
     def _InitPaths(self):
         """프로세스와 관련된 모든 경로를 초기화 메서드"""
         # SplitedPDF 경로 및 디렉토리 생성
-        self.TrimScriptJPEGDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_TrimScript({self.NextSolution})_jpeg")
+        self.TrimScriptJPEGDirPath = os.path.join(self.UploadScriptFileDirPath, f"{self.ProjectName}_TrimScript({self.NextSolution})_jpeg")
         os.makedirs(self.TrimScriptJPEGDirPath, exist_ok = True)
         self.FontDirPath = "/usr/share/fonts/"
         self.NotoSansCJKRegular = os.path.join(self.FontDirPath, "opentype/noto/NotoSansCJK-Regular.ttc")
@@ -977,9 +981,9 @@ class PDFSplitProcess(ScriptSegmentationSolution):
 
 
     ## Init: PDFSplit 초기화 ##
-    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview):
         """솔루션 상속 및 프로세스 초기화"""
-        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
+        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview)
         
         # 출력정보 및 경로 설정
         self.ProcessInfo = self._ProcessInfo()
@@ -990,9 +994,9 @@ class PDFSplitProcess(ScriptSegmentationSolution):
     def _InitPaths(self):
         """프로세스와 관련된 모든 경로를 초기화 메서드"""
         # SplitedPDF 경로 및 디렉토리 생성
-        self.SplitScriptPDFDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_Script({self.NextSolution})_pdf")
+        self.SplitScriptPDFDirPath = os.path.join(self.UploadScriptFileDirPath, f"{self.ProjectName}_Script({self.NextSolution})_pdf")
         os.makedirs(self.SplitScriptPDFDirPath, exist_ok = True)
-        self.SplitScriptResizePDFDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_ResizeScript({self.NextSolution})_pdf")
+        self.SplitScriptResizePDFDirPath = os.path.join(self.UploadScriptFileDirPath, f"{self.ProjectName}_ResizeScript({self.NextSolution})_pdf")
         os.makedirs(self.SplitScriptResizePDFDirPath, exist_ok = True)
 
 
@@ -1062,9 +1066,9 @@ class PDFFormCheckProcess(ScriptSegmentationSolution):
 
 
     ## Init: PDFFormCheck 초기화 ##
-    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview):
         """솔루션 상속 및 프로세스 초기화"""
-        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
+        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview)
 
         # 출력정보 및 경로 설정
         self.ProcessInfo = self._ProcessInfo()
@@ -1075,7 +1079,7 @@ class PDFFormCheckProcess(ScriptSegmentationSolution):
     def _InitPaths(self):
         """프로세스와 관련된 모든 경로를 초기화 메서드"""
         # SplitedPDF 경로 및 디렉토리 생성
-        self.ScriptJPEGDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_Script({self.NextSolution})_jpeg")
+        self.ScriptJPEGDirPath = os.path.join(self.UploadScriptFileDirPath, f"{self.ProjectName}_Script({self.NextSolution})_jpeg")
         os.makedirs(self.ScriptJPEGDirPath, exist_ok = True)
         self.FontDirPath = "/usr/share/fonts/"
         self.NotoSansCJKRegular = os.path.join(self.FontDirPath, "opentype/noto/NotoSansCJK-Regular.ttc")
@@ -1208,9 +1212,9 @@ class PDFIndexGenProcess(ScriptSegmentationSolution):
 
 
     ## Init: PDFIndexGen 초기화 ##
-    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview):
         """솔루션 상속 및 프로세스 초기화"""
-        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
+        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview)
 
         # 출력정보 및 경로 설정
         self.ProcessInfo = self._ProcessInfo()
@@ -1246,9 +1250,9 @@ class TXTMainLangCheckProcess(ScriptSegmentationSolution):
 
 
     ## Init: TXTMainLangCheck 초기화 ##
-    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview):
         """솔루션 상속 및 프로세스 초기화"""
-        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
+        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview)
 
         # 출력정보 및 경로 설정
         self.ProcessInfo = self._ProcessInfo()
@@ -1332,9 +1336,9 @@ class TXTSplitProcess(ScriptSegmentationSolution):
 
 
     ## Init: TXTSplit 초기화 ##
-    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview):
         """솔루션 상속 및 프로세스 초기화"""
-        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
+        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview)
         
         # 출력정보 및 경로 설정
         self.ProcessInfo = self._ProcessInfo()
@@ -1474,39 +1478,39 @@ def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTempla
     
     ## PT01 통합: ScriptLoad (업로드 된 스크립트 파일 확인)
     ScriptLoadInstance = ScriptLoadProcess(email, projectName, NextSolution, AutoTemplate, MainLang, Model, "Algorithm", None, None, None, MessagesReview)
-    SolutionEdit, FileExtension, UploadedScriptFilePath, UploadScriptFilePath = ScriptLoadInstance.Run()
+    SolutionEdit, FileExtension, UploadedScriptFilePath, UploadScriptFileDirPath = ScriptLoadInstance.Run()
 
     # 파일 확장자에 따라 후속 프로세스 실행
     if FileExtension == 'pdf':
 
         ## P02 PDFMainLangCheck (PDF 언어 체크)
-        PDFMainLangCheckProcessInstance = PDFMainLangCheckProcess(email, projectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
+        PDFMainLangCheckProcessInstance = PDFMainLangCheckProcess(email, projectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview)
         SolutionEdit, MainLang = PDFMainLangCheckProcessInstance.Run()
         
         ## P03 PDFLayoutCheck (PDF 인쇄 파일 형식인 단면, 양면 체크) <- 여기서 페이지 분할 동시 진행
-        PDFLayoutCheckInstance = PDFLayoutCheckProcess(email, projectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
+        PDFLayoutCheckInstance = PDFLayoutCheckProcess(email, projectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview)
         SolutionEdit = PDFLayoutCheckInstance.Run()
         
         ## P04 PDFResize (PDF 파일 재단)
-        PDFResizeInstance = PDFResizeProcess(email, projectName, NextSolution, AutoTemplate, MainLang, "Google", "Manual", UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
+        PDFResizeInstance = PDFResizeProcess(email, projectName, NextSolution, AutoTemplate, MainLang, "Google", "Manual", UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview)
         SolutionEdit = PDFResizeInstance.Run()
         
         ## P05 PDFSplit (PDF 파일 페이지 분할)
-        PDFSplitterInstance = PDFSplitProcess(email, projectName, NextSolution, AutoTemplate, MainLang, Model, "Algorithm", UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
+        PDFSplitterInstance = PDFSplitProcess(email, projectName, NextSolution, AutoTemplate, MainLang, Model, "Algorithm", UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview)
         SolutionEdit = PDFSplitterInstance.Run()
 
         ## P06 PDFFormCheck (PDF 파일 페이지 형식 체크)
-        PDFFormCheckInstance = PDFFormCheckProcess(email, projectName, NextSolution, AutoTemplate, MainLang, "Google", ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
+        PDFFormCheckInstance = PDFFormCheckProcess(email, projectName, NextSolution, AutoTemplate, MainLang, "Google", ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview)
         SolutionEdit = PDFFormCheckInstance.Run()
         
     elif FileExtension == 'txt':
 
         ## T02 TXTMainLangCheck (TXT 언어 체크)
-        TXTMainLangCheckInstance = TXTMainLangCheckProcess(email, projectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
+        TXTMainLangCheckInstance = TXTMainLangCheckProcess(email, projectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview)
         SolutionEdit, MainLang = TXTMainLangCheckInstance.Run()
 
         ## T03 TXTSplit (텍스트 파일 지정 토큰수 분할)
-        TXTSplitterInstance = TXTSplitProcess(email, projectName, NextSolution, AutoTemplate, MainLang, Model, "Algorithm", UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview)
+        TXTSplitterInstance = TXTSplitProcess(email, projectName, NextSolution, AutoTemplate, MainLang, Model, "Algorithm", UploadScriptFileDirPath, UploadedScriptFilePath, SolutionEdit, MessagesReview)
         SolutionEdit = TXTSplitterInstance.Run()
 
 

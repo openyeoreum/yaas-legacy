@@ -693,7 +693,7 @@ class PDFResizeProcess:
 
         def SaveImage(Img, SuffixText, input_id=None):
             use_id = InputId if input_id is None else input_id
-            OutName = f"{self.ProjectName}_HTrimScript({self.NextSolution})({use_id})({SuffixText}).jpeg"
+            OutName = f"{self.ProjectName}_Script({self.NextSolution})({use_id})({SuffixText}).jpeg"
             OutPath = os.path.join(self.TrimScriptJPEGDirPath, OutName)
             Img.save(OutPath, "JPEG", quality=92, optimize=True, progressive=True, subsampling=1)
             return OutPath
@@ -767,7 +767,7 @@ class PDFResizeProcess:
             OutputPaths.append(OutPath)
 
             # 저장: (multiply)(네방향).jpeg -> 누적 Multiply 저장 (OutputPaths에는 포함 X)
-            zero_name = f"{self.ProjectName}_HTrimScript({self.NextSolution})(multiply)({MultiDirSuffix}).jpeg"
+            zero_name = f"{self.ProjectName}_Script({self.NextSolution})(multiply)({MultiDirSuffix}).jpeg"
             zero_path = os.path.join(self.TrimScriptJPEGDirPath, zero_name)
 
             # 파일이 이미 있으면 불러와서 곱하기 누적, 없으면 이번 결과로 시작
@@ -1029,7 +1029,7 @@ class PDFSplitProcess:
         # SplitedPDF 경로 및 디렉토리 생성
         self.SplitScriptPDFDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_Script({self.NextSolution})_pdf")
         os.makedirs(self.SplitScriptPDFDirPath, exist_ok = True)
-        self.SplitScriptResizePDFDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_Script({self.NextSolution})_Resize_pdf")
+        self.SplitScriptResizePDFDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_ResizeScript({self.NextSolution})_pdf")
         os.makedirs(self.SplitScriptResizePDFDirPath, exist_ok = True)
 
     ## PDF 파일을 페이지별로 분할 및 저장 및 Inputs 생성 ##
@@ -1037,7 +1037,7 @@ class PDFSplitProcess:
         """PDF 파일을 페이지별로 분할하고 저장"""
         # PDF 파일 읽고 총 페이지 수 계산
         PdfDocument = PdfReader(self.UploadedScriptFilePath)
-        ResizePDFPath = self.UploadedScriptFilePath.replace(".pdf", "_Resize.pdf")
+        ResizePDFPath = self.UploadedScriptFilePath.replace(f"_Script({self.NextSolution}).pdf", f"_ResizeScript({self.NextSolution}).pdf")
         ResizePdfDocument = PdfReader(ResizePDFPath)
         TotalPages = len(PdfDocument.pages)
 
@@ -1264,6 +1264,58 @@ class PDFFormCheckProcess:
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
+
+
+###################################################
+##### #P07 PDFIndexGen (PDF 파일 목차 데이터 형성) #####
+###################################################
+class PDFIndexGenProcess:
+
+    ## PDFIndexGen 초기화 ##
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, UploadScriptFilePath, SolutionEdit, MessagesReview):
+        """클래스 초기화"""
+        # 업데이트 정보
+        self.Email = Email
+        self.ProjectName = ProjectName
+        self.Solution = Solution
+        self.SubSolution = SubSolution
+        self.NextSolution = NextSolution
+        self.AutoTemplate = AutoTemplate
+        self.Model = Model
+        self.MainLang = MainLang
+        self.ResponseMethod = ResponseMethod
+        self.EditMode = "Auto"
+        if self.ResponseMethod == "Manual":
+            self.EditMode = self.ResponseMethod
+        self.Model = Model
+        self.UploadedScriptFilePath = UploadedScriptFilePath
+
+        # Process 설정
+        self.ProcessNumber = "P07"
+        self.ProcessName = "PDFIndexGen"
+        self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
+
+        # 경로 설정
+        self.UploadScriptFilePath = UploadScriptFilePath
+        self._InitializePaths()
+
+        # Edit 설정
+        self.SolutionEdit = SolutionEdit
+
+        # 출력설정
+        self.MessagesReview = MessagesReview
+
+##############################################################
+##### #P08 PDFIndexMatching (PDF 파일 목차와 본문 속 목차 매칭) #####
+##############################################################
+# class PDFFormCheckProcess:
+
+
+#############################################################################
+##### #P09 PDFBodyCaptionComponentCheck (PDF 파일 페이지별 Body 구성요소 체크) #####
+#############################################################################
+# class PDFFormCheckProcess:
+
 
 #################################
 #################################

@@ -51,6 +51,7 @@ def SetupProject(projectName, email):
     scriptDataFramePath = os.path.join(scriptPath, f"{projectName}_dataframe_script_file")
     masterScriptPath = os.path.join(scriptPath, f"{projectName}_master_script_file")
     uploadScriptPath = os.path.join(scriptPath, f"{projectName}_upload_script_file")
+    mixedScriptPath = os.path.join(scriptPath, f"{projectName}_mixed_script_file")
 
     # translation
     translationPath = os.path.join(projectPath, f"{projectName}_translation")
@@ -112,6 +113,7 @@ def SetupProject(projectName, email):
         os.makedirs(scriptDataFramePath, exist_ok = True)
         os.makedirs(masterScriptPath, exist_ok = True)
         os.makedirs(uploadScriptPath, exist_ok = True)
+        os.makedirs(mixedScriptPath, exist_ok = True)
         os.makedirs(translationPath, exist_ok = True)
         os.makedirs(translationDataFramePath, exist_ok = True)
         os.makedirs(masterTranslationPath, exist_ok = True)

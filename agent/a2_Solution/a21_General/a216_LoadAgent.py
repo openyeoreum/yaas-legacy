@@ -92,7 +92,7 @@ class LoadAgent:
         self.InputCountKey = InputCountKey # 입력 수의 기준키 설정 (InputCount의 수가 단순 데이터 리스트의 총 개수랑 맞지 않는 경우)
         self.IgnoreCountCheck = IgnoreCountCheck # 입력 수 체크 안함 (입력의 카운트가 의미가 없는 경우 예시로 IndexDefine 등)
         self.FilterPass = FilterPass # 필터 오류 3회가 넘어가는 경우 그냥 패스 (에러의 수준이 글자 1000자 중 1자 수준으로 매우 작으나, Response 오류 회수가 너무 빈번한 경우 예시로 TranslationProofreading 등)
-        self.EditCheck, self.EditResponseCompletion, self.EditOutputCompletion = self._SolutionEditCheck(OutputsPerInput, InputCountKey, IgnoreCountCheck)
+        self.EditCheck, self.EditResponseCompletion, self.EditResponsePostProcessCompletion, self.EditOutputCompletion = self._SolutionEditCheck(OutputsPerInput, InputCountKey, IgnoreCountCheck)
 
         # Output 설정
         self.OutputFunc = OutputFunc
@@ -200,12 +200,16 @@ class LoadAgent:
             # ProcessCompletion 확인
             if SolutionEdit[f"{self.ProcessName}ResponseCompletion"] == 'Completion':
                 EditResponseCompletion = True
-                
+            
+            # ResponsePostProcessCompletion 확인
+            if SolutionEdit.get(f"{self.ProcessName}ResponsePostProcessCompletion") == 'Completion':
+                EditResponsePostProcessCompletion = True
+
             # ProcessOutputCompletion 확인
             if SolutionEdit[f"{self.ProcessName}OutputCompletion"] == 'Completion':
                 EditOutputCompletion = True
                 
-            return EditCheck, EditResponseCompletion, EditOutputCompletion
+            return EditCheck, EditResponseCompletion, EditResponsePostProcessCompletion, EditOutputCompletion
 
         # EditCheck 및 EditResponseCompletion 및 EditOutputCompletion 초기화
         EditCheck = False
@@ -788,6 +792,7 @@ class LoadAgent:
                 SolutionEdit[f"{self.ProcessName}ResponseCompletion"] = '완료 후 Completion'
             elif self.EditMode == "Auto":
                 SolutionEdit[f"{self.ProcessName}ResponseCompletion"] = 'Completion'
+            SolutionEdit[f"{self.ProcessName}ResponsePostProcessCompletion"] = '완료 후 자동 Completion'
             SolutionEdit[f"{self.ProcessName}OutputCompletion"] = '완료 후 자동 Completion'
 
             SolutionProjectDataList = SolutionProjectDataFrame[1]
@@ -812,6 +817,11 @@ class LoadAgent:
             with open(self.SolutionEditPath, 'r', encoding = 'utf-8') as SolutionEditJson:
                 SolutionEdit = json.load(SolutionEditJson)
         return SolutionEdit
+
+    ## Reponse 후처리 메서드 ##
+    def _ReponsePostProcess(self, SolutionEdit):
+        """Output 후처리 메서드"""
+        pass
 
     ## Output 생성 메서드 ##
     def _CreateOutput(self, SolutionEdit):
@@ -864,6 +874,12 @@ class LoadAgent:
 
         ## Edit 불러오기
         SolutionEdit = self._LoadEdit()
+
+        ## Response 후처리
+        if self.EditResponsePostProcessCompletion:
+            print(f"[ {self.ProcessInfo}Response 후처리는 이미 완료됨 ]\n")
+        else:
+            self._ReponsePostProcess(SolutionEdit)
 
         ## Output 실행
         if self.EditOutputCompletion:

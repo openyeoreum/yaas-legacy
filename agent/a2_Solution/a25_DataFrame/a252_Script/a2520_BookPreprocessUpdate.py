@@ -230,8 +230,8 @@ def BookPreprocessInputList(projectName, email, IndexLength = 50):
                 "indexPages": [], # {projectName}_Cropped.pdf 파일에서 각 목차의 내용이 존재하는 페이지 리스트
                 "DeletePages": [],  # {projectName}_Cropped.pdf 파일에서 중복되어 필요없는 페이지 리스트
                 "SettingCompletion": "세팅 완료 후 Completion",
-                "PDFBookToTextCompletion": "완료 후 Completion으로 자동변경",
-                "InspectionCompletion": "완료 후 Completion으로 자동변경"
+                "PDFBookToTextCompletion": "완료 후 자동 Completion",
+                "InspectionCompletion": "완료 후 자동 Completion"
             }
         }
         with open(JsonPath, 'w', encoding = 'utf-8') as json_file:
@@ -717,34 +717,35 @@ def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview
     
     responseJson = []
     for i in range(len(outputMemoryDics)):
-        PageId = inputList[i]['Id']
-        PageElement = inputList[i]['PageElement']
-        Input = inputList[i]['Continue']
-        Script = outputMemoryDics[i][0]['인공지능 음성 스크립트']
-        
-        ## Script에 마지막 단어 누락 방지 코드 ##
-        # 1. Input에서 마지막 라인을 추출합니다.
-        lines = Input.split('\n')
-        InputLine = lines[-1]
+        if outputMemoryDics[i] != []:
+            PageId = inputList[i]['Id']
+            PageElement = inputList[i]['PageElement']
+            Input = inputList[i]['Continue']
+            Script = outputMemoryDics[i][0]['인공지능 음성 스크립트']
+            
+            ## Script에 마지막 단어 누락 방지 코드 ##
+            # 1. Input에서 마지막 라인을 추출합니다.
+            lines = Input.split('\n')
+            InputLine = lines[-1]
 
-        # 2. Input 마지막 라인에서 앞 10 - 15글자를 추출
-        substring = ''
-        if len(InputLine) >= 15:
-            substring = InputLine[:15]
-        elif len(InputLine) >= 10:
-            substring = InputLine[:10]
-        else:
-            pass
-        if substring:
-            # 3. Script에서 동일한 부분을 찾아 그 이후 부분을 삭제
-            pos = Script.find(substring)
-            if pos != -1:
-                Script = Script[:pos + len(substring)]
-                # 4. Script에서 일치하는 부분을 Input의 마지막 라인으로 대체
-                Script = Script.replace(substring, InputLine)
-        ## 마지막 단어 누락 방지 코드 ##
+            # 2. Input 마지막 라인에서 앞 10 - 15글자를 추출
+            substring = ''
+            if len(InputLine) >= 15:
+                substring = InputLine[:15]
+            elif len(InputLine) >= 10:
+                substring = InputLine[:10]
+            else:
+                pass
+            if substring:
+                # 3. Script에서 동일한 부분을 찾아 그 이후 부분을 삭제
+                pos = Script.find(substring)
+                if pos != -1:
+                    Script = Script[:pos + len(substring)]
+                    # 4. Script에서 일치하는 부분을 Input의 마지막 라인으로 대체
+                    Script = Script.replace(substring, InputLine)
+            ## 마지막 단어 누락 방지 코드 ##
 
-        responseJson.append({"PageId": PageId, "PageElement": PageElement, "Script": Script})
+            responseJson.append({"PageId": PageId, "PageElement": PageElement, "Script": Script})
 
     ### B. 검수 ###
     # 경로 설정

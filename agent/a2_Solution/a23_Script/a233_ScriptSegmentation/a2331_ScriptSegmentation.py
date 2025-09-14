@@ -1410,10 +1410,10 @@ class TXTSplitProcess(ScriptSegmentationSolution):
         return SolutionEdit
 
 
-################################
-##### Process 진행 및 업데이트 #####
-################################
-## ScriptSegmentation 프롬프트 요청 및 결과물 Json화
+
+########################################################
+##### SolutionRun: ScriptSegmentation Solution 진행 #####
+########################################################
 def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTemplate, MessagesReview = "on"):
     ## 기본 인자 정의
     MainLang = "ko"

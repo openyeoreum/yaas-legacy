@@ -1,8 +1,8 @@
 import sys
 sys.path.append("/yaas")
 
-from agent.a2_Solution.a23_Script.a232_BookScriptGen.a2321_BookScriptGenUpdate import BookScriptGenProcessUpdate
-from agent.a2_Solution.a23_Script.a233_ScriptSegmentation.a2331_ScriptSegmentation import ScriptSegmentationProcessUpdate
+from agent.a2_Solution.a24_Script.a242_BookScriptGen.a2421_BookScriptGenUpdate import BookScriptGenProcessUpdate
+from agent.a2_Solution.a24_Script.a243_ScriptSegmentation.a2431_ScriptSegmentation import ScriptSegmentationProcessUpdate
 
 ################################
 ################################

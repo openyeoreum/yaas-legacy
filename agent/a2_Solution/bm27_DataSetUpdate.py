@@ -1,8 +1,8 @@
 import sys
 sys.path.append("/yaas")
 
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataSetCommit import AddProjectFeedbackDataSets
-from agent.a2_Solution.a21_General.a215_LoadLLM import OpenAI_LLMFineTuning
+from agent.a2_Solution.a26_Audiobook.a261_DataCommit.a2612_DataSetCommit import AddProjectFeedbackDataSets
+from agent.a2_Solution.a22_Operation.a225_LoadLLM import OpenAI_LLMFineTuning
 
 #################################
 #################################

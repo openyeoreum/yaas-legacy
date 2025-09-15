@@ -10,7 +10,7 @@ from agent.a2_Solution.bm23_DataCollectionUpdate import SolutionDataCollectionUp
 from agent.a2_Solution.bm24_ScriptUpdate import SolutionScriptUpdate
 from agent.a2_Solution.bm25_TranslationUpdate import SolutionTranslationUpdate
 from agent.a2_Solution.bm26_DataFrameUpdate import SolutionDataFrameUpdate
-from agent.a4_Creation.bm29_AudioBookUpdate import CreationAudioBookUpdate
+from agent.a4_Generation.bm29_AudioBookUpdate import CreationAudioBookUpdate
 
 
 #################################

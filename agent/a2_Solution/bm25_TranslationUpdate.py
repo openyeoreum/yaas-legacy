@@ -1,7 +1,7 @@
 import sys
 sys.path.append("/yaas")
 
-from agent.a2_Solution.a24_Translation.a241_TranslationUpdate import TranslationProcessUpdate
+from agent.a2_Solution.a25_Translation.a251_TranslationUpdate import TranslationProcessUpdate
 
 #####################################
 #####################################

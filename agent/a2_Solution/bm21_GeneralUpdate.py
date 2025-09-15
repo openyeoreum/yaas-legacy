@@ -1,9 +1,9 @@
 import sys
 sys.path.append("/yaas")
 
-from agent.a2_Solution.a21_General.a211_Access import SetupProjectAccess
-from agent.a2_Solution.a21_General.a212_Project import SetupProject
-from agent.a2_Solution.a21_General.a213_TrainingDataset import SetupTrainingDataset
+from agent.a2_Solution.a22_Operation.a221_Access import SetupProjectAccess
+from agent.a2_Solution.a22_Operation.a222_Project import SetupProject
+from agent.a2_Solution.a22_Operation.a223_TrainingDataset import SetupTrainingDataset
 
 #################################
 #################################
@@ -14,16 +14,16 @@ from agent.a2_Solution.a21_General.a213_TrainingDataset import SetupTrainingData
 ### 솔루션에 계정 업데이트 ###
 def AccountUpdate(email, projectName):
 
-    ### a211_Access ###
+    ### a221_Access ###
     SetupProjectAccess(projectName, email)
 
 ### 솔루션에 프로젝트 업데이트 ###
 def SolutionProjectUpdate(email, projectName):
 
-    ### a212_ProjectCommit ###
+    ### a222_ProjectCommit ###
     SetupProject(projectName, email)
 
-    ### a213_TrainingDatasetCommit ###
+    ### a223_TrainingDatasetCommit ###
     SetupTrainingDataset(projectName, email)
 
 if __name__ == "__main__":

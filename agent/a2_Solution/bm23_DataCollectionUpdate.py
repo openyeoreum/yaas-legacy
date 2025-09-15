@@ -1,11 +1,11 @@
 import sys
 sys.path.append("/yaas")
 
-from agent.a2_Solution.a22_DataCollection.a221_VectorDatabase.a2215_VDBSearch import YaaSsearch
-from agent.a2_Solution.a22_DataCollection.a222_TargetData.a2222_PublisherData.a22221_PublisherScraper import PublisherDataUpdate
-from agent.a2_Solution.a22_DataCollection.a222_TargetData.a2222_PublisherData.a22222_PublisherUpdate import PublisherDataProcessUpdate
-from agent.a2_Solution.a22_DataCollection.a223_TrendData.a2232_BestSellerData.a22321_BestSellerScraper import BookDataUpdate
-from agent.a2_Solution.a22_DataCollection.a223_TrendData.a2232_BestSellerData.a22322_BestSellerUpdate import BookDataProcessUpdate
+from agent.a2_Solution.a23_Collection.a231_VectorDatabase.a2315_VDBSearch import YaaSsearch
+from agent.a2_Solution.a23_Collection.a232_TargetData.a2322_PublisherData.a23221_PublisherScraper import PublisherDataUpdate
+from agent.a2_Solution.a23_Collection.a232_TargetData.a2322_PublisherData.a23222_PublisherUpdate import PublisherDataProcessUpdate
+from agent.a2_Solution.a23_Collection.a233_TrendData.a2332_BestSellerData.a23321_BestSellerScraper import BookDataUpdate
+from agent.a2_Solution.a23_Collection.a233_TrendData.a2332_BestSellerData.a23322_BestSellerUpdate import BookDataProcessUpdate
 
 ########################################
 ########################################

@@ -4,13 +4,13 @@ import unicodedata
 import sys
 sys.path.append("/yaas")
 
-from agent.a4_Core.a43_Solution.a431_GeneralUpdate import AccountUpdate, SolutionProjectUpdate
-from agent.a4_Core.a43_Solution.a432_EstimateUpdate import SolutionEstimateUpdate
-from agent.a4_Core.a43_Solution.a433_DataCollectionUpdate import SolutionDataCollectionUpsert, SolutionDataCollectionSearch
-from agent.a4_Core.a43_Solution.a434_ScriptUpdate import SolutionScriptUpdate
-from agent.a4_Core.a43_Solution.a435_TranslationUpdate import SolutionTranslationUpdate
-from agent.a4_Core.a43_Solution.a436_DataFrameUpdate import SolutionDataFrameUpdate
-from agent.a4_Core.a43_Solution.a439_AudioBookUpdate import CreationAudioBookUpdate
+from agent.a4_Core.a43_Run.a431_GeneralUpdate import AccountUpdate, SolutionProjectUpdate
+from agent.a4_Core.a43_Run.a432_EstimateUpdate import SolutionEstimateUpdate
+from agent.a4_Core.a43_Run.a433_DataCollectionUpdate import SolutionDataCollectionUpsert, SolutionDataCollectionSearch
+from agent.a4_Core.a43_Run.a434_ScriptUpdate import SolutionScriptUpdate
+from agent.a4_Core.a43_Run.a435_TranslationUpdate import SolutionTranslationUpdate
+from agent.a4_Core.a43_Run.a436_DataFrameUpdate import SolutionDataFrameUpdate
+from agent.a4_Core.a43_Run.a439_AudioBookUpdate import CreationAudioBookUpdate
 
 
 #################################

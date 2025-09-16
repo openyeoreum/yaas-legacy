@@ -22,7 +22,7 @@ class LoadAgent:
     PromptDataPath = "/yaas/agent/a0_Database/a04_PromptData"
 
     ## LoadAgent 초기화 ##
-    def __init__(self, InputListFunc, Email, ProjectName, Solution, ProcessNumber, ProcessName, MainLang = "ko", Model = "OpenAI", ResponseMethod = "Prompt", OutputFunc = None, MessagesReview = "off", SubSolution = None, NextSolution = None, EditMode = "Auto", AutoTemplate = "on", OutputsPerInput = 1, InputCountKey = None, IgnoreCountCheck = False, FilterPass = False):
+    def __init__(self, InputListFunc, Email, ProjectName, Solution, ProcessNumber, ProcessName, MainLang = "ko", Model = "OpenAI", ResponseMethod = "Prompt", PesponsePostProcessFunc = None, OutputFunc = None, MessagesReview = "off", SubSolution = None, NextSolution = None, EditMode = "Auto", AutoTemplate = "on", OutputsPerInput = 1, InputCountKey = None, IgnoreCountCheck = False, FilterPass = False):
         """클래스 초기화"""
         # Process 설정
         self.Email = Email
@@ -93,6 +93,9 @@ class LoadAgent:
         self.IgnoreCountCheck = IgnoreCountCheck # 입력 수 체크 안함 (입력의 카운트가 의미가 없는 경우 예시로 IndexDefine 등)
         self.FilterPass = FilterPass # 필터 오류 3회가 넘어가는 경우 그냥 패스 (에러의 수준이 글자 1000자 중 1자 수준으로 매우 작으나, Response 오류 회수가 너무 빈번한 경우 예시로 TranslationProofreading 등)
         self.EditCheck, self.EditResponseCompletion, self.EditResponsePostProcessCompletion, self.EditOutputCompletion = self._SolutionEditCheck(OutputsPerInput, InputCountKey, IgnoreCountCheck)
+
+        # PesponsePostProcess 설정
+        self.PesponsePostProcessFunc = PesponsePostProcessFunc
 
         # Output 설정
         self.OutputFunc = OutputFunc
@@ -193,7 +196,7 @@ class LoadAgent:
     def _SolutionEditCheck(self, OutputsPerInput = 1, InputCountKey = None, IgnoreCountCheck = False):
         """프로세스 Edit 및 Completion을 확인하는 메서드"""
         # EditCheck 및 EditResponseCompletion 및 EditOutputCompletion 설정 함수
-        def EditCheckFunc(EditCheck, EditResponseCompletion, EditOutputCompletion):
+        def EditCheckFunc(EditCheck, EditResponseCompletion, EditResponsePostProcessCompletion, EditOutputCompletion):
             # Edit.json' 확인
             EditCheck = True
 
@@ -214,6 +217,7 @@ class LoadAgent:
         # EditCheck 및 EditResponseCompletion 및 EditOutputCompletion 초기화
         EditCheck = False
         EditResponseCompletion = False
+        EditResponsePostProcessCompletion = False
         EditOutputCompletion = False
 
         # SolutionEdit 경로가 존재하는지 확인 후 불러오기
@@ -225,19 +229,19 @@ class LoadAgent:
             # 입력 수 체크 안함 (입력의 카운트가 의미가 없는 경우 예시로 IndexDefine 등)
             if IgnoreCountCheck:
                 if self.ProcessName in SolutionEdit.keys():
-                    EditCheck, EditResponseCompletion, EditOutputCompletion = EditCheckFunc(EditCheck, EditResponseCompletion, EditOutputCompletion)
+                    EditCheck, EditResponseCompletion, EditResponsePostProcessCompletion, EditOutputCompletion = EditCheckFunc(EditCheck, EditResponseCompletion, EditResponsePostProcessCompletion, EditOutputCompletion)
             else:
                 # 입력 수의 기준키 설정 (InputCount의 수가 단순 데이터 리스트의 총 개수랑 맞지 않는 경우)
                 if InputCountKey:
                     if self.ProcessName in SolutionEdit.keys() and SolutionEdit[self.ProcessName][-1][InputCountKey] == self.TotalInputCount * OutputsPerInput:
-                        EditCheck, EditResponseCompletion, EditOutputCompletion = EditCheckFunc(EditCheck, EditResponseCompletion, EditOutputCompletion)
+                        EditCheck, EditResponseCompletion, EditResponsePostProcessCompletion, EditOutputCompletion = EditCheckFunc(EditCheck, EditResponseCompletion, EditResponsePostProcessCompletion, EditOutputCompletion)
                         
                 # 일반적인 입력 수 체크
                 else:
                     if self.ProcessName in SolutionEdit and len(SolutionEdit[self.ProcessName]) == self.TotalInputCount * OutputsPerInput:
-                        EditCheck, EditResponseCompletion, EditOutputCompletion = EditCheckFunc(EditCheck, EditResponseCompletion, EditOutputCompletion)
+                        EditCheck, EditResponseCompletion, EditResponsePostProcessCompletion, EditOutputCompletion = EditCheckFunc(EditCheck, EditResponseCompletion, EditResponsePostProcessCompletion, EditOutputCompletion)
 
-        return EditCheck, EditResponseCompletion, EditOutputCompletion
+        return EditCheck, EditResponseCompletion, EditResponsePostProcessCompletion, EditOutputCompletion
 
     ## ProcessResponse 생성 메서드 ##
     def _ProcessResponse(self, Input, InputCount, ComparisonInput, memoryNote = ""):
@@ -820,15 +824,24 @@ class LoadAgent:
 
     ## Reponse 후처리 메서드 ##
     def _ReponsePostProcess(self, SolutionEdit):
-        """Output 후처리 메서드"""
-        pass
+        """Reponse 후처리 메서드"""
+        SolutionEditProcess = SolutionEdit[self.ProcessName]
+        
+        # SolutionEditProcess 불러오기 및 ResponsePostProcess 함수 실행
+        if self.OutputFunc(SolutionEditProcess):
+            # OutputCompletion 설정
+            SolutionEdit[f"{self.ProcessName}ResponsePostProcessCompletion"] = "Completion"
+            
+            # SolutionEdit 저장
+            with open(self.SolutionEditPath, 'w', encoding = 'utf-8') as SolutionEditJson:
+                json.dump(SolutionEdit, SolutionEditJson, indent = 4, ensure_ascii = False)
 
     ## Output 생성 메서드 ##
     def _CreateOutput(self, SolutionEdit):
         """Output을 생성하는 메서드"""
         SolutionEditProcess = SolutionEdit[self.ProcessName]
         
-        # SolutionEditProcess 불러오기 및 Output 실행
+        # SolutionEditProcess 불러오기 및 Output 함수 실행
         if self.OutputFunc(SolutionEditProcess):
             # OutputCompletion 설정
             SolutionEdit[f"{self.ProcessName}OutputCompletion"] = "Completion"

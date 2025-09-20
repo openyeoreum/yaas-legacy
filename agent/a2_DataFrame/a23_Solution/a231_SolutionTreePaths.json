@@ -1,0 +1,12 @@
+{
+    "EstimatePaths": "/yaas/agent/a2_DataFrame/a23_Solution/a232_Estimate/a2321_EstimatePaths.json",
+    "CollectionPaths": "/yaas/agent/a2_DataFrame/a23_Solution/a233_Collection/a2331_CollectionPaths.json",
+    "ScriptGenPaths": "/yaas/agent/a2_DataFrame/a23_Solution/a234_Script/a2341_ScriptGen/a23411_ScriptGenPaths.json",
+    "ScriptSegmentationPaths": "/yaas/agent/a2_DataFrame/a23_Solution/a234_Script/a2342_ScriptSegmentation/a23421_ScriptSegmentationPaths.json",
+    "ScriptStructionPaths": "/yaas/agent/a2_DataFrame/a23_Solution/a234_Script/a2343_ScriptStruction/a23431_ScriptStructionPaths.json",
+    "TranslationPaths": "/yaas/agent/a2_DataFrame/a23_Solution/a235_Translation/a2351_TranslationPaths.json",
+    "TextbookPaths": "/yaas/agent/a2_DataFrame/a23_Solution/a236_Textbook/a2361_TextbookPaths.json",
+    "AudiobookPaths": "/yaas/agent/a2_DataFrame/a23_Solution/a237_Audiobook/a2371_AudiobookPaths.json",
+    "VideobookPaths": "/yaas/agent/a2_DataFrame/a23_Solution/a238_Videobook/a2381_VideobookPaths.json",
+    "MarketingPaths": "/yaas/agent/a2_DataFrame/a23_Solution/a239_Marketing/a2391_MarketingPaths.json"
+}

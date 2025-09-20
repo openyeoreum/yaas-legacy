@@ -63,6 +63,7 @@ class LoadAgent:
         _SolutionProjectInputListPath = os.path.join(self.DataFrameFileDirPath, f"{self.Email}_{self.ProjectName}_{self.ProcessNumber}_{ProcessName}InputList.json")
 
         _SolutionProjectDataFramePath = os.path.join(self.DataFrameFileDirPath, f"{self.Email}_{self.ProjectName}_{self.ProcessNumber}_{ProcessName}.json")
+        
         if self.NextSolution:
             self.SolutionProjectDataFramePath = _SolutionProjectDataFramePath.replace('.json', f'({self.NextSolution}).json')
             self.SolutionProjectInputListPath = _SolutionProjectInputListPath.replace('.json', f'({self.NextSolution}).json')

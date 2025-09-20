@@ -1,0 +1,39 @@
+{
+    "ko": [
+        {
+            "ProjectName": "eval(Response['ProjectName'])",
+            "TaskName": "ScriptLoad",
+            "NextSolution": "eval(Response['NextSolution'])",
+            "AutoTemplate": "eval(Response['AutoTemplate'])",
+            "FileExtension": "eval(Response['FileExtension'])",
+            "MainLang": "",
+            "InputCount": 0,
+            "Completion": "No"
+        },
+        [
+            {
+                "FileExtension": "eval(Response['FileExtension'])",
+                "UploadedScriptFilePath": "eval(Response['UploadedScriptFilePath'])"
+            }
+        ]
+    ],
+    "global": [
+        {
+            "ProjectName": "eval(Response['ProjectName'])",
+            "TaskName": "ScriptLoad",
+            "NextSolution": "eval(Response['NextSolution'])",
+            "AutoTemplate": "eval(Response['AutoTemplate'])",
+            "FileExtension": "eval(Response['FileExtension'])",
+            "MainLang": "",
+            "InputCount": 0,
+            "Completion": "No"
+        },
+        [
+            {
+                "FileExtension": "eval(Response['FileExtension'])",
+                "UploadedScriptFilePath": "eval(Response['UploadedScriptFilePath'])"
+            }
+        ]
+    ],
+    "wordpairs": []
+}

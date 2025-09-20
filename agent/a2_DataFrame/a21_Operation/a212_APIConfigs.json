@@ -1,0 +1,28 @@
+{
+    "LanguageModel": {
+        "OPENAI": {
+            "High": "gpt-5",
+            "Mid": "",
+            "Low": ""
+        },
+        "ANTHROPIC": {
+            "High": "",
+            "Mid": "",
+            "Low": ""
+        },
+        "GOOGLE": {
+            "High": "",
+            "Mid": "",
+            "Low": ""
+        },
+        "DEEPSEEK": {
+            "High": "",
+            "Mid": "",
+            "Low": ""
+        }
+    },
+    "TTSModel": {},
+    "STTModel": {},
+    "ImageModel": {},
+    "VedioModel": {}
+}

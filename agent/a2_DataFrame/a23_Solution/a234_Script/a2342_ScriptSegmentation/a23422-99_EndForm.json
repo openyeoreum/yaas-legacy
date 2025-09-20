@@ -1,0 +1,28 @@
+[
+    {
+        "ProjectName": "",
+        "TaskName": "Body",
+        "NextSolution": "",
+        "AutoTemplate": "No",
+        "FileExtension": "",
+        "MainLang": "",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "IndexId": 0,
+            "IndexTag": "None",
+            "Index": "None",
+            "BodyId": "None",
+            "BodyTag": "None",
+            "SplitedBodyChunks": [
+                {
+                    "ChunkId": 0,
+                    "Tag": "None",
+                    "Chunk": "None"
+                }
+            ]
+        }
+    ]
+]

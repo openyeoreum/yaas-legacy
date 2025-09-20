@@ -1,0 +1,204 @@
+1. 파이썬
+
+
+    가. 코드
+
+
+        (1-1) 폴더 및 파일명 (현재)
+
+            * 최상위 폴더: snake_case
+
+                agent
+                backend
+                ...
+
+
+            * 폴더, py파일, json파일 등: AlphabetNumber_PascalCase
+
+                a1_Service
+                a11_Project.py
+                a212_APIConfigs.json
+                ...
+
+
+        (1-2) 폴더 및 파일명 (권장)
+
+            * 최상위 폴더, 폴더, py파일, json파일 등: snake_case
+
+                agent
+                backend
+                ...
+
+
+        (2) 클래스, 변수, 함수, 상수 등 (PEP 8)
+
+            * 클래스, 오류: PascalCase *
+
+            class UserProfile:
+                # ...
+
+
+            * 변수, 함수: snake_case *
+
+            user_name = "Alice"
+            def calculate_total_price(price, quantity):
+                # ...
+
+
+            * 상수: SCREAMING_SNAKE_CASE *
+
+            MAX_CONNECTIONS = 100
+
+
+            * json 데이터: PascalCase (현재)
+
+            {
+                "UserName": "Bob",
+                "IsActive": true,
+                "UserProfileImage": "url/to/image.jpg"
+            }
+
+
+            * json 데이터: camelCase (권장)
+
+            {
+                "userName": "Bob",
+                "isActive": true,
+                "userProfileImage": "url/to/image.jpg"
+            }
+
+
+    나. 주석
+
+
+        (1) 주석 계층 (위치: 대상 또는 class, func의 바로 상단 또는 최상단 작성 후 1번 줄바꿈)
+
+
+            * Operation, Core, Solution, Generation - Process *
+
+                # ======================================================================
+                # [AlphabetNumber-DetailNumber] Operation-Process: ...
+
+
+            * class *
+
+                # ======================================================================
+                # class: ...
+                # ======================================================================
+
+
+            * class-init *
+
+                # --------------------------------------
+                # --- class-init ---
+
+
+            * func-set *
+
+                # --------------------------------------
+                # --- func-set: ... ---
+
+
+            * class-func *
+
+                # --- class-func: ... ---
+
+
+            * func *
+
+                # --- func: ... ---
+
+
+            * innerfunc *
+
+                # - innerfunc: ... -
+
+
+            * for, if 등의 기능단위 *
+
+                ## 기능설명
+
+
+            * 세부기능, 변수 등 단위 *
+
+                # 기능설명
+
+
+        (2) 정보 기입 (위치: 대상 또는 class, func와 주석 계층 사잇 부분 작성)
+
+            * TODO, 앞으로 해야 할 작업 표기 *
+
+                # TODO: ...
+
+
+            * FIXME, 코드에 버그나 문제가 있을 경우 수정 요청 표기 *
+
+                # FIXME: ...
+
+
+            * HACK, 최종 개발에서는 삭제될 임시코드의 경우 그 내용을 표기 *
+
+                # HACK: ...
+
+
+            * NOTE, 특정 코드에 대한 중요한 정보 표기 *
+
+                # NOTE: ...
+
+
+            * WARNING, 코드에 대한 경고사항 표기 *
+
+                # WARNING: ...
+
+
+        (3) 함수/메서드 Docs (위치: 대상 또는 class, func의 바로 하단)
+
+            """
+            Args: 함수나 메서드가 받는 **파라미터(인자)**에 대해 설명하는 부분, 각 파라미터의 이름, 타입(예: str, int), 그리고 무엇을 의미하는지를 명확하게 작성
+                source_url (str): 데이터를 가져올 소스 URL
+                ...
+
+
+            Returns: 함수가 실행을 마친 후 반환하는 값에 대해 설명합니다. 반환값의 타입과 어떤 의미를 가지는 결과물인지를 상세히 작성
+                dict: 파싱된 데이터. 성공 시 데이터를, 실패 시 빈 딕셔너리를 반환
+                ...
+
+
+            Effects: 함수가 실행을 통한 효과와 기능에 대해 설명합니다.
+                json: a222_UserAccessForm.json -> {email}_user_access.json
+                json: a223_UserConfigForm.json -> {email}_user_config.json
+                json: a224_UserLogsForm.json -> {email}_user_logs.json
+                ...
+
+
+            Raises: 함수 내부에서 특정 조건에 따라 의도적으로 발생시킬 수 있는 **예외(Exception)**의 종류와 발생 상황 설명을 작성
+                ValueError: URL 형식이 올바르지 않을 때 발생
+                ...
+
+
+            Yields: Returns와 비슷하지만, 일반 함수가 아닌 제너레이터(generator) 함수에 사용, 제너레이터가 yield 키워드를 통해 순차적으로 생성해내는 값의 타입과 의미를 작성
+                int: 1부터 limit까지의 정수
+                ...
+
+
+            Attributes: 주로 함수보다는 클래스(Class)의 Docstring에 사용, 클래스가 가지는 속성(멤버 변수)에 대해 설명하며, 각 속성의 이름, 타입, 역할을 작성
+                name (str): 사용자의 이름
+                email (str): 사용자의 이메일 주소
+                ...
+
+
+            Examples: 해당 함수를 실제로 어떻게 사용해야 하는지 보여주는 코드 예시를 작성
+                >>> get_user_info(123)
+                {'name': 'Alice', 'email': 'alice@example.com'}
+                ...
+            """
+
+
+        (4) 전체 주석처리 (위치: 전체 주석처리된 코드의 상단과 하단)
+
+            # 주석처리: 이유 설명
+            # ---------------------------------------------------------------------- #
+            # ...
+            # ...
+            # ...
+            # ---------------------------------------------------------------------- #

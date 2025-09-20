@@ -1,0 +1,28 @@
+{
+    "Form": {
+        "CoreDirPath": "/yaas/agent/a2_DataFrame/a22_Core",
+        "UserAccessFormJsonFilePath": "{CoreDirPath}/a222_UserAccessForm.json",
+        "UserConfigFormJsonFilePath": "{CoreDirPath}/a223_UserConfigForm.json",
+        "UserLogsFormJsonFilePath": "{CoreDirPath}/a224_UserLogsForm.json",
+        "ProjectConfigFormJsonFilePath": "{CoreDirPath}/a225_ProjectConfigForm.json",
+        "ProjectLogsFormJsonFilePath": "{CoreDirPath}/a226_ProjectLogsForm.json"
+    },
+    "DirAndFile": {
+        "UserStorageDirPath": "/yaas/storage/s1_Yeoreum/s12_UserStorage",
+        "User": {
+            "UserDirPath": "{UserStorageDirPath}/{Email}",
+            "UserAccessJsonFilePath": "{UserDirPath}/{Email}_user_access.json",
+            "UserConfigJsonFilePath": "{UserDirPath}/{Email}_user_config.json",
+            "UserLogJsonFilePath": "{UserDirPath}/{Email}_user_logs.json"
+        },
+        "Core": {
+            "CoreDirPath": "{UserDirPath}/{ProjectName}",
+            "CoreConfigJsonFilePath": "{CoreDirPath}/{ProjectName}_core_config.json",
+            "CoreLogJsonFilePath": "{CoreDirPath}/{ProjectName}_core_logs.json"
+        },
+        "Solution": {
+            "SolutionDirPath": "{CoreDirPath}/{ProjectName}_{Solution}",
+            "Solution(NextSolution)DirPath": "{CoreDirPath}/{ProjectName}_{Solution}({NextSolution})"
+        }
+    }
+}

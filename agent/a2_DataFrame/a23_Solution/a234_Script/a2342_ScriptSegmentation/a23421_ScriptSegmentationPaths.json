@@ -1,0 +1,57 @@
+{
+    "Form": {
+        "ScriptSegmentationDirPath": "/yaas/agent/a2_DataFrame/a23_Solution/a234_Script/a2342_ScriptSegmentation",
+        "StartFormJsonFilePath": "{ScriptSegmentationDirPath}/a23422_00_StartForm.json",
+        "ScriptLoadFormJsonFilePath": "{ScriptSegmentationDirPath}/a23422-PT01_ScriptLoadForm.json",
+        "PDFMainLangCheckFormJsonFilePath": "{ScriptSegmentationDirPath}/a23422-P02_PDFMainLangCheckForm.json",
+        "PDFLayoutCheckFormJsonFilePath": "{ScriptSegmentationDirPath}/a23422-P03_PDFLayoutCheckForm.json",
+        "PDFResizeFormJsonFilePath": "{ScriptSegmentationDirPath}/a23422-P04_PDFResizeForm.json",
+        "PDFSplitFormJsonFilePath": "{ScriptSegmentationDirPath}/a23422-P05_PDFSplitForm.json",
+        "PDFFormCheckFormJsonFilePath": "{ScriptSegmentationDirPath}/a23422-P06_PDFFormCheckForm.json",
+        "TXTMainLangCheckFormJsonFilePath": "{ScriptSegmentationDirPath}/a23422-T02_TXTMainLangCheckForm.json",
+        "TXTSplitFormJsonFilePath": "{ScriptSegmentationDirPath}/a23422-T03_TXTSplitForm.json"
+    },
+    "DirAndFile": {
+        "UploadDirPath": "{SolutionDirPath}/{ProjectName}_upload_script_file",
+        "DataFrame": {
+            "DataFrameDirPath": "{SolutionDirPath}/{ProjectName}_dataframe_script_file",
+            "InputListJsonFilePath": "{DataFrameDirPath}/{Email}_{ProjectName}_{ProcessNumber}_{ProcessName}_inputlist.json",
+            "MiddleFrameJsonFilePath": "{DataFrameDirPath}/{Email}_{ProjectName}_{ProcessNumber}_{ProcessName}_middleframe.json"
+        },
+        "DataSet": {
+            "DataSetDirPath": "{SolutionDirPath}/{ProjectName}_dataset_script_file",
+            "DataSetJsonFilePath": "{DataSetDirPath}/{Email}_{ProjectName}_{ProcessNumber}_{ProcessName}_dataset.json"
+        },
+        "Mixed": {
+            "MixedDirPath": "{SolutionDirPath}/{ProjectName}_mixed_script_file",
+            "MixedScript": {
+                "SampleScriptJPEGs": {
+                    "SampleScriptJPEGsDirPath": "{MixedDirPath}/SampleScriptJPEGs",
+                    "SampleScriptJPEGsFilePath": "{SampleScriptJPEGsDirPath}/({Idx})SampleScript.jpg"
+                },
+                "TrimSampleScriptJPEGs": {
+                    "TrimSampleScriptJPEGsDirPath": "{MixedDirPath}/TrimSampleScriptJPEGs",
+                    "TrimSampleScriptJPEGsFilePath": "{TrimSampleScriptJPEGsDirPath}/({Idx})TrimSampleScript.jpg"
+                },
+                "ScriptPDFs": {
+                    "ScriptPDFsDirPath": "{MixedDirPath}/ScriptPDFs",
+                    "ScriptPDFsFilePath": "{ScriptPDFsDirPath}/({Idx})Script.pdf"
+                },
+                "ResizeScriptPDFs": {
+                    "ResizeScriptPDFsDirPath": "{MixedDirPath}/ResizeScriptPDFs",
+                    "ResizeScriptPDFsFilePath": "{ResizeScriptPDFsDirPath}/({Idx})ResizeScript.pdf"
+                },
+                "ScriptJpegs": {
+                    "ScriptJpegsDirPath": "{MixedDirPath}/ScriptJPEGs",
+                    "ScriptJpegsFilePath": "{ScriptJpegsDirPath}/({Idx})Script.jpg"
+                }
+            }
+        },
+        "Master": {
+            "MasterDirPath": "{SolutionDirPath}/{ProjectName}_master_script_file",
+            "MasterScript": {
+                "EditPath": "{MasterDirPath}/[{ProjectName}_script_edit].json"
+            }
+        }
+    }
+}

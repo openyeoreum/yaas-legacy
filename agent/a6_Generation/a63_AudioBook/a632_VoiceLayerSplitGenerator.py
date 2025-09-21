@@ -731,6 +731,7 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
         # Api Setting
         VoiceId = ApiSetting['voice_id']
         Volume = ApiSetting['Volume']
+        Speed = ApiSetting['Speed']
         Stability = random.choice(ApiSetting['stability'])
         SimilarityBoost = random.choice(ApiSetting['similarity_boost'])
         Style = random.choice(ApiSetting['style'])
@@ -745,7 +746,7 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                 Voice_Audio = client.text_to_speech.convert(
                     text = EL_Chunk,
                     voice_id = VoiceId,
-                    voice_settings = VoiceSettings(stability = Stability, similarity_boost = SimilarityBoost, style = Style, use_speaker_boost = True),
+                    voice_settings = VoiceSettings(speed = Speed, stability = Stability, similarity_boost = SimilarityBoost, style = Style, use_speaker_boost = True),
                     model_id = Model
                 )
 

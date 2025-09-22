@@ -9,20 +9,18 @@
     },
     "DirAndFile": {
         "UserStorageDirPath": "/yaas/storage/s1_Yeoreum/s12_UserStorage",
-        "User": {
-            "UserDirPath": "{UserStorageDirPath}/{Email}",
+        "UserDirPath": "{UserStorageDirPath}/{Email}",
+        "UserDirInnerDirAndFilePath": {
             "UserAccessJsonFilePath": "{UserDirPath}/{Email}_user_access.json",
             "UserConfigJsonFilePath": "{UserDirPath}/{Email}_user_config.json",
             "UserLogJsonFilePath": "{UserDirPath}/{Email}_user_logs.json"
         },
-        "Core": {
-            "CoreDirPath": "{UserDirPath}/{ProjectName}",
-            "CoreConfigJsonFilePath": "{CoreDirPath}/{ProjectName}_core_config.json",
-            "CoreLogJsonFilePath": "{CoreDirPath}/{ProjectName}_core_logs.json"
+        "CoreDirPath": "{UserDirPath}/{ProjectName}",
+        "CoreDirInnerDirAndFilePath": {
+            "ProjectConfigJsonFilePath": "{CoreDirPath}/{ProjectName}_project_config.json",
+            "ProjectLogJsonFilePath": "{CoreDirPath}/{ProjectName}_project_logs.json"
         },
-        "Solution": {
-            "SolutionDirPath": "{CoreDirPath}/{ProjectName}_{Solution}",
-            "Solution(NextSolution)DirPath": "{CoreDirPath}/{ProjectName}_{Solution}({NextSolution})"
-        }
+        "SolutionDirPath": "{CoreDirPath}/{ProjectName}_{Solution}",
+        "Solution(NextSolution)DirPath": "{CoreDirPath}/{ProjectName}_{Solution}({NextSolution})"
     }
 }

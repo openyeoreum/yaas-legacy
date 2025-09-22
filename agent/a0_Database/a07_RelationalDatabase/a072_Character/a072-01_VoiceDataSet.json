@@ -28883,11 +28883,11 @@
                 "ApiSetting": {
                     "name": "양소영(연기)",
                     "Api": "ElevenLabs",
-                    "voice_id": "mpow1HpVvCjCXMuMRsb6",
+                    "voice_id": "cfGSQ1f0xag00jRcDSI6",
                     "stability": [0.7],
                     "similarity_boost": [0.7],
-                    "style": [0.0],
-                    "models": {"Ko": "eleven_v3", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
+                    "style": [0.01],
+                    "models": {"Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 1,
                     "Speed": 1,
                     "Pitch": 0

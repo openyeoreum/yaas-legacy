@@ -18,7 +18,7 @@ class Base:
     # -----------------------------
     # --- class-init --------------
     # --- class-func: Base 초기화 ---
-    def __init__(self, email: str, project_name: str, solution: str, process_number: str, process_name: str, sub_solution: str = None, next_solution: str = None) -> None:
+    def __init__(self, email: str, project_name: str, solution: str, process_number: str, process_name: str, work: str, *keys, sub_solution: str = None, next_solution: str = None) -> None:
         """사용자-프로젝트의 Core와 Solution에 통합 Base 기능을 수행하는 클래스입니다.
 
         Attributes:
@@ -36,25 +36,19 @@ class Base:
         self.solution = solution
         self.process_number = process_number
         self.process_name = process_name
+        self.storage_solution_dir_path = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{self.email}/{self.project_name}/{self.project_name}_{self.solution}"
 
-        # script 솔루션 등에서 sub_solution과 next_solution이 필요한 경우
+        # script solution 등에서 sub_solution과 next_solution이 필요한 경우에 solution 변경 및 next_solution 설정
         if sub_solution is not None:
             self.solution = sub_solution
         self.next_solution = next_solution
 
-        # core_paths_dict 불러오기
-        self.core_paths_dict = self._load_core_paths_file()
+        # next_solution이 있는 경우 storage_solution_dir_path 변경
+        if self.next_solution is not None:
+            self.storage_solution_dir_path = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{self.email}/{self.project_name}/{self.project_name}_{self.solution}({self.next_solution})"
 
-        # solution_paths_dict 불러오기
-        self.solution_paths_dict = self._load_solution_paths_file()
-
-        # core_paths 가져오기
-        # form
-        self.user_access_form_json_file_path, self.user_config_form_json_file_path, self.user_logs_form_json_file_path, self.project_config_form_json_file_path, self.project_logs_form_json_file_path = self._read_core_form_path_data()
-        # dir_and_file
-        self.user_dir_path, self.user_access_json_file_path, self.user_config_json_file_path, self.user_log_json_file_path, self.core_dir_path, self.core_config_json_file_path, self.core_log_json_file_path, self.solution_dir_path = self._read_core_dir_and_file_path_data()
-        
-        # solution_
+        # path 가져오기
+        self.path = self._read_path(work, *keys)
 
     # -------------------------------------
     # --- func-set: load paths file -------
@@ -87,13 +81,12 @@ class Base:
             solution_paths = solution_paths_dict["EstimatePaths"]
         if self.solution == "Collection":
             solution_paths = solution_paths_dict["CollectionPaths"]
-        if self.solution == "Script":
-            if self.sub_solution == "ScriptGen":
-                solution_paths = solution_paths_dict["ScriptGenPaths"]
-            if self.sub_solution == "ScriptSegmentation":
-                solution_paths = solution_paths_dict["ScriptSegmentationPaths"]
-            if self.sub_solution == "ScriptStruction":
-                solution_paths = solution_paths_dict["ScriptStructionPaths"]
+        if self.solution == "ScriptGen":
+            solution_paths = solution_paths_dict["ScriptGenPaths"]
+        if self.solution == "ScriptSegmentation":
+            solution_paths = solution_paths_dict["ScriptSegmentationPaths"]
+        if self.solution == "ScriptStruction":
+            solution_paths = solution_paths_dict["ScriptStructionPaths"]
         if self.solution == "Translation":
             solution_paths = solution_paths_dict["CTranslationPaths"]
         if self.solution == "Textbook":
@@ -110,124 +103,40 @@ class Base:
             solution_paths_dict = json.load(f)
 
         return solution_paths_dict
-    
-    # -----------------------------------------
-    # --- func-set: read core paths -----------
-    # --- class-func: core_form_path 가져오기 ---
-    def _read_core_form_path_data(self) -> str:
-        """Core의 Form 경로를 반환합니다.
-        Returns:
-            core_form_path (str): CorePaths.json에서 Form값 반환
-        """
-        # core_dir_path 가져오기
-        core_dir_path = self.core_paths_dict["Form"]["CoreDirPath"]
 
-        # form_path 가져오기
-        user_access_form_json_file_path = self.core_paths_dict["Form"]["UserAccessFormJsonFilePath"].format(CoreDirPath=core_dir_path)
-        user_config_form_json_file_path = self.core_paths_dict["Form"]["UserConfigFormJsonFilePath"].format(CoreDirPath=core_dir_path)
-        user_logs_form_json_file_path = self.core_paths_dict["Form"]["UserLogsFormJsonFilePath"].format(CoreDirPath=core_dir_path)
-        project_config_form_json_file_path = self.core_paths_dict["Form"]["ProjectConfigFormJsonFilePath"].format(CoreDirPath=core_dir_path)
-        project_logs_form_json_file_path = self.core_paths_dict["Form"]["ProjectLogsFormJsonFilePath"].format(CoreDirPath=core_dir_path)
+    # ---------------------------------------------
+    # --- func-set: read path ---------------------
+    # --- class-func: paths_data 가져오고 포맷팅하기 ---
+    def _read_path(self, work: str, *keys: str) -> str:
+        """Core 또는 Solution과 _Paths의 키 값을 인자로 받은 후, 이를 email, project_name, solution, process_number, process_name, self.solution, self.next_solution, self.storage_solution_dir_path으로 포맷팅합니다.
 
-        return user_access_form_json_file_path, user_config_form_json_file_path, user_logs_form_json_file_path, project_config_form_json_file_path, project_logs_form_json_file_path
-
-    # --- class-func: core_dir_and_file_path 가져오기 ---
-    def _read_core_dir_and_file_path_data(self) -> str:
-        """Core의 User, Core, Solution 디렉토리와 폴더 경로를 반환합니다.
+        Args:
+            work (str): 'core' 또는 'solution' (core_paths_data 또는 solution_paths_data 선택)
+            *keys (str): core_paths_data 또는 solution_paths_data의 연속된 키 값
 
         Returns:
-            user_path (str): CorePaths.json에서 DirAndFile -> User값 반환
-            core_path (str): CorePaths.json에서 DirAndFile -> Core값 반환
-            solution_path (str): CorePaths.json에서 DirAndFile -> Solution값 반환
+            formatted_path (str): 포맷팅된 경로
         """
-        # user_storage_dir_path 가져오기
-        user_storage_dir_path = self.core_paths_dict["DirAndFile"]["UserStorageDirPath"]
+        # core_paths_dict 또는 solution_paths_dict 가져오기
+        if work == "core":
+            paths_dict = self._load_core_paths_file()
+        elif work == "solution":
+            paths_dict = self._load_solution_paths_file()
 
-        # user_path 가져오기
-        user_dir_path = self.core_paths_dict["DirAndFile"]["User"]["UserDirPath"].format(StorageDirPath=user_storage_dir_path, Email=self.email)
-        user_access_json_file_path = self.core_paths_dict["DirAndFile"]["User"]["UserAccessJsonFilePath"].format(UserDirPath=user_dir_path, Email=self.email)
-        user_config_json_file_path = self.core_paths_dict["DirAndFile"]["User"]["UserConfigJsonFilePath"].format(UserDirPath=user_dir_path, Email=self.email)
-        user_log_json_file_path = self.core_paths_dict["DirAndFile"]["User"]["UserLogJsonFilePath"].format(UserDirPath=user_dir_path, Email=self.email)
+        # paths_dict에서 keys에 해당하는 경로 가져오기
+        path = paths_dict
+        for key in keys[1:]:
+            path = path[key]
 
-        # core_path 가져오기
-        core_dir_path = self.core_paths_dict["DirAndFile"]["Core"]["CoreDirPath"].format(UserDirPath=user_dir_path, ProjectName=self.project_name)
-        core_config_json_file_path = self.core_paths_dict["DirAndFile"]["Core"]["CoreConfigJsonFilePath"].format(CoreDirPath=core_dir_path, ProjectName=self.project_name)
-        core_log_json_file_path = self.core_paths_dict["DirAndFile"]["Core"]["CoreLogJsonFilePath"].format(CoreDirPath=core_dir_path, ProjectName=self.project_name)
+        # 경로 포맷팅
+        formatted_path = path.format(
+            Email=self.email,
+            ProjectName=self.project_name,
+            Solution=self.solution,
+            ProcessNumber=self.process_number,
+            ProcessName=self.process_name,
+            NextSolution=self.next_solution,
+            StorageSolutionDirPath=self.storage_solution_dir_path
+        )
 
-        # solution_path 가져오기
-        solution_dir_path = self.core_paths_dict["DirAndFile"]["Solution"]["SolutionDirPath"].format(CoreDirPath=core_dir_path, ProjectName=self.project_name, Solution=self.solution)
-        if self.next_solution is not None:
-            solution_dir_path = self.core_paths_dict["DirAndFile"]["Solution"]["Solution(NextSolution)DirPath"].format(CoreDirPath=core_dir_path, ProjectName=self.project_name, Solution=self.solution, NextSolution=self.next_solution)
-        
-        return user_dir_path, user_access_json_file_path, user_config_json_file_path, user_log_json_file_path, core_dir_path, core_config_json_file_path, core_log_json_file_path, solution_dir_path
-
-    # --------------------------------------------------------
-    # --- func-set: read process paths -----------------------
-    # --- class-func: process_form_paths 가져오기 --------------
-    def _read_process_form_path_data(self) -> str:
-        """Process의 Form 경로를 반환합니다.
-        Returns:
-            process_form_json_file_path (str): ProcessPaths.json에서 Form값 반환
-        """
-        # script_segmentation_dir_path 가져오기
-        script_segmentation_dir_path = self.solution_paths_dict["Form"]["ScriptSegmentationFormPath"]
-        
-        # form_path 가져오기
-        start_form_json_file_path = self.solution_paths_dict["Form"]["StartFormJsonFilePath"].format(ScriptSegmentationDirPath=script_segmentation_dir_path)
-        script_load_form_json_file_path = self.solution_paths_dict["Form"]["ScriptLoadFormJsonFilePath"].format(ScriptSegmentationDirPath=script_segmentation_dir_path)
-        pdf_main_lang_check_form_json_file_path = self.solution_paths_dict["Form"]["PDFMainLangCheckFormJsonFilePath"].format(ScriptSegmentationDirPath=script_segmentation_dir_path)
-        pdf_layout_check_form_json_file_path = self.solution_paths_dict["Form"]["PDFLayoutCheckFormJsonFilePath"].format(ScriptSegmentationDirPath=script_segmentation_dir_path)
-        pdf_resize_form_json_file_path = self.solution_paths_dict["Form"]["PDFResizeFormJsonFilePath"].format(ScriptSegmentationDirPath=script_segmentation_dir_path)
-        pdf_split_form_json_file_path = self.solution_paths_dict["Form"]["PDFSplitFormJsonFilePath"].format(ScriptSegmentationDirPath=script_segmentation_dir_path)
-        pdf_form_check_form_json_file_path = self.solution_paths_dict["Form"]["PDFFormCheckFormJsonFilePath"].format(ScriptSegmentationDirPath=script_segmentation_dir_path)
-        txt_main_lang_check_form_json_file_path = self.solution_paths_dict["Form"]["TXTMainLangCheckFormJsonFilePath"].format(ScriptSegmentationDirPath=script_segmentation_dir_path)
-        txt_split_form_json_file_path = self.solution_paths_dict["Form"]["TXTSplitFormJsonFilePath"].format(ScriptSegmentationDirPath=script_segmentation_dir_path)
-
-        return start_form_json_file_path, script_load_form_json_file_path, pdf_main_lang_check_form_json_file_path, pdf_layout_check_form_json_file_path, pdf_resize_form_json_file_path, pdf_split_form_json_file_path, pdf_form_check_form_json_file_path, txt_main_lang_check_form_json_file_path, txt_split_form_json_file_path
-
-    # ---------------------------------------------------------------
-    # --- func-set: read data_frame_and_data_set paths --------------
-    # --- class-func: process_data_frame_and_data_set_path 가져오기 ---
-    def _read_process_data_frame_and_data_set_path_data(self) -> str:
-        """Process의 DataFrame, DataSet 디렉토리와 폴더 경로를 반환합니다.
-
-        Returns:
-            data_frame (str): ProcessPaths.json에서 DirAndFile -> DataFrame값 반환
-            data_set (str): ProcessPaths.json에서 DirAndFile -> DataSet값 반환
-        """
-        # upload_dir_path 가져오기
-        upload_dir_path = self.solution_paths_dict["DirAndFile"]["UploadDirPath"].format(SolutionDirPath=self.solution_dir_path, ProjectName=self.project_name)
-
-        # data_frame_path 가져오기
-        data_frame_dir_path = self.solution_paths_dict["DirAndFile"]["DataFrame"]["DataFrameDirPath"].format(SolutionDirPath=self.solution_dir_path, ProjectName=self.project_name)
-        input_list_json_file_path = self.solution_paths_dict["DirAndFile"]["DataFrame"]["InputListJsonFilePath"].format(DataFrameDirPath=data_frame_dir_path, Email=self.email, ProjectName=self.project_name, ProcessNumber=self.process_number, ProcessName=self.process_name)
-        middle_frame_json_file_path = self.solution_paths_dict["DirAndFile"]["DataFrame"]["MiddleFrameJsonFilePath"].format(DataFrameDirPath=data_frame_dir_path, Email=self.email, ProjectName=self.project_name, ProcessNumber=self.process_number, ProcessName=self.process_name)
-
-        # data_set_path 가져오기
-        data_set_dir_path = self.solution_paths_dict["DirAndFile"]["DataSet"]["DataSetDirPath"].format(SolutionDirPath=self.solution_dir_path, ProjectName=self.project_name)
-        data_set_json_file_path = self.solution_paths_dict["DirAndFile"]["DataSet"]["DataSetJsonFilePath"].format(DataSetDirPath=data_set_dir_path, Email=self.email, ProjectName=self.project_name, ProcessNumber=self.process_number, ProcessName=self.process_name)
-
-        return upload_dir_path, data_frame_dir_path, input_list_json_file_path, middle_frame_json_file_path, data_set_dir_path, data_set_json_file_path
-
-    # ------------------------------------------------------------------
-    # --- func-set: read mix_and_master paths --------------------------
-    # --- class-func: script_segmentation_mix_and_master_path 가져오기 ---
-    def _read_script_segmentation_mix_and_master_path_data(self) -> str:
-        """ScriptSegmentation의 DataFrame, DataSet, Mixed, Master 디렉토리와 폴더 경로를 반환합니다.
-
-        Returns:
-            data_frame (str): ScriptSegmentationPaths.json에서 DirAndFile -> DataFrame값 반환
-            data_set (str): ScriptSegmentationPaths.json에서 DirAndFile -> DataSet값 반환
-            mixed (str): ScriptSegmentationPaths.json에서 DirAndFile -> Mixed값 반환
-            master (str): ScriptSegmentationPaths.json에서 DirAndFile -> Master값 반환
-        """
-        # upload_dir_path 가져오기
-        upload_dir_path = self.solution_paths_dict["DirAndFile"]["UploadDirPath"].format(SolutionDirPath=self.solution_dir_path, ProjectName=self.project_name)
-
-        # data_frame_path 가져오기
-        data_frame_dir_path = self.solution_paths_dict["DirAndFile"]["DataFrame"]["DataFrameDirPath"].format(SolutionDirPath=self.solution_dir_path, ProjectName=self.project_name)
-        input_list_json_file_path = self.solution_paths_dict["DirAndFile"]["DataFrame"]["InputListJsonFilePath"].format(DataFrameDirPath=data_frame_dir_path, Email=self.email, ProcessNumber=self.process_number, ProjectName=self.project_name)
-        middle_frame_json_file_path = self.solution_paths_dict["DirAndFile"]["DataFrame"]["MiddleFrameJsonFilePath"].format(DataFrameDirPath=data_frame_dir_path, Email=self.email, ProcessNumber=self.process_number, ProjectName=self.project_name)
-
-        # data_set_path 가져오기
-        data_set_dir_path = self.solution_paths_dict["DirAndFile"]["DataSet"]["DataSetDirPath"].format(SolutionDirPath=self.solution_dir_path, ProjectName=self.project_name)
+        return formatted_path

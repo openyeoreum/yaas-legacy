@@ -13,39 +13,58 @@ class Base:
     # paths 경로
     core_paths_file_path = "/yaas/agent/a2_DataFrame/a22_Core/a221_CorePaths.json"
     solution_tree_paths_file_path = "/yaas/agent/a2_DataFrame/a23_Solution/a231_SolutionTreePaths.json"
+    generation_tree_paths_file_path = "/yaas/agent/a2_DataFrame/a24_Generation/a241_GenerationTreePaths.json"
 
     # -----------------------------
     # --- class-init --------------
     # --- class-func: Base 초기화 ---
-    def __init__(self, email: str, project_name: str, work: str, *keys: str, solution: str = None, next_solution: str = None, process_number: str = None, process_name: str = None) -> None:
+    def __init__(self, email: str, project_name: str, work: str, form_keys: list = None, dir_keys: list = None, file_keys: list = None, solution: str = None, next_solution: str = None, process_number: str = None, process_name: str = None, idx: int = None) -> None:
         """사용자-프로젝트의 Core와 Solution에 통합 Base 기능을 수행하는 클래스입니다.
 
         Attributes:
             email (str): 이메일
             project_name (str): yymmdd_프로젝트명
-            *keys (str): core_paths_data 또는 solution_paths_data의 연속된 키 값
+            work (str): "core" 또는 "solution" 또는 "generation"
+            _keys (list): core_paths 또는 solution_paths 또는 generation_paths의 연속된 키 값
             solution (str): 솔루션명 (ex. Collection, ScriptSegmentation 등)
             next_solution (str): 다음 솔루션이 필요한 경우 다음 솔루션명 (ex. Audiobook, Translation 등)
             process_number (str): 솔루션 안에 프로세스 번호
             process_name (str): 솔루션 안에 프로세스명
+            idx (int): 솔루션 안에 프로세스 안에 테스크 인덱스 번호로 jpg, wav, mp3 등 file명에 사용
+            storage_solution_dir_path (str): 사용자-프로젝트-솔루션 디렉토리 경로
+            _path (str): 포맷팅된 경로
         """
         # attributes 설정
+        # 경로 가져오기 인자
         self.email = email
         self.project_name = project_name
         self.work = work
+        self.form_keys = form_keys if form_keys is not [] else None
+        self.dir_keys = dir_keys if dir_keys is not [] else None
+        self.file_keys = file_keys if file_keys is not [] else None
+
+        # 경로 포맷팅 인자
         self.solution = solution
         self.next_solution = next_solution
         self.process_number = process_number
         self.process_name = process_name
-        self.keys = keys
-        self.storage_solution_dir_path = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{self.email}/{self.project_name}/{self.project_name}_{self.solution}"
+        self.idx = idx
 
-        # next_solution이 있는 경우 storage_solution_dir_path 변경
+        # next_solution 유무에 따른 storage_solution_dir_path 생성
+        self.storage_solution_dir_path = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{self.email}/{self.project_name}/{self.project_name}_{self.solution}"
         if self.next_solution is not None:
             self.storage_solution_dir_path = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{self.email}/{self.project_name}/{self.project_name}_{self.solution}({self.next_solution})"
 
-        # core, solution, generation 경로 가져오기
-        self.path = self._read_path(self.work, *keys)
+        # core, solution, generation의 form, dir, file 경로 가져오기
+        self.form_path = None
+        self.dir_path = None
+        self.file_path = None
+        if form_keys is not None:
+            self.form_path = self._read_path(self.work, form_keys)
+        if dir_keys is not None:
+            self.dir_path = self._read_path(self.work, dir_keys)
+        if file_keys is not None:
+            self.file_path = self._read_path(self.work, file_keys)
 
     # -------------------------------------
     # --- func-set: load paths file -------
@@ -62,14 +81,14 @@ class Base:
         
         return core_paths_dict
 
-    # --- class-func: solution_paths 불러오기 ---
+    # --- class-func: solution_tree_paths 불러오기 ---
     def _load_solution_paths_file(self) -> dict:
-        """SolutionPaths.json 파일을 불러옵니다.
+        """SolutionTreePaths.json 파일을 불러옵니다.
 
         Returns:
-            solution_paths (dict): SolutionPaths.json 파일 내용
+            solution_tree_paths (dict): SolutionTreePaths.json 파일 내용
         """
-        # solution_paths.json 파일 불러오기
+        # solution_tree_paths.json 파일 불러오기
         with open(self.solution_tree_paths_file_path, "r") as f:
             solution_paths_dict = json.load(f)
 
@@ -101,33 +120,38 @@ class Base:
 
         return solution_paths_dict
 
-    # --- class-func: generation_paths 불러오기 ---
+    # --- class-func: generation_tree_paths 불러오기 ---
     def _load_generation_paths_file(self) -> dict:
-        """GenerationPaths.json 파일을 불러옵니다.
+        """GenerationTreePaths.json 파일을 불러옵니다.
 
         Returns:
-            generation_paths (dict): GenerationPaths.json 파일 내용
+            generation_tree_paths (dict): GenerationTreePaths.json 파일 내용
         """
+        # generation_tree_paths.json 파일 불러오기
+        with open(self.generation_tree_paths_file_path, "r") as f:
+            generation_paths_dict = json.load(f)
+        
+        return generation_paths_dict
 
     # ---------------------------------------------
     # --- func-set: read path ---------------------
     # --- class-func: paths_data 가져오고 포맷팅하기 ---
-    def _read_path(self, work: str, *keys: str) -> str:
+    def _read_path(self, work: str, keys: list) -> str:
         """work와 _Paths의 키 값을 *keys에 인자로 받은 후, 이를 email, project_name, solution, process_number, process_name, self.solution, self.next_solution, self.storage_solution_dir_path로 포맷팅합니다.
 
         Args:
-            work (str): 'core' 또는 'solution' 또는 'generation' (_load_core_paths_file 또는 _load_solution_paths_file 또는 _load_generation_paths_file 선택)
-            *keys (str): core_paths 또는 solution_paths 또는 generation_paths의 연속된 키 값
+            work (str): "core" 또는 "solution" 또는 "generation" (_load_core_paths_file 또는 _load_solution_paths_file 또는 _load_generation_paths_file 선택)
+            keys (list): core_paths 또는 solution_paths 또는 generation_paths의 연속된 keys 리스트
 
         Returns:
             formatted_path (str): 포맷팅된 경로
         """
         # paths_dict 가져오기
-        if work == 'core':
+        if work == "core":
             paths_dict = self._load_core_paths_file()
-        if work == 'solution':
+        if work == "solution":
             paths_dict = self._load_solution_paths_file()
-        if work == 'generation':
+        if work == "generation":
             paths_dict = self._load_generation_paths_file()
 
         # paths_dict에서 keys에 해당하는 경로 가져오기
@@ -140,9 +164,10 @@ class Base:
             Email=self.email,
             ProjectName=self.project_name,
             Solution=self.solution,
+            NextSolution=self.next_solution,
             ProcessNumber=self.process_number,
             ProcessName=self.process_name,
-            NextSolution=self.next_solution,
+            Idx=self.idx,
             StorageSolutionDirPath=self.storage_solution_dir_path
         )
 
@@ -150,19 +175,20 @@ class Base:
 
 if __name__ == "__main__":
 
-    # ------------------
     # --- class-test ---
+    # upload dir path 가져오기 인자
     email = "yeoreum00128@gmail.com"
     project_name = "250911_오늘도불안한엄마들에게"
     work = "solution"
-    key1 = "Storage"
-    key2 = "Upload"
-    key3 = "DirPath"
+    form_keys = None
+    dir_keys = ["Storage", "Upload", "DirPath"]
+    file_keys = None
     solution = "ScriptSegmentation"
     next_solution = "Audiobook"
     process_number = "PT01"
     process_name = "ScriptLoad"
+    idx = None
 
     # 클래스 테스트
-    BaseInstance = Base(email, project_name, work, key1,key2, key3, solution=solution, next_solution=next_solution, process_number=process_number, process_name=process_name)
-    print(BaseInstance.path)
+    base = Base(email, project_name, work, form_keys=form_keys, dir_keys=dir_keys, file_keys=file_keys, solution=solution, next_solution=next_solution, process_number=process_number, process_name=process_name, idx=idx)
+    print(base.dir_path)

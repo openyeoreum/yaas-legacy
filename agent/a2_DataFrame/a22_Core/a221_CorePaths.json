@@ -1,22 +1,19 @@
 {
     "Form": {
-        "UserAccessPath": "/yaas/agent/a2_DataFrame/a22_Core/a222_UserAccessForm.json",
-        "UserConfigPath": "/yaas/agent/a2_DataFrame/a22_Core/a223_UserConfigForm.json",
-        "UserLogsPath": "/yaas/agent/a2_DataFrame/a22_Core/a224_UserLogsForm.json",
-        "ProjectConfigPath": "/yaas/agent/a2_DataFrame/a22_Core/a225_ProjectConfigForm.json",
-        "ProjectLogsPath": "/yaas/agent/a2_DataFrame/a22_Core/a226_ProjectLogsForm.json"
+        "ProjectConfigPath": "/yaas/agent/a2_DataFrame/a22_Core/a225_ProjectConfigForm.json"
     },
-    "Storage": {
-        "User": {
-            "DirPath": "/yaas/storage/s1_Yeoreum/s12_UserStorage/{Email}",
-            "AccessPath": "/yaas/storage/s1_Yeoreum/s12_UserStorage/{Email}/{Email}_user_access.json",
-            "ConfigPath": "/yaas/storage/s1_Yeoreum/s12_UserStorage/{Email}/{Email}_user_config.json",
-            "LogsPath": "/yaas/storage/s1_Yeoreum/s12_UserStorage/{Email}/{Email}_user_logs.json"
+    "Dir": {
+        "User": "/yaas/storage/s1_Yeoreum/s12_UserStorage/{Email}",
+        "Project": "/yaas/storage/s1_Yeoreum/s12_UserStorage/{Email}/{ProjectName}"
+    },
+    "File": {
+        "Json": {
+            "ProjectConfig": "/yaas/storage/s1_Yeoreum/s12_UserStorage/{Email}/{ProjectName}/{ProjectName}_project_config.json"
         },
-        "Project": {
-            "DirPath": "/yaas/storage/s1_Yeoreum/s12_UserStorage/{Email}/{ProjectName}",
-            "ConfigPath": "/yaas/storage/s1_Yeoreum/s12_UserStorage/{Email}/{ProjectName}/{ProjectName}_project_config.json",
-            "LogsPath": "/yaas/storage/s1_Yeoreum/s12_UserStorage/{Email}/{ProjectName}/{ProjectName}_project_logs.json"
-        }
+        "Txt": {},
+        "Pdf": {},
+        "Jpg": {},
+        "Wav": {},
+        "Mp3": {}
     }
 }

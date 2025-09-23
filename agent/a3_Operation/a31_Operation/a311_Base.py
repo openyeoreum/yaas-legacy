@@ -18,7 +18,7 @@ class Base:
     # -----------------------------
     # --- class-init --------------
     # --- class-func: Base 초기화 ---
-    def __init__(self, email: str, project_name: str, solution: str, process_number: str, process_name: str, work: str, *keys, sub_solution: str = None, next_solution: str = None) -> None:
+    def __init__(self, email: str, project_name: str, solution: str, process_number: str, process_name: str, next_solution: str = None) -> None:
         """사용자-프로젝트의 Core와 Solution에 통합 Base 기능을 수행하는 클래스입니다.
 
         Attributes:
@@ -36,19 +36,12 @@ class Base:
         self.solution = solution
         self.process_number = process_number
         self.process_name = process_name
-        self.storage_solution_dir_path = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{self.email}/{self.project_name}/{self.project_name}_{self.solution}"
-
-        # script solution 등에서 sub_solution과 next_solution이 필요한 경우에 solution 변경 및 next_solution 설정
-        if sub_solution is not None:
-            self.solution = sub_solution
         self.next_solution = next_solution
+        self.storage_solution_dir_path = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{self.email}/{self.project_name}/{self.project_name}_{self.solution}"
 
         # next_solution이 있는 경우 storage_solution_dir_path 변경
         if self.next_solution is not None:
             self.storage_solution_dir_path = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{self.email}/{self.project_name}/{self.project_name}_{self.solution}({self.next_solution})"
-
-        # path 가져오기
-        self.path = self._read_path(work, *keys)
 
     # -------------------------------------
     # --- func-set: load paths file -------
@@ -104,10 +97,18 @@ class Base:
 
         return solution_paths_dict
 
+    # --- class-func: generation_paths 불러오기 ---
+    def _load_generation_paths_file(self) -> dict:
+        """GenerationPaths.json 파일을 불러옵니다.
+
+        Returns:
+            generation_paths (dict): GenerationPaths.json 파일 내용
+        """
+
     # ---------------------------------------------
     # --- func-set: read path ---------------------
     # --- class-func: paths_data 가져오고 포맷팅하기 ---
-    def _read_path(self, work: str, *keys: str) -> str:
+    def read_path(self, work: str, *keys: str) -> str:
         """Core 또는 Solution과 _Paths의 키 값을 인자로 받은 후, 이를 email, project_name, solution, process_number, process_name, self.solution, self.next_solution, self.storage_solution_dir_path으로 포맷팅합니다.
 
         Args:
@@ -120,8 +121,10 @@ class Base:
         # core_paths_dict 또는 solution_paths_dict 가져오기
         if work == "core":
             paths_dict = self._load_core_paths_file()
-        elif work == "solution":
+        if work == "solution":
             paths_dict = self._load_solution_paths_file()
+        if work == "generation":
+            paths_dict = self._load_generation_paths_file()
 
         # paths_dict에서 keys에 해당하는 경로 가져오기
         path = paths_dict
@@ -140,3 +143,21 @@ class Base:
         )
 
         return formatted_path
+    
+if __name__ == "__main__":
+
+    ############################ 하이퍼 파라미터 설정 ############################
+    email = "yeoreum00128@gmail.com"
+    project_name = "250911_오늘도불안한엄마들에게"
+    solution = "ScriptSegmentation"
+    process_number = "PT01"
+    process_name = "ScriptLoad"
+    next_solution = "Audiobook"
+    work = "solution"
+    key1 = "Form"
+    Key2 = "ScriptLoad"
+    #########################################################################
+
+    BaseInstance = Base(email, project_name, solution, process_number, process_name, next_solution=next_solution)
+    Path = BaseInstance.read_path(work, key1, Key2)
+    print(Path)

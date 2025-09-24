@@ -3,10 +3,10 @@ import json
 import sys
 sys.path.append("/yaas")
 
-from agent.a3_Operation.a31_Operation.a311_Base import Base
+from agent.a3_Operation.a31_Operation.a313_Base import Base
 
 # ======================================================================
-# [a312-1] Operation-Manager
+# [a314-1] Operation-Manager
 # ======================================================================
 # class: Manager
 # ======================================================================
@@ -15,11 +15,46 @@ class Manager(Base):
     # --------------------------------
     # --- class-init -----------------
     # --- class-func: Manager 초기화 ---
-    def __init__(self, email: str, project_name: str, work: str, form_keys: list = None, dir_keys: list = None, file_keys: list = None, solution: str = None, next_solution: str = None, process_number: str = None, process_name: str = None, idx: int = None) -> None:
+    def __init__(self,
+                 email: str,
+                 project_name: str,
+                 work: str,
+                 form_keys: list = None,
+                 dir_keys: list = None,
+                 file_keys: list = None,
+                 solution: str = None,
+                 next_solution: str = None,
+                 process_number: str = None,
+                 process_name: str = None,
+                 idx: int = None) -> None:
         """사용자-프로젝트의 Core와 Solution에 통합 Manager 기능을 수행하는 클래스입니다.
+
+        Args:
+            email (str): 이메일
+            project_name (str): 프로젝트명
+            work (str): "core" 또는 "solution" 또는 "generation"
+            _keys (list): core_paths 또는 solution_paths 또는 generation_paths의 연속된 키 값
+            solution (str): 솔루션명 (ex. Collection, ScriptSegmentation 등)
+            next_solution (str): 다음 솔루션이 필요한 경우 다음 솔루션명 (ex. Audiobook, Translation 등)
+            process_number (str): 솔루션 안에 프로세스 번호
+            process_name (str): 솔루션 안에 프로세스명
+            idx (int): 솔루션 안에 프로세스 안에 테스크 인덱스 번호로 jpg, wav, mp3 등 file명에 사용
+            storage_solution_dir_path (str): 사용자-프로젝트-솔루션 디렉토리 경로
+            _path (str): 포맷팅된 경로
         """
         # Base 초기화
-        super().__init__(email, project_name, work, form_keys=form_keys, dir_keys=dir_keys, file_keys=file_keys, solution=solution, next_solution=next_solution, process_number=process_number, process_name=process_name, idx=idx)
+        super().__init__(
+            email,
+            project_name,
+            work,
+            form_keys=form_keys,
+            dir_keys=dir_keys,
+            file_keys=file_keys,
+            solution=solution,
+            next_solution=next_solution,
+            process_number=process_number,
+            process_name=process_name,
+            idx=idx)
 
     # -----------------------------------------
     # --- func-set: dir manager ---------------
@@ -56,7 +91,8 @@ class Manager(Base):
             print("오류처리")
 
     # --- class-func: storage json 저장하기 ---
-    def overwrite_json(self, json_data: dict) -> None:
+    def overwrite_json(self,
+                       json_data: dict) -> None:
         """self.file_path의 json을 저장합니다.
 
         Args:
@@ -86,7 +122,9 @@ class Manager(Base):
             print("오류처리")
 
     # --- class-func: storage json data 추가하기 ---
-    def append_data(self, json_keys: list, data: dict) -> None:
+    def append_data(self,
+                    json_keys: list,
+                    data: dict) -> None:
         """self.file_path의 json에 데이터를 추가합니다.
 
         Effects:
@@ -112,7 +150,9 @@ class Manager(Base):
             print("오류처리")
 
     # --- class-func: storage json data 수정하기 ---
-    def set_json(self, json_keys: list, data: str | dict | list) -> None:
+    def set_json(self,
+                 json_keys: list,
+                 data: str | dict | list) -> None:
         """self.file_path의 json에 데이터를 수정, 변경합니다.
 
         Effects:
@@ -139,7 +179,8 @@ class Manager(Base):
             print("오류처리")
 
     # --- class-func: storage json data 가져오기 ---
-    def read_json(self, json_keys: list) -> str | dict | list:
+    def read_json(self,
+                  json_keys: list) -> str | dict | list:
         """self.file_path의 json에서 데이터를 가져옵니다.
 
         Returns:
@@ -162,7 +203,8 @@ class Manager(Base):
     # -----------------------------------------
     # --- func-set: txt manager ---------------
     # --- class-func: storage txt 생성하기 ------
-    def create_txt(self, text: str) -> None:
+    def create_txt(self,
+                   text: str) -> None:
         """self.file_path의 txt를 저장합니다.
 
         Args:
@@ -211,17 +253,30 @@ if __name__ == "__main__":
 
     # --- class-test ---
     # core dir 생성 인자
-    email = "yeoreum00128@gmail.com"
-    project_name = "250911_오늘도불안한엄마들에게"
-    work = "solution"
+    email = "yeoreum00128@gmail.com3"
+    project_name = "250911_오늘도불안한엄마들에게2"
+    work = "core"
     form_keys = None
-    dir_keys = ["Storage", "Upload", "DirPath"]
+    dir_keys = ["Dir", "User"]
     file_keys = None
-    solution = "ScriptSegmentation"
-    next_solution = "Audiobook"
-    process_number = "PT01"
-    process_name = "ScriptLoad"
+    solution = None
+    next_solution = None
+    process_number = None
+    process_name = None
     idx = None
 
     # core dir 생성
-    manager = Manager(email, project_name, work, form_keys=form_keys, dir_keys=dir_keys, file_keys=file_keys, solution=solution, next_solution=next_solution, process_number=process_number, process_name=process_name, idx=idx)
+    user = Manager(
+        email,
+        project_name,
+        work,
+        form_keys=form_keys,
+        dir_keys=dir_keys,
+        file_keys=file_keys,
+        solution=solution,
+        next_solution=next_solution,
+        process_number=process_number,
+        process_name=process_name,
+        idx=idx)
+
+    user.make_dir()

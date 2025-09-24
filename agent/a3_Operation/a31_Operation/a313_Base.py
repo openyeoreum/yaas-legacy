@@ -3,12 +3,14 @@ import json
 import sys
 sys.path.append("/yaas")
 
+from agent.a3_Operation.a31_Operation.a311_Access import Access
+
 # ======================================================================
-# [a311-1] Operation-Base
+# [a313-1] Operation-Base
 # ======================================================================
 # class: Base
 # ======================================================================
-class Base:
+class Base(Access):
 
     # paths 경로
     core_paths_file_path = "/yaas/agent/a2_DataFrame/a22_Core/a221_CorePaths.json"
@@ -18,12 +20,23 @@ class Base:
     # -----------------------------
     # --- class-init --------------
     # --- class-func: Base 초기화 ---
-    def __init__(self, email: str, project_name: str, work: str, form_keys: list = None, dir_keys: list = None, file_keys: list = None, solution: str = None, next_solution: str = None, process_number: str = None, process_name: str = None, idx: int = None) -> None:
+    def __init__(self,
+                 email: str,
+                 project_name: str,
+                 work: str,
+                 form_keys: list = None,
+                 dir_keys: list = None,
+                 file_keys: list = None,
+                 solution: str = None,
+                 next_solution: str = None,
+                 process_number: str = None,
+                 process_name: str = None,
+                 idx: int = None) -> None:
         """사용자-프로젝트의 Core와 Solution에 통합 Base 기능을 수행하는 클래스입니다.
 
         Attributes:
             email (str): 이메일
-            project_name (str): yymmdd_프로젝트명
+            project_name (str): 프로젝트명
             work (str): "core" 또는 "solution" 또는 "generation"
             _keys (list): core_paths 또는 solution_paths 또는 generation_paths의 연속된 키 값
             solution (str): 솔루션명 (ex. Collection, ScriptSegmentation 등)
@@ -34,10 +47,12 @@ class Base:
             storage_solution_dir_path (str): 사용자-프로젝트-솔루션 디렉토리 경로
             _path (str): 포맷팅된 경로
         """
+        # Access 초기화
+        super().__init__(
+            email,
+            project_name)
+        
         # attributes 설정
-        # 경로 가져오기 인자
-        self.email = email
-        self.project_name = project_name
         self.work = work
         self.form_keys = form_keys if form_keys is not [] else None
         self.dir_keys = dir_keys if dir_keys is not [] else None
@@ -136,7 +151,9 @@ class Base:
     # ---------------------------------------------
     # --- func-set: read path ---------------------
     # --- class-func: paths_data 가져오고 포맷팅하기 ---
-    def _read_path(self, work: str, keys: list) -> str:
+    def _read_path(self,
+                   work: str,
+                   keys: list) -> str:
         """work와 _Paths의 키 값을 *keys에 인자로 받은 후, 이를 email, project_name, solution, process_number, process_name, self.solution, self.next_solution, self.storage_solution_dir_path로 포맷팅합니다.
 
         Args:
@@ -168,8 +185,7 @@ class Base:
             ProcessNumber=self.process_number,
             ProcessName=self.process_name,
             Idx=self.idx,
-            StorageSolutionDirPath=self.storage_solution_dir_path
-        )
+            StorageSolutionDirPath=self.storage_solution_dir_path)
 
         return formatted_path
 
@@ -190,5 +206,19 @@ if __name__ == "__main__":
     idx = None
 
     # 클래스 테스트
-    base = Base(email, project_name, work, form_keys=form_keys, dir_keys=dir_keys, file_keys=file_keys, solution=solution, next_solution=next_solution, process_number=process_number, process_name=process_name, idx=idx)
-    print(base.dir_path)
+    base = Base(
+        email,
+        project_name,
+        work,
+        form_keys=form_keys,
+        dir_keys=dir_keys,
+        file_keys=file_keys,
+        solution=solution,
+        next_solution=next_solution,
+        process_number=process_number,
+        process_name=process_name,
+        idx=idx)
+
+    dir_path = base.dir_path
+
+    print("Dir Path:", dir_path)

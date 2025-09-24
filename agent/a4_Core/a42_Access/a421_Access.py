@@ -5,11 +5,11 @@ sys.path.append("/yaas")
 
 ### ProjectList.json 경로 불러오기 ###
 def LoadProjectListPath():
-    return f'/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_Projects(Temp).json'
+    return f'/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_Projects.json'
 
 ### Project_ProjectAccess.json 경로 불러오기 ###
 def LoadProjectAccessPath(projectName, email):
-    return f'/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Access(Temp)/{email}_{projectName}_Access.json'
+    return f'/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Access/{email}_{projectName}_Access.json'
 
 ### ProjectStorage 기본 경로 불러오기 ###
 def LoadProjectStoragePath(email):

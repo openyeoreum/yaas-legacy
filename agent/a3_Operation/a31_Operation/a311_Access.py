@@ -14,7 +14,7 @@ from datetime import datetime
 class Access:
 
     # paths 경로
-    access_file_path = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_Access.json"
+    access_file_path = "/yaas/agent/a2_DataFrame/a21_Operation/a211_Access.json"
 
     # -------------------------------
     # --- class-init ----------------

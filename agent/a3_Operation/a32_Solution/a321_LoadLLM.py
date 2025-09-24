@@ -654,7 +654,7 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
-    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
+    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage"
     FeedbackDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s112_FeedbackDataSet/"
     CompleteDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s113_CompleteDataSet/"
     TrainingDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s114_TrainingDataSet/"

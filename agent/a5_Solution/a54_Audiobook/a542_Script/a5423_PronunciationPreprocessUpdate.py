@@ -324,7 +324,7 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "노인을위한나라는있다"
-    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
+    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"
     messagesReview = "on"

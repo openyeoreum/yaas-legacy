@@ -14,7 +14,7 @@ from datetime import datetime
 class Access:
 
     # paths 경로
-    projects_file_path = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_Projects.json"
+    access_file_path = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_Access.json"
 
     # -------------------------------
     # --- class-init ----------------
@@ -93,7 +93,7 @@ class Access:
                 - timestamped_project_name: 타임스탬프가 추가된 프로젝트 이름
         """
         try:
-            with open(self.projects_file_path, 'r', encoding='utf-8') as f:
+            with open(self.access_file_path, 'r', encoding='utf-8') as f:
                 all_projects = json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
             # 파일이 없거나 비어있으면 빈 딕셔너리로 시작
@@ -124,7 +124,7 @@ class Access:
             all_projects[hashed_email] = user_projects
             
             # 변경된 내용을 JSON 파일에 다시 저장
-            with open(self.projects_file_path, 'w', encoding='utf-8') as f:
+            with open(self.access_file_path, 'w', encoding='utf-8') as f:
                 json.dump(all_projects, f, indent=4, ensure_ascii=False)
             
             return hashed_email, new_timestamped_project_name

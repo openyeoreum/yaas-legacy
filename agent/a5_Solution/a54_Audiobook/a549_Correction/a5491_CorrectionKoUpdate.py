@@ -731,7 +731,7 @@ def ResponseJsonText(projectName, email, responseJson):
                 responseJsonText += token
         
     # 문자열 정규화
-    _baseFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_audiobook/{projectName}_dataframe_audiobook_file/{email}_{projectName}_21_responseJson"
+    _baseFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage/{email}/{projectName}/{projectName}_audiobook/{projectName}_dataframe_audiobook_file/{email}_{projectName}_21_responseJson"
     baseFilePathNFCNormalized = unicodedata.normalize('NFC', _baseFilePath)
     baseFilePathNFDNormalized = unicodedata.normalize('NFD', _baseFilePath)
     
@@ -1046,7 +1046,7 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "나는외식창업에적합한사람인가"
-    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
+    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"
     messagesReview = "on"

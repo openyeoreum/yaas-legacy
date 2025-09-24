@@ -17,7 +17,7 @@ from agent.a5_Solution.a54_Audiobook.a541_DataCommit.a5412_DataSetCommit import 
 # IndexBodyText 로드
 def LoadIndexBody(projectName, email):
     # 경로 설정
-    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_script/{projectName}_upload_script_file"
+    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage/{email}/{projectName}/{projectName}_script/{projectName}_upload_script_file"
     project = GetProject(projectName, email)
     indexFrame = project["IndexFrame"][1]['IndexTags'][1:]
     bodyTextPath = os.path.join(TextDirPath, f"{projectName}_Body.txt")
@@ -519,7 +519,7 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "마케터의무기들"
-    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
+    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"
     messagesReview = "on"

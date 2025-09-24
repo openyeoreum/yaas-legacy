@@ -161,14 +161,14 @@ def LoadAndUpdateBodyFrameBodys(projectName, email, Process, Data, DataFramePath
 ### 솔루션에 프로젝트 데이터 프레임 진행 및 업데이트 ###
 def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", messagesReview = "on", bookGenre = "Auto", Translations = []):
     ############################ 하이퍼 파라미터 설정 ############################
-    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
+    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
-    RawDataSetPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_audiobook/{projectName}_dataset_audiobook_file/"
+    RawDataSetPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage/{email}/{projectName}/{projectName}_audiobook/{projectName}_dataset_audiobook_file/"
     
     ### existedDataFrameMode는 개발과정에서 지속적인 데이터베이스 포멧에 따라 필요, 프로덕트에서는 필요없음.
     existedDataFrameMode = "on" # <- 개발 후 off #
     
-    ProjectConfig = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_config.json"
+    ProjectConfig = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage/{email}/{projectName}/{projectName}_config.json"
     with open(ProjectConfig, 'r', encoding = 'utf-8') as ConfigJson:
         Config = json.load(ConfigJson)
         ScriptConfig = Config['ScriptConfig']

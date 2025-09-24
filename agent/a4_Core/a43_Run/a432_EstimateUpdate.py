@@ -29,10 +29,10 @@ def SecondsToHMS(seconds):
 
 ### SciptFile의 EstimateSetting ###
 def EstimateSettingGen(projectName, email, Estimate, Estimates):
-    ScriptFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_script/{projectName}_upload_script_file"
+    ScriptFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage/{email}/{projectName}/{projectName}_script/{projectName}_upload_script_file"
     ScriptFile = f"{projectName}_Script.txt"
     ProjectScriptFilePath = os.path.join(ScriptFilePath, ScriptFile)
-    EstimateFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_estimate/{projectName}_master_estimate_file"
+    EstimateFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage/{email}/{projectName}/{projectName}_estimate/{projectName}_master_estimate_file"
     EstimateFile = f"[{projectName}_{Estimate}Estimate_Setting].json"
     ProjectEstimateFilePath = os.path.join(EstimateFilePath, EstimateFile)
     RunningTimeDataPath = f"/yaas/storage/s1_Yeoreum/s14_EstimateStorage/s141_RunningTimeData"

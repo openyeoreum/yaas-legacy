@@ -1050,7 +1050,7 @@ def CharacterCompletionResponseJson(projectName, email, DataFramePath, bookGenre
 ## NarratorOnly일 경우의 Narrator 설정
 def NarratorSetting(projectName, email, DataFrame, CharacterId):
     ## ProjectConfig 불러오기
-    ProjectConfigPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_config.json"
+    ProjectConfigPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage/{email}/{projectName}/{projectName}_config.json"
     with open(ProjectConfigPath, 'r', encoding = 'utf-8') as file:
         projectConfig = json.load(file)
     ## NarratorName 불러오기
@@ -1202,7 +1202,7 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
-    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
+    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"
     messagesReview = "on"

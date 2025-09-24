@@ -5,7 +5,7 @@ sys.path.append("/yaas")
 
 ## Project 경로 설정
 def GetProjectPath(projectName, email):
-    ProjectPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}"
+    ProjectPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage/{email}/{projectName}"
     return ProjectPath
 
 ## Init audiobookDataFrame 경로 불러오기
@@ -15,7 +15,7 @@ def GetProjectDataPath():
 
 ## audiobookDataFrameConfig 경로 설정
 def GetProjectConfigPath(projectName, email):
-    ProjectConfigPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_audiobook/{projectName}_dataframe_audiobook_file/{email}_{projectName}_AudiobookProcess_Config.json"
+    ProjectConfigPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage/{email}/{projectName}/{projectName}_audiobook/{projectName}_dataframe_audiobook_file/{email}_{projectName}_AudiobookProcess_Config.json"
     return ProjectConfigPath
 
 ## DataFrame JSON 데이터 불러오기

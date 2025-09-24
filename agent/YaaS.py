@@ -20,7 +20,7 @@ from agent.a4_Core.a43_Run.a439_AudioBookUpdate import CreationAudioBookUpdate
 #################################
 ## YaaSConfig 로드
 def LoadYaaSConfig(email, ProjectName):
-    ConfigPath = f'/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{ProjectName}/{ProjectName}_config.json'
+    ConfigPath = f'/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage/{email}/{ProjectName}/{ProjectName}_config.json'
     if not os.path.exists(ConfigPath):
         with open(ConfigPath, 'w', encoding = 'utf-8') as ConfigJson:
             json.dump({}, ConfigJson, ensure_ascii = False, indent = 4)

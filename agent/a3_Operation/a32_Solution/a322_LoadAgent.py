@@ -17,7 +17,7 @@ from agent.a3_Operation.a32_Solution.a321_LoadLLM import OpenAI_LLMresponse, ANT
 class LoadAgent:
 
     ## 기본 경로 정의 ##
-    StoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
+    StoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage"
     ProjectDataPath = "/yaas/agent/a0_Database/a03_ProjectData"
     PromptDataPath = "/yaas/agent/a0_Database/a04_PromptData"
 

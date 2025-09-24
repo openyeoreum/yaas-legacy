@@ -20,7 +20,7 @@ class ScriptSegmentationSolution:
 
     Solution = "Script"
     SubSolution = "ScriptSegmentation"
-    StoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
+    StoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage"
 
 
     ## [Method] Init: ScriptSegmentation 초기화 ##

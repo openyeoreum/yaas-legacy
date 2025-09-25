@@ -1,38 +1,41 @@
 {
     "Access": {
         "Logging": {
-            "Access": "\n{Timestamp} >>> 👋-[[ ((Access)) | {Email} | {ProjectName} ]]\n",
-            "Complete": "\n{Timestamp} >>> 👍-[[ ((Complete)) | {Email} | {ProjectName} ]]\n"
+            "Access": "\n{Info} {Timestamp} >>> 👋-[[ ((Access)) | {Email} | {ProjectName} ]]-🤘\n",
+            "Complete": "\n{Info} {Timestamp} >>> 👏-[[ ((Complete)) | {Email} | {ProjectName} ]]-👍\n"
         },
-        "Info": {}
+        "Info": {
+            "Hello": "((🤗 Hello))",
+            "Goodbye": "((🥳 Goodbye))"
+        }
     },
     "Work": {
         "Logging": {
-            "Core": "{Timestamp} >> 🔴-[ (Core) | {ProjectName} | {Solution}({NextSolution}) ]{Info}",
-            "Solution": "{Timestamp} >> 🟡-[ (Solution) | {ProjectName} | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName} ]{Info}",
-            "Process": "{Timestamp} >> 🔵-[ (Process) | {ProjectName} | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName} ]{Info}",
-            "Task": "{Timestamp} >> 🟣-[ (Task) | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) ]{Info}"
+            "Core": "{Info} {Timestamp} >> 🔴-[ (Core) | {ProjectName} | {Solution}({NextSolution}) ]-🔴",
+            "Solution": "{Info} {Timestamp} >> 🟡-[ (Solution) | {ProjectName} | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName} ]-🟡",
+            "Process": "{Info} {Timestamp} >> 🔵-[ (Process) | {ProjectName} | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName} ]-🔵",
+            "Task": "{Info} {Timestamp} >> 🟣-[ (Task) | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) ]-🟣"
         },
         "Info": {
-            "Run": " >> (⚡️ Run)",
-            "End": " >> (🔆 End)",
-            "Skip": " >> (☑️ Skip)",
-            "Stop": " >> (⛔️ Stop)"
+            "Start": "(⚡️ Start)",
+            "End": "(🔆 End)",
+            "Skip": "(☑️ Skip)",
+            "Stop": "(⛔️ Stop)"
         }
     },
     "Task": {
         "Logging": {
-            "InputsPreprocess": "{Timestamp} > 🟥-( InputPreprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}",
-            "Inputs": "{Timestamp} > 🟨-( Inputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}",
-            "Prompt": "{Timestamp} > 🟦-( Prompt | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}",
-            "ResponsePostprocess": " > 🟪-( ResponsePostprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}",
-            "MiddleFrame": "{Timestamp} > 🟩-( MiddleFrame | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}",
-            "Outputs": "{Timestamp} > 🟧-( Outputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}"
+            "InputsPreprocess": "(⭐️ Run) {Timestamp} > 🟥-( InputPreprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} )-🟥{Info}",
+            "Inputs": "(⭐️ Run) {Timestamp} > 🟨-( Inputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}",
+            "Prompt": "(⭐️ Run) {Timestamp} > 🟦-( Prompt | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}",
+            "ResponsePostprocess": "(⭐️ Run) {Timestamp} > 🟪-( ResponsePostprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}",
+            "MiddleFrame": "(⭐️ Run) {Timestamp} > 🟩-( MiddleFrame | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}",
+            "Outputs": "(⭐️ Run) {Timestamp} > 🟧-( Outputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}"
         },
         "Info": {
             "Complete": "\n > (✅ Complete: {Print})",
             "Notice": "\n > (✔️ Notice: {Print})",
-            "Prompt": "\n > (💬 Prompt)\n{Print}",
+            "Prompt": "\n-+-+-+-+-+-+-+-+-+-+-\n > (💬 Prompt)\n{Print}",
             "Manual": "\n > (👉 Manual)\n{Print}",
             "Error": "\n > (❗️ Error: {Print})"
         }

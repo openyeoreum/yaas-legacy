@@ -71,17 +71,28 @@ class Logging(Access):
     def print_logging(self,
                       logginig: str,
                       logginig_keys: list,
-                      info_keys: list = None,
-                      print: str = None) -> str:
+                      info_keys: list,
+                      message: str = None) -> str:
         """로깅 설정에서 지정된 키에 해당하는 로깅 데이터를 가져와 포맷팅합니다.
 
         Args:
             logginig (str): 로깅 종류 (예: "Access", "Work", "Task")
-            logginig_keys_list (list): 로깅 설정에서 접근할 키들의 리스트의 리스트 (ex. [["Logging", "Core"], ["Info", "Run"]])
-            print (str, optional): 출력할 추가 정보
+            logginig_keys (list): 로깅 데이터에서 가져올 키들의 리스트
+            info_keys (list): 추가 정보에서 가져올 키들의 리스트
+            message (str, optional): 출력할 추가 정보
 
         Print:
             formatted_logging_data (str): 포맷팅된 로깅 데이터
+        """
+        # Welcome YaaS 패턴
+        welcome_yaas = """
+         __          __  _                           __     __          _____ 
+         \ \        / / | |                          \ \   / /         / ____|
+          \ \  /\  / /__| | ___ ___  _ __ ___   ___   \ \_/ /_ _  __ _| (___  
+           \ \/  \/ / _ \ |/ __/ _ \| '_ ` _ \ / _ \   \   / _` |/ _` |\___ \ 
+            \  /\  /  __/ | (_| (_) | | | | | |  __/    | | (_| | (_| |____) |
+             \/  \/ \___|_|\___\___/|_| |_| |_|\___|    |_|\__,_|\__,_|_____/ 
+
         """
         # logging_config_dict 불러오기
         logging_config_dict = self._load_logging_config().get(logginig, {})
@@ -101,7 +112,7 @@ class Logging(Access):
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         # info 포맷팅
-        formatted_info = info.format(Print=print if print is not None else "")
+        formatted_info = info.format(Print=message if message is not None else "")
 
         # loggig 포맷팅
         formatted_loggig_data = logging.format(
@@ -117,6 +128,8 @@ class Logging(Access):
             IdxLength=self.idx_length if self.idx_length is not None else 0)
 
         # formatting된 loggig 출력
+        if logginig == "Access" and "Access" in logginig_keys:
+            print(welcome_yaas)
         print(formatted_loggig_data)
 
 if __name__ == "__main__":
@@ -143,11 +156,11 @@ if __name__ == "__main__":
         idx=idx,
         idx_length=idx_length)
     
-    logginig = "Work"
-    logginig_keys = ["Logging", "Core"]
-    info_keys = ["Info", "Run"]
+    logginig = "Access"
+    logginig_keys = ["Logging", "Access"]
+    info_keys = ["Info", "Hello"]
 
     logging.print_logging(
         logginig,
         logginig_keys,
-        info_keys=info_keys)
+        info_keys)

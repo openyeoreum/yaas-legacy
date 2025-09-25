@@ -1,0 +1,74 @@
+{
+    "Access": {
+        "Logging": {
+            "Access": "\n{Timestamp} >>> 👋-[[ ((Access)) | {Email} | {ProjectName} ]]\n",
+            "Complete": "\n{Timestamp} >>> 👍-[[ ((Complete)) | {Email} | {ProjectName} ]]\n"
+        },
+        "Info": {}
+    },
+    "Work": {
+        "Logging": {
+            "Core": "{Timestamp} >> 🔴-[ (Core) | {ProjectName} | {Solution}({NextSolution}) ]{Info}",
+            "Solution": "{Timestamp} >> 🟡-[ (Solution) | {ProjectName} | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName} ]{Info}",
+            "Process": "{Timestamp} >> 🔵-[ (Process) | {ProjectName} | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName} ]{Info}",
+            "Task": "{Timestamp} >> 🟣-[ (Task) | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) ]{Info}"
+        },
+        "Info": {
+            "Run": " >> (⚡️ Run)",
+            "End": " >> (🔆 End)",
+            "Skip": " >> (☑️ Skip)",
+            "Stop": " >> (⛔️ Stop)"
+        }
+    },
+    "Task": {
+        "Logging": {
+            "InputsPreprocess": "{Timestamp} > 🟥-( InputPreprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}",
+            "Inputs": "{Timestamp} > 🟨-( Inputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}",
+            "Prompt": "{Timestamp} > 🟦-( Prompt | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}",
+            "ResponsePostprocess": " > 🟪-( ResponsePostprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}",
+            "MiddleFrame": "{Timestamp} > 🟩-( MiddleFrame | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}",
+            "Outputs": "{Timestamp} > 🟧-( Outputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}"
+        },
+        "Info": {
+            "Complete": "\n > (✅ Complete: {Print})",
+            "Notice": "\n > (✔️ Notice: {Print})",
+            "Prompt": "\n > (💬 Prompt)\n{Print}",
+            "Manual": "\n > (👉 Manual)\n{Print}",
+            "Error": "\n > (❗️ Error: {Print})"
+        }
+    },
+    "DataFrame": {
+        "RawData": "",
+        "StartFrame": "",
+        "MiddleFrame": "",
+        "EndFrame": "",
+        "Edit": ""
+    },
+    "EditStructure": {
+        "Index": {
+            "Title": "",
+            "Part": "",
+            "Chapter": "",
+            "Index": "",
+            "Logue": ""
+        },
+        "Body": {
+            "Body": "",
+            "Caption": {
+                "Figure": "",
+                "Diagram": "",
+                "Chart": "",
+                "Graph": "",
+                "Table": "",
+                "Code": "",
+                "Formula": ""
+            }
+        },
+        "Chunk": {
+            "Chunk": "",
+            "Sign": "",
+            "Comment": "",
+            "Annotation": ""
+        }
+    }
+}

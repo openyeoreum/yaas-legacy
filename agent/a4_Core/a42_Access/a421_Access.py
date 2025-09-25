@@ -13,7 +13,7 @@ def LoadProjectAccessPath(projectName, email):
 
 ### ProjectStorage 기본 경로 불러오기 ###
 def LoadProjectStoragePath(email):
-    return f'/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage/{email}'
+    return f'/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}'
 
 ### ProjectAccess 생성 ###
 def SetupProjectAccess(projectName, email):

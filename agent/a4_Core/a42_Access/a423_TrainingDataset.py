@@ -6,7 +6,7 @@ sys.path.append("/yaas")
 
 ## Dataset 경로 설정
 def GetDataSetPath(projectName, email):
-    DataSetPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage/{email}/{projectName}/{projectName}_audiobook/{projectName}_dataset_audiobook_file"
+    DataSetPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_audiobook/{projectName}_dataset_audiobook_file"
     return DataSetPath
 
 ## Init TrainingDataset 경로 불러오기
@@ -16,7 +16,7 @@ def GetTrainingDatasetPath():
 
 ## audiobookDataSetConfig 경로 설정
 def GetDataSetConfigPath(projectName, email):
-    DataSetConfigPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage/{email}/{projectName}/{projectName}_audiobook/{projectName}_dataset_audiobook_file/{email}_{projectName}_AudiobookDataSet_Config.json"
+    DataSetConfigPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_audiobook/{projectName}_dataset_audiobook_file/{email}_{projectName}_AudiobookDataSet_Config.json"
     return DataSetConfigPath
 
 ## Dataset JSON 데이터 불러오기

@@ -174,7 +174,7 @@ def GetSoundDataSet(soundDataSet):
 ## Project를 가져오는 함수
 def GetScript(projectName, email, Option):
 # 경로 설정
-    ScriptDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage/{email}/{projectName}/{projectName}_script/{projectName}_upload_script_file"
+    ScriptDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_script/{projectName}_upload_script_file"
     ScriptTextPath = os.path.join(ScriptDirPath, f"{projectName}_{Option}.txt")
     with open(ScriptTextPath, 'r', encoding = 'utf-8') as file:
         ScriptText = file.read()

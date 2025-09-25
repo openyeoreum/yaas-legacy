@@ -33,7 +33,7 @@ class Manager(Base):
             email (str): 이메일
             project_name (str): 프로젝트명
             work (str): "core" 또는 "solution" 또는 "generation"
-            _keys (list): core_paths 또는 solution_paths 또는 generation_paths의 연속된 키 값
+            _keys (list): core_paths 또는 solution_paths 또는 generation_paths json의 연속된 키 값
             solution (str): 솔루션명 (ex. Collection, ScriptSegmentation 등)
             next_solution (str): 다음 솔루션이 필요한 경우 다음 솔루션명 (ex. Audiobook, Translation 등)
             process_number (str): 솔루션 안에 프로세스 번호
@@ -252,7 +252,7 @@ class Manager(Base):
 if __name__ == "__main__":
 
     # --- class-test ---
-    # core dir 생성 인자
+    # 인자 설정
     email = "yeoreum00128@gmail.com3"
     project_name = "글로벌솔루션여름"
     work = "core"

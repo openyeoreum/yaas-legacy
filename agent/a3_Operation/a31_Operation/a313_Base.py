@@ -3,14 +3,14 @@ import json
 import sys
 sys.path.append("/yaas")
 
-from agent.a3_Operation.a31_Operation.a311_Access import Access
+from agent.a3_Operation.a31_Operation.a312_Logging import Logging
 
 # ======================================================================
 # [a313-1] Operation-Base
 # ======================================================================
 # class: Base
 # ======================================================================
-class Base(Access):
+class Base(Logging):
 
     # paths 경로
     core_paths_file_path = "/yaas/agent/a2_DataFrame/a22_Core/a221_CorePaths.json"
@@ -31,39 +31,40 @@ class Base(Access):
                  next_solution: str = None,
                  process_number: str = None,
                  process_name: str = None,
-                 idx: int = None) -> None:
+                 idx: int = None,
+                 idx_length: int = None) -> None:
         """사용자-프로젝트의 Core와 Solution에 통합 Base 기능을 수행하는 클래스입니다.
 
         Attributes:
             email (str): 이메일
             project_name (str): 프로젝트명
             work (str): "core" 또는 "solution" 또는 "generation"
-            _keys (list): core_paths 또는 solution_paths 또는 generation_paths의 연속된 키 값
+            _keys (list): core_paths 또는 solution_paths 또는 generation_paths json의 연속된 키 값
             solution (str): 솔루션명 (ex. Collection, ScriptSegmentation 등)
             next_solution (str): 다음 솔루션이 필요한 경우 다음 솔루션명 (ex. Audiobook, Translation 등)
             process_number (str): 솔루션 안에 프로세스 번호
             process_name (str): 솔루션 안에 프로세스명
             idx (int): 솔루션 안에 프로세스 안에 테스크 인덱스 번호로 jpg, wav, mp3 등 file명에 사용
+            idx_length (int): idx의 전체 길이
             storage_solution_dir_path (str): 사용자-프로젝트-솔루션 디렉토리 경로
             _path (str): 포맷팅된 경로
         """
-        # Access 초기화
+        # Log 초기화
         super().__init__(
             email,
-            project_name)
+            project_name,
+            solution = solution,
+            next_solution = next_solution,
+            process_number = process_number,
+            process_name = process_name,
+            idx = idx,
+            idx_length = idx_length)
         
         # attributes 설정
         self.work = work
         self.form_keys = form_keys if form_keys is not [] else None
         self.dir_keys = dir_keys if dir_keys is not [] else None
         self.file_keys = file_keys if file_keys is not [] else None
-
-        # 경로 포맷팅 인자
-        self.solution = solution
-        self.next_solution = next_solution
-        self.process_number = process_number
-        self.process_name = process_name
-        self.idx = idx
 
         # next_solution 유무에 따른 storage_solution_dir_path 생성
         self.storage_solution_dir_path = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{self.email}/{self.project_name}/{self.project_name}_{self.solution}"
@@ -192,7 +193,7 @@ class Base(Access):
 if __name__ == "__main__":
 
     # --- class-test ---
-    # upload dir path 가져오기 인자
+    # 인자 설정
     email = "yeoreum00128@gmail.com"
     project_name = "글로벌솔루션여름"
     work = "solution"

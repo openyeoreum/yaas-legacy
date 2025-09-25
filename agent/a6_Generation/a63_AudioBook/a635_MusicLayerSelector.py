@@ -60,7 +60,7 @@ def LoadMusicDataSet(projectName, email, MainLang = 'Ko'):
 ## VoiceLayerPath 경로 생성
 def VoiceLayerPathGen(projectName, email, FileName, Folder = 'Mixed'):
     # 첫번째, 두번째 폴더 패턴: 시간 스탬프와 사용자 이름을 포함
-    BasePath = '/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage'
+    BasePath = '/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage'
 
     # 최종 경로 생성
     if Folder == "Mixed":
@@ -76,7 +76,7 @@ def VoiceLayerPathGen(projectName, email, FileName, Folder = 'Mixed'):
 ## MusicLayerPath 경로 생성
 def MusicLayerPathGen(projectName, email, FileName):
     # 첫번째, 두번째 폴더 패턴: 시간 스탬프와 사용자 이름을 포함
-    BasePath = '/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage'
+    BasePath = '/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage'
 
     # 최종 경로 생성
     LayerPath = os.path.join(BasePath, email, projectName, f"{projectName}_audiobook", f"{projectName}_mixed_audiobook_file", "MusicLayers", "Music1", FileName)
@@ -2021,7 +2021,7 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
 ## 오디오북 러닝타임 기록 ##
 def SaveAudiobookRunningTime(projectName, email, FileRunningTimeList):
     # BodyScript의 개수 구하기
-    BodyScriptPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage/{email}/{projectName}/{projectName}_script/{projectName}_upload_script_file/{projectName}_Body.txt"
+    BodyScriptPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_script/{projectName}_upload_script_file/{projectName}_Body.txt"
     with open(BodyScriptPath, 'r', encoding='utf-8') as Textfile:
         BodyScript = Textfile.read()
         BodyScript = unicodedata.normalize('NFC', BodyScript)

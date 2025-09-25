@@ -12,7 +12,7 @@ from datetime import datetime
 # ======================================================================
 class Access:
 
-    # paths 경로
+    # operation 경로
     access_file_path = "/yaas/agent/a2_DataFrame/a21_Operation/a211_Access.json"
 
     # -------------------------------
@@ -65,11 +65,8 @@ class Access:
         Returns:
             timestamped_project_name (str): 타임스탬프가 추가된 새 프로젝트 이름 (예: '20250924_123311_ProjectName')
         """
-        # 현재 시간
-        now = datetime.now()
-
         # 'YYYYMMDD_HHMMSS' 형식의 문자열로 포맷팅
-        timestamp = now.strftime('%Y%m%d_%H%M%S')
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
 
         # 타임스탬프와 원본 프로젝트 이름을 조합
         timestamped_project_name = f"{timestamp}_{project_name}"
@@ -77,12 +74,28 @@ class Access:
         # 원본 프로젝트 이름과 타임스탬프를 조합하여 반환
         return timestamped_project_name
 
-    # ----------------------------------------------------------------
-    # --- func-set: read or write project ----------------------------
-    # --- class-func: 프로젝트 조회 또는 생성 및 JSON 저장/로드 -------
-    def _read_or_write_timestamped_project(self, email: str, project_name: str) -> str:
+    # ---------------------------------------
+    # --- func-set: read or write project ---
+    # --- class-func: access 파일 불러오기 ------
+    def _load_access_file(self) -> dict:
+        """Access.json 파일을 불러옵니다.
+
+        Returns:
+            access_data (dict): Access.json 파일 내용
         """
-        이메일과 프로젝트 이름으로 기존 프로젝트를 조회하거나 새 프로젝트 데이터를 생성합니다.
+        # access.json 파일 불러오기
+        try:
+            with open(self.access_file_path, 'r', encoding='utf-8') as f:
+                all_projects = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            # 파일이 없거나 비어있으면 빈 딕셔너리로 시작
+            all_projects = {}
+
+        return all_projects
+    
+    # --- class-func: 프로젝트 조회 또는 생성 및 JSON 저장/로드 ---
+    def _read_or_write_timestamped_project(self, email: str, project_name: str) -> str:
+        """이메일과 프로젝트 이름으로 기존 프로젝트를 조회하거나 새 프로젝트 데이터를 생성합니다.
 
         Args:
             email (str): 사용자 이메일 주소
@@ -92,12 +105,8 @@ class Access:
             hashed_email (str): 해시된 이메일 주소
             timestamped_project_name (str): 타임스탬프가 추가된 프로젝트 이름
         """
-        try:
-            with open(self.access_file_path, 'r', encoding='utf-8') as f:
-                all_projects = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            # 파일이 없거나 비어있으면 빈 딕셔너리로 시작
-            all_projects = {}
+        # access.json 파일 불러오기
+        all_projects = self._load_access_file()
 
         # 이메일을 해시하여 사용자 식별
         hashed_email = self._hash_email(email)
@@ -132,7 +141,7 @@ class Access:
 if __name__ == "__main__":
 
     # --- class-test ---
-    # email, project_name 인자
+    # 인자 설정
     email = "yeoreum00128@gmail.com"
     project_name = "글로벌솔루션여름"
 

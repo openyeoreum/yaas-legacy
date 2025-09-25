@@ -1426,7 +1426,7 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
     TotalSearchResultDataTempPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_SearchData/s1513_SearchResultData/s15131_TotalSearchResultData/TotalSearchResultDataTemp"
     
     ## projectName_script 경로 설정
-    ProjectScriptPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage/{email}/{projectName}/{projectName}_script"
+    ProjectScriptPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_script"
     ProjectDataFrameScriptPath = os.path.join(ProjectScriptPath, f'{projectName}_dataframe_script_file')
     ProjectMasterScriptPath = os.path.join(ProjectScriptPath, f'{projectName}_master_script_file')
     ScriptEditPath = os.path.join(ProjectMasterScriptPath, f'[{projectName}_Script_Edit].json')

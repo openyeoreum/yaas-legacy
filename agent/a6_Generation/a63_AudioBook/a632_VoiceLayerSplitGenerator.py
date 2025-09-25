@@ -513,7 +513,7 @@ def ActorChunkSetting(RawChunk):
 # 낭독 ActorMatching
 def ActorMatchedSelectionGenerationChunks(projectName, email, MainLang, messagesReview):
     voiceDataSetCharacters, CharacterCompletion, CharacterChunks, SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email, MainLang)
-    VoiceLayerPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage/{email}/{projectName}/{projectName}_audiobook/{projectName}_mixed_audiobook_file/VoiceLayers"
+    VoiceLayerPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_audiobook/{projectName}_mixed_audiobook_file/VoiceLayers"
     MatchedVoicesFileName = f"{projectName}_MatchedVoices.json"
     ActorsNeededFileName = f"{projectName}_ActorsNeeded.json"
     MatchedVoicesFilePath = os.path.join(VoiceLayerPath, MatchedVoicesFileName)
@@ -646,7 +646,7 @@ def ActorMatchedSelectionGenerationChunks(projectName, email, MainLang, messages
 ## VoiceLayerPath(TTS 저장) 경로 생성
 def VoiceLayerPathGen(projectName, email, FileName, Folder):
     # 첫번째, 두번째 폴더 패턴: 시간 스탬프와 사용자 이름을 포함
-    BasePath = '/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage'
+    BasePath = '/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage'
 
     # 최종 경로 생성
     if Folder == "Mixed":

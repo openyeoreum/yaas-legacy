@@ -362,7 +362,7 @@ def ScriptGenResponseJson(projectName, email, DataFramePath, TextDirPath, Script
 ## 프롬프트 요청 및 결과물 Json을 ScriptGen에 업데이트
 def ScriptGenUpdate(projectName, email, DataFramePath, ScriptConfig, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     # 경로 설정
-    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage/{email}/{projectName}/{projectName}_script/{projectName}_upload_script_file"
+    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_script/{projectName}_upload_script_file"
     IndexTextFilePath = TextDirPath + f'/{projectName}_Index.txt'
     RawIndexTextFilePath = TextDirPath + f'/{projectName}_Index(Raw).txt'
     BodyTextFilePath = TextDirPath + f'/{projectName}_Body.txt'
@@ -423,7 +423,7 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "241118_우리반오디오북아름초5학년5반"
-    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s122_Storage"
+    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"
     messagesReview = "on"

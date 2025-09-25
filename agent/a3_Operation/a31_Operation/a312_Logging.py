@@ -13,7 +13,7 @@ from agent.a3_Operation.a31_Operation.a311_Access import Access
 class Logging(Access):
 
     # operation 경로
-    log_file_path = "/yaas/agent/a2_DataFrame/a21_Operation/a212_Logging.json"
+    log_file_path = "/yaas/agent/a2_DataFrame/a21_Operation/a212_LoggingConfig.json"
 
     # --------------------------------
     # --- class-init -----------------
@@ -86,11 +86,13 @@ class Logging(Access):
         # logging_config_dict 불러오기
         logging_config_dict = self._load_logging_config().get(logginig, {})
 
-        # logging_config_dict에서 keys에 해당하는 경로 가져오기
+        # logging_config_dict에서 keys에 해당하는 로깅 출력 가져오기
+        # logging keys
         logging = logging_config_dict
         for key in logginig_keys:
             logging = logging[key]
 
+        # info keys
         info = logging_config_dict
         for key in info_keys:
             info = info[key]
@@ -98,8 +100,11 @@ class Logging(Access):
         # 'YYYYMMDD_HHMMSS' 형식의 문자열로 포맷팅
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+        # info 포맷팅
+        formatted_info = info.format(Print=print if print is not None else "")
+
         # loggig 포맷팅
-        formatted_loggig = logging.format(
+        formatted_loggig_data = logging.format(
             Timestamp=timestamp,
             Email=self.email,
             ProjectName=self.project_name,
@@ -107,16 +112,12 @@ class Logging(Access):
             NextSolution=self.next_solution,
             ProcessNumber=self.process_number,
             ProcessName=self.process_name,
+            Info=formatted_info,
             Idx=self.idx if self.idx is not None else 0,
             IdxLength=self.idx_length if self.idx_length is not None else 0)
 
-        # info 포맷팅
-        formatted_info = info.format(Print=print if print is not None else "")
-
-        # 최종 로깅 데이터 출력
-        formatted_logging_data = f"{formatted_loggig}{formatted_info}"
-
-        print(formatted_logging_data)
+        # formatting된 loggig 출력
+        print(formatted_loggig_data)
 
 if __name__ == "__main__":
 

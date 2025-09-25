@@ -254,7 +254,7 @@ if __name__ == "__main__":
     # --- class-test ---
     # core dir 생성 인자
     email = "yeoreum00128@gmail.com3"
-    project_name = "250911_오늘도불안한엄마들에게2"
+    project_name = "글로벌솔루션여름"
     work = "core"
     form_keys = None
     dir_keys = ["Dir", "User"]

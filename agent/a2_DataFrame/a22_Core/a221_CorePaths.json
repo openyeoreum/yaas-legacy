@@ -1,6 +1,6 @@
 {
     "Form": {
-        "CoreConfigPath": "/yaas/agent/a2_DataFrame/a22_Core/a222-01_CoreConfigForm.json"
+        "ConfigPath": "/yaas/agent/a2_DataFrame/a22_Core/a222-01_ConfigForm.json"
     },
     "Dir": {
         "User": "/yaas/storage/s1_Yeoreum/s12_UserStorage/{Email}",

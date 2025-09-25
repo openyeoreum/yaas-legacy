@@ -1,4 +1,3 @@
-import hashlib
 import json
 import hashlib
 import sys
@@ -64,8 +63,7 @@ class Access:
             project_name (str): 원본 프로젝트 이름
 
         Returns:
-            str: 타임스탬프가 추가된 새 프로젝트 이름
-                (예: '20250924_123311_project')
+            timestamped_project_name (str): 타임스탬프가 추가된 새 프로젝트 이름 (예: '20250924_123311_ProjectName')
         """
         # 현재 시간
         now = datetime.now()
@@ -73,8 +71,11 @@ class Access:
         # 'YYYYMMDD_HHMMSS' 형식의 문자열로 포맷팅
         timestamp = now.strftime('%Y%m%d_%H%M%S')
 
+        # 타임스탬프와 원본 프로젝트 이름을 조합
+        timestamped_project_name = f"{timestamp}_{project_name}"
+
         # 원본 프로젝트 이름과 타임스탬프를 조합하여 반환
-        return f"{timestamp}_{project_name}"
+        return timestamped_project_name
 
     # ----------------------------------------------------------------
     # --- func-set: read or write project ----------------------------
@@ -84,13 +85,12 @@ class Access:
         이메일과 프로젝트 이름으로 기존 프로젝트를 조회하거나 새 프로젝트 데이터를 생성합니다.
 
         Args:
-            email (str): 사용자 이메일 주소.
-            project_name (str): 원본 프로젝트 이름.
+            email (str): 사용자 이메일 주소
+            project_name (str): 원본 프로젝트 이름
 
         Returns:
-            tuple: (hashed_email (str), timestamped_project_name (str))
-                - hashed_email: 해시된 이메일 주소
-                - timestamped_project_name: 타임스탬프가 추가된 프로젝트 이름
+            hashed_email (str): 해시된 이메일 주소
+            timestamped_project_name (str): 타임스탬프가 추가된 프로젝트 이름
         """
         try:
             with open(self.access_file_path, 'r', encoding='utf-8') as f:
@@ -115,10 +115,10 @@ class Access:
         else:
             # 없으면 새로 생성
             print("로그출력")
-            new_timestamped_project_name = self._timestamped_project_name(project_name)
+            timestamped_project_name = self._timestamped_project_name(project_name)
             
             # 사용자 프로젝트 목록에 새 프로젝트 추가
-            user_projects[project_name] = new_timestamped_project_name
+            user_projects[project_name] = timestamped_project_name
             
             # 전체 데이터에 사용자 프로젝트 목록 업데이트
             all_projects[hashed_email] = user_projects
@@ -127,14 +127,14 @@ class Access:
             with open(self.access_file_path, 'w', encoding='utf-8') as f:
                 json.dump(all_projects, f, indent=4, ensure_ascii=False)
             
-            return hashed_email, new_timestamped_project_name
+            return hashed_email, timestamped_project_name
 
 if __name__ == "__main__":
 
     # --- class-test ---
     # email, project_name 인자
     email = "yeoreum00128@gmail.com"
-    project_name = "오늘도불안한엄마들에게"
+    project_name = "글로벌솔루션여름"
 
     # 클래스 테스트
     access = Access(

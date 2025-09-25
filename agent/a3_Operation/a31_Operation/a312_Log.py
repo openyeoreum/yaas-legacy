@@ -6,18 +6,18 @@ from datetime import datetime
 from agent.a3_Operation.a31_Operation.a311_Access import Access
 
 # ======================================================================
-# [a312-1] Operation-Logging
+# [a312-1] Operation-Log
 # ======================================================================
-# class: Logging
+# class: Log
 # ======================================================================
-class Logging(Access):
+class Log(Access):
 
     # operation 경로
-    log_file_path = "/yaas/agent/a2_DataFrame/a21_Operation/a212_LoggingConfig.json"
+    log_file_path = "/yaas/agent/a2_DataFrame/a21_Operation/a212_LogConfig.json"
 
-    # --------------------------------
-    # --- class-init -----------------
-    # --- class-func: Logging 초기화 ---
+    # ----------------------------
+    # --- class-init -------------
+    # --- class-func: Log 초기화 ---
     def __init__(self,
                  email: str,
                  project_name: str,
@@ -27,7 +27,7 @@ class Logging(Access):
                  process_name: str = None,
                  idx: int = None,
                  idx_length: int = None) -> None:
-        """사용자-프로젝트의 Operation에 통합 Logging 기능을 수행하는 클래스입니다.
+        """사용자-프로젝트의 Operation에 통합 Log 기능을 수행하는 클래스입니다.
 
         Attributes:
             email (str): 이메일
@@ -51,29 +51,30 @@ class Logging(Access):
         self.process_name = process_name
         self.idx = idx
         self.idx_length = idx_length
+        self.project_log_path = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{self.email}/{self.project_name}/{self.project_name}_project_log.json"
 
-    # -----------------------------------------
-    # --- func-set: print logging -------------
-    # --- class-func: logging_config 불러오기 ---
-    def _load_logging_config(self) -> dict:
+    # -------------------------------------
+    # --- func-set: print log -------------
+    # --- class-func: log_config 불러오기 ---
+    def _load_log_config(self) -> dict:
         """로깅 설정 JSON 파일을 로드하여 딕셔너리로 반환합니다.
 
         Returns:
-            logging_config_dict (dict): 로깅 설정이 담긴 딕셔너리
+            log_config_dict (dict): 로깅 설정이 담긴 딕셔너리
         """
         # JSON 파일 열기 및 로드
         with open(self.log_file_path, 'r', encoding='utf-8') as file:
-            logging_config_dict = json.load(file)
+            log_config_dict = json.load(file)
         
-        return logging_config_dict
+        return log_config_dict
 
-    # --- logging_data 가져오고 포맷팅하고 출력하기 ---
-    def print_logging(self,
-                      logginig: str,
-                      logginig_keys: list,
-                      info_keys: list,
-                      function_name = None,
-                      message: str = None) -> str:
+    # --- log_data 가져오고 포맷팅하고 출력하기 ---
+    def print_log(self,
+                  logginig: str,
+                  logginig_keys: list,
+                  info_keys: list,
+                  function_name = None,
+                  message: str = None) -> str:
         """로깅 설정에서 지정된 키에 해당하는 로깅 데이터를 가져와 포맷팅합니다.
 
         Args:
@@ -84,30 +85,30 @@ class Logging(Access):
             message (str, optional): 출력할 추가 정보
 
         Print:
-            formatted_logging_data (str): 포맷팅된 로깅 데이터
+            formatted_log_data (str): 포맷팅된 로깅 데이터
         """
         # Welcome YaaS 패턴
         welcome_yaas = """
 
-         __          __  _                           __     __          _____ 
-         \ \        / / | |                          \ \   / /         / ____|
-          \ \  /\  / /__| | ___ ___  _ __ ___   ___   \ \_/ /_ _  __ _| (___  
-           \ \/  \/ / _ \ |/ __/ _ \| '_ ` _ \ / _ \   \   / _` |/ _` |\___ \ 
-            \  /\  /  __/ | (_| (_) | | | | | |  __/    | | (_| | (_| |____) |
-             \/  \/ \___|_|\___\___/|_| |_| |_|\___|    |_|\__,_|\__,_|_____/ 
+        __          __  _                           __     __          _____ 
+        \ \        / / | |                          \ \   / /         / ____|
+         \ \  /\  / /__| | ___ ___  _ __ ___   ___   \ \_/ /_ _  __ _| (___  
+          \ \/  \/ / _ \ |/ __/ _ \| '_ ` _ \ / _ \   \   / _` |/ _` |\___ \ 
+           \  /\  /  __/ | (_| (_) | | | | | |  __/    | | (_| | (_| |____) |
+            \/  \/ \___|_|\___\___/|_| |_| |_|\___|    |_|\__,_|\__,_|_____/ 
 
         """
-        # logging_config_dict 불러오기
-        logging_config_dict = self._load_logging_config().get(logginig, {})
+        # log_config_dict 불러오기
+        log_config_dict = self._load_log_config().get(logginig, {})
 
-        # logging_config_dict에서 keys에 해당하는 로깅 출력 가져오기
-        # logging keys
-        logging = logging_config_dict
+        # log_config_dict에서 keys에 해당하는 로깅 출력 가져오기
+        # log keys
+        log = log_config_dict
         for key in logginig_keys:
-            logging = logging[key]
+            log = log[key]
 
         # info keys
-        info = logging_config_dict
+        info = log_config_dict
         for key in info_keys:
             info = info[key]
         
@@ -118,7 +119,7 @@ class Logging(Access):
         formatted_info = info.format(Print=message if message is not None else "")
 
         # loggig 포맷팅
-        formatted_loggig_data = logging.format(
+        formatted_loggig_data = log.format(
             Timestamp=timestamp,
             Email=self.email,
             ProjectName=self.project_name,
@@ -150,7 +151,7 @@ if __name__ == "__main__":
     idx_length = 10
 
     # 클래스 테스트
-    logging = Logging(
+    log = Log(
         email,
         project_name,
         solution=solution,
@@ -160,7 +161,7 @@ if __name__ == "__main__":
         idx=idx,
         idx_length=idx_length)
 
-    logging.print_logging(
+    log.print_log(
         "Access",
-        ["Logging", "Access"],
+        ["Log", "Access"],
         ["Info", "Hello"])

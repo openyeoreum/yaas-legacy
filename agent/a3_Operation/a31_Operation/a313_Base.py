@@ -3,14 +3,14 @@ import json
 import sys
 sys.path.append("/yaas")
 
-from agent.a3_Operation.a31_Operation.a312_Logging import Logging
+from agent.a3_Operation.a31_Operation.a312_Log import Log
 
 # ======================================================================
 # [a313-1] Operation-Base
 # ======================================================================
 # class: Base
 # ======================================================================
-class Base(Logging):
+class Base(Log):
 
     # paths 경로
     core_paths_file_path = "/yaas/agent/a2_DataFrame/a22_Core/a221_CorePaths.json"

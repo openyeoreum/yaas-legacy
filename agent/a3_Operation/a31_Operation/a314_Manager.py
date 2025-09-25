@@ -281,9 +281,9 @@ if __name__ == "__main__":
 
     user.make_dir()
 
-    user.print_logging(
+    user.print_log(
         "Task",
-        ["Logging", "Prompt"],
+        ["Log", "Prompt"],
         ["Info", "Prompt"],
         function_name="make_dir",
         message="디렉토리 생성 완료")

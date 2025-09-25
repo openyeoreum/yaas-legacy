@@ -1,6 +1,6 @@
 {
     "Access": {
-        "Logging": {
+        "Log": {
             "Access": "\n{Info} 🕐 {Timestamp} >>> 👋-[[ ((Access)) | {Email} | {ProjectName} ]]-🤘\n",
             "Complete": "\n{Info} 🕐 {Timestamp} >>> 👏-[[ ((Complete)) | {Email} | {ProjectName} ]]-👍\n"
         },
@@ -10,7 +10,7 @@
         }
     },
     "Work": {
-        "Logging": {
+        "Log": {
             "Core": "{Info} 🕐 {Timestamp} >> 🔴-[ (Core) | {ProjectName} | {Solution}({NextSolution}) ]-🔴",
             "Solution": "{Info} 🕐 {Timestamp} >> 🟡-[ (Solution) | {ProjectName} | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName} ]-🟡",
             "Process": "{Info} 🕐 {Timestamp} >> 🔵-[ (Process) | {ProjectName} | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName} ]-🔵",
@@ -24,7 +24,7 @@
         }
     },
     "Task": {
-        "Logging": {
+        "Log": {
             "InputsPreprocess": "(⭐️ Run) 🕐 {Timestamp} > 🟥-( InputPreprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟥{Info}",
             "Inputs": "(⭐️ Run) 🕐 {Timestamp} > 🟨-( Inputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟨{Info}",
             "Prompt": "(⭐️ Run) 🕐 {Timestamp} > 🟦-( Prompt | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟦{Info}",

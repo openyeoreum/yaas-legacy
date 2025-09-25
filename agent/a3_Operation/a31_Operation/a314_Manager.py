@@ -280,3 +280,10 @@ if __name__ == "__main__":
         idx=idx)
 
     user.make_dir()
+
+    user.print_logging(
+        "Task",
+        ["Logging", "Prompt"],
+        ["Info", "Prompt"],
+        function_name="make_dir",
+        message="디렉토리 생성 완료")

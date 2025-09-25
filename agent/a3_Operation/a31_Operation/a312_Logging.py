@@ -72,6 +72,7 @@ class Logging(Access):
                       logginig: str,
                       logginig_keys: list,
                       info_keys: list,
+                      function_name = None,
                       message: str = None) -> str:
         """로깅 설정에서 지정된 키에 해당하는 로깅 데이터를 가져와 포맷팅합니다.
 
@@ -79,6 +80,7 @@ class Logging(Access):
             logginig (str): 로깅 종류 (예: "Access", "Work", "Task")
             logginig_keys (list): 로깅 데이터에서 가져올 키들의 리스트
             info_keys (list): 추가 정보에서 가져올 키들의 리스트
+            function_name (str, optional): 함수 이름 (예: "InputPreprocess", "Prompt" 등)
             message (str, optional): 출력할 추가 정보
 
         Print:
@@ -86,7 +88,7 @@ class Logging(Access):
         """
         # Welcome YaaS 패턴
         welcome_yaas = """
-        
+
          __          __  _                           __     __          _____ 
          \ \        / / | |                          \ \   / /         / ____|
           \ \  /\  / /__| | ___ ___  _ __ ___   ___   \ \_/ /_ _  __ _| (___  
@@ -124,6 +126,7 @@ class Logging(Access):
             NextSolution=self.next_solution,
             ProcessNumber=self.process_number,
             ProcessName=self.process_name,
+            FunctionName=function_name if function_name is not None else "",
             Info=formatted_info,
             Idx=self.idx if self.idx is not None else 0,
             IdxLength=self.idx_length if self.idx_length is not None else 0)
@@ -156,12 +159,8 @@ if __name__ == "__main__":
         process_name=process_name,
         idx=idx,
         idx_length=idx_length)
-    
-    logginig = "Access"
-    logginig_keys = ["Logging", "Access"]
-    info_keys = ["Info", "Hello"]
 
     logging.print_logging(
-        logginig,
-        logginig_keys,
-        info_keys)
+        "Access",
+        ["Logging", "Access"],
+        ["Info", "Hello"])

@@ -1,8 +1,8 @@
 {
     "Access": {
         "Logging": {
-            "Access": "\n{Info} {Timestamp} >>> 👋-[[ ((Access)) | {Email} | {ProjectName} ]]-🤘\n",
-            "Complete": "\n{Info} {Timestamp} >>> 👏-[[ ((Complete)) | {Email} | {ProjectName} ]]-👍\n"
+            "Access": "\n{Info} 🕐 {Timestamp} >>> 👋-[[ ((Access)) | {Email} | {ProjectName} ]]-🤘\n",
+            "Complete": "\n{Info} 🕐 {Timestamp} >>> 👏-[[ ((Complete)) | {Email} | {ProjectName} ]]-👍\n"
         },
         "Info": {
             "Hello": "((🤗 Hello))",
@@ -11,10 +11,10 @@
     },
     "Work": {
         "Logging": {
-            "Core": "{Info} {Timestamp} >> 🔴-[ (Core) | {ProjectName} | {Solution}({NextSolution}) ]-🔴",
-            "Solution": "{Info} {Timestamp} >> 🟡-[ (Solution) | {ProjectName} | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName} ]-🟡",
-            "Process": "{Info} {Timestamp} >> 🔵-[ (Process) | {ProjectName} | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName} ]-🔵",
-            "Task": "{Info} {Timestamp} >> 🟣-[ (Task) | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) ]-🟣"
+            "Core": "{Info} 🕐 {Timestamp} >> 🔴-[ (Core) | {ProjectName} | {Solution}({NextSolution}) ]-🔴",
+            "Solution": "{Info} 🕐 {Timestamp} >> 🟡-[ (Solution) | {ProjectName} | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName} ]-🟡",
+            "Process": "{Info} 🕐 {Timestamp} >> 🔵-[ (Process) | {ProjectName} | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName} ]-🔵",
+            "Task": "{Info} 🕐 {Timestamp} >> 🟣-[ (Task) | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) ]-🟣"
         },
         "Info": {
             "Start": "(⚡️ Start)",
@@ -25,19 +25,19 @@
     },
     "Task": {
         "Logging": {
-            "InputsPreprocess": "(⭐️ Run) {Timestamp} > 🟥-( InputPreprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} )-🟥{Info}",
-            "Inputs": "(⭐️ Run) {Timestamp} > 🟨-( Inputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}",
-            "Prompt": "(⭐️ Run) {Timestamp} > 🟦-( Prompt | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}",
-            "ResponsePostprocess": "(⭐️ Run) {Timestamp} > 🟪-( ResponsePostprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}",
-            "MiddleFrame": "(⭐️ Run) {Timestamp} > 🟩-( MiddleFrame | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}",
-            "Outputs": "(⭐️ Run) {Timestamp} > 🟧-( Outputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) | {FunctionName} ){Info}"
+            "InputsPreprocess": "(⭐️ Run) 🕐 {Timestamp} > 🟥-( InputPreprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟥{Info}",
+            "Inputs": "(⭐️ Run) 🕐 {Timestamp} > 🟨-( Inputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟨{Info}",
+            "Prompt": "(⭐️ Run) 🕐 {Timestamp} > 🟦-( Prompt | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟦{Info}",
+            "ResponsePostprocess": "(⭐️ Run) 🕐 {Timestamp} > 🟪-( ResponsePostprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟪{Info}",
+            "MiddleFrame": "(⭐️ Run) 🕐 {Timestamp} > 🟩-( MiddleFrame | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟩{Info}",
+            "Outputs": "(⭐️ Run) 🕐 {Timestamp} > 🟧-( Outputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟧{Info}"
         },
         "Info": {
             "Complete": "\n > (✅ Complete: {Print})",
-            "Notice": "\n > (✔️ Notice: {Print})",
-            "Prompt": "\n-+-+-+-+-+-+-+-+-+-+-\n > (💬 Prompt)\n{Print}",
-            "Manual": "\n > (👉 Manual)\n{Print}",
-            "Error": "\n > (❗️ Error: {Print})"
+            "Notice": "\n\n------ Notice ------\n\n-> (✔️ Notice: {Print})\n\n------ Notice ------\n",
+            "Prompt": "\n\n------ Prompt ------\n\n-> (💬 Prompt)\n{Print}\n\n------ Prompt ------\n",
+            "Manual": "\n\n------ Manual ------\n\n-> (👉 Manual)\n{Print}\n\n------ Manual ------\n",
+            "Error": "\n\n------ Error ------\n\n-> (❗️ Error: {Print})\n\n------ Error ------\n"
         }
     },
     "DataFrame": {

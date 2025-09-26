@@ -258,8 +258,6 @@ if __name__ == "__main__":
     next_solution = "Audiobook"
     process_number = "PT01"
     process_name = "ScriptLoad"
-    idx = 1
-    idx_length = 10
 
     # 클래스 테스트
     log = Log(
@@ -268,11 +266,4 @@ if __name__ == "__main__":
         solution=solution,
         next_solution=next_solution,
         process_number=process_number,
-        process_name=process_name,
-        idx=idx,
-        idx_length=idx_length)
-
-    log.print_log(
-        "access",
-        ["Log", "Access"],
-        ["Info", "Hello"])
+        process_name=process_name)

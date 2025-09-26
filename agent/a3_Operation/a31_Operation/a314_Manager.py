@@ -298,12 +298,12 @@ if __name__ == "__main__":
     # 테스트3: 로그 생성
     manager.print_log("access", ["Log", "Access"], ["Info", "Hello"])
 
-    # 테스트3: 로그 생성
+    # 테스트3: 로그 출력 및 생성
     manager.print_log("solution", ["Log", "Core"], ["Info", "Start"])
 
     # 3초 쉬기
     import time
     time.sleep(3)
 
-    # 테스트3: 로그 생성
+    # 테스트3: 로그 출력 및 생성
     manager.print_log("solution", ["Log", "Core"], ["Info", "End"])

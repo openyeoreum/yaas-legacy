@@ -169,30 +169,16 @@ if __name__ == "__main__":
     # 인자 설정
     email = "yeoreum00128@gmail.com"
     project_name = "글로벌솔루션여름"
-    work = "solution"
-    form_keys = None
-    dir_keys = ["Storage", "Upload", "DirPath"]
-    file_keys = None
     solution = "ScriptSegmentation"
     next_solution = "Audiobook"
     process_number = "PT01"
     process_name = "ScriptLoad"
-    idx = None
 
     # 클래스 테스트
     base = Base(
         email,
         project_name,
-        work,
-        form_keys=form_keys,
-        dir_keys=dir_keys,
-        file_keys=file_keys,
         solution=solution,
         next_solution=next_solution,
         process_number=process_number,
-        process_name=process_name,
-        idx=idx)
-
-    dir_path = base.dir_path
-
-    print("Dir Path:", dir_path)
+        process_name=process_name)

@@ -1,11 +1,11 @@
 [
     {
-        "ProjectName": "",
+        "ProjectName": null,
         "TaskName": "Body",
-        "NextSolution": "",
+        "NextSolution": null,
         "AutoTemplate": "No",
-        "FileExtension": "",
-        "MainLang": "",
+        "FileExtension": null,
+        "MainLang": null,
         "InputCount": 0,
         "Completion": "No"
     },

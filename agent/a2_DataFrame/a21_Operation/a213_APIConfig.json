@@ -2,28 +2,28 @@
     "LanguageModel": {
         "OPENAI": {
             "High": "gpt-5",
-            "Mid": "",
-            "Low": ""
+            "Mid": null,
+            "Low": null
         },
         "ANTHROPIC": {
-            "High": "",
-            "Mid": "",
-            "Low": ""
+            "High": null,
+            "Mid": null,
+            "Low": null
         },
         "GOOGLE": {
-            "High": "",
-            "Mid": "",
-            "Low": ""
+            "High": null,
+            "Mid": null,
+            "Low": null
         },
         "XAI": {
-            "High": "",
-            "Mid": "",
-            "Low": ""
+            "High": null,
+            "Mid": null,
+            "Low": null
         },
         "DEEPSEEK": {
-            "High": "",
-            "Mid": "",
-            "Low": ""
+            "High": null,
+            "Mid": null,
+            "Low": null
         }
     },
     "TTSModel": {},

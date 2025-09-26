@@ -7,7 +7,7 @@
     "SearchConfig": {},
     "ScriptConfig": {
         "Script": "Upload",
-        "Intention": "",
+        "Intention": null,
         "NextSolution": "AudioBook",
         "AutoTemplate": "on"
     },

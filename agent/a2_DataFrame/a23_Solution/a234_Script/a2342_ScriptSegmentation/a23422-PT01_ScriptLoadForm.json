@@ -6,7 +6,7 @@
             "NextSolution": "eval(Response['NextSolution'])",
             "AutoTemplate": "eval(Response['AutoTemplate'])",
             "FileExtension": "eval(Response['FileExtension'])",
-            "MainLang": "",
+            "MainLang": null,
             "InputCount": 0,
             "Completion": "No"
         },
@@ -24,7 +24,7 @@
             "NextSolution": "eval(Response['NextSolution'])",
             "AutoTemplate": "eval(Response['AutoTemplate'])",
             "FileExtension": "eval(Response['FileExtension'])",
-            "MainLang": "",
+            "MainLang": null,
             "InputCount": 0,
             "Completion": "No"
         },

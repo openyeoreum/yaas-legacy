@@ -41,37 +41,37 @@
         }
     },
     "DataFrame": {
-        "RawData": "",
-        "StartFrame": "",
-        "MiddleFrame": "",
-        "EndFrame": "",
-        "Edit": ""
+        "RawData": null,
+        "StartFrame": null,
+        "MiddleFrame": null,
+        "EndFrame": null,
+        "Edit": null
     },
     "EditStructure": {
         "Index": {
-            "Title": "",
-            "Part": "",
-            "Chapter": "",
-            "Index": "",
-            "Logue": ""
+            "Title": null,
+            "Part": null,
+            "Chapter": null,
+            "Index": null,
+            "Logue": null
         },
         "Body": {
-            "Body": "",
+            "Body": null,
             "Caption": {
-                "Figure": "",
-                "Diagram": "",
-                "Chart": "",
-                "Graph": "",
-                "Table": "",
-                "Code": "",
-                "Formula": ""
+                "Figure": null,
+                "Diagram": null,
+                "Chart": null,
+                "Graph": null,
+                "Table": null,
+                "Code": null,
+                "Formula": null
             }
         },
         "Chunk": {
-            "Chunk": "",
-            "Sign": "",
-            "Comment": "",
-            "Annotation": ""
+            "Chunk": null,
+            "Sign": null,
+            "Comment": null,
+            "Annotation": null
         }
     }
 }

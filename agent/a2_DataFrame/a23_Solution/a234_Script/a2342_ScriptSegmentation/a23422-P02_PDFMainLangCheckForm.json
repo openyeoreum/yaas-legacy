@@ -25,8 +25,8 @@
                 "ValueType": "dict",
                 "ValueCheckList": [
                     {
-                        "ValueCheck": "",
-                        "ValueCheckItem": ""
+                        "ValueCheck": null,
+                        "ValueCheckItem": null
                     }
                 ],
                 "Value": [
@@ -39,7 +39,7 @@
                                 "ValueCheckItem": "ko, en, de, fr, es, zh, ja, it, pt, nl, sv, no, da, pl"
                             }
                         ],
-                        "Value": ""
+                        "Value": null
                     }
                 ]
             },
@@ -61,35 +61,35 @@
                             "Message": "{'언어': {'태그': 'ko, en, de ... pl 중 <도서페이지> 자료 10개를 보고 해당 도서의 주요 언어 1개를 (언어태그)에서 지정하여 작성'}}"
                         },
                         {
-                            "Mark": "",
-                            "Message": ""
+                            "Mark": null,
+                            "Message": null
                         },
                         {
-                            "Mark": "",
-                            "InputMasterMark": "",
-                            "InputMaster": "",
-                            "OutputMasterMark": "",
-                            "OutputMaster": ""
+                            "Mark": null,
+                            "InputMasterMark": null,
+                            "InputMaster": null,
+                            "OutputMasterMark": null,
+                            "OutputMaster": null
                         },
                         {
-                            "Mark": "",
-                            "InputMasterMark": "",
-                            "InputMaster": "",
-                            "OutputMasterMark": "",
-                            "OutputMaster": ""
+                            "Mark": null,
+                            "InputMasterMark": null,
+                            "InputMaster": null,
+                            "OutputMasterMark": null,
+                            "OutputMaster": null
                         },
                         {
-                            "Mark": "",
-                            "InputMasterMark": "",
-                            "InputMaster": "",
-                            "OutputMasterMark": "",
-                            "OutputMaster": ""
+                            "Mark": null,
+                            "InputMasterMark": null,
+                            "InputMaster": null,
+                            "OutputMasterMark": null,
+                            "OutputMaster": null
                         },
                         {
                             "Mark": "\n\n\n(주어진 <도서페이지> 자료 5개를 보고 해당 도서의 주요 언어 1개를 (언어태그)에서 지정하여 <도서언어태그.json>로 완성해주세요)\n\n",
-                            "InputMark": "",
+                            "InputMark": null,
                             "Input": "INPUT",
-                            "InputMark2": "",
+                            "InputMark2": null,
                             "Input2": "INPUT2"
                         }
                     ]
@@ -98,7 +98,7 @@
                     "Role": "assistant",
                     "OutputMark": "\n\n<도서언어태그.json>",
                     "MemoryNote": "MemoryNote",
-                    "OutputStarter": "",
+                    "OutputStarter": null,
                     "Output": "OUTPUT"
                 }
             ]
@@ -124,8 +124,8 @@
                 "ValueType": "dict",
                 "ValueCheckList": [
                     {
-                        "ValueCheck": "",
-                        "ValueCheckItem": ""
+                        "ValueCheck": null,
+                        "ValueCheckItem": null
                     }
                 ],
                 "Value": [
@@ -138,7 +138,7 @@
                                 "ValueCheckItem": "ko, en, de, fr, es, zh, ja, it, pt, nl, sv, no, da, pl"
                             }
                         ],
-                        "Value": ""
+                        "Value": null
                     }
                 ]
             },
@@ -160,35 +160,35 @@
                             "Message": "{'Language': {'TBased on the <BookPage> data, assign the single language tag for the book from the list: ko, en, de, ..., pl'}}"
                         },
                         {
-                            "Mark": "",
-                            "Message": ""
+                            "Mark": null,
+                            "Message": null
                         },
                         {
-                            "Mark": "",
-                            "InputMasterMark": "",
-                            "InputMaster": "",
-                            "OutputMasterMark": "",
-                            "OutputMaster": ""
+                            "Mark": null,
+                            "InputMasterMark": null,
+                            "InputMaster": null,
+                            "OutputMasterMark": null,
+                            "OutputMaster": null
                         },
                         {
-                            "Mark": "",
-                            "InputMasterMark": "",
-                            "InputMaster": "",
-                            "OutputMasterMark": "",
-                            "OutputMaster": ""
+                            "Mark": null,
+                            "InputMasterMark": null,
+                            "InputMaster": null,
+                            "OutputMasterMark": null,
+                            "OutputMaster": null
                         },
                         {
-                            "Mark": "",
-                            "InputMasterMark": "",
-                            "InputMaster": "",
-                            "OutputMasterMark": "",
-                            "OutputMaster": ""
+                            "Mark": null,
+                            "InputMasterMark": null,
+                            "InputMaster": null,
+                            "OutputMasterMark": null,
+                            "OutputMaster": null
                         },
                         {
                             "Mark": "\n\n\n(Please analyze the ten given <BookPage> data items, determine the single (LanguageTag) for the book, and provide the output in the <BookLanguageTag.json> format)\n\n",
-                            "InputMark": "",
+                            "InputMark": null,
                             "Input": "INPUT",
-                            "InputMark2": "",
+                            "InputMark2": null,
                             "Input2": "INPUT2"
                         }
                     ]
@@ -197,7 +197,7 @@
                     "Role": "assistant",
                     "OutputMark": "\n\n<BookLanguageTag.json>",
                     "MemoryNote": "MemoryNote",
-                    "OutputStarter": "",
+                    "OutputStarter": null,
                     "Output": "OUTPUT"
                 }
             ]

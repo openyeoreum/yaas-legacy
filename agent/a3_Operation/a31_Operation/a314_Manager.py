@@ -281,9 +281,64 @@ if __name__ == "__main__":
 
     user.make_dir()
 
+    # 인자 설정
+    email = "yeoreum00128@gmail.com3"
+    project_name = "글로벌솔루션여름"
+    work = "core"
+    form_keys = None
+    dir_keys = ["Dir", "Project"]
+    file_keys = None
+    solution = None
+    next_solution = None
+    process_number = None
+    process_name = None
+    idx = None
+
+    # core log file 생성
+    user = Manager(
+        email,
+        project_name,
+        work,
+        form_keys=form_keys,
+        dir_keys=dir_keys,
+        file_keys=file_keys,
+        solution=solution,
+        next_solution=next_solution,
+        process_number=process_number,
+        process_name=process_name,
+        idx=idx)
+
+    user.make_dir()
+
+    # 인자 설정
+    email = "yeoreum00128@gmail.com3"
+    project_name = "글로벌솔루션여름"
+    work = "core"
+    form_keys = ["Form", "LogPath"]
+    dir_keys = ["Dir", "User"]
+    file_keys = ["File", "Json", "ProjectLog"]
+    solution = None
+    next_solution = None
+    process_number = None
+    process_name = None
+    idx = None
+
+    # core log file 생성
+    user = Manager(
+        email,
+        project_name,
+        work,
+        form_keys=form_keys,
+        dir_keys=dir_keys,
+        file_keys=file_keys,
+        solution=solution,
+        next_solution=next_solution,
+        process_number=process_number,
+        process_name=process_name,
+        idx=idx)
+
+    user.create_json()
     user.print_log(
-        "Task",
-        ["Log", "Prompt"],
-        ["Info", "Prompt"],
-        function_name="make_dir",
-        message="디렉토리 생성 완료")
+        "work",
+        ["Log", "Solution"],
+        ["Info", "Start"])

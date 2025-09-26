@@ -51,11 +51,11 @@ class Log(Access):
         self.process_name = process_name
         self.idx = idx
         self.idx_length = idx_length
-        self.project_log_path = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{self.email}/{self.project_name}/{self.project_name}_project_log.json"
+        self.project_log_file_path = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{self.email}/{self.project_name}/{self.project_name}_project_log.json"
 
-    # -------------------------------------
-    # --- func-set: print log -------------
-    # --- class-func: log_config 불러오기 ---
+    # ---------------------------------------
+    # --- func-set: print and append log ----
+    # --- class-func: log_config 불러오기 -----
     def _load_log_config(self) -> dict:
         """로깅 설정 JSON 파일을 로드하여 딕셔너리로 반환합니다.
 
@@ -68,7 +68,41 @@ class Log(Access):
         
         return log_config_dict
 
-    # --- log_data 가져오고 포맷팅하고 출력하기 ---
+    # --- class-func: log data 추가하기 ---
+    def _append_log_data(self,
+                         timestamp: str,
+                         info: str) -> None:
+        """현재 로그 데이터를 프로젝트 로그 파일에 추가합니다.
+
+        Args:
+            timestamp (str): 'YYYY-MM-DD HH:MM:SS' 형식의 타임스탬프 문자열
+            info (str): 'Start', 'End', 'Stop' 등 로그 정보
+
+        Effects:
+            log_json_data 추가 (dict): self.project_log_file_path["Log"].append(log_data)
+        """
+        # 현재 로그 데이터를 딕셔너리로 생성
+        current_log_data = {
+            "Timestamp": timestamp,
+            "Solution": self.solution,
+            "NextSolution": self.next_solution if self.next_solution is not None else "",
+            "ProcessNumber": self.process_number,
+            "ProcessName": self.process_name,
+            "Info": info
+        }
+
+        # self.project_log_file_path 파일 불러오기
+        with open(self.project_log_file_path, 'r', encoding='utf-8') as log_json_file:
+            log_json_data = json.load(log_json_file)
+
+        # 현재 로그 데이터를 기존 로그 데이터에 추가
+        log_json_data["Log"].append(current_log_data)
+
+        # 업데이트된 로그 데이터를 다시 파일에 저장
+        with open(self.project_log_file_path, 'w', encoding='utf-8') as file:
+            json.dump(log_json_data, file, ensure_ascii=False, indent=4)
+
+    # --- class-func: log data 가져오고 포맷팅하고 출력하기 ---
     def print_log(self,
                   logginig: str,
                   logginig_keys: list,
@@ -99,7 +133,7 @@ class Log(Access):
 
         """
         # log_config_dict 불러오기
-        log_config_dict = self._load_log_config().get(logginig, {})
+        log_config_dict = self._load_log_config()[logginig.capitalize()]
 
         # log_config_dict에서 keys에 해당하는 로깅 출력 가져오기
         # log keys
@@ -137,6 +171,11 @@ class Log(Access):
             print(welcome_yaas)
         print(formatted_loggig_data)
 
+        # log data 추가
+        _info = info_keys[-1]
+        if logginig == "work" and _info in ["Start", "End", "Stop"]:
+            self._append_log_data(timestamp, _info)
+
 if __name__ == "__main__":
 
     # --- class-test ---
@@ -162,6 +201,6 @@ if __name__ == "__main__":
         idx_length=idx_length)
 
     log.print_log(
-        "Access",
+        "access",
         ["Log", "Access"],
         ["Info", "Hello"])

@@ -1,16 +1,19 @@
 
 {
-    "email": "",
-    "ProjectName": "",
-    "StartTime": "",
+    "Email": null,
+    "ProjectName": null,
+    "OperatingTime": {
+        "Time": null,
+        "Second": null
+    },
     "Log": [
         {
-            "Timestamp": "",
-            "Solution": "",
-            "NextSolution": "",
-            "ProcessNumber": "",
-            "ProcessName": "",
-            "Info": ""
+            "Timestamp": null,
+            "Solution": null,
+            "NextSolution": null,
+            "ProcessNumber": null,
+            "ProcessName": null,
+            "Info": null
         }
     ]
 }

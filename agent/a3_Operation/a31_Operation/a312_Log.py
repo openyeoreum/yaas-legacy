@@ -21,6 +21,7 @@ class Log(Access):
     def __init__(self,
                  email: str,
                  project_name: str,
+                 work: str = None,
                  solution: str = None,
                  next_solution: str = None,
                  process_number: str = None,
@@ -32,6 +33,7 @@ class Log(Access):
         Attributes:
             email (str): 이메일
             project_name (str): 프로젝트명
+            work (str): "core" 또는 "solution" 또는 "generation"
             solution (str): 솔루션명 (ex. Collection, ScriptSegmentation 등)
             next_solution (str): 다음 솔루션이 필요한 경우 다음 솔루션명 (ex. Audiobook, Translation 등)
             process_number (str): 솔루션 안에 프로세스 번호
@@ -45,6 +47,7 @@ class Log(Access):
             project_name)
 
         # attributes 설정
+        self.work = work
         self.solution = solution
         self.next_solution = next_solution
         self.process_number = process_number
@@ -70,9 +73,9 @@ class Log(Access):
 
     # --- class-func: log data 추가하기 ---
     def _append_log_data(self,
-                         timestamp: str,
-                         info: str) -> None:
-        """현재 로그 데이터를 프로젝트 로그 파일에 추가합니다.
+                        timestamp: str,
+                        info: str) -> None:
+        """현재 로그 데이터를 프로젝트 로그 파일에 추가하고, 유효한 운영 시간만 계산하여 업데이트합니다.
 
         Args:
             timestamp (str): 'YYYY-MM-DD HH:MM:SS' 형식의 타임스탬프 문자열
@@ -80,12 +83,37 @@ class Log(Access):
 
         Effects:
             log_json_data 추가 (dict): self.project_log_file_path["Log"].append(log_data)
+            OperatingTime 업데이트: 'core' 작업의 'Start'부터 'Stop' 또는 'End'까지의 시간만 합산하여 업데이트합니다.
         """
+        # - innerfunc: timestamp 계산기 -
+        def calculate_timestamp_difference(start_timestamp: str, end_timestamp: str) -> int:
+            """
+            'YYYY-MM-DD HH:MM:SS' 형식의 두 시간 문자열을 받아
+            시간 차이를 'HH:MM:SS' 형식과 초로 반환합니다.
+
+            Args:
+                start_timestamp (str): 시작 시간 문자열
+                end_timestamp (str): 종료 시간 문자열
+
+            Returns:
+                tuple[str, int]: ('HH:MM:SS' 형식의 시간 차이, 총 시간 차이(초))
+            """
+            time_format = "%Y-%m-%d %H:%M:%S"
+            start_time = datetime.strptime(start_timestamp, time_format)
+            end_time = datetime.strptime(end_timestamp, time_format)
+            time_delta = end_time - start_time
+            
+            total_seconds = int(time_delta.total_seconds())
+            
+            return total_seconds
+        # - innerfunc end -
+
         # 현재 로그 데이터를 딕셔너리로 생성
         current_log_data = {
             "Timestamp": timestamp,
+            "Work": self.work,
             "Solution": self.solution,
-            "NextSolution": self.next_solution if self.next_solution is not None else "",
+            "NextSolution": self.next_solution,
             "ProcessNumber": self.process_number,
             "ProcessName": self.process_name,
             "Info": info
@@ -95,8 +123,51 @@ class Log(Access):
         with open(self.project_log_file_path, 'r', encoding='utf-8') as log_json_file:
             log_json_data = json.load(log_json_file)
 
+        # 첫 로그 데이터인 경우 Email과 ProjectName 추가
+        if len(log_json_data["Log"]) == 1:
+            log_json_data["Email"] = self.email
+            log_json_data["ProjectName"] = self.project_name
+
         # 현재 로그 데이터를 기존 로그 데이터에 추가
         log_json_data["Log"].append(current_log_data)
+        
+        # --- OperatingTime 계산 로직 수정 ---
+        total_operating_seconds = 0
+        start_timestamp_for_session = None
+
+        # "Work"가 "core"인 로그만 필터링하여 계산
+        core_logs = [log for log in log_json_data["Log"] if log.get("Work") == "core"]
+
+        for log in core_logs:
+            # 타임스탬프와 정보가 유효한지 확인
+            current_timestamp = log.get("Timestamp")
+            current_info = log.get("Info")
+            if not current_timestamp or not current_info:
+                continue
+
+            if current_info == "Start":
+                # 새로운 세션 시작으로 간주하고 시작 시간 기록
+                start_timestamp_for_session = current_timestamp
+            elif current_info in ["Stop", "End"]:
+                # 세션이 시작된 상태에서 Stop 또는 End를 만나면 시간 계산
+                if start_timestamp_for_session:
+                    duration_seconds = calculate_timestamp_difference(
+                        start_timestamp_for_session, 
+                        current_timestamp
+                    )
+                    total_operating_seconds += duration_seconds
+                    # 계산 후 세션 시작 시간 초기화
+                    start_timestamp_for_session = None
+
+        # 계산된 총 운영 시간을 HH:MM:SS 형식으로 변환
+        hours, remainder = divmod(total_operating_seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        formatted_total_time = f"{hours:02}:{minutes:02}:{seconds:02}"
+
+        # 최종 OperatingTime 업데이트
+        log_json_data["OperatingTime"]["Time"] = formatted_total_time
+        log_json_data["OperatingTime"]["Second"] = total_operating_seconds
+        # --- 로직 수정 끝 ---
 
         # 업데이트된 로그 데이터를 다시 파일에 저장
         with open(self.project_log_file_path, 'w', encoding='utf-8') as file:

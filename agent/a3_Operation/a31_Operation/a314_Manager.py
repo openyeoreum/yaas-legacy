@@ -338,7 +338,4 @@ if __name__ == "__main__":
         idx=idx)
 
     user.create_json()
-    user.print_log(
-        "work",
-        ["Log", "Solution"],
-        ["Info", "Start"])
+    user.print_log("work", ["Log", "Solution"], ["Info", "Start"])

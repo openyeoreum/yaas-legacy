@@ -53,6 +53,7 @@ class Base(Log):
         super().__init__(
             email,
             project_name,
+            work = work,
             solution = solution,
             next_solution = next_solution,
             process_number = process_number,

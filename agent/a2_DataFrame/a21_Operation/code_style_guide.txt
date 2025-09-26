@@ -112,6 +112,7 @@
             * innerfunc *
 
                 # - innerfunc: ... -
+                # - innerfunc end -
 
 
             * for, if 등의 기능단위 *

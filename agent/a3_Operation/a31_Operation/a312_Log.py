@@ -21,25 +21,19 @@ class Log(Access):
     def __init__(self,
                  email: str,
                  project_name: str,
-                 work: str = None,
                  solution: str = None,
                  next_solution: str = None,
                  process_number: str = None,
-                 process_name: str = None,
-                 idx: int = None,
-                 idx_length: int = None) -> None:
+                 process_name: str = None) -> None:
         """사용자-프로젝트의 Operation에 통합 Log 기능을 수행하는 클래스입니다.
 
         Attributes:
             email (str): 이메일
             project_name (str): 프로젝트명
-            work (str): "core" 또는 "solution" 또는 "generation"
             solution (str): 솔루션명 (ex. Collection, ScriptSegmentation 등)
             next_solution (str): 다음 솔루션이 필요한 경우 다음 솔루션명 (ex. Audiobook, Translation 등)
             process_number (str): 솔루션 안에 프로세스 번호
             process_name (str): 솔루션 안에 프로세스명
-            idx (int): 솔루션 안에 프로세스 안에 테스크 인덱스 번호
-            idx_length (int): idx의 전체 길이
         """
         # Access 초기화
         super().__init__(
@@ -47,23 +41,20 @@ class Log(Access):
             project_name)
 
         # attributes 설정
-        self.work = work
         self.solution = solution
         self.next_solution = next_solution
         self.process_number = process_number
         self.process_name = process_name
-        self.idx = idx
-        self.idx_length = idx_length
         self.project_log_file_path = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{self.email}/{self.project_name}/{self.project_name}_project_log.json"
 
     # ---------------------------------------
     # --- func-set: print and append log ----
     # --- class-func: log_config 불러오기 -----
     def _load_log_config(self) -> dict:
-        """로깅 설정 JSON 파일을 로드하여 딕셔너리로 반환합니다.
+        """로그 설정 JSON 파일을 로드하여 딕셔너리로 반환합니다.
 
         Returns:
-            log_config_dict (dict): 로깅 설정이 담긴 딕셔너리
+            log_config_dict (dict): 로그 설정이 담긴 딕셔너리
         """
         # JSON 파일 열기 및 로드
         with open(self.log_file_path, 'r', encoding='utf-8') as file:
@@ -73,13 +64,15 @@ class Log(Access):
 
     # --- class-func: log data 추가하기 ---
     def _append_log_data(self,
-                        timestamp: str,
-                        info: str) -> None:
+                         timestamp: str,
+                         _solution: str,
+                         _info: str) -> None:
         """현재 로그 데이터를 프로젝트 로그 파일에 추가하고, 유효한 운영 시간만 계산하여 업데이트합니다.
 
         Args:
             timestamp (str): 'YYYY-MM-DD HH:MM:SS' 형식의 타임스탬프 문자열
-            info (str): 'Start', 'End', 'Stop' 등 로그 정보
+            _solution (str): 'Core', 'Solution', 'Process', 'Task'
+            _info (str): 'Start', 'End', 'Stop' 등 로그 정보
 
         Effects:
             log_json_data 추가 (dict): self.project_log_file_path["Log"].append(log_data)
@@ -111,12 +104,12 @@ class Log(Access):
         # 현재 로그 데이터를 딕셔너리로 생성
         current_log_data = {
             "Timestamp": timestamp,
-            "Work": self.work,
+            "Work": _solution,
             "Solution": self.solution,
             "NextSolution": self.next_solution,
             "ProcessNumber": self.process_number,
             "ProcessName": self.process_name,
-            "Info": info
+            "Info": _info
         }
 
         # self.project_log_file_path 파일 불러오기
@@ -131,12 +124,12 @@ class Log(Access):
         # 현재 로그 데이터를 기존 로그 데이터에 추가
         log_json_data["Log"].append(current_log_data)
         
-        # --- OperatingTime 계산 로직 수정 ---
+        # OperatingTime 계산
         total_operating_seconds = 0
         start_timestamp_for_session = None
 
-        # "Work"가 "core"인 로그만 필터링하여 계산
-        core_logs = [log for log in log_json_data["Log"] if log.get("Work") == "core"]
+        # "Work"가 "Core"인 로그만 필터링하여 계산
+        core_logs = [log for log in log_json_data["Log"] if log.get("Work") == "Core"]
 
         for log in core_logs:
             # 타임스탬프와 정보가 유효한지 확인
@@ -175,22 +168,26 @@ class Log(Access):
 
     # --- class-func: log data 가져오고 포맷팅하고 출력하기 ---
     def print_log(self,
-                  logginig: str,
-                  logginig_keys: list,
+                  log: str,
+                  log_keys: list,
                   info_keys: list,
+                  idx: int = None,
+                  idx_length: int = None,
                   function_name = None,
                   message: str = None) -> str:
-        """로깅 설정에서 지정된 키에 해당하는 로깅 데이터를 가져와 포맷팅합니다.
+        """로그 설정에서 지정된 키에 해당하는 로그 데이터를 가져와 포맷팅합니다.
 
         Args:
-            logginig (str): 로깅 종류 (예: "Access", "Work", "Task")
-            logginig_keys (list): 로깅 데이터에서 가져올 키들의 리스트
+            log (str): 로그 종류 (예: "Access", "Work", "Task")
+            log_keys (list): 로그 데이터에서 가져올 키들의 리스트
             info_keys (list): 추가 정보에서 가져올 키들의 리스트
+            idx (int, optional): 솔루션 안에 프로세스 안에 테스크 인덱스 번호로 jpg, wav, mp3 등 file명에 사용 (기본값: None)
+            idx_length (int, optional): idx의 전체 길이 (기본값: None)
             function_name (str, optional): 함수 이름 (예: "InputPreprocess", "Prompt" 등)
             message (str, optional): 출력할 추가 정보
 
         Print:
-            formatted_log_data (str): 포맷팅된 로깅 데이터
+            formatted_log_data (str): 포맷팅된 로그 데이터
         """
         # Welcome YaaS 패턴
         welcome_yaas = """
@@ -204,13 +201,13 @@ class Log(Access):
 
         """
         # log_config_dict 불러오기
-        log_config_dict = self._load_log_config()[logginig.capitalize()]
+        log_config_dict = self._load_log_config()[log.capitalize()]
 
-        # log_config_dict에서 keys에 해당하는 로깅 출력 가져오기
+        # log_config_dict에서 keys에 해당하는 로그 출력 가져오기
         # log keys
-        log = log_config_dict
-        for key in logginig_keys:
-            log = log[key]
+        _log = log_config_dict
+        for key in log_keys:
+            _log = _log[key]
 
         # info keys
         info = log_config_dict
@@ -224,7 +221,7 @@ class Log(Access):
         formatted_info = info.format(Print=message if message is not None else "")
 
         # loggig 포맷팅
-        formatted_loggig_data = log.format(
+        formatted_loggig_data = _log.format(
             Timestamp=timestamp,
             Email=self.email,
             ProjectName=self.project_name,
@@ -234,18 +231,22 @@ class Log(Access):
             ProcessName=self.process_name,
             FunctionName=function_name if function_name is not None else "",
             Info=formatted_info,
-            Idx=self.idx if self.idx is not None else 0,
-            IdxLength=self.idx_length if self.idx_length is not None else 0)
+            Idx=idx if idx is not None else 0,
+            IdxLength=idx_length if idx_length is not None else 0)
 
         # formatting된 loggig 출력
-        if logginig == "Access" and "Access" in logginig_keys:
+        if log == "access" and "Access" in log_keys:
             print(welcome_yaas)
         print(formatted_loggig_data)
 
         # log data 추가
         _info = info_keys[-1]
-        if logginig == "work" and _info in ["Start", "End", "Stop"]:
-            self._append_log_data(timestamp, _info)
+        if log == "solution" and _info in ["Start", "End", "Stop"]:
+            _solution = log_keys[-1]
+
+            self._append_log_data(timestamp,
+                                  _solution,
+                                  _info)
 
 if __name__ == "__main__":
 

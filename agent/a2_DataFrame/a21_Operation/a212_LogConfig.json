@@ -9,7 +9,7 @@
             "Goodbye": "((🥳 Goodbye))"
         }
     },
-    "Work": {
+    "Solution": {
         "Log": {
             "Core": "{Info} 🕐 {Timestamp} >> 🔴-[ (Core) | {ProjectName} | {Solution}({NextSolution}) ]-🔴",
             "Solution": "{Info} 🕐 {Timestamp} >> 🟡-[ (Solution) | {ProjectName} | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName} ]-🟡",

@@ -9,6 +9,7 @@
     "Log": [
         {
             "Timestamp": null,
+            "Work": null,
             "Solution": null,
             "NextSolution": null,
             "ProcessNumber": null,

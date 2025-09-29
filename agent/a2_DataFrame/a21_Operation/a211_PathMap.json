@@ -1,0 +1,84 @@
+{
+    "Operation": {
+        "LogMap": "/yaas/agent/a2_DataFrame/a21_Operation/a212_LogMap.json",
+        "APIConfig": "/yaas/agent/a2_DataFrame/a21_Operation/a213_APIConfig.json"
+    },
+    "Core": {
+        "Form": {
+            "Config": "/yaas/agent/a2_DataFrame/a22_Core/a22-01_ConfigForm.json",
+            "Log": "/yaas/agent/a2_DataFrame/a22_Core/a22-02_LogForm.json"
+        },
+        "Dir": {
+            "User": "/yaas/storage/s1_Yeoreum/s12_UserStorage/{Email}",
+            "Project": "/yaas/storage/s1_Yeoreum/s12_UserStorage/{Email}/{ProjectName}"
+        },
+        "File": {
+            "Json": {
+                "ProjectConfig": "/yaas/storage/s1_Yeoreum/s12_UserStorage/{Email}/{ProjectName}/{ProjectName}_project_config.json",
+                "ProjectLog": "/yaas/storage/s1_Yeoreum/s12_UserStorage/{Email}/{ProjectName}/{ProjectName}_project_log.json"
+            },
+            "Txt": {},
+            "Pdf": {},
+            "Jpg": {},
+            "Wav": {},
+            "Mp3": {}
+        }
+    },
+    "Solution": {
+        "Estimate": {},
+        "Collection": {},
+        "ScriptGen": {},
+        "ScriptSegmentation": {
+            "Form": {
+                "Start": "/yaas/agent/a2_DataFrame/a23_Solution/a234_ScriptSegmentation/a234-00_StartForm.json",
+                "ScriptLoad": "/yaas/agent/a2_DataFrame/a23_Solution/a234_ScriptSegmentation/a234-PT01_ScriptLoadForm.json",
+                "PDFMainLangCheck": "/yaas/agent/a2_DataFrame/a23_Solution/a234_Script/a2342_ScriptSegmentation/a23422-P02_PDFMainLangCheckForm.json",
+                "PDFLayoutCheck": "/yaas/agent/a2_DataFrame/a23_Solution/a234_ScriptSegmentation/a234-P03_PDFLayoutCheckForm.json",
+                "PDFResize": "/yaas/agent/a2_DataFrame/a23_Solution/a234_ScriptSegmentation/a234-P04_PDFResizeForm.json",
+                "PDFSplit": "/yaas/agent/a2_DataFrame/a23_Solution/a234_ScriptSegmentation/a234-P05_PDFSplitForm.json",
+                "PDFFormCheck": "/yaas/agent/a2_DataFrame/a23_Solution/a234_ScriptSegmentation/a234-P06_PDFFormCheckForm.json",
+                "TXTMainLangCheck": "/yaas/agent/a2_DataFrame/a23_Solution/a234_ScriptSegmentation/a234-T02_TXTMainLangCheckForm.json",
+                "TXTSplit": "/yaas/agent/a2_DataFrame/a23_Solution/a234_ScriptSegmentation/a234-T03_TXTSplitForm.json",
+                "End": "/yaas/agent/a2_DataFrame/a23_Solution/a234_ScriptSegmentation/a234-99_EndForm.json"
+            },
+            "Dir": {
+                "Upload": "{StorageSolutionDirPath}/{ProjectName}_upload_script_file",
+                "DataFrame": "{StorageSolutionDirPath}/{ProjectName}_dataframe_script_file",
+                "DataSet": "{StorageSolutionDirPath}/{ProjectName}_dataset_script_file",
+                "Mixed": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file",
+                "SampleScriptJpgs": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file/SampleScriptJpgs",
+                "TrimSampleScriptJpgs": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file/TrimSampleScriptJpgs",
+                "ScriptPDFs": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file/ScriptPDFs",
+                "ResizeScriptPDFs": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file/ResizeScriptPDFs",
+                "ScriptJpegs": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file/ScriptJpgs",
+                "Master": "{StorageSolutionDirPath}/{ProjectName}_master_script_file"
+            },
+            "File": {
+                "Json": {
+                    "InputList": "{StorageSolutionDirPath}/{ProjectName}_dataframe_script_file/{Email}_{ProjectName}_{ProcessNumber}_{ProcessName}_inputlist.json",
+                    "MiddleFrame": "{StorageSolutionDirPath}/{ProjectName}_dataframe_script_file/{Email}_{ProjectName}_{ProcessNumber}_{ProcessName}_middleframe.json",
+                    "DataSet": "{StorageSolutionDirPath}/{ProjectName}_dataset_script_file/{Email}_{ProjectName}_{ProcessNumber}_{ProcessName}_dataset.json",
+                    "Edit": "{StorageSolutionDirPath}/{ProjectName}_master_script_file/[{ProjectName}_script_edit].json"
+                },
+                "Txt": {},
+                "Pdf": {
+                    "Script": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file/ScriptPDFs/({Idx})Script.pdf",
+                    "ResizeScript": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file/ResizeScriptPDFs/({Idx})ResizeScript.pdf"
+                },
+                "Jpg": {
+                    "SampleScript": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file/SampleScriptJpgs/({Idx})SampleScript.jpg",
+                    "TrimSampleScript": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file/TrimSampleScriptJpgs/({Idx})TrimSampleScript.jpg",
+                    "Script": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file/ScriptJpgs/({Idx})Script.jpg"
+                },
+                "Wav": {},
+                "Mp3": {}
+            }
+        },
+        "ScriptStructuration": {},
+        "Translation": {},
+        "TextBook": {},
+        "AudioBook": {},
+        "VideoBook": {}
+    },
+    "Generation": {}
+}

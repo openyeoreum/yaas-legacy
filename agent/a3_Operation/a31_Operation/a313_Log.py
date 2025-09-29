@@ -3,17 +3,17 @@ import sys
 sys.path.append("/yaas")
 
 from datetime import datetime
-from agent.a3_Operation.a31_Operation.a311_Access import Access
+from agent.a3_Operation.a31_Operation.a312_Base import Base
 
 # ======================================================================
-# [a312-1] Operation-Log
+# [a313-1] Operation-Log
 # ======================================================================
 # class: Log
 # ======================================================================
-class Log(Access):
+class Log(Base):
 
     # operation 경로
-    log_file_path = "/yaas/agent/a2_DataFrame/a21_Operation/a212_LogConfig.json"
+    log_file_path = "/yaas/agent/a2_DataFrame/a21_Operation/a212_LogMap.json"
 
     # ----------------------------
     # --- class-init -------------
@@ -35,32 +35,29 @@ class Log(Access):
             process_number (str): 솔루션 안에 프로세스 번호
             process_name (str): 솔루션 안에 프로세스명
         """
-        # Access 초기화
+        # Base 초기화
         super().__init__(
             email,
-            project_name)
-
-        # attributes 설정
-        self.solution = solution
-        self.next_solution = next_solution
-        self.process_number = process_number
-        self.process_name = process_name
-        self.project_log_file_path = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{self.email}/{self.project_name}/{self.project_name}_project_log.json"
+            project_name,
+            solution,
+            next_solution,
+            process_number,
+            process_name)
 
     # ---------------------------------------
     # --- func-set: print and append log ----
-    # --- class-func: log_config 불러오기 -----
-    def _load_log_config(self) -> dict:
+    # --- class-func: log_map 불러오기 -----
+    def _load_log_map(self) -> dict:
         """로그 설정 JSON 파일을 로드하여 딕셔너리로 반환합니다.
 
         Returns:
-            log_config_dict (dict): 로그 설정이 담긴 딕셔너리
+            log_map_dict (dict): 로그 설정이 담긴 딕셔너리
         """
         # JSON 파일 열기 및 로드
-        with open(self.log_file_path, 'r', encoding='utf-8') as file:
-            log_config_dict = json.load(file)
+        with open(self.log_file_path, 'r', encoding='utf-8') as f:
+            log_map_dict = json.load(f)
         
-        return log_config_dict
+        return log_map_dict
 
     # --- class-func: log data 추가하기 ---
     def _append_log_data(self,
@@ -112,9 +109,9 @@ class Log(Access):
             "Info": _info
         }
 
-        # self.project_log_file_path 파일 불러오기
-        with open(self.project_log_file_path, 'r', encoding='utf-8') as log_json_file:
-            log_json_data = json.load(log_json_file)
+        # ProjectLog 파일 불러오기
+        with open(self.read_path_map("Core", ["File", "Json", "ProjectLog"]), 'r', encoding='utf-8') as f:
+            log_json_data = json.load(f)
 
         # 첫 로그 데이터인 경우 Email과 ProjectName 추가
         if len(log_json_data["Log"]) == 1:
@@ -162,9 +159,9 @@ class Log(Access):
         log_json_data["OperatingTime"]["Second"] = total_operating_seconds
         # --- 로직 수정 끝 ---
 
-        # 업데이트된 로그 데이터를 다시 파일에 저장
-        with open(self.project_log_file_path, 'w', encoding='utf-8') as file:
-            json.dump(log_json_data, file, ensure_ascii=False, indent=4)
+        # 업데이트된 로그 데이터를 다시 ProjectLog 파일에 저장
+        with open(self.read_path_map("Core", ["File", "Json", "ProjectLog"]), 'w', encoding='utf-8') as f:
+            json.dump(log_json_data, f, ensure_ascii=False, indent=4)
 
     # --- class-func: log data 가져오고 포맷팅하고 출력하기 ---
     def print_log(self,
@@ -200,17 +197,17 @@ class Log(Access):
             \/  \/ \___|_|\___\___/|_| |_| |_|\___|    |_|\__,_|\__,_|_____/ 
 
         """
-        # log_config_dict 불러오기
-        log_config_dict = self._load_log_config()[log.capitalize()]
+        # log_map_dict 불러오기
+        log_map_dict = self._load_log_map()[log]
 
-        # log_config_dict에서 keys에 해당하는 로그 출력 가져오기
+        # log_map_dict에서 keys에 해당하는 로그 출력 가져오기
         # log keys
-        _log = log_config_dict
+        _log = log_map_dict
         for key in log_keys:
             _log = _log[key]
 
         # info keys
-        info = log_config_dict
+        info = log_map_dict
         for key in info_keys:
             info = info[key]
         
@@ -235,13 +232,13 @@ class Log(Access):
             IdxLength=idx_length if idx_length is not None else 0)
 
         # formatting된 loggig 출력
-        if log == "access" and "Access" in log_keys:
+        if log == "Access" and "Access" in log_keys:
             print(welcome_yaas)
         print(formatted_loggig_data)
 
         # log data 추가
         _info = info_keys[-1]
-        if log == "solution" and _info in ["Start", "End", "Stop"]:
+        if log == "Solution" and _info in ["Start", "End", "Stop"]:
             _solution = log_keys[-1]
 
             self._append_log_data(timestamp,

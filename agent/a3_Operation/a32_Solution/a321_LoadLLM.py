@@ -426,7 +426,7 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, mainLang = 
 ## 프롬프트 실행
 def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, mainLang = "ko", root = "agent", PromptFramePath = "", Mode = "Master", Input2 = "", InputMemory = "", OutputMemory = "", MemoryNote = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
 
-    GoogleAIClient = genai.Client(api_key= os.getenv("GEMINI_API_KEY"), http_options={'api_version':'v1alpha'})
+    GoogleAIClient = genai.Client(api_key= os.getenv("GEMINI_API_KEY"))
     if PromptFramePath == "":
         promptFrame = GetPromptFrame(Process, mainLang)
     else:

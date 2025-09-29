@@ -13,7 +13,7 @@ from datetime import datetime
 class Access:
 
     # operation 경로
-    access_file_path = "/yaas/agent/a2_DataFrame/a21_Operation/a211_Access.json"
+    access_path = "/yaas/storage/s1_Yeoreum/s11_UserAccess/s111_UserAccess.json"
 
     # -------------------------------
     # --- class-init ----------------
@@ -77,21 +77,21 @@ class Access:
     # ---------------------------------------
     # --- func-set: read or write project ---
     # --- class-func: access 파일 불러오기 ------
-    def _load_access_file(self) -> dict:
+    def _load_access(self) -> dict:
         """Access.json 파일을 불러옵니다.
 
         Returns:
-            access_data (dict): Access.json 파일 내용
+            access_dict (dict): Access.json 파일 내용
         """
         # access.json 파일 불러오기
         try:
-            with open(self.access_file_path, 'r', encoding='utf-8') as f:
-                all_projects = json.load(f)
+            with open(self.access_path, 'r', encoding='utf-8') as f:
+                access_dict = json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
             # 파일이 없거나 비어있으면 빈 딕셔너리로 시작
-            all_projects = {}
+            access_dict = {}
 
-        return all_projects
+        return access_dict
     
     # --- class-func: 프로젝트 조회 또는 생성 및 JSON 저장/로드 ---
     def _read_or_write_timestamped_project(self, email: str, project_name: str) -> str:
@@ -106,35 +106,33 @@ class Access:
             timestamped_project_name (str): 타임스탬프가 추가된 프로젝트 이름
         """
         # access.json 파일 불러오기
-        all_projects = self._load_access_file()
+        access_dict = self._load_access()
 
         # 이메일을 해시하여 사용자 식별
         hashed_email = self._hash_email(email)
 
         # 사용자의 기존 프로젝트 목록 가져오기
-        user_projects = all_projects.get(hashed_email, {})
+        user_projects = access_dict.get(hashed_email, {})
 
         # 동일한 이름의 프로젝트가 있는지 확인
         if project_name in user_projects:
             # 있으면 기존 이름 반환
-            print("로그출력")
             timestamped_project_name = user_projects[project_name]
             
             return hashed_email, timestamped_project_name
         else:
             # 없으면 새로 생성
-            print("로그출력")
             timestamped_project_name = self._timestamped_project_name(project_name)
             
             # 사용자 프로젝트 목록에 새 프로젝트 추가
             user_projects[project_name] = timestamped_project_name
             
             # 전체 데이터에 사용자 프로젝트 목록 업데이트
-            all_projects[hashed_email] = user_projects
+            access_dict[hashed_email] = user_projects
             
             # 변경된 내용을 JSON 파일에 다시 저장
-            with open(self.access_file_path, 'w', encoding='utf-8') as f:
-                json.dump(all_projects, f, indent=4, ensure_ascii=False)
+            with open(self.access_path, 'w', encoding='utf-8') as f:
+                json.dump(access_dict, f, indent=4, ensure_ascii=False)
             
             return hashed_email, timestamped_project_name
 

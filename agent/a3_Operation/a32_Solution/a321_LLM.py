@@ -20,9 +20,6 @@ from agent.a3_Operation.a31_Operation.a314_Manager import Manager
 # ======================================================================
 class Manager(Manager):
 
-    # operation 경로
-    api_file_path = "/yaas/agent/a2_DataFrame/a21_Operation/a213_APIConfig.json"
-
     # ----------------------------
     # --- class-init -------------
     # --- class-func: LLM 초기화 ---

@@ -3,12 +3,12 @@ version: '3.8'
 services:
 
   yaasdb:
-    image: postgres:latest
+    image: postgres:16
     environment:
       - POSTGRES_USER=yeoreum
       - POSTGRES_PASSWORD=0128
     volumes:
-      - ./agent/databaseVolumesPostgres:/var/lib/postgresql/data
+      - databaseVolumesPostgres:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 

@@ -162,7 +162,7 @@ class Manager(Manager):
         message_time = f"current time: {str(datetime('Second'))}\n\n"
 
         # 프롬프트 불러오기
-        message_dict = self._load_message_dict()
+        message_dict = self._load_message()
 
         # 프롬프트["InputFormat"]이 Text가 아닌 경우에는 파일리스트 정리
         if message_dict["InputFormat"] != "text":
@@ -230,9 +230,33 @@ class Manager(Manager):
         print(request_and_response_text)
 
     # ------------------------------
-    # --- func-set: llm request ----
-    # --- class-func: openai 요청 ---
-    def openai_request():
-        pass
+    # --- func-set: api request ----
+    # --- class-func: OPENAI 요청 ---
+    def openai_request(self):
+        api_config_dict = self._load_api_config()
+        api_dict = self.read_json("Solution", [self.solution, "Form", self.process_name], ["API"])
+        format_dict = self.read_json("Solution", [self.solution, "Form", self.process_name], ["Format"])
+        service = api_dict["Service"]
+        client = self._load_api_client(service)
+        _model = api_dict["Model"]
+        model = api_config_dict["LanguageModel"][service][_model]["Model"]
+        reasoning_effort = api_config_dict["LanguageModel"][service][_model]["ReasoningEffort"]
+        messages = self._format_prompt_to_messages(self.input, self.memory_note)
+
+        # - innerfunc: image file 업로드 함수 -
+        def upload_image_file(client, image_path):
+            """이미지 파일을 업로드하여 반환합니다.
+
+            Args:
+                client (OpenAI): OpenAI 클라이언트
+                image_path (str): 이미지 파일 경로
+            Returns:
+                image_id (str): 이미지 ID
+            """
+            with open(image_path, "rb") as f:
+                result = client.files.create(file = f, purpose = "vision")
+
+                return result.id
+        # - innerfunc end -
 
 if __name__ == "__main__":

@@ -1,16 +1,18 @@
 {
     "ProjectName": "eval(self.ProjectName)",
     "TaskName": "PDFLanguageCheck",
-    "Model": {
+    "API": {
         "Service": "OPENAI",
         "Model": "High"
+    },
+    "Format": {
+        "InputFormat": "jpeg",
+        "ResponseFormat": "json"
     },
     "InputsPreprocess": {},
     "Inputs": {},
     "Message": {
         "Ko": {
-            "InputFormat": "jpeg",
-            "ResponseFormat": "json",
             "ResponseExample": {
                 "언어": {
                     "태그": "ko, en, de ... pl 중 <도서페이지> 자료 10개를 보고 해당 도서의 주요 언어 1개를 (언어태그)에서 지정하여 작성"
@@ -72,8 +74,6 @@
             }
         },
         "Global": {
-            "InputFormat": "jpeg",
-            "ResponseFormat": "json",
             "ResponseExample": {
                 "Language": {
                     "Tag": "Based on the <BookPage> data, assign the single language tag for the book from the list: ko, en, de, ..., pl"

@@ -1,7 +1,7 @@
 {
     "LanguageModel": {
         "OPENAI": {
-            "High": "gpt-5",
+            "High": {"Model": "gpt-5", "ReasoningEffort": "medium"},
             "Mid": null,
             "Low": null
         },

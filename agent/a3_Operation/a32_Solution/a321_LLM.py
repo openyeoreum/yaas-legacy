@@ -19,7 +19,7 @@ from agent.a3_Operation.a31_Operation.a314_Manager import Manager
 # ======================================================================
 # class: LLM
 # ======================================================================
-class Manager(Manager):
+class LLM(Manager):
 
     # ----------------------------
     # --- class-init -------------

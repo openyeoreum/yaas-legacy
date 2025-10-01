@@ -75,21 +75,21 @@ class Manager(Manager):
         """API 클라이언트를 로드하여 반환합니다.
 
         Args:
-            service (str): 사용할 LLM 서비스명 (ex. OpenAI, AnthropicAI, GoogleAI, DeepSeek)
+            service (str): 사용할 LLM 서비스명 (ex. "OPENAI", "ANTHROPIC", "GOOGLE", "DEEPSEEK")
         Returns:
             api_client (str): API 클라이언트
         """
         # 서비스에 따른 API 클라이언트 로드
-        if service == "OpenAI":
+        if service == "OPENAI":
             open_ai_client = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
             return open_ai_client
-        elif service == "AnthropicAI":
+        elif service == "ANTHROPIC":
             anthropic_client = anthropic.Anthropic(api_key = os.getenv("ANTHROPIC_API_KEY"))
             return anthropic_client
-        elif service == "GoogleAI":
+        elif service == "GOOGLE":
             google_client = genai.Client(api_key= os.getenv("GEMINI_API_KEY"))
             return google_client
-        elif service == "DeepSeek":
+        elif service == "DEEPSEEK":
             deepseek_client = OpenAI(api_key = os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com")
             return deepseek_client
 
@@ -201,7 +201,7 @@ class Manager(Manager):
         """request와 response를 출력합니다.
 
         Args:
-            service (str): 서비스명 (예: "OpenAI", "AnthropicAI", "GoogleAI", "DeepSeek")
+            service (str): 서비스명 (예: "OPENAI", "ANTHROPIC", "GOOGLE", "DEEPSEEK")
             messages (list): 메시지 리스트
             response (dict): 응답 딕셔너리
             usage (str): 사용량 텍스트

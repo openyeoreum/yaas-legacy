@@ -2,7 +2,7 @@
     "ProjectName": "eval(self.ProjectName)",
     "TaskName": "PDFLanguageCheck",
     "Model": {
-        "Service": "OpenAI",
+        "Service": "OPENAI",
         "Model": "High"
     },
     "InputsPreprocess": {},

@@ -7,10 +7,10 @@
             "None": {"Model": "gpt-5-mini", "ReasoningEffort": "low"}
         },
         "ANTHROPIC": {
-            "High": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 10000},
-            "Mid": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 5000},
-            "Low": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 1000},
-            "None": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 100}
+            "High": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 10000, "MaxTokens": null},
+            "Mid": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 5000, "MaxTokens": null},
+            "Low": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 1000, "MaxTokens": null},
+            "None": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 100, "MaxTokens": null}
         },
         "GOOGLE": {
             "High": {"Model": null, "ReasoningEffort": 10000},
@@ -25,10 +25,10 @@
             "None": null
         },
         "DEEPSEEK": {
-            "High": null,
-            "Mid": null,
-            "Low": null,
-            "None": null
+            "High": {"Model": "deepseek-chat", "ReasoningEffort": null},
+            "Mid": {"Model": "deepseek-chat", "ReasoningEffort": null},
+            "Low": {"Model": "deepseek-chat", "ReasoningEffort": null},
+            "None": {"Model": "deepseek-chat", "ReasoningEffort": null}
         }
     },
     "TTSModel": {},

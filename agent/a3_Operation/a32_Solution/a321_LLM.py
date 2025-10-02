@@ -84,16 +84,16 @@ class LLM(Manager):
         """
         # 서비스에 따른 API 클라이언트 로드
         if service == "OPENAI":
-            open_ai_client = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
+            open_ai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
             return open_ai_client
         elif service == "ANTHROPIC":
-            anthropic_client = anthropic.Anthropic(api_key = os.getenv("ANTHROPIC_API_KEY"))
+            anthropic_client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
             return anthropic_client
         elif service == "GOOGLE":
-            google_client = genai.Client(api_key= os.getenv("GEMINI_API_KEY"))
+            google_client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
             return google_client
         elif service == "DEEPSEEK":
-            deepseek_client = OpenAI(api_key = os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com")
+            deepseek_client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com")
             return deepseek_client
 
     # ----------------------------------
@@ -400,11 +400,11 @@ class LLM(Manager):
         # request 요청 및 response 출력
         for _ in range(self.MAX_ATTEMPTS):
             try:
-                _response = self.client.responses.create(
-                    model = self.model,
-                    reasoning = {"effort": self.reasoning_effort},
-                    input = self.messages,
-                    text = {"format": {"type": "json_object"}})
+                _response=self.client.responses.create(
+                    model=self.model,
+                    reasoning={"effort": self.reasoning_effort},
+                    input=self.messages,
+                    text={"format": {"type": "json_object"}})
 
                 response = _response.output_text
                 usage = {
@@ -500,13 +500,13 @@ class LLM(Manager):
         for _ in range(self.MAX_ATTEMPTS):
             try:
                 _response = self.client.messages.create(
-                    model = self.model,
-                    max_tokens = MAX_TOKENS,
-                    thinking = {
+                    model=self.model,
+                    max_tokens=MAX_TOKENS,
+                    thinking={
                         "type": "enabled",
                         "budget_tokens": self.reasoning_effort},
-                    system = self.messages[0]["content"],
-                    messages = self.messages[1]["content"] + self.messages[2]["content"])
+                    system=self.messages[0]["content"],
+                    messages=self.messages[1]["content"] + self.messages[2]["content"])
                 
                 response = _response.content[0].text
                 usage = {
@@ -592,15 +592,15 @@ class LLM(Manager):
 
                 if self.input_format == "jpeg":
                     _response = self.client.models.generate_content(
-                        model = self.model,
-                        contents = [self.messages[1]["content"]] + image_list + [self.messages[2]["content"]],
-                        config = generation_config)
+                        model=self.model,
+                        contents=[self.messages[1]["content"]] + image_list + [self.messages[2]["content"]],
+                        config=generation_config)
                     
                 else:
                     _response = self.client.models.generate_content(
-                        model = self.model,
-                        contents = self.messages[1]["content"] + self.messages[2]["content"],
-                        config = generation_config)
+                        model=self.model,
+                        contents=self.messages[1]["content"] + self.messages[2]["content"],
+                        config=generation_config)
 
                 response = _response.text
                 usage = {
@@ -621,14 +621,55 @@ class LLM(Manager):
                 continue
 
     # ----------------------------------------
-    # --- func-set: deepseek request -----------
-    # --- class-func: deepseek 이미지 파일 업로드 ---
-    def _deepseek_image_files(self) -> None:
-        """입력된 이미지 파일들을 DeepSeek에 업로드하고 self.messages를 업데이트합니다.
-        """
-        pass
-    
+    # --- func-set: deepseek request ---------
     # --- class-func: deepseek request 요청 ---
+    def deepseek_request(self,
+                         input: list,
+                         memory_note: str,
+                         idx: int,
+                         idx_length: int) -> str:
+        """DeepSeek 요청을 수행합니다.
+
+        Args:
+            input (list): 입력 데이터
+            memory_note (str): 메모리 노트
+            idx (int): 인덱스
+            idx_length (int): 인덱스 길이
+
+        Returns:
+            response (str): 응답 문자열
+        """
+        # request 초기화
+        self._init_request(
+            input,
+            memory_note)
+
+        # API 요청 및 응답
+        for _ in range(self.MAX_ATTEMPTS):
+            try:
+            # JSON 응답 형식을 요청하는 경우
+                _response = self.client.chat.completions.create(
+                    model=self.model,
+                    messages=self.messages,
+                    response_format={"type": "json_object"},
+                    stream=False)
+
+                response = _response.choices[0].message.content
+                usage = {
+                    'Input': _response.usage.prompt_tokens,
+                    'Output': _response.usage.completion_tokens,
+                    'Total': _response.usage.total_tokens
+                }
+                
+                request_and_response_text = self._print_request_and_response("DEEPSEEK", self.messages, response, usage)
+                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], idx=idx, idx_length=idx_length, function_name="deepseek_request", print=request_and_response_text)
+
+                return response
+
+            except Exception as e:
+                self.print_log("Access", ["Log", "Info"], ["Info", "Error"], function_name="deepseek_request", print=e)
+                time.sleep(random.uniform(2, 5))
+                continue
 
 if __name__ == "__main__":
 

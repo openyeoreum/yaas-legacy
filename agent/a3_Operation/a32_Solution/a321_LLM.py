@@ -11,7 +11,9 @@ sys.path.append("/yaas")
 
 from datetime import datetime
 from openai import OpenAI
+from PIL import Image
 from google import genai
+from google.genai import types
 from agent.a3_Operation.a31_Operation.a314_Manager import Manager
 
 # ======================================================================
@@ -330,6 +332,10 @@ class LLM(Manager):
     # --- class-func: openai 이미지 파일 업로드 ---
     def _openai_image_files(self) -> None:
         """입력된 이미지 파일들을 OpenAI에 업로드하고 self.messages를 업데이트합니다.
+
+        Effects:
+            self.messages[1]["content"]가 문자열일 경우, OpenAI 형식에 맞게 list로 변환
+            self.messages[1]["content"]가 list가 아닐 경우, list로 변환
         """
         # - innerfunc: image file 업로드 함수 -
         def upload_single_file(client, image_path: str) -> str:
@@ -377,6 +383,10 @@ class LLM(Manager):
 
         Returns:
             response (str): 응답 문자열
+
+        Print:
+            request_and_response_text (str): request와 response
+            error (str): 에러 메시지
         """
         # request 초기화
         self._init_request(
@@ -390,18 +400,11 @@ class LLM(Manager):
         # request 요청 및 response 출력
         for _ in range(self.MAX_ATTEMPTS):
             try:
-                if self.response_format == "json":
-                    _response = self.client.responses.create(
-                        model = self.model,
-                        reasoning = {"effort": self.reasoning_effort},
-                        input = self.messages,
-                        text = {"format": {"type": "json_object"}})
-
-                else:
-                    _response = self.client.responses.create(
-                        model = self.model,
-                        reasoning = {"effort": self.reasoning_effort},
-                        input = self.messages)
+                _response = self.client.responses.create(
+                    model = self.model,
+                    reasoning = {"effort": self.reasoning_effort},
+                    input = self.messages,
+                    text = {"format": {"type": "json_object"}})
 
                 response = _response.output_text
                 usage = {
@@ -426,6 +429,9 @@ class LLM(Manager):
     # --- class-func: anthropic 이미지 파일 준비 ---
     def _anthropic_image_files(self) -> None:
         """입력된 이미지 파일들을 Base64로 인코딩하여 self.messages에 포함시킵니다.
+
+        Effects:
+            self.messages[1]["content"]가 문자열일 경우, Claude 형식에 맞게 list로 변환
         """
         # self.messages[1]["content"]가 문자열일 경우, Claude 형식에 맞게 list로 변환
         if isinstance(self.messages[1]["content"], str):
@@ -476,6 +482,10 @@ class LLM(Manager):
 
         Returns:
             response (str): 응답 문자열
+
+        Print:
+            request_and_response_text (str): request와 response
+            error (str): 에러 메시지
         """
         # request 초기화
         self._init_request(
@@ -519,6 +529,106 @@ class LLM(Manager):
     # ---------------------------------------
     # --- func-set: google request ----------
     # --- class-func: google 이미지 파일 준비 ---
+    def _google_image_files(self) -> list:
+        """입력된 이미지 파일들을 Google API가 처리할 수 있는 형식으로 준비합니다.
+
+        Returns:
+            image_list (list): Google API에 전달할 이미지 리스트
+        """
+        # 이미지 리스트 초기화
+        image_list = []
+        
+        # self.input에 있는 각 파일 경로에 대해 반복
+        for image_path in self.input:
+            try:
+                # PIL을 사용하여 이미지 파일 열기
+                img = Image.open(image_path)
+                # 리스트에 이미지 객체 추가
+                image_list.append(img)
+            except IOError as e:
+                # 파일을 열 수 없는 경우 에러 메시지 출력
+                print(f"Error opening image file {image_path}: {e}")
+                
+        return image_list
+
+    # --- class-func: google request 요청 ---
+    def google_request(self,
+                       input: list,
+                       memory_note: str,
+                       idx: int,
+                       idx_length: int) -> str:
+        """Google 요청을 수행합니다.
+
+        Args:
+            input (list): 입력 데이터
+            memory_note (str): 메모리 노트
+            idx (int): 인덱스
+            idx_length (int): 인덱스 길이
+
+        Returns:
+            response (str): 응답 문자열
+
+        Print:
+            request_and_response_text (str): request와 response
+            error (str): 에러 메시지
+        """
+        # request 초기화
+        self._init_request(
+            input,
+            memory_note)
+
+        # 입력 포맷이 jpeg인 경우, 이미지 업로드 함수 호출
+        if self.input_format == "jpeg":
+            image_list = self._google_image_files()
+
+        # Google API 요청 및 응답
+        for _ in range(self.MAX_ATTEMPTS):
+            try:
+                # generation_config 설정
+                generation_config = types.GenerateContentConfig(
+                    system_instruction = self.messages[0]["content"],
+                    thinking_config = types.ThinkingConfig(thinking_budget = self.reasoning_effort),
+                    response_mime_type = "application/json")
+
+                if self.input_format == "jpeg":
+                    _response = self.client.models.generate_content(
+                        model = self.model,
+                        contents = [self.messages[1]["content"]] + image_list + [self.messages[2]["content"]],
+                        config = generation_config)
+                    
+                else:
+                    _response = self.client.models.generate_content(
+                        model = self.model,
+                        contents = self.messages[1]["content"] + self.messages[2]["content"],
+                        config = generation_config)
+
+                response = _response.text
+                usage = {
+                    'Input': _response.usage_metadata.prompt_token_count,
+                    'Output': _response.usage_metadata.candidates_token_count,
+                    'Total': _response.usage_metadata.total_token_count}
+                
+                # request와 response 출력
+                request_and_response_text = self._print_request_and_response(self.service, self.messages, response, usage)
+
+                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], idx=idx, idx_length=idx_length, function_name="google_request", print=request_and_response_text)
+
+                return response
+
+            except Exception as e:
+                self.print_log("Access", ["Log", "Info"], ["Info", "Error"], function_name="openai_request", print=e)
+                time.sleep(random.uniform(2, 5))
+                continue
+
+    # ----------------------------------------
+    # --- func-set: deepseek request -----------
+    # --- class-func: deepseek 이미지 파일 업로드 ---
+    def _deepseek_image_files(self) -> None:
+        """입력된 이미지 파일들을 DeepSeek에 업로드하고 self.messages를 업데이트합니다.
+        """
+        pass
+    
+    # --- class-func: deepseek request 요청 ---
 
 if __name__ == "__main__":
 

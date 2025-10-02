@@ -359,3 +359,8 @@ class Request(Setting):
 
 
 if __name__ == "__main__":
+
+    # --- class-test ---
+    # 인자 설정
+    email = "yeoreum00128@gmail.com3"
+    project_name = "글로벌솔루션여름"

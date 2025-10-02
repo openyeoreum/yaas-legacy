@@ -30,7 +30,8 @@
             "Message": "(⭐️ Run) 🕐 {Timestamp} > 🟦-( Message | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟦{Info}",
             "ResponsePostprocess": "(⭐️ Run) 🕐 {Timestamp} > 🟪-( ResponsePostprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟪{Info}",
             "MiddleFrame": "(⭐️ Run) 🕐 {Timestamp} > 🟩-( MiddleFrame | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟩{Info}",
-            "Outputs": "(⭐️ Run) 🕐 {Timestamp} > 🟧-( Outputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟧{Info}"
+            "Outputs": "(⭐️ Run) 🕐 {Timestamp} > 🟧-( Outputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟧{Info}",
+            "Info": "{Info}"
         },
         "Info": {
             "Complete": "\n > (✅ Complete: {Print})",

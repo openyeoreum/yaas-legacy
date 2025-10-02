@@ -15,15 +15,15 @@ from google import genai
 from agent.a3_Operation.a31_Operation.a314_Manager import Manager
 
 # ======================================================================
-# [a332-1] Operation-LLM: Setting
+# [a332-1] Operation-LLM
 # ======================================================================
-# class: Setting
+# class: LLM
 # ======================================================================
-class Setting(Manager):
+class LLM(Manager):
 
-    # --------------------------------
-    # --- class-init -----------------
-    # --- class-func: Setting 초기화 ---
+    # -----------------------------
+    # --- class-init --------------
+    # --- class-func: LLM 초기화 ---
     def __init__(self,
                  email: str,
                  project_name: str,
@@ -227,30 +227,43 @@ class Setting(Manager):
         
         # request와 response 출력
         request_and_response_text = request_text + response_text
-        print(request_and_response_text)
 
-# ======================================================================
-# [a332-2] Operation-LLM: Request
-# ======================================================================
-# class: Request
-# ======================================================================
-class Request(Setting):
+        return request_and_response_text
 
-    # --------------------------------
-    # --- class-init -----------------
-    # --- class-func: Request 초기화 ---
-    def __init__(self,
-                 input: list = None,
-                 memory_note: str = None) -> None:
-        """사용자-프로젝트의 Operation에 통합 LLM 기능을 수행하는 클래스입니다.
+    # ------------------------------------
+    # --- func-set: llm request ----------
+    # --- class-func: llm request 초기화 ---
+    def _init_request(self,
+                      input: list,
+                      idx: int,
+                      idx_length: int,
+                      memory_note: str = None) -> None:
+        """llm request를 초기화합니다.
+
+        Args:
+            input (list): 입력 데이터
+            idx (int): 인덱스
+            idx_length (int): 인덱스 길이
+            memory_note (str): 메모리 노트
 
         Attributes:
             input (list): 입력 데이터
             memory_note (str): 메모리 노트
+            idx (int): 인덱스
+            idx_length (int): 인덱스 길이
+            client (OpenAI): OpenAI 클라이언트
+            model (str): 모델
+            reasoning_effort (str): 추론 노력
+            input_format (str): 입력 포맷
+            response_format (str): 응답 포맷
+            messages (list): 메시지
+            MAX_ATTEMPTS (int): 최대 시도 횟수
         """
 
         # attributes 설정
         self.input = input
+        self.idx = idx
+        self.idx_length = idx_length
         self.memory_note = memory_note
 
         api_config_dict = self._load_api_config()
@@ -269,10 +282,59 @@ class Request(Setting):
 
         self.MAX_ATTEMPTS = 100
 
-    # ----------------------------------
-    # --- func-set: llm request --------
-    # --- class-func: 이미지 파일 업로드 ---
-    def _upload_image_files(self) -> None:
+    # ------------------------------------
+    # --- func-set: normalize response ---
+    # --- class-func: json 포멧 정규화 ------
+    def _normalize_response_json_format(self, response: str) -> str:
+        """응답 문자열을 JSON 형식으로 정규화합니다.
+
+        Args:
+            response (str): 응답 문자열
+
+        Returns:
+            json_response (str): JSON 형식으로 정규화된 응답 문자열
+        """
+        pattern = r'(?:\'\'\'|```|\"\"\")(.*?)(?:\'\'\'|```|\"\"\")'
+        match = re.search(pattern, response, re.DOTALL)
+        if match:
+            response = match.group(1).strip()
+        response = response.replace('\n', '\\n')
+
+        # 대괄호와 중괄호 인덱스 찾기
+        start_index_bracket = response.find('[')
+        start_index_brace = response.find('{')
+
+        # 대괄호와 중괄호 인덱스 중 작은 값 찾기
+        if start_index_bracket != -1 and start_index_brace != -1:
+            start_index = min(start_index_bracket, start_index_brace)
+        elif start_index_bracket != -1:
+            start_index = start_index_bracket
+        elif start_index_brace != -1:
+            start_index = start_index_brace
+        else:
+            start_index = -1
+
+        # 대괄호와 중괄호 인덱스 중 작은 값이 -1이 아닌 경우, json 형식 정규화
+        if start_index != -1:
+            if response[start_index] == '[':
+                end_index = response.rfind(']')
+            else:
+                end_index = response.rfind('}')
+            # 대괄호와 중괄호 인덱스 중 큰 값이 -1이 아닌 경우, json 형식 정규화
+            if end_index != -1:
+                json_response = response[start_index:end_index+1]
+            else:
+                json_response = response
+        # 대괄호와 중괄호 인덱스 중 작은 값이 -1인 경우, 원본 응답 반환
+        else:
+            json_response = response
+
+        return json_response
+
+    # ----------------------------------------
+    # --- func-set: openai request -----------
+    # --- class-func: openai 이미지 파일 업로드 ---
+    def _openai_upload_image_files(self) -> None:
         """입력된 이미지 파일들을 OpenAI에 업로드하고 self.messages를 업데이트합니다.
         """
         # - innerfunc: image file 업로드 함수 -
@@ -308,7 +370,7 @@ class Request(Setting):
         ]
         self.messages[1]["content"].extend(image_contents)
 
-    # --- class-func: llm request 요청 ---
+    # --- class-func: openai request 요청 ---
     def openai_request(self):
         """OpenAI 요청을 수행합니다.
 
@@ -316,9 +378,11 @@ class Request(Setting):
             response (str): 응답 문자열
             usage (dict): 사용량 딕셔너리
         """
+        # 요청 초기화
+        self._init_request()
         # 입력 포맷이 jpeg인 경우, 이미지 업로드 함수 호출
         if self.input_format == "jpeg":
-            self._upload_image_files()
+            self._openai_upload_image_files()
 
         # request 요청 및 response 출력
         for _ in range(self.MAX_ATTEMPTS):
@@ -345,16 +409,23 @@ class Request(Setting):
                 }
 
                 # request와 response 출력
-                self.print_request_and_response(self.service, self.messages, response, usage)
-                
-                return response, usage
+                request_and_response_text = self.print_request_and_response(self.service, self.messages, response, usage)
+
+                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], idx=self.idx, idx_length=self.idx_length, function_name="openai_request", model=self.model, print=request_and_response_text)
+                return response
 
             except Exception as e:
-                print(f"OpenAI 요청 오류: {e}")
-                time.sleep(random.uniform(5, 10))
+                self.print_log("Access", ["Log", "Info"], ["Info", "Error"], function_name="openai_request", print=e)
+                time.sleep(random.uniform(2, 5))
                 continue
 
-
+    # -----------------------------------------
+    # --- func-set: anthropic request ---------
+    # --- class-func: anthropic request 요청 ---
+    def anthropic_request(self):
+        """Anthropic 요청을 수행합니다.
+        """
+        pass
 
 
 

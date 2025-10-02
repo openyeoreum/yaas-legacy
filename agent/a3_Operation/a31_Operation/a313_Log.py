@@ -171,7 +171,7 @@ class Log(Base):
                   idx: int = None,
                   idx_length: int = None,
                   function_name = None,
-                  message: str = None) -> str:
+                  print: str = None) -> str:
         """로그 설정에서 지정된 키에 해당하는 로그 데이터를 가져와 포맷팅합니다.
 
         Args:
@@ -181,7 +181,7 @@ class Log(Base):
             idx (int, optional): 솔루션 안에 프로세스 안에 테스크 인덱스 번호로 jpg, wav, mp3 등 file명에 사용 (기본값: None)
             idx_length (int, optional): idx의 전체 길이 (기본값: None)
             function_name (str, optional): 함수 이름 (예: "InputPreprocess", "Prompt" 등)
-            message (str, optional): 출력할 추가 정보
+            print (str, optional): 출력할 추가 정보
 
         Print:
             formatted_log_data (str): 포맷팅된 로그 데이터
@@ -215,7 +215,7 @@ class Log(Base):
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         # info 포맷팅
-        formatted_info = info.format(Print=message if message is not None else "")
+        formatted_info = info.format(Print=print if print is not None else "")
 
         # loggig 포맷팅
         formatted_loggig_data = _log.format(

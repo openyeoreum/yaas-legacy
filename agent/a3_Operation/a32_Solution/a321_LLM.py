@@ -15,15 +15,15 @@ from google import genai
 from agent.a3_Operation.a31_Operation.a314_Manager import Manager
 
 # ======================================================================
-# [a332-1] Solution-LLM
+# [a332-1] Operation-LLM: Setting
 # ======================================================================
-# class: LLM
+# class: Setting
 # ======================================================================
-class LLM(Manager):
+class Setting(Manager):
 
-    # ----------------------------
-    # --- class-init -------------
-    # --- class-func: LLM 초기화 ---
+    # --------------------------------
+    # --- class-init -----------------
+    # --- class-func: Setting 초기화 ---
     def __init__(self,
                  email: str,
                  project_name: str,
@@ -32,7 +32,7 @@ class LLM(Manager):
                  process_number: str = None,
                  process_name: str = None,
                  main_lang: str = "ko") -> None:
-        """사용자-프로젝트의 Operation에 통합 LLM 기능을 수행하는 클래스입니다.
+        """사용자-프로젝트의 Operation에 통합 LLM 기능을 셋팅하는 클래스입니다.
 
         Attributes:
             email (str): 이메일
@@ -197,7 +197,7 @@ class LLM(Manager):
     # --------------------------------------------
     # --- func-set: print request and response ---
     # --- class-func: request와 response 출력 ------
-    def _print_request_and_response(self, service: str, messages: list, response: dict, usage: str) -> str:
+    def print_request_and_response(self, service: str, messages: list, response: dict, usage: str) -> str:
         """request와 response를 출력합니다.
 
         Args:
@@ -229,34 +229,133 @@ class LLM(Manager):
         request_and_response_text = request_text + response_text
         print(request_and_response_text)
 
-    # ------------------------------
-    # --- func-set: api request ----
-    # --- class-func: OPENAI 요청 ---
-    def openai_request(self):
+# ======================================================================
+# [a332-2] Operation-LLM: Request
+# ======================================================================
+# class: Request
+# ======================================================================
+class Request(Setting):
+
+    # --------------------------------
+    # --- class-init -----------------
+    # --- class-func: Request 초기화 ---
+    def __init__(self,
+                 input: list = None,
+                 memory_note: str = None) -> None:
+        """사용자-프로젝트의 Operation에 통합 LLM 기능을 수행하는 클래스입니다.
+
+        Attributes:
+            input (list): 입력 데이터
+            memory_note (str): 메모리 노트
+        """
+
+        # attributes 설정
+        self.input = input
+        self.memory_note = memory_note
+
         api_config_dict = self._load_api_config()
         api_dict = self.read_json("Solution", [self.solution, "Form", self.process_name], ["API"])
-        format_dict = self.read_json("Solution", [self.solution, "Form", self.process_name], ["Format"])
         service = api_dict["Service"]
-        client = self._load_api_client(service)
         _model = api_dict["Model"]
-        model = api_config_dict["LanguageModel"][service][_model]["Model"]
-        reasoning_effort = api_config_dict["LanguageModel"][service][_model]["ReasoningEffort"]
-        messages = self._format_prompt_to_messages(self.input, self.memory_note)
+        self.client = self._load_api_client(service)
+        self.model = api_config_dict["LanguageModel"][service][_model]["Model"]
+        self.reasoning_effort = api_config_dict["LanguageModel"][service][_model]["ReasoningEffort"]
 
+        format_dict = self.read_json("Solution", [self.solution, "Form", self.process_name], ["Format"])
+        self.input_format = format_dict["InputFormat"]
+        self.response_format = format_dict["ResponseFormat"]
+
+        self.messages = self._format_prompt_to_messages(self.input, self.memory_note)
+
+        self.MAX_ATTEMPTS = 100
+
+    # ----------------------------------
+    # --- func-set: llm request --------
+    # --- class-func: 이미지 파일 업로드 ---
+    def _upload_image_files(self) -> None:
+        """입력된 이미지 파일들을 OpenAI에 업로드하고 self.messages를 업데이트합니다.
+        """
         # - innerfunc: image file 업로드 함수 -
-        def upload_image_file(client, image_path):
-            """이미지 파일을 업로드하여 반환합니다.
+        def upload_single_file(client, image_path: str) -> str:
+            """단일 이미지 파일을 업로드하여 파일 ID를 반환합니다.
 
             Args:
-                client (OpenAI): OpenAI 클라이언트
+                client: OpenAI 클라이언트
                 image_path (str): 이미지 파일 경로
+
             Returns:
-                image_id (str): 이미지 ID
+                image_id (str): 업로드된 파일의 ID
             """
             with open(image_path, "rb") as f:
-                result = client.files.create(file = f, purpose = "vision")
-
+                result = client.files.create(file=f, purpose="vision")
                 return result.id
         # - innerfunc end -
+
+        # 모든 이미지 파일을 업로드하고 파일 ID 리스트를 생성
+        image_file_ids = [upload_single_file(self.client, image_path) for image_path in self.input]
+
+        # Messages[1]["content"]가 문자열이라면, input_text 블록으로 변환
+        if isinstance(self.messages[1]["content"], str):
+            self.messages[1]["content"] = [{"type": "input_text", "text": self.messages[1]["content"]}]
+
+        elif not isinstance(self.messages[1]["content"], list):
+            self.messages[1]["content"] = []
+
+        # 메시지 포맷에 맞게 이미지 콘텐츠 추가
+        image_contents = [
+            {"type": "input_image", "file_id": fid, "detail": "high"}
+            for fid in image_file_ids
+        ]
+        self.messages[1]["content"].extend(image_contents)
+
+    # --- class-func: llm request 요청 ---
+    def openai_request(self):
+        """OpenAI 요청을 수행합니다.
+
+        Returns:
+            response (str): 응답 문자열
+            usage (dict): 사용량 딕셔너리
+        """
+        # 입력 포맷이 jpeg인 경우, 이미지 업로드 함수 호출
+        if self.input_format == "jpeg":
+            self._upload_image_files()
+
+        # request 요청 및 response 출력
+        for _ in range(self.MAX_ATTEMPTS):
+            try:
+                if self.response_format == "json":
+                    response = self.client.responses.create(
+                        model = self.model,
+                        reasoning = {"effort": self.reasoning_effort},
+                        input = self.messages,
+                        text = {"format": {"type": "json_object"}}
+                    )
+                else:
+                    response = self.client.responses.create(
+                        model = self.model,
+                        reasoning = {"effort": self.reasoning_effort},
+                        input = self.messages
+                    )
+                
+                response = response.output_text
+                usage = {
+                    'Input': response.usage.input_tokens,
+                    'Output': response.usage.output_tokens,
+                    'Total': response.usage.total_tokens
+                }
+
+                # request와 response 출력
+                self.print_request_and_response(self.service, self.messages, response, usage)
+                
+                return response, usage
+
+            except Exception as e:
+                print(f"OpenAI 요청 오류: {e}")
+                time.sleep(random.uniform(5, 10))
+                continue
+
+
+
+
 
 if __name__ == "__main__":

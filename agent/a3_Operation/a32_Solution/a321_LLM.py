@@ -372,7 +372,6 @@ class LLM(Manager):
 
         Returns:
             response (str): 응답 문자열
-            usage (dict): 사용량 딕셔너리
         """
         # 요청 초기화
         self._init_request(
@@ -419,7 +418,11 @@ class LLM(Manager):
     # -----------------------------------------
     # --- func-set: anthropic request ---------
     # --- class-func: anthropic request 요청 ---
-    def anthropic_request(self):
+    def anthropic_request(self,
+                          input: list,
+                          memory_note: str,
+                          idx: int,
+                          idx_length: int) -> str:
         """Anthropic 요청을 수행합니다.
         """
         pass

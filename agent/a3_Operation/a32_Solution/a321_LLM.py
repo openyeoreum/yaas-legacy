@@ -3,8 +3,8 @@ import re
 import json
 import time
 import random
-import tiktoken
-import textwrap
+import base64
+import mimetypes
 import anthropic
 import sys
 sys.path.append("/yaas")
@@ -76,6 +76,7 @@ class LLM(Manager):
 
         Args:
             service (str): 사용할 LLM 서비스명 (ex. "OPENAI", "ANTHROPIC", "GOOGLE", "DEEPSEEK")
+
         Returns:
             api_client (str): API 클라이언트
         """
@@ -119,6 +120,7 @@ class LLM(Manager):
 
         Args:
             input (list): 파일 리스트
+
         Returns:
             input_str (str): 포맷팅된 파일 리스트 문자열
         """
@@ -174,7 +176,7 @@ class LLM(Manager):
 
         # 프롬프트 포맷팅
         system_message = message_dict["Messages"]["System"]
-        system_content =  message_time +system_message["Mark"] + system_message["MarkLineBreak"] + system_message["Message"] + system_message["MessageLineBreak"]
+        system_content =  message_time + system_message["Mark"] + system_message["MarkLineBreak"] + system_message["Message"] + system_message["MessageLineBreak"]
 
         user_message = message_dict["Messages"]["User"]
         _user_content = ""
@@ -197,7 +199,7 @@ class LLM(Manager):
     # --------------------------------------------
     # --- func-set: print request and response ---
     # --- class-func: request와 response 출력 ------
-    def print_request_and_response(self, service: str, messages: list, response: dict, usage: str) -> str:
+    def _print_request_and_response(self, service: str, messages: list, response: dict, usage: str) -> str:
         """request와 response를 출력합니다.
 
         Args:
@@ -326,7 +328,7 @@ class LLM(Manager):
     # ----------------------------------------
     # --- func-set: openai request -----------
     # --- class-func: openai 이미지 파일 업로드 ---
-    def _openai_upload_image_files(self) -> None:
+    def _openai_image_files(self) -> None:
         """입력된 이미지 파일들을 OpenAI에 업로드하고 self.messages를 업데이트합니다.
         """
         # - innerfunc: image file 업로드 함수 -
@@ -356,10 +358,7 @@ class LLM(Manager):
             self.messages[1]["content"] = []
 
         # 메시지 포맷에 맞게 이미지 콘텐츠 추가
-        image_contents = [
-            {"type": "input_image", "file_id": fid, "detail": "high"}
-            for fid in image_file_ids
-        ]
+        image_contents = [{"type": "input_image", "file_id": fid, "detail": "high"} for fid in image_file_ids]
         self.messages[1]["content"].extend(image_contents)
 
     # --- class-func: openai request 요청 ---
@@ -370,17 +369,23 @@ class LLM(Manager):
                        idx_length: int) -> str:
         """OpenAI 요청을 수행합니다.
 
+        Args:
+            input (list): 입력 데이터
+            memory_note (str): 메모리 노트
+            idx (int): 인덱스
+            idx_length (int): 인덱스 길이
+
         Returns:
             response (str): 응답 문자열
         """
-        # 요청 초기화
+        # request 초기화
         self._init_request(
             input,
             memory_note)
 
         # 입력 포맷이 jpeg인 경우, 이미지 업로드 함수 호출
         if self.input_format == "jpeg":
-            self._openai_upload_image_files()
+            self._openai_image_files()
 
         # request 요청 및 response 출력
         for _ in range(self.MAX_ATTEMPTS):
@@ -405,9 +410,10 @@ class LLM(Manager):
                     'Total': _response.usage.total_tokens}
 
                 # request와 response 출력
-                request_and_response_text = self.print_request_and_response(self.service, self.messages, response, usage)
+                request_and_response_text = self._print_request_and_response(self.service, self.messages, response, usage)
 
                 self.print_log("Task", ["Log", "Message"], ["Info", "Message"], idx=idx, idx_length=idx_length, function_name="openai_request", print=request_and_response_text)
+
                 return response
 
             except Exception as e:
@@ -415,19 +421,104 @@ class LLM(Manager):
                 time.sleep(random.uniform(2, 5))
                 continue
 
-    # -----------------------------------------
-    # --- func-set: anthropic request ---------
+    # ------------------------------------------
+    # --- func-set: anthropic request ----------
+    # --- class-func: anthropic 이미지 파일 준비 ---
+    def _anthropic_image_files(self) -> None:
+        """입력된 이미지 파일들을 Base64로 인코딩하여 self.messages에 포함시킵니다.
+        """
+        # self.messages[1]["content"]가 문자열일 경우, Claude 형식에 맞게 list로 변환
+        if isinstance(self.messages[1]["content"], str):
+            self.messages[1]["content"] = [{"type": "text", "text": self.messages[1]["content"]}]
+
+        elif not isinstance(self.messages[1]["content"], list):
+            self.messages[1]["content"] = []
+
+        # 기존 텍스트 파트 분리
+        text_parts = [part for part in self.messages[1]["content"] if part.get("type") == "text"]
+        
+        # 이미지 파일들을 읽고 Base64로 인코딩하여 이미지 파트 생성
+        image_parts = []
+        for image_path in self.input:
+            # 파일 확장자로부터 MIME 타입 추정
+            mime_type, _ = mimetypes.guess_type(image_path)
+
+            with open(image_path, "rb") as f:
+                encoded_string = base64.b64encode(f.read()).decode('utf-8')
+            
+            image_parts.append({
+                "type": "image",
+                "source": {
+                    "type": "base64",
+                    "media_type": mime_type,
+                    "data": encoded_string,
+                }
+            })
+
+        # 기존 텍스트 파트와 새로운 이미지 파트를 합쳐 content 업데이트
+        self.messages[1]["content"] = text_parts + image_parts
+
     # --- class-func: anthropic request 요청 ---
     def anthropic_request(self,
                           input: list,
                           memory_note: str,
                           idx: int,
-                          idx_length: int) -> str:
+                          idx_length: int, 
+                          MAX_TOKENS: int = 16000) -> str:
         """Anthropic 요청을 수행합니다.
+
+        Args:
+            input (list): 입력 데이터
+            memory_note (str): 메모리 노트
+            idx (int): 인덱스
+            idx_length (int): 인덱스 길이
+            MAX_TOKENS (int): 최대 토큰 수
+
+        Returns:
+            response (str): 응답 문자열
         """
-        pass
+        # request 초기화
+        self._init_request(
+            input,
+            memory_note)
 
+        # 입력 포맷이 jpeg인 경우, 이미지 업로드 함수 호출
+        if self.input_format == "jpeg":
+            self._anthropic_image_files()
 
+        # request 요청 및 response 출력
+        for _ in range(self.MAX_ATTEMPTS):
+            try:
+                _response = self.client.messages.create(
+                    model = self.model,
+                    max_tokens = MAX_TOKENS,
+                    thinking = {
+                        "type": "enabled",
+                        "budget_tokens": self.reasoning_effort},
+                    system = self.messages[0]["content"],
+                    messages = self.messages[1]["content"] + self.messages[2]["content"])
+                
+                response = _response.content[0].text
+                usage = {
+                    'Input': _response.usage.input_tokens,
+                    'Output': _response.usage.output_tokens,
+                    'Total': _response.usage.input_tokens + _response.usage.output_tokens}
+
+                # request와 response 출력
+                request_and_response_text = self._print_request_and_response(self.service, self.messages, response, usage)
+
+                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], idx=idx, idx_length=idx_length, function_name="anthropic_request", print=request_and_response_text)
+
+                return response
+
+            except Exception as e:
+                self.print_log("Access", ["Log", "Info"], ["Info", "Error"], function_name="anthropic_request", print=e)
+                time.sleep(random.uniform(2, 5))
+                continue
+
+    # ---------------------------------------
+    # --- func-set: google request ----------
+    # --- class-func: google 이미지 파일 준비 ---
 
 if __name__ == "__main__":
 

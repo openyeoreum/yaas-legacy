@@ -1,29 +1,34 @@
 {
     "LanguageModel": {
         "OPENAI": {
-            "High": {"Model": "gpt-5", "ReasoningEffort": "medium"},
-            "Mid": null,
-            "Low": null
+            "High": {"Model": "gpt-5", "ReasoningEffort": "high"},
+            "Mid": {"Model": "gpt-5", "ReasoningEffort": "medium"},
+            "Low": {"Model": "gpt-5-mini", "ReasoningEffort": "medium"},
+            "No": {"Model": "gpt-5-mini", "ReasoningEffort": "low"}
         },
         "ANTHROPIC": {
-            "High": null,
-            "Mid": null,
-            "Low": null
+            "High": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 10000},
+            "Mid": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 5000},
+            "Low": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 1000},
+            "No": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 100}
         },
         "GOOGLE": {
             "High": null,
             "Mid": null,
-            "Low": null
+            "Low": null,
+            "No": null
         },
         "XAI": {
             "High": null,
             "Mid": null,
-            "Low": null
+            "Low": null,
+            "No": null
         },
         "DEEPSEEK": {
             "High": null,
             "Mid": null,
-            "Low": null
+            "Low": null,
+            "No": null
         }
     },
     "TTSModel": {},

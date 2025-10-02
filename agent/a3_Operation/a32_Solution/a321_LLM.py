@@ -235,23 +235,17 @@ class LLM(Manager):
     # --- class-func: llm request 초기화 ---
     def _init_request(self,
                       input: list,
-                      idx: int,
-                      idx_length: int,
-                      memory_note: str = None) -> None:
+                      memory_note: str) -> None:
         """llm request를 초기화합니다.
 
         Args:
             input (list): 입력 데이터
-            idx (int): 인덱스
-            idx_length (int): 인덱스 길이
             memory_note (str): 메모리 노트
 
         Attributes:
             input (list): 입력 데이터
             memory_note (str): 메모리 노트
-            idx (int): 인덱스
-            idx_length (int): 인덱스 길이
-            client (OpenAI): OpenAI 클라이언트
+            client: llm api 클라이언트
             model (str): 모델
             reasoning_effort (str): 추론 노력
             input_format (str): 입력 포맷
@@ -262,8 +256,6 @@ class LLM(Manager):
 
         # attributes 설정
         self.input = input
-        self.idx = idx
-        self.idx_length = idx_length
         self.memory_note = memory_note
 
         api_config_dict = self._load_api_config()
@@ -371,7 +363,11 @@ class LLM(Manager):
         self.messages[1]["content"].extend(image_contents)
 
     # --- class-func: openai request 요청 ---
-    def openai_request(self):
+    def openai_request(self,
+                       input: list,
+                       memory_note: str,
+                       idx: int,
+                       idx_length: int) -> str:
         """OpenAI 요청을 수행합니다.
 
         Returns:
@@ -379,7 +375,10 @@ class LLM(Manager):
             usage (dict): 사용량 딕셔너리
         """
         # 요청 초기화
-        self._init_request()
+        self._init_request(
+            input,
+            memory_note)
+
         # 입력 포맷이 jpeg인 경우, 이미지 업로드 함수 호출
         if self.input_format == "jpeg":
             self._openai_upload_image_files()
@@ -388,30 +387,28 @@ class LLM(Manager):
         for _ in range(self.MAX_ATTEMPTS):
             try:
                 if self.response_format == "json":
-                    response = self.client.responses.create(
+                    _response = self.client.responses.create(
                         model = self.model,
                         reasoning = {"effort": self.reasoning_effort},
                         input = self.messages,
-                        text = {"format": {"type": "json_object"}}
-                    )
+                        text = {"format": {"type": "json_object"}})
+
                 else:
-                    response = self.client.responses.create(
+                    _response = self.client.responses.create(
                         model = self.model,
                         reasoning = {"effort": self.reasoning_effort},
-                        input = self.messages
-                    )
-                
-                response = response.output_text
+                        input = self.messages)
+
+                response = _response.output_text
                 usage = {
-                    'Input': response.usage.input_tokens,
-                    'Output': response.usage.output_tokens,
-                    'Total': response.usage.total_tokens
-                }
+                    'Input': _response.usage.input_tokens,
+                    'Output': _response.usage.output_tokens,
+                    'Total': _response.usage.total_tokens}
 
                 # request와 response 출력
                 request_and_response_text = self.print_request_and_response(self.service, self.messages, response, usage)
 
-                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], idx=self.idx, idx_length=self.idx_length, function_name="openai_request", model=self.model, print=request_and_response_text)
+                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], idx=idx, idx_length=idx_length, function_name="openai_request", print=request_and_response_text)
                 return response
 
             except Exception as e:

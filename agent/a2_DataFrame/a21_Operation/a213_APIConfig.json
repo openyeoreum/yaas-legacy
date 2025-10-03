@@ -7,10 +7,10 @@
             "None": {"Model": "gpt-5-mini", "ReasoningEffort": "low"}
         },
         "ANTHROPIC": {
-            "High": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 10000, "MaxTokens": null},
-            "Mid": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 5000, "MaxTokens": null},
-            "Low": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 1024, "MaxTokens": null},
-            "None": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 0, "MaxTokens": null}
+            "High": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 10000, "MaxTokens": 16000},
+            "Mid": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 5000, "MaxTokens": 10000},
+            "Low": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 1024, "MaxTokens": 6000},
+            "None": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 0, "MaxTokens": 5000}
         },
         "GOOGLE": {
             "High": {"Model": "gemini-2.5-pro", "ReasoningEffort": -1},

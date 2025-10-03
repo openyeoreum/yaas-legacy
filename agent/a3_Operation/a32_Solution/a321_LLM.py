@@ -254,6 +254,9 @@ class LLM(Manager):
         self.client = self._load_api_client(self.service)
         self.model = api_config_dict["LanguageModel"][self.service][level]["Model"]
         self.reasoning_effort = api_config_dict["LanguageModel"][self.service][level]["ReasoningEffort"]
+        self.max_tokens = None
+        if "MaxTokens" in api_config_dict["LanguageModel"][self.service][level]:
+            self.max_tokens = api_config_dict["LanguageModel"][self.service][level]["MaxTokens"]
 
         format_dict = self.read_json("Solution", [self.solution, "Form", self.process_name], ["Format"])
         self.input_format = format_dict["InputFormat"]
@@ -706,7 +709,7 @@ class LLM(Manager):
                 if self.service == "OPENAI":
                     response, usage = self.openai_request()
                 if self.service == "ANTHROPIC":
-                    response, usage = self.anthropic_request()
+                    response, usage = self.anthropic_request(self.max_tokens)
                 if self.service == "GOOGLE":
                     response, usage = self.google_request()
                 if self.service == "DEEPSEEK":
@@ -748,7 +751,7 @@ if __name__ == "__main__":
         "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/yeoreum00128@gmail.com/250911_스크립트테스트/250911_스크립트테스트_script/250911_스크립트테스트_mixed_script_file/250911_스크립트테스트_SampleScript(AudioBook)_jpeg/250911_스크립트테스트_Script(AudioBook)(8).jpeg",
         "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/yeoreum00128@gmail.com/250911_스크립트테스트/250911_스크립트테스트_script/250911_스크립트테스트_mixed_script_file/250911_스크립트테스트_SampleScript(AudioBook)_jpeg/250911_스크립트테스트_Script(AudioBook)(9).jpeg",
         "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/yeoreum00128@gmail.com/250911_스크립트테스트/250911_스크립트테스트_script/250911_스크립트테스트_mixed_script_file/250911_스크립트테스트_SampleScript(AudioBook)_jpeg/250911_스크립트테스트_Script(AudioBook)(10).jpeg"
-        ]
+    ]
 
     # 클래스 테스트
     llm = LLM(

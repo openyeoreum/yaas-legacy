@@ -87,13 +87,13 @@ class LLM(Manager):
         if service == "OPENAI":
             open_ai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
             return open_ai_client
-        elif service == "ANTHROPIC":
+        if service == "ANTHROPIC":
             anthropic_client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
             return anthropic_client
-        elif service == "GOOGLE":
+        if service == "GOOGLE":
             google_client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
             return google_client
-        elif service == "DEEPSEEK":
+        if service == "DEEPSEEK":
             deepseek_client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com")
             return deepseek_client
 
@@ -174,7 +174,7 @@ class LLM(Manager):
         user_content = user_content.format(ResponseExample=response_example)
 
         assistant_message = message_dict["Messages"]["Assistant"]
-        assistant_content = assistant_message["MemoryNote"].format(MemoryNote=memory_note) + assistant_message["MemoryNoteLineBreak"] + assistant_message["ResponseMark"]
+        assistant_content = assistant_message["MemoryNote"].format(MemoryNote=memory_note or "") + assistant_message["MemoryNoteLineBreak"] + assistant_message["ResponseMark"]
 
         messages = [
             {"role": "system", "content": system_content},
@@ -313,18 +313,18 @@ class LLM(Manager):
 
         return json_response
 
-    # ----------------------------------------
-    # --- func-set: openai request -----------
-    # --- class-func: openai 이미지 파일 업로드 ---
-    def _openai_image_files(self) -> None:
-        """입력된 이미지 파일들을 OpenAI에 업로드하고 self.messages를 업데이트합니다.
+    # ---------------------------------------------
+    # --- func-set: openai request ----------------
+    # --- class-func: openai 이미지 파일 합성 메세지 ---
+    def _image_files_added_openai_messages(self) -> None:
+        """입력된 이미지 파일들을 OpenAI API에 전달할 수 있는 형식으로 준비합니다.
 
-        Effects:
-            self.messages[1]["content"]가 문자열일 경우, OpenAI 형식에 맞게 list로 변환
-            self.messages[1]["content"]가 list가 아닐 경우, list로 변환
+        Returns:
+            openai_messages (list): OpenAI API에 전달할 메시지 리스트
         """
         # - innerfunc: image file 업로드 함수 -
-        def upload_single_file(client, image_path: str) -> str:
+        def upload_single_file(client,
+                               image_path: str) -> str:
             """단일 이미지 파일을 업로드하여 파일 ID를 반환합니다.
 
             Args:
@@ -349,86 +349,55 @@ class LLM(Manager):
         elif not isinstance(self.messages[1]["content"], list):
             self.messages[1]["content"] = []
 
-        # 메시지 포맷에 맞게 이미지 콘텐츠 추가
-        image_contents = [{"type": "input_image", "file_id": fid, "detail": "high"} for fid in image_file_ids]
-        self.messages[1]["content"].extend(image_contents)
+        # 메시지 포맷에 맞게 이미지 파트 추가
+        image_parts = [{"type": "input_image", "file_id": fid, "detail": "high"} for fid in image_file_ids]
+        self.messages[1]["content"].extend(image_parts)
+
+        # openai_messages 설정
+        openai_messages = self.messages
+
+        return openai_messages
 
     # --- class-func: openai request 요청 ---
-    def openai_request(self,
-                       input: str | list,
-                       memory_note: str,
-                       idx: int,
-                       idx_length: int) -> str:
-        """OpenAI 요청을 수행합니다.
-
-        Args:
-            input (list): 입력 데이터
-            memory_note (str): 메모리 노트
-            idx (int): 인덱스
-            idx_length (int): 인덱스 길이
+    def openai_request(self) -> str:
+        """OpenAI에 요청합니다.
 
         Returns:
             response (str): 응답 문자열
-
-        Print:
-            request_and_response_text (str): request와 response
-            error (str): 에러 메시지
+            usage (dict): 사용 정보
         """
-        # request 초기화
-        self._init_request(
-            input,
-            memory_note)
-
-        # 입력 포맷이 jpeg인 경우, 이미지 업로드 함수 호출
+        # openai_messages 설정
+        openai_messages = self.messages
         if self.input_format == "jpeg":
-            self._openai_image_files()
+            openai_messages = self._image_files_added_openai_messages()
 
-        # request 요청 및 response 출력
-        for _ in range(self.MAX_ATTEMPTS):
-            try:
-                _response=self.client.responses.create(
-                    model=self.model,
-                    reasoning={"effort": self.reasoning_effort},
-                    input=self.messages,
-                    text={"format": {"type": "json_object"}})
+        # request 요청
+        _response = self.client.responses.create(
+            model=self.model,
+            reasoning={"effort": self.reasoning_effort},
+            input=openai_messages,
+            text={"format": {"type": "json_object"}})
 
-                response = _response.output_text
-                usage = {
-                    'Input': _response.usage.input_tokens,
-                    'Output': _response.usage.output_tokens,
-                    'Total': _response.usage.total_tokens}
+        # 응답 출력
+        response = _response.output_text
 
-                # request와 response 출력
-                request_and_response_text = self._print_request_and_response(response, usage)
+        # 사용 정보 출력
+        usage = {
+            'Input': _response.usage.input_tokens,
+            'Output': _response.usage.output_tokens,
+            'Total': _response.usage.total_tokens}
 
-                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], idx=idx, idx_length=idx_length, function_name="openai_request", _print=request_and_response_text)
+        return response, usage
 
-                return response
+    # ------------------------------------------------
+    # --- func-set: anthropic request ----------------
+    # --- class-func: anthropic 이미지 파일 합성 메세지 ---
+    def _image_files_added_anthropic_messages(self) -> None:
+        """입력된 이미지 파일들을 Base64로 인코딩하여 API에 전달할 수 있는 형식으로 준비합니다.
 
-            except Exception as e:
-                self.print_log("Access", ["Log", "Info"], ["Info", "Error"], function_name="openai_request", _print=e)
-                time.sleep(random.uniform(2, 5))
-                continue
-
-    # ------------------------------------------
-    # --- func-set: anthropic request ----------
-    # --- class-func: anthropic 이미지 파일 준비 ---
-    def _anthropic_image_files(self) -> None:
-        """입력된 이미지 파일들을 Base64로 인코딩하여 self.messages에 포함시킵니다.
-
-        Effects:
-            self.messages[1]["content"]가 문자열일 경우, Claude 형식에 맞게 list로 변환
+        Returns:
+            anthropic_messages (list): API에 전달할 메시지 리스트
         """
-        # self.messages[1]["content"]가 문자열일 경우, Claude 형식에 맞게 list로 변환
-        if isinstance(self.messages[1]["content"], str):
-            self.messages[1]["content"] = [{"type": "text", "text": self.messages[1]["content"]}]
-
-        elif not isinstance(self.messages[1]["content"], list):
-            self.messages[1]["content"] = []
-
-        # 기존 텍스트 파트 분리
-        text_parts = [part for part in self.messages[1]["content"] if part.get("type") == "text"]
-        
         # 이미지 파일들을 읽고 Base64로 인코딩하여 이미지 파트 생성
         image_parts = []
         for image_path in self.input:
@@ -443,174 +412,281 @@ class LLM(Manager):
                 "source": {
                     "type": "base64",
                     "media_type": mime_type,
-                    "data": encoded_string,
-                }
-            })
+                    "data": encoded_string}})
 
-        # 기존 텍스트 파트와 새로운 이미지 파트를 합쳐 content 업데이트
-        self.messages[1]["content"] = text_parts + image_parts
+        # self.messages[1]["content"]가 문자열일 경우, Claude 형식에 맞게 list로 변환
+        if isinstance(self.messages[1]["content"], str):
+            user_message_list = [{"type": "text", "text": self.messages[1]["content"]}]
+
+        elif not isinstance(self.messages[1]["content"], list):
+            user_message_list = []
+        
+        # 메시지 포맷에 맞게 이미지 파트 및 assistant_message 추가
+        user_message_list.extend(image_parts)
+        user_message_list.append({"type": "text", "text": self.messages[2]["content"]})
+
+        # anthropic_messages 설정
+        anthropic_messages = [{"role": "user", "content": user_message_list}]
+
+        return anthropic_messages
 
     # --- class-func: anthropic request 요청 ---
     def anthropic_request(self,
-                          input: str | list,
-                          memory_note: str,
-                          idx: int,
-                          idx_length: int, 
                           MAX_TOKENS: int = 16000) -> str:
-        """Anthropic 요청을 수행합니다.
+        """Anthropic에 요청합니다.
 
         Args:
-            input (list): 입력 데이터
-            memory_note (str): 메모리 노트
-            idx (int): 인덱스
-            idx_length (int): 인덱스 길이
             MAX_TOKENS (int): 최대 토큰 수
 
         Returns:
             response (str): 응답 문자열
-
-        Print:
-            request_and_response_text (str): request와 response
-            error (str): 에러 메시지
-        """
-        # request 초기화
-        self._init_request(
-            input,
-            memory_note)
-
-        # 입력 포맷이 jpeg인 경우, 이미지 업로드 함수 호출
+            usage (dict): 사용 정보
+        """        
+        # anthropic_messages 설정
+        anthropic_messages = [self.messages[1], self.messages[2]]
         if self.input_format == "jpeg":
-            self._anthropic_image_files()
+            anthropic_messages = self._image_files_added_anthropic_messages()
 
-        # request 요청 및 response 출력
-        for _ in range(self.MAX_ATTEMPTS):
-            try:
-                _response = self.client.messages.create(
-                    model=self.model,
-                    max_tokens=MAX_TOKENS,
-                    thinking={
-                        "type": "enabled",
-                        "budget_tokens": self.reasoning_effort},
-                    system=self.messages[0]["content"],
-                    messages=self.messages[1]["content"] + self.messages[2]["content"])
-                
-                response = _response.content[0].text
-                usage = {
-                    'Input': _response.usage.input_tokens,
-                    'Output': _response.usage.output_tokens,
-                    'Total': _response.usage.input_tokens + _response.usage.output_tokens}
+        # request 요청
+        # 추론 토큰이 0인 경우
+        if self.reasoning_effort == 0:
+            _response = self.client.messages.create(
+                model=self.model,
+                max_tokens=MAX_TOKENS,
+                system=self.messages[0]["content"],
+                messages=anthropic_messages)
 
-                # request와 response 출력
-                request_and_response_text = self._print_request_and_response(response, usage)
+            # 응답 출력
+            response = _response.content[0].text
 
-                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], idx=idx, idx_length=idx_length, function_name="anthropic_request", _print=request_and_response_text)
+        # 추론 토큰이 0이 아닌 경우, 추론 노력 설정
+        else:
+            _response = self.client.messages.create(
+                model=self.model,
+                max_tokens=MAX_TOKENS,
+                thinking={
+                    "type": "enabled",
+                    "budget_tokens": self.reasoning_effort},
+                system=self.messages[0]["content"],
+                messages=anthropic_messages)
+        
+            # 응답 출력
+            response = next((block.text for block in _response.content if block.type == "text"), None)
 
-                return response
+        # 사용 정보 출력
+        usage = {
+            'Input': _response.usage.input_tokens,
+            'Output': _response.usage.output_tokens,
+            'Total': _response.usage.input_tokens + _response.usage.output_tokens}
 
-            except Exception as e:
-                self.print_log("Access", ["Log", "Info"], ["Info", "Error"], function_name="anthropic_request", _print=e)
-                time.sleep(random.uniform(2, 5))
-                continue
+        return response, usage
 
-    # ---------------------------------------
-    # --- func-set: google request ----------
-    # --- class-func: google 이미지 파일 준비 ---
-    def _google_image_files(self) -> list:
-        """입력된 이미지 파일들을 Google API가 처리할 수 있는 형식으로 준비합니다.
+    # --------------------------------------------
+    # --- func-set: google request ---------------
+    # --- class-func: google 이미지 파일 합성 메세지 ---
+    def _image_files_added_google_messages(self) -> list:
+        """입력된 이미지 파일들을 Google API에 전달할 수 있는 형식으로 준비합니다.
 
         Returns:
-            image_list (list): Google API에 전달할 이미지 리스트
+            google_messages (list): Google API에 전달할 메시지 리스트
         """
-        # 이미지 리스트 초기화
-        image_list = []
+        # user_message_list 설정
+        user_message = [self.messages[1]["content"]]
+
+        # 이미지 파트 초기화
+        image_parts = []
         
         # self.input에 있는 각 파일 경로에 대해 반복
         for image_path in self.input:
             # PIL을 사용하여 이미지 파일 열기
             img = Image.open(image_path)
             # 리스트에 이미지 객체 추가
-            image_list.append(img)
-                
-        return image_list
+            image_parts.append(img)
+
+        # assistant_message 설정
+        assistant_message = [self.messages[2]["content"]]
+
+        # google_messages 설정
+        google_messages = user_message + image_parts + assistant_message
+
+        return google_messages
 
     # --- class-func: google request 요청 ---
-    def google_request(self,
-                       input: str | list,
-                       memory_note: str,
-                       idx: int,
-                       idx_length: int) -> str:
-        """Google 요청을 수행합니다.
-
-        Args:
-            input (list): 입력 데이터
-            memory_note (str): 메모리 노트
-            idx (int): 인덱스
-            idx_length (int): 인덱스 길이
+    def google_request(self) -> str:
+        """Google에 요청합니다.
 
         Returns:
             response (str): 응답 문자열
-
-        Print:
-            request_and_response_text (str): request와 response
-            error (str): 에러 메시지
+            usage (dict): 사용 정보
         """
-        # request 초기화
-        self._init_request(
-            input,
-            memory_note)
-
-        # 입력 포맷이 jpeg인 경우, 이미지 업로드 함수 호출
+        # google_messages 설정
+        google_messages = [self.messages[1]["content"], self.messages[2]["content"]]
         if self.input_format == "jpeg":
-            image_list = self._google_image_files()
+            google_messages = self._image_files_added_google_messages()
 
-        # Google API 요청 및 응답
-        for _ in range(self.MAX_ATTEMPTS):
-            try:
-                # generation_config 설정
-                generation_config = types.GenerateContentConfig(
-                    system_instruction = self.messages[0]["content"],
-                    thinking_config = types.ThinkingConfig(thinking_budget = self.reasoning_effort),
-                    response_mime_type = "application/json")
+        # request 요청
+        _response = self.client.models.generate_content(
+            model=self.model,
+            contents=google_messages,
+            config=types.GenerateContentConfig(
+                system_instruction=self.messages[0]["content"],
+                response_mime_type="application/json",
+                thinking_config=types.ThinkingConfig(
+                    thinking_budget=self.reasoning_effort
+                )
+            )
+        )
 
-                if self.input_format == "jpeg":
-                    _response = self.client.models.generate_content(
-                        model=self.model,
-                        contents=[self.messages[1]["content"]] + image_list + [self.messages[2]["content"]],
-                        config=generation_config)
-                    
-                else:
-                    _response = self.client.models.generate_content(
-                        model=self.model,
-                        contents=self.messages[1]["content"] + self.messages[2]["content"],
-                        config=generation_config)
+        # 응답 출력
+        response = _response.text
 
-                response = _response.text
-                usage = {
-                    'Input': _response.usage_metadata.prompt_token_count,
-                    'Output': _response.usage_metadata.candidates_token_count,
-                    'Total': _response.usage_metadata.total_token_count}
-                
-                # request와 response 출력
-                request_and_response_text = self._print_request_and_response(response, usage)
+        # 사용 정보 출력
+        usage = {
+            'Input': _response.usage_metadata.prompt_token_count,
+            'Output': _response.usage_metadata.candidates_token_count,
+            'Total': _response.usage_metadata.total_token_count}
 
-                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], idx=idx, idx_length=idx_length, function_name="google_request", _print=request_and_response_text)
+        return response, usage
 
-                return response
+    # --- class-func: deepseek 이미지 파일 합성 메세지 ---
+    def _image_files_added_deepseek_messages(self) -> None:
+        """입력된 이미지 파일들을 DeepSeek API에 전달할 수 있는 형식으로 준비합니다.
 
-            except Exception as e:
-                self.print_log("Access", ["Log", "Info"], ["Info", "Error"], function_name="openai_request", _print=e)
-                time.sleep(random.uniform(2, 5))
-                continue
+        Returns:
+            deepseek_messages (list): DeepSeek API에 전달할 메시지 리스트
+        """
+
+        # deepseek_messages 설정
+        deepseek_messages = self.messages
+
+        return deepseek_messages
 
     # ----------------------------------------
     # --- func-set: deepseek request ---------
     # --- class-func: deepseek request 요청 ---
-    def deepseek_request(self,
-                         input: str | list,
-                         memory_note: str,
-                         idx: int,
-                         idx_length: int) -> str:
-        """DeepSeek 요청을 수행합니다.
+    def deepseek_request(self) -> str:
+        """DeepSeek에 요청합니다.
+
+        Returns:
+            response (str): 응답 문자열
+            usage (dict): 사용 정보
+        """
+        # deepseek_messages 설정
+        deepseek_messages = self.messages
+        if self.input_format == "jpeg":
+            deepseek_messages = self._image_files_added_deepseek_messages()
+
+        # request 요청
+        _response = self.client.chat.completions.create(
+            model=self.model,
+            messages=deepseek_messages,
+            response_format={"type": "json_object"},
+            stream=False)
+
+        # 응답 출력
+        response = _response.choices[0].message.content
+
+        # 사용 정보 출력
+        usage = {
+            'Input': _response.usage.prompt_tokens,
+            'Output': _response.usage.completion_tokens,
+            'Total': _response.usage.total_tokens}
+
+        return response, usage
+    
+    # ---------------------------------
+    # --- func-set: llm run -----------
+    # --- class-func: json 응답 후처리 ---
+    def _clean_json_response(self,
+                             response: str) -> dict | list:
+        """응답에서 JSON을 추출하고 파싱합니다.
+        
+        Args:
+            response (str): 응답 문자열
+
+        Returns:
+            dict/list: 유효한 JSON인 경우 파싱된 Python 객체
+            str: JSON을 찾지 못한 경우 원본 문자열
+        """
+        
+        # 먼저 응답 전체가 이미 유효한 JSON인지 확인
+        try:
+            return json.loads(response.strip())
+        except json.JSONDecodeError:
+            pass  # JSON이 아니므로 추출 작업 진행
+        
+        # 코드 블록 확인 및 추출
+        patterns = [
+            r'```json\s*([\s\S]*?)\s*```',  # ```json ... ```
+            r'```\s*([\s\S]*?)\s*```',       # ``` ... ```
+            r"'''json\s*([\s\S]*?)\s*'''",  # '''json ... '''
+            r"'''\s*([\s\S]*?)\s*'''",       # ''' ... '''
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, response)
+            if match:
+                extracted = match.group(1).strip()
+                # 추출한 내용이 유효한 JSON인지 확인
+                try:
+                    return json.loads(extracted)
+                except json.JSONDecodeError:
+                    continue
+        
+        # 코드 블록에서 찾지 못했으면 전체 응답에서 JSON 찾기
+        extracted = response
+        
+        # JSON 객체/배열 추출
+        # 가장 바깥쪽 { } 또는 [ ] 찾기
+        json_patterns = [
+            r'(\{(?:[^{}]|(?:\{(?:[^{}]|\{[^{}]*\})*\}))*\})',  # 중첩된 객체 처리
+            r'(\[[\s\S]*\])',  # 배열
+        ]
+        
+        for pattern in json_patterns:
+            match = re.search(pattern, extracted)
+            if match:
+                json_str = match.group(1).strip()
+                
+                # JSON 유효성 검증 및 파싱
+                try:
+                    return json.loads(json_str)
+                except json.JSONDecodeError:
+                    continue
+        
+        # 모든 패턴 실패 시, 원본에서 직접 JSON 찾기
+        # 첫 { 부터 마지막 } 까지
+        first_brace = extracted.find('{')
+        last_brace = extracted.rfind('}')
+        
+        if first_brace != -1 and last_brace != -1 and last_brace > first_brace:
+            json_str = extracted[first_brace:last_brace+1]
+            try:
+                return json.loads(json_str)
+            except json.JSONDecodeError:
+                pass
+        
+        # 첫 [ 부터 마지막 ] 까지 (배열인 경우)
+        first_bracket = extracted.find('[')
+        last_bracket = extracted.rfind(']')
+        
+        if first_bracket != -1 and last_bracket != -1 and last_bracket > first_bracket:
+            json_str = extracted[first_bracket:last_bracket+1]
+            try:
+                return json.loads(json_str)
+            except json.JSONDecodeError:
+                pass
+        
+        # 최후의 수단: 원본 반환 (JSON이 아닐 수 있음)
+        return extracted.strip()
+
+    # --- class-func: llm run 요청 ---
+    def run(self,
+            input: str | list,
+            memory_note: str,
+            idx: int,
+            idx_length: int) -> str:
+        """LLM 요청을 수행합니다.
 
         Args:
             input (list): 입력 데이터
@@ -622,34 +698,32 @@ class LLM(Manager):
             response (str): 응답 문자열
         """
         # request 초기화
-        self._init_request(
-            input,
-            memory_note)
+        self._init_request(input, memory_note)
 
-        # API 요청 및 응답
+        # Google API 요청 및 응답
         for _ in range(self.MAX_ATTEMPTS):
             try:
-            # JSON 응답 형식을 요청하는 경우
-                _response = self.client.chat.completions.create(
-                    model=self.model,
-                    messages=self.messages,
-                    response_format={"type": "json_object"},
-                    stream=False)
+                if self.service == "OPENAI":
+                    response, usage = self.openai_request()
+                if self.service == "ANTHROPIC":
+                    response, usage = self.anthropic_request()
+                if self.service == "GOOGLE":
+                    response, usage = self.google_request()
+                if self.service == "DEEPSEEK":
+                    response, usage = self.deepseek_request()
 
-                response = _response.choices[0].message.content
-                usage = {
-                    'Input': _response.usage.prompt_tokens,
-                    'Output': _response.usage.completion_tokens,
-                    'Total': _response.usage.total_tokens
-                }
-                
+                # JSON 응답 후처리
+                response = self._clean_json_response(response)
+
+                # request와 response 출력
                 request_and_response_text = self._print_request_and_response(response, usage)
-                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], idx=idx, idx_length=idx_length, function_name="deepseek_request", _print=request_and_response_text)
+
+                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], idx=idx, idx_length=idx_length, function_name="llm.run", _print=request_and_response_text)
 
                 return response
 
             except Exception as e:
-                self.print_log("Access", ["Log", "Info"], ["Info", "Error"], function_name="deepseek_request", _print=e)
+                self.print_log("Task", ["Log", "Info"], ["Info", "Error"], function_name="openai_request", _print=e)
                 time.sleep(random.uniform(2, 5))
                 continue
 
@@ -663,16 +737,6 @@ if __name__ == "__main__":
     next_solution = "Audiobook"
     process_number = "P02"
     process_name = "PDFMainLangCheck"
-
-    # 클래스 테스트
-    llm = LLM(
-        email,
-        project_name,
-        solution=solution,
-        next_solution=next_solution,
-        process_number=process_number,
-        process_name=process_name)
-
     input = [
         "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/yeoreum00128@gmail.com/250911_스크립트테스트/250911_스크립트테스트_script/250911_스크립트테스트_mixed_script_file/250911_스크립트테스트_SampleScript(AudioBook)_jpeg/250911_스크립트테스트_Script(AudioBook)(1).jpeg",
         "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/yeoreum00128@gmail.com/250911_스크립트테스트/250911_스크립트테스트_script/250911_스크립트테스트_mixed_script_file/250911_스크립트테스트_SampleScript(AudioBook)_jpeg/250911_스크립트테스트_Script(AudioBook)(2).jpeg",
@@ -686,29 +750,17 @@ if __name__ == "__main__":
         "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/yeoreum00128@gmail.com/250911_스크립트테스트/250911_스크립트테스트_script/250911_스크립트테스트_mixed_script_file/250911_스크립트테스트_SampleScript(AudioBook)_jpeg/250911_스크립트테스트_Script(AudioBook)(10).jpeg"
         ]
 
-    # openai request
-    response = llm.openai_request(
-        input=input,
-        memory_note="",
-        idx=1,
-        idx_length=1)
+    # 클래스 테스트
+    llm = LLM(
+        email,
+        project_name,
+        solution=solution,
+        next_solution=next_solution,
+        process_number=process_number,
+        process_name=process_name)
 
-    # anthropic request
-    response = llm.anthropic_request(
-        input=input,
-        memory_note="",
-        idx=1,
-        idx_length=1)
-
-    # google request
-    response = llm.google_request(
-        input=input,
-        memory_note="",
-        idx=1,
-        idx_length=1)
-
-    # deepseek request
-    response = llm.deepseek_request(
+    # run
+    response = llm.run(
         input=input,
         memory_note="",
         idx=1,

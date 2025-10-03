@@ -2,8 +2,8 @@
     "ProjectName": "eval(self.ProjectName)",
     "TaskName": "PDFLanguageCheck",
     "API": {
-        "Service": "OPENAI",
-        "Level": "High"
+        "Service": "ANTHROPIC",
+        "Level": "Low"
     },
     "Format": {
         "InputFormat": "jpeg",

@@ -9,14 +9,14 @@
         "ANTHROPIC": {
             "High": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 10000, "MaxTokens": null},
             "Mid": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 5000, "MaxTokens": null},
-            "Low": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 1000, "MaxTokens": null},
-            "None": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 100, "MaxTokens": null}
+            "Low": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 1024, "MaxTokens": null},
+            "None": {"Model": "claude-sonnet-4-5-20250929", "ReasoningEffort": 0, "MaxTokens": null}
         },
         "GOOGLE": {
-            "High": {"Model": null, "ReasoningEffort": 10000},
-            "Mid": {"Model": null, "ReasoningEffort": 5000},
-            "Low": {"Model": null, "ReasoningEffort": 1000},
-            "None": {"Model": null, "ReasoningEffort": 0}
+            "High": {"Model": "gemini-2.5-pro", "ReasoningEffort": -1},
+            "Mid": {"Model": "gemini-2.5-pro", "ReasoningEffort": 5000},
+            "Low": {"Model": "gemini-2.5-flash", "ReasoningEffort": 1024},
+            "None": {"Model": "gemini-2.5-flash", "ReasoningEffort": 0}
         },
         "XAI": {
             "High": null,

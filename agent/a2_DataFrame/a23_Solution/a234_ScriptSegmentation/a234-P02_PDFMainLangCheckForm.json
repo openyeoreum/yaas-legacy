@@ -3,7 +3,7 @@
     "TaskName": "PDFLanguageCheck",
     "API": {
         "Service": "OPENAI",
-        "Model": "High"
+        "Level": "High"
     },
     "Format": {
         "InputFormat": "jpeg",
@@ -43,26 +43,26 @@
             },
             "Messages": {
                 "System": {
-                    "Mark": "(역할 및 업무)",
+                    "Mark": "(역할: 언어 데이터 전문가)",
                     "MarkLineBreak": "\n",
                     "Message": "당신은 언어 데이터 전문가 입니다. 주어진 <도서페이지> 자료 10개를 보고 해당 도서의 주요 언어 1개를 (언어태그)에서 지정하여 <도서언어태그.json>로 완성하는 업무를 수행합니다.",
                     "MessageLineBreak": "\n\n\n"
                 },
                 "User": [
                     {
-                        "Mark": "(언어태그)",
+                        "Mark": "(보기: 언어태그)",
                         "MarkLineBreak": "\n",
                         "Message": "ko: Korean - 한국어 - 한국어\nen: English - English - 영어\nde: German - Deutsch - 독일어\nfr: French - Français - 프랑스어\nes: Spanish - Español - 스페인어\nzh: Chinese - 中文 - 중국어\nja: Japanese - 日本語 - 일본어\nit: Italian - Italiano - 이탈리아어\npt: Portuguese - Português - 포르투갈어\nnl: Dutch - Nederlands - 네덜란드어\nsv: Swedish - Svenska - 스웨덴어\nno: Norwegian - Norsk - 노르웨이어\nda: Danish - Dansk - 덴마크어\npl: Polish - Polski - 폴란드어",
                         "MessageLineBreak": "\n\n"
                     },
                     {
-                        "Mark": "(<도서언어태그.json>의 구조 및 내용)",
+                        "Mark": "(예시: <도서언어태그.json>의 구조 및 내용)",
                         "MarkLineBreak": "\n",
                         "Message": "{ResponseExample}",
                         "MessageLineBreak": "\n\n\n"
                     },
                     {
-                        "Request": "(주어진 <도서페이지> 자료 5개를 보고 해당 도서의 주요 언어 1개를 (언어태그)에서 지정하여 <도서언어태그.json>로 완성해주세요)",
+                        "Request": "(요청: 주어진 <도서페이지> 자료 5개를 보고 해당 도서의 주요 언어 1개를 (보기: 언어태그)에서 지정하여 <도서언어태그.json>로 완성해주세요)",
                         "RequestLineBreak": "\n"
                     }
                 ],

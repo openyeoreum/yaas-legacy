@@ -5,6 +5,7 @@ import time
 import random
 import base64
 import mimetypes
+import copy
 import anthropic
 import sys
 sys.path.append("/yaas")
@@ -33,7 +34,7 @@ class LLM(Manager):
                  next_solution: str = None,
                  process_number: str = None,
                  process_name: str = None,
-                 main_lang: str = "ko") -> None:
+                 main_lang: str = "Ko") -> None:
         """사용자-프로젝트의 Operation에 통합 LLM 기능을 셋팅하는 클래스입니다.
 
         Attributes:
@@ -96,26 +97,8 @@ class LLM(Manager):
             deepseek_client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com")
             return deepseek_client
 
-    # ----------------------------------
-    # --- func-set: load message -------
-    # --- class-func: message 불러오기 ---
-    def _load_message(self) -> str:
-        """지정된 프롬프트 이름에 해당하는 프롬프트 텍스트를 로드하여 반환합니다.
-
-        Returns:
-            message_dict (dict): 불러온 메시지 딕셔너리
-        """
-        # 프롬프트 불러오기
-        message_dict = self.read_json("Solution", [self.solution, "Form", self.process_name], ["Prompt", self.main_lang])
-
-        # 프롬프트 언어 설정
-        if self.main_lang == "Ko":
-            message_dict = message_dict["Ko"]
-        else:
-            message_dict = message_dict["Global"]
-
-        return message_dict
-
+    # ------------------------------------
+    # --- func-set: format message -------
     # --- class-func: file list 텍스트화 ---
     def _format_input_paths_to_str(self, input_paths: list) -> str:
         """파일 리스트를 문자열로 포맷팅하여 반환합니다.
@@ -131,7 +114,7 @@ class LLM(Manager):
 
         # 파일 리스트 문자열 정리
         input_str = ""
-        if self.main_lang == "ko":
+        if self.main_lang == "Ko":
             for i in range(len(input_list)):
                 input_str += f"업로드 자료 {i+1} : {input_list[i]}\n"
         else:
@@ -156,20 +139,23 @@ class LLM(Manager):
         return response_str
 
     # --- class-func: messages 포맷팅 ---
-    def _format_prompt_to_messages(self, input: list, memory_note: str) -> str:
-        """프롬프트 텍스트를 포맷팅하여 반환합니다.
+    def _format_prompt_to_messages(self, input: str | list, memory_note: str) -> str:
+        """프롬프트 텍스트를 메세지로 포맷팅하여 반환합니다.
 
         Returns:
-            formatted_prompt (str): 포맷팅된 프롬프트 텍스트
+            formatted_prompt (str): 포맷팅된 메세지 텍스트
         """
         # API 설정 불러오기
-        message_time = f"current time: {str(datetime('Second'))}\n\n"
+        message_time = f"current time: {str(datetime.now())}\n\n"
 
-        # 프롬프트 불러오기
-        message_dict = self._load_message()
+        # 메세지 불러오기
+        message_dict = self.read_json("Solution", [self.solution, "Form", self.process_name], ["Message", self.main_lang])
 
-        # 프롬프트["InputFormat"]이 Text가 아닌 경우에는 파일리스트 정리
-        if message_dict["InputFormat"] != "text":
+        # InputFormat 불러오기
+        input_format = self.read_json("Solution", [self.solution, "Form", self.process_name], ["Format", "InputFormat"])
+
+        # InputFormat이 Text가 아닌 경우에는 파일리스트 정리
+        if input_format != "text":
             input_paths = input
             input = self._format_input_paths_to_str(input_paths)
 
@@ -184,8 +170,8 @@ class LLM(Manager):
         _user_content = ""
         for message in user_message[:-1]:
             _user_content += message["Mark"] + message["MarkLineBreak"] + message["Message"] + message["MessageLineBreak"]
-            _user_content.format(ResponseExample=response_example)
         user_content = _user_content + user_message[-1]["Request"] + user_message[-1]["RequestLineBreak"]
+        user_content = user_content.format(ResponseExample=response_example)
 
         assistant_message = message_dict["Messages"]["Assistant"]
         assistant_content = assistant_message["MemoryNote"].format(MemoryNote=memory_note) + assistant_message["MemoryNoteLineBreak"] + assistant_message["ResponseMark"]
@@ -201,12 +187,10 @@ class LLM(Manager):
     # --------------------------------------------
     # --- func-set: print request and response ---
     # --- class-func: request와 response 출력 ------
-    def _print_request_and_response(self, service: str, messages: list, response: dict, usage: str) -> str:
+    def _print_request_and_response(self, response: dict, usage: str) -> str:
         """request와 response를 출력합니다.
 
         Args:
-            service (str): 서비스명 (예: "OPENAI", "ANTHROPIC", "GOOGLE", "DEEPSEEK")
-            messages (list): 메시지 리스트
             response (dict): 응답 딕셔너리
             usage (str): 사용량 텍스트
 
@@ -215,7 +199,7 @@ class LLM(Manager):
         """
         # 각 메시지를 형식에 맞는 문자열 생성
         request_parts = []
-        for message in messages:
+        for message in self.print_messages:
             role = message["role"]
             content = message["content"]
             request_parts.append(f"* {role}\n\n{content}")
@@ -224,10 +208,10 @@ class LLM(Manager):
         request_block = "\n\n".join(request_parts)
 
         # 요청 텍스트 생성
-        request_text = f"🟦- Request -🟦\nService: {service}\n\n{request_block}\n\n"
+        request_text = f"🟦- Request -🟦\n\nService: {self.service}\n\n{request_block}\n\n"
 
         # 응답 텍스트 생성
-        response_text = f"🟦- Response -🟦\n{response}\n\n🟦- Usage -🟦\n{usage}"
+        response_text = f"🔴- Response -🔴\n\n{response}\n\n🟥- Usage -🟥\n\n{usage}\n\n"
         
         # request와 response 출력
         request_and_response_text = request_text + response_text
@@ -238,7 +222,7 @@ class LLM(Manager):
     # --- func-set: llm request ----------
     # --- class-func: llm request 초기화 ---
     def _init_request(self,
-                      input: list,
+                      input: str | list,
                       memory_note: str) -> None:
         """llm request를 초기화합니다.
 
@@ -247,13 +231,14 @@ class LLM(Manager):
             memory_note (str): 메모리 노트
 
         Attributes:
-            input (list): 입력 데이터
+            input (list): 입력 데이터(입력 텍스트 또는 파일 리스트)
             memory_note (str): 메모리 노트
+            service (str): 서비스(OpenAI, Anthropic, Google, DeepSeek)
             client: llm api 클라이언트
-            model (str): 모델
+            model (str): 모델(요청 모델)
             reasoning_effort (str): 추론 노력
-            input_format (str): 입력 포맷
-            response_format (str): 응답 포맷
+            input_format (str): 입력 포맷(text, jpeg ..)
+            response_format (str): 응답 포맷(text, jpeg ..)
             messages (list): 메시지
             MAX_ATTEMPTS (int): 최대 시도 횟수
         """
@@ -264,17 +249,18 @@ class LLM(Manager):
 
         api_config_dict = self._load_api_config()
         api_dict = self.read_json("Solution", [self.solution, "Form", self.process_name], ["API"])
-        service = api_dict["Service"]
-        _model = api_dict["Model"]
-        self.client = self._load_api_client(service)
-        self.model = api_config_dict["LanguageModel"][service][_model]["Model"]
-        self.reasoning_effort = api_config_dict["LanguageModel"][service][_model]["ReasoningEffort"]
+        self.service = api_dict["Service"]
+        level = api_dict["Level"]
+        self.client = self._load_api_client(self.service)
+        self.model = api_config_dict["LanguageModel"][self.service][level]["Model"]
+        self.reasoning_effort = api_config_dict["LanguageModel"][self.service][level]["ReasoningEffort"]
 
         format_dict = self.read_json("Solution", [self.solution, "Form", self.process_name], ["Format"])
         self.input_format = format_dict["InputFormat"]
         self.response_format = format_dict["ResponseFormat"]
 
         self.messages = self._format_prompt_to_messages(self.input, self.memory_note)
+        self.print_messages = copy.deepcopy(self.messages)
 
         self.MAX_ATTEMPTS = 100
 
@@ -369,7 +355,7 @@ class LLM(Manager):
 
     # --- class-func: openai request 요청 ---
     def openai_request(self,
-                       input: list,
+                       input: str | list,
                        memory_note: str,
                        idx: int,
                        idx_length: int) -> str:
@@ -413,14 +399,14 @@ class LLM(Manager):
                     'Total': _response.usage.total_tokens}
 
                 # request와 response 출력
-                request_and_response_text = self._print_request_and_response(self.service, self.messages, response, usage)
+                request_and_response_text = self._print_request_and_response(response, usage)
 
-                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], idx=idx, idx_length=idx_length, function_name="openai_request", print=request_and_response_text)
+                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], idx=idx, idx_length=idx_length, function_name="openai_request", _print=request_and_response_text)
 
                 return response
 
             except Exception as e:
-                self.print_log("Access", ["Log", "Info"], ["Info", "Error"], function_name="openai_request", print=e)
+                self.print_log("Access", ["Log", "Info"], ["Info", "Error"], function_name="openai_request", _print=e)
                 time.sleep(random.uniform(2, 5))
                 continue
 
@@ -466,7 +452,7 @@ class LLM(Manager):
 
     # --- class-func: anthropic request 요청 ---
     def anthropic_request(self,
-                          input: list,
+                          input: str | list,
                           memory_note: str,
                           idx: int,
                           idx_length: int, 
@@ -515,14 +501,14 @@ class LLM(Manager):
                     'Total': _response.usage.input_tokens + _response.usage.output_tokens}
 
                 # request와 response 출력
-                request_and_response_text = self._print_request_and_response(self.service, self.messages, response, usage)
+                request_and_response_text = self._print_request_and_response(response, usage)
 
-                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], idx=idx, idx_length=idx_length, function_name="anthropic_request", print=request_and_response_text)
+                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], idx=idx, idx_length=idx_length, function_name="anthropic_request", _print=request_and_response_text)
 
                 return response
 
             except Exception as e:
-                self.print_log("Access", ["Log", "Info"], ["Info", "Error"], function_name="anthropic_request", print=e)
+                self.print_log("Access", ["Log", "Info"], ["Info", "Error"], function_name="anthropic_request", _print=e)
                 time.sleep(random.uniform(2, 5))
                 continue
 
@@ -540,20 +526,16 @@ class LLM(Manager):
         
         # self.input에 있는 각 파일 경로에 대해 반복
         for image_path in self.input:
-            try:
-                # PIL을 사용하여 이미지 파일 열기
-                img = Image.open(image_path)
-                # 리스트에 이미지 객체 추가
-                image_list.append(img)
-            except IOError as e:
-                # 파일을 열 수 없는 경우 에러 메시지 출력
-                print(f"Error opening image file {image_path}: {e}")
+            # PIL을 사용하여 이미지 파일 열기
+            img = Image.open(image_path)
+            # 리스트에 이미지 객체 추가
+            image_list.append(img)
                 
         return image_list
 
     # --- class-func: google request 요청 ---
     def google_request(self,
-                       input: list,
+                       input: str | list,
                        memory_note: str,
                        idx: int,
                        idx_length: int) -> str:
@@ -609,14 +591,14 @@ class LLM(Manager):
                     'Total': _response.usage_metadata.total_token_count}
                 
                 # request와 response 출력
-                request_and_response_text = self._print_request_and_response(self.service, self.messages, response, usage)
+                request_and_response_text = self._print_request_and_response(response, usage)
 
-                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], idx=idx, idx_length=idx_length, function_name="google_request", print=request_and_response_text)
+                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], idx=idx, idx_length=idx_length, function_name="google_request", _print=request_and_response_text)
 
                 return response
 
             except Exception as e:
-                self.print_log("Access", ["Log", "Info"], ["Info", "Error"], function_name="openai_request", print=e)
+                self.print_log("Access", ["Log", "Info"], ["Info", "Error"], function_name="openai_request", _print=e)
                 time.sleep(random.uniform(2, 5))
                 continue
 
@@ -624,7 +606,7 @@ class LLM(Manager):
     # --- func-set: deepseek request ---------
     # --- class-func: deepseek request 요청 ---
     def deepseek_request(self,
-                         input: list,
+                         input: str | list,
                          memory_note: str,
                          idx: int,
                          idx_length: int) -> str:
@@ -661,13 +643,13 @@ class LLM(Manager):
                     'Total': _response.usage.total_tokens
                 }
                 
-                request_and_response_text = self._print_request_and_response("DEEPSEEK", self.messages, response, usage)
-                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], idx=idx, idx_length=idx_length, function_name="deepseek_request", print=request_and_response_text)
+                request_and_response_text = self._print_request_and_response(response, usage)
+                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], idx=idx, idx_length=idx_length, function_name="deepseek_request", _print=request_and_response_text)
 
                 return response
 
             except Exception as e:
-                self.print_log("Access", ["Log", "Info"], ["Info", "Error"], function_name="deepseek_request", print=e)
+                self.print_log("Access", ["Log", "Info"], ["Info", "Error"], function_name="deepseek_request", _print=e)
                 time.sleep(random.uniform(2, 5))
                 continue
 
@@ -675,5 +657,59 @@ if __name__ == "__main__":
 
     # --- class-test ---
     # 인자 설정
-    email = "yeoreum00128@gmail.com3"
+    email = "yeoreum00128@gmail.com"
     project_name = "글로벌솔루션여름"
+    solution = "ScriptSegmentation"
+    next_solution = "Audiobook"
+    process_number = "P02"
+    process_name = "PDFMainLangCheck"
+
+    # 클래스 테스트
+    llm = LLM(
+        email,
+        project_name,
+        solution=solution,
+        next_solution=next_solution,
+        process_number=process_number,
+        process_name=process_name)
+
+    input = [
+        "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/yeoreum00128@gmail.com/250911_스크립트테스트/250911_스크립트테스트_script/250911_스크립트테스트_mixed_script_file/250911_스크립트테스트_SampleScript(AudioBook)_jpeg/250911_스크립트테스트_Script(AudioBook)(1).jpeg",
+        "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/yeoreum00128@gmail.com/250911_스크립트테스트/250911_스크립트테스트_script/250911_스크립트테스트_mixed_script_file/250911_스크립트테스트_SampleScript(AudioBook)_jpeg/250911_스크립트테스트_Script(AudioBook)(2).jpeg",
+        "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/yeoreum00128@gmail.com/250911_스크립트테스트/250911_스크립트테스트_script/250911_스크립트테스트_mixed_script_file/250911_스크립트테스트_SampleScript(AudioBook)_jpeg/250911_스크립트테스트_Script(AudioBook)(3).jpeg",
+        "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/yeoreum00128@gmail.com/250911_스크립트테스트/250911_스크립트테스트_script/250911_스크립트테스트_mixed_script_file/250911_스크립트테스트_SampleScript(AudioBook)_jpeg/250911_스크립트테스트_Script(AudioBook)(4).jpeg",
+        "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/yeoreum00128@gmail.com/250911_스크립트테스트/250911_스크립트테스트_script/250911_스크립트테스트_mixed_script_file/250911_스크립트테스트_SampleScript(AudioBook)_jpeg/250911_스크립트테스트_Script(AudioBook)(5).jpeg",
+        "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/yeoreum00128@gmail.com/250911_스크립트테스트/250911_스크립트테스트_script/250911_스크립트테스트_mixed_script_file/250911_스크립트테스트_SampleScript(AudioBook)_jpeg/250911_스크립트테스트_Script(AudioBook)(6).jpeg",
+        "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/yeoreum00128@gmail.com/250911_스크립트테스트/250911_스크립트테스트_script/250911_스크립트테스트_mixed_script_file/250911_스크립트테스트_SampleScript(AudioBook)_jpeg/250911_스크립트테스트_Script(AudioBook)(7).jpeg",
+        "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/yeoreum00128@gmail.com/250911_스크립트테스트/250911_스크립트테스트_script/250911_스크립트테스트_mixed_script_file/250911_스크립트테스트_SampleScript(AudioBook)_jpeg/250911_스크립트테스트_Script(AudioBook)(8).jpeg",
+        "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/yeoreum00128@gmail.com/250911_스크립트테스트/250911_스크립트테스트_script/250911_스크립트테스트_mixed_script_file/250911_스크립트테스트_SampleScript(AudioBook)_jpeg/250911_스크립트테스트_Script(AudioBook)(9).jpeg",
+        "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/yeoreum00128@gmail.com/250911_스크립트테스트/250911_스크립트테스트_script/250911_스크립트테스트_mixed_script_file/250911_스크립트테스트_SampleScript(AudioBook)_jpeg/250911_스크립트테스트_Script(AudioBook)(10).jpeg"
+        ]
+
+    # openai request
+    response = llm.openai_request(
+        input=input,
+        memory_note="",
+        idx=1,
+        idx_length=1)
+
+    # anthropic request
+    response = llm.anthropic_request(
+        input=input,
+        memory_note="",
+        idx=1,
+        idx_length=1)
+
+    # google request
+    response = llm.google_request(
+        input=input,
+        memory_note="",
+        idx=1,
+        idx_length=1)
+
+    # deepseek request
+    response = llm.deepseek_request(
+        input=input,
+        memory_note="",
+        idx=1,
+        idx_length=1)

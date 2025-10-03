@@ -32,7 +32,7 @@
             "Form": {
                 "Start": "/yaas/agent/a2_DataFrame/a23_Solution/a234_ScriptSegmentation/a234-00_StartForm.json",
                 "ScriptLoad": "/yaas/agent/a2_DataFrame/a23_Solution/a234_ScriptSegmentation/a234-PT01_ScriptLoadForm.json",
-                "PDFMainLangCheck": "/yaas/agent/a2_DataFrame/a23_Solution/a234_Script/a2342_ScriptSegmentation/a23422-P02_PDFMainLangCheckForm.json",
+                "PDFMainLangCheck": "/yaas/agent/a2_DataFrame/a23_Solution/a234_ScriptSegmentation/a234-P02_PDFMainLangCheckForm.json",
                 "PDFLayoutCheck": "/yaas/agent/a2_DataFrame/a23_Solution/a234_ScriptSegmentation/a234-P03_PDFLayoutCheckForm.json",
                 "PDFResize": "/yaas/agent/a2_DataFrame/a23_Solution/a234_ScriptSegmentation/a234-P04_PDFResizeForm.json",
                 "PDFSplit": "/yaas/agent/a2_DataFrame/a23_Solution/a234_ScriptSegmentation/a234-P05_PDFSplitForm.json",

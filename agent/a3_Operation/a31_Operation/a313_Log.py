@@ -171,7 +171,7 @@ class Log(Base):
                   idx: int = None,
                   idx_length: int = None,
                   function_name = None,
-                  print: str = None) -> str:
+                  _print: str = None) -> str:
         """로그 설정에서 지정된 키에 해당하는 로그 데이터를 가져와 포맷팅합니다.
 
         Args:
@@ -215,7 +215,7 @@ class Log(Base):
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         # info 포맷팅
-        formatted_info = info.format(Print=print if print is not None else "")
+        formatted_info = info.format(Print=_print if _print is not None else "")
 
         # loggig 포맷팅
         formatted_loggig_data = _log.format(

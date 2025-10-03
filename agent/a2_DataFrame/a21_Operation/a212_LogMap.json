@@ -28,6 +28,7 @@
             "InputsPreprocess": "(⭐️ Run) 🕐 {Timestamp} > 🟥-( InputPreprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟥{Info}",
             "Inputs": "(⭐️ Run) 🕐 {Timestamp} > 🟨-( Inputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟨{Info}",
             "Message": "(⭐️ Run) 🕐 {Timestamp} > 🟦-( Message | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟦{Info}",
+            "ResponsePreprocess": "(⭐️ Run) 🕐 {Timestamp} > 🟫-( ResponsePreprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟫{Info}",
             "ResponsePostprocess": "(⭐️ Run) 🕐 {Timestamp} > 🟪-( ResponsePostprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟪{Info}",
             "MiddleFrame": "(⭐️ Run) 🕐 {Timestamp} > 🟩-( MiddleFrame | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟩{Info}",
             "Outputs": "(⭐️ Run) 🕐 {Timestamp} > 🟧-( Outputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟧{Info}",
@@ -36,8 +37,8 @@
         "Info": {
             "Complete": "\n > (✅ Complete: {Print})",
             "Notice": "\n\n------ Notice ------\n\n-> (✔️ Notice: {Print})\n\n------ Notice ------\n",
-            "Message": "\n\n------ Message ------\n\n-> (💬 Message)\n{Print}\n\n------ Message ------\n",
-            "Manual": "\n\n------ Manual ------\n\n-> (👉 Manual)\n{Print}\n\n------ Manual ------\n",
+            "Message": "\n\n------ Message ------\n\n-> (💬 Message)\n\n{Print}\n\n------ Message ------\n",
+            "Manual": "\n\n------ Manual ------\n\n-> (👉 Manual)\n\n{Print}\n\n------ Manual ------\n",
             "Error": "\n\n------ Error ------\n\n-> (❗️ Error: {Print})\n\n------ Error ------\n"
         }
     },

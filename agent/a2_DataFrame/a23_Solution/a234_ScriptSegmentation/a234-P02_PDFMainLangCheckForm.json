@@ -2,11 +2,11 @@
     "ProjectName": "eval(self.ProjectName)",
     "TaskName": "PDFLanguageCheck",
     "API": {
-        "Service": "DEEPSEEK",
+        "Service": "ANTHROPIC",
         "Level": "Low"
     },
     "Format": {
-        "InputFormat": "jpeg",
+        "InputFormat": "text",
         "ResponseFormat": "json"
     },
     "InputsPreprocess": {},
@@ -63,12 +63,16 @@
                     },
                     {
                         "Request": "(요청: 주어진 <도서페이지> 자료 5개를 보고 해당 도서의 주요 언어 1개를 (보기: 언어태그)에서 지정하여 <도서언어태그.json>로 완성해주세요)",
-                        "RequestLineBreak": "\n"
+                        "RequestLineBreak": "\n",
+                        "MemoryNote": "{MemoryNote}",
+                        "MemoryNoteLineBreak": "\n\n",
+                        "InputMark": "<도서페이지>",
+                        "InputMarkLineBreak": "\n",
+                        "Input": "{Input}",
+                        "InputLineBreak": "\n\n"
                     }
                 ],
                 "Assistant": {
-                    "MemoryNote": "{MemoryNote}",
-                    "MemoryNoteLineBreak": "\n\n",
                     "ResponseMark": "<도서언어태그.json>"
                 }
             }

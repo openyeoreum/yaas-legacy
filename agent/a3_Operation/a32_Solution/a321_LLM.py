@@ -222,12 +222,12 @@ class LLM(Manager):
         return request_and_response_text
 
     # ------------------------------------
-    # --- func-set: llm request ----------
+    # --- func-set: api request ----------
     # --- class-func: llm request 초기화 ---
     def _init_request(self,
                       input: str | list,
                       memory_note: str) -> None:
-        """llm request를 초기화합니다.
+        """request를 초기화합니다.
 
         Args:
             input (list): 입력 데이터
@@ -320,7 +320,7 @@ class LLM(Manager):
         return json_response
 
     # ---------------------------------------------
-    # --- func-set: openai request ----------------
+    # --- func-set: request openai ----------------
     # --- class-func: openai 이미지 파일 합성 메세지 ---
     def _image_files_added_openai_messages(self) -> None:
         """입력된 이미지 파일들을 OpenAI API에 전달할 수 있는 형식으로 준비합니다.
@@ -364,8 +364,8 @@ class LLM(Manager):
 
         return openai_messages
 
-    # --- class-func: openai request 요청 ---
-    def openai_request(self) -> str:
+    # --- class-func: openai 요청 ---
+    def _request_openai(self) -> str:
         """OpenAI에 요청합니다.
 
         Returns:
@@ -396,7 +396,7 @@ class LLM(Manager):
         return response, usage
 
     # ------------------------------------------------
-    # --- func-set: anthropic request ----------------
+    # --- func-set: request anthropic ----------------
     # --- class-func: anthropic 이미지 파일 합성 메세지 ---
     def _image_files_added_anthropic_messages(self) -> None:
         """입력된 이미지 파일들을 Base64로 인코딩하여 API에 전달할 수 있는 형식으로 준비합니다.
@@ -436,8 +436,8 @@ class LLM(Manager):
 
         return anthropic_messages
 
-    # --- class-func: anthropic request 요청 ---
-    def anthropic_request(self,
+    # --- class-func: anthropic 요청 ---
+    def _request_anthropic(self,
                           MAX_TOKENS: int = 16000) -> str:
         """Anthropic에 요청합니다.
 
@@ -489,7 +489,7 @@ class LLM(Manager):
         return response, usage
 
     # --------------------------------------------
-    # --- func-set: google request ---------------
+    # --- func-set: request google  --------------
     # --- class-func: google 이미지 파일 합성 메세지 ---
     def _image_files_added_google_messages(self) -> list:
         """입력된 이미지 파일들을 Google API에 전달할 수 있는 형식으로 준비합니다.
@@ -518,8 +518,8 @@ class LLM(Manager):
 
         return google_messages
 
-    # --- class-func: google request 요청 ---
-    def google_request(self) -> str:
+    # --- class-func: google 요청 ---
+    def _request_google(self) -> str:
         """Google에 요청합니다.
 
         Returns:
@@ -568,10 +568,10 @@ class LLM(Manager):
 
         return deepseek_messages
 
-    # ----------------------------------------
-    # --- func-set: deepseek request ---------
-    # --- class-func: deepseek request 요청 ---
-    def deepseek_request(self) -> str:
+    # -----------------------------------
+    # --- func-set: request deepseek  ---
+    # --- class-func: deepseek 요청 ------
+    def _request_deepseek(self) -> str:
         """DeepSeek에 요청합니다.
 
         Returns:
@@ -602,7 +602,7 @@ class LLM(Manager):
         return response, usage
     
     # ---------------------------------
-    # --- func-set: llm run -----------
+    # --- func-set: llm request -------
     # --- class-func: json 응답 후처리 ---
     def _clean_json_response(self,
                              response: str) -> dict | list:
@@ -688,7 +688,7 @@ class LLM(Manager):
         return extracted.strip()
 
     # --- class-func: llm request 요청 ---
-    def request(self,
+    def request_llm(self,
             input: str | list,
             memory_note: str,
             idx: int,
@@ -711,13 +711,13 @@ class LLM(Manager):
         for _ in range(self.MAX_ATTEMPTS):
             try:
                 if self.service == "OPENAI":
-                    response, usage = self.openai_request()
+                    response, usage = self._request_openai()
                 if self.service == "ANTHROPIC":
-                    response, usage = self.anthropic_request(self.max_tokens)
+                    response, usage = self._request_anthropic(self.max_tokens)
                 if self.service == "GOOGLE":
-                    response, usage = self.google_request()
+                    response, usage = self._request_google()
                 if self.service == "DEEPSEEK":
-                    response, usage = self.deepseek_request()
+                    response, usage = self._request_deepseek()
 
                 # JSON 응답 후처리
                 response = self._clean_json_response(response)
@@ -770,7 +770,7 @@ if __name__ == "__main__":
         main_lang)
 
     # run
-    response = llm.request(
+    response = llm.request_llm(
         input=input,
         memory_note="",
         idx=1,

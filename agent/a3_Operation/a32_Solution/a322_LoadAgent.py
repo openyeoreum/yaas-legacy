@@ -22,7 +22,7 @@ class LoadAgent:
     PromptDataPath = "/yaas/agent/a0_Database/a04_PromptData"
 
     ## LoadAgent 초기화 ##
-    def __init__(self, InputListFunc, Email, ProjectName, Solution, ProcessNumber, ProcessName, MainLang = "ko", Model = "OpenAI", ResponseMethod = "Prompt", PesponsePostProcessFunc = None, OutputFunc = None, MessagesReview = "off", SubSolution = None, NextSolution = None, EditMode = "Auto", AutoTemplate = "on", OutputsPerInput = 1, InputCountKey = None, IgnoreCountCheck = False, FilterPass = False):
+    def __init__(self, InputListFunc, Email, ProjectName, Solution, ProcessNumber, ProcessName, MainLang = "ko", Model = "OpenAI", ResponseMethod = "Prompt", ResponsePostProcessFunc = None, OutputFunc = None, MessagesReview = "off", SubSolution = None, NextSolution = None, EditMode = "Auto", AutoTemplate = "on", OutputsPerInput = 1, InputCountKey = None, IgnoreCountCheck = False, FilterPass = False):
         """클래스 초기화"""
         # Process 설정
         self.Email = Email
@@ -95,8 +95,8 @@ class LoadAgent:
         self.FilterPass = FilterPass # 필터 오류 3회가 넘어가는 경우 그냥 패스 (에러의 수준이 글자 1000자 중 1자 수준으로 매우 작으나, Response 오류 회수가 너무 빈번한 경우 예시로 TranslationProofreading 등)
         self.EditCheck, self.EditResponseCompletion, self.EditResponsePostProcessCompletion, self.EditOutputCompletion = self._SolutionEditCheck()
 
-        # PesponsePostProcess 설정
-        self.PesponsePostProcessFunc = PesponsePostProcessFunc
+        # ResponsePostProcess 설정
+        self.ResponsePostProcessFunc = ResponsePostProcessFunc
 
         # Output 설정
         self.OutputFunc = OutputFunc

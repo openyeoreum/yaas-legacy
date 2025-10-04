@@ -180,7 +180,7 @@ class ScriptLoadProcess(ScriptSegmentationSolution):
     def Run(self):
         """스크립트 로드 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._CreateSolutionInfoToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, PesponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._CreateSolutionInfoToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         # SolutionEdit 추출
@@ -347,7 +347,7 @@ class PDFMainLangCheckProcess(ScriptSegmentationSolution):
     def Run(self):
         """PDF 언어 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._CreateLabeledSamplePathToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, PesponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._CreateLabeledSamplePathToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         # SolutionEdit 추출
@@ -509,7 +509,7 @@ class PDFLayoutCheckProcess(ScriptSegmentationSolution):
     def Run(self):
         """PDF 인쇄 파일 형식인 단면, 양면 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._LoadPDFToLabeledSampleJPEGToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, PesponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._LoadPDFToLabeledSampleJPEGToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -944,7 +944,7 @@ class PDFResizeProcess(ScriptSegmentationSolution):
     def Run(self):
         """PDF 가로 재단 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._CreateTrimLineJPEGToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, PesponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutputToResizedPDF, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._CreateTrimLineJPEGToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutputToResizedPDF, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -1015,7 +1015,7 @@ class PDFSplitProcess(ScriptSegmentationSolution):
     def Run(self):
         """PDF 분할 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._SplitPDFToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, PesponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._SplitPDFToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -1150,7 +1150,7 @@ class PDFFormCheckProcess(ScriptSegmentationSolution):
     def Run(self):
         """PDF 페이지 형식 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._CreateLabeledJPEGsToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, PesponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._CreateLabeledJPEGsToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -1265,7 +1265,7 @@ class TXTMainLangCheckProcess(ScriptSegmentationSolution):
     def Run(self):
         """TXT 언어 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._CreateTXTToSampleTextToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, PesponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._CreateTXTToSampleTextToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         # MainLang 추출
@@ -1404,7 +1404,7 @@ class TXTSplitProcess(ScriptSegmentationSolution):
     def Run(self):
         """TXT 분할 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._SplitTXTToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, PesponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._SplitTXTToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit

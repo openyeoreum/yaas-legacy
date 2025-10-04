@@ -30,11 +30,11 @@ class LLM(Manager):
     def __init__(self,
                  email: str,
                  project_name: str,
-                 solution: str = None,
-                 next_solution: str = None,
-                 process_number: str = None,
-                 process_name: str = None,
-                 main_lang: str = "Ko") -> None:
+                 solution: str,
+                 next_solution: str,
+                 process_number: str,
+                 process_name: str,
+                 main_lang: str) -> None:
         """사용자-프로젝트의 Operation에 통합 LLM 기능을 셋팅하는 클래스입니다.
 
         Attributes:
@@ -44,7 +44,7 @@ class LLM(Manager):
             next_solution (str): 다음 솔루션이 필요한 경우 다음 솔루션명 (ex. Audiobook, Translation 등)
             process_number (str): 솔루션 안에 프로세스 번호
             process_name (str): 솔루션 안에 프로세스명
-            main_lang (str): 주요 언어 (기본값: "ko")
+            main_lang (str): 주요 언어
         """
         # Manager 초기화
         super().__init__(
@@ -687,8 +687,8 @@ class LLM(Manager):
         # 최후의 수단: 원본 반환 (JSON이 아닐 수 있음)
         return extracted.strip()
 
-    # --- class-func: llm run 요청 ---
-    def run(self,
+    # --- class-func: llm request 요청 ---
+    def request(self,
             input: str | list,
             memory_note: str,
             idx: int,
@@ -744,6 +744,7 @@ if __name__ == "__main__":
     next_solution = "Audiobook"
     process_number = "P02"
     process_name = "PDFMainLangCheck"
+    main_lang = "Ko"
     # input = [
     #     "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/yeoreum00128@gmail.com/250911_스크립트테스트/250911_스크립트테스트_script/250911_스크립트테스트_mixed_script_file/250911_스크립트테스트_SampleScript(AudioBook)_jpeg/250911_스크립트테스트_Script(AudioBook)(1).jpeg",
     #     "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/yeoreum00128@gmail.com/250911_스크립트테스트/250911_스크립트테스트_script/250911_스크립트테스트_mixed_script_file/250911_스크립트테스트_SampleScript(AudioBook)_jpeg/250911_스크립트테스트_Script(AudioBook)(2).jpeg",
@@ -762,13 +763,14 @@ if __name__ == "__main__":
     llm = LLM(
         email,
         project_name,
-        solution=solution,
-        next_solution=next_solution,
-        process_number=process_number,
-        process_name=process_name)
+        solution,
+        next_solution,
+        process_number,
+        process_name,
+        main_lang)
 
     # run
-    response = llm.run(
+    response = llm.request(
         input=input,
         memory_note="",
         idx=1,

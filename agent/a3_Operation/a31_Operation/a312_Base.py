@@ -28,6 +28,8 @@ class Base(Access):
         """사용자-프로젝트의 Core와 Solution에 통합 Base 기능을 수행하는 클래스입니다.
 
         Attributes:
+            email (str): 이메일
+            project_name (str): 프로젝트명
             solution (str): 솔루션명 (ex. Collection, ScriptSegmentation 등)
             next_solution (str): 다음 솔루션이 필요한 경우 다음 솔루션명 (ex. Audiobook, Translation 등)
             process_number (str): 솔루션 안에 프로세스 번호

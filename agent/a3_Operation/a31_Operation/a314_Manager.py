@@ -131,8 +131,8 @@ class Manager(Log):
             with open(self.read_path_map(work, file_keys), "w", encoding="utf-8") as f:
                 json.dump(form_data, f, ensure_ascii=False, indent=4)
 
-    # --- class-func: storage json 저장하기 ---
-    def overwrite_storage_json(self,
+    # --- class-func: storage json 생성하기 및 덮어쓰기 ---
+    def save_storage_json(self,
                                work: str,
                                file_keys: list,
                                json_data: dict) -> None:
@@ -216,10 +216,10 @@ class Manager(Log):
         with open(self.read_path_map(work, file_keys), "w", encoding="utf-8") as f:
             json.dump(json_data, f, ensure_ascii=False, indent=4)
 
-    # --------------------------------------
-    # --- func-set: storage txt manager ----
-    # --- class-func: storage txt 생성하기 ---
-    def create_storage_txt(self,
+    # -----------------------------------------------
+    # --- func-set: storage txt manager -------------
+    # --- class-func: storage txt 생성하기 및 덮어쓰기 ---
+    def save_storage_txt(self,
                            work: str,
                            file_keys: list,
                            text: str) -> None:

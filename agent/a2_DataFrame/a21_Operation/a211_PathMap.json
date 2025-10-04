@@ -42,33 +42,33 @@
                 "End": "/yaas/agent/a2_DataFrame/a23_Solution/a234_ScriptSegmentation/a234-99_EndForm.json"
             },
             "Dir": {
-                "Upload": "{StorageSolutionDirPath}/{ProjectName}_upload_script_file",
-                "DataFrame": "{StorageSolutionDirPath}/{ProjectName}_dataframe_script_file",
-                "DataSet": "{StorageSolutionDirPath}/{ProjectName}_dataset_script_file",
-                "Mixed": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file",
-                "SampleScriptJpgs": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file/SampleScriptJpgs",
-                "TrimSampleScriptJpgs": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file/TrimSampleScriptJpgs",
-                "ScriptPDFs": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file/ScriptPDFs",
-                "ResizeScriptPDFs": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file/ResizeScriptPDFs",
-                "ScriptJpegs": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file/ScriptJpgs",
-                "Master": "{StorageSolutionDirPath}/{ProjectName}_master_script_file"
+                "Upload": "{StorageSolutionDirPath}/upload_script_file",
+                "DataFrame": "{StorageSolutionDirPath}/dataframe_script_file",
+                "DataSet": "{StorageSolutionDirPath}/dataset_script_file",
+                "Mixed": "{StorageSolutionDirPath}/mixed_script_file",
+                "SampleScriptJpgs": "{StorageSolutionDirPath}/mixed_script_file/SampleScriptJpgs",
+                "TrimSampleScriptJpgs": "{StorageSolutionDirPath}/mixed_script_file/TrimSampleScriptJpgs",
+                "ScriptPDFs": "{StorageSolutionDirPath}/mixed_script_file/ScriptPDFs",
+                "ResizeScriptPDFs": "{StorageSolutionDirPath}/mixed_script_file/ResizeScriptPDFs",
+                "ScriptJpegs": "{StorageSolutionDirPath}/mixed_script_file/ScriptJpgs",
+                "Master": "{StorageSolutionDirPath}/master_script_file"
             },
             "File": {
                 "Json": {
-                    "InputList": "{StorageSolutionDirPath}/{ProjectName}_dataframe_script_file/{Email}_{ProjectName}_{ProcessNumber}_{ProcessName}_inputlist.json",
-                    "MiddleFrame": "{StorageSolutionDirPath}/{ProjectName}_dataframe_script_file/{Email}_{ProjectName}_{ProcessNumber}_{ProcessName}_middleframe.json",
-                    "DataSet": "{StorageSolutionDirPath}/{ProjectName}_dataset_script_file/{Email}_{ProjectName}_{ProcessNumber}_{ProcessName}_dataset.json",
-                    "Edit": "{StorageSolutionDirPath}/{ProjectName}_master_script_file/[{ProjectName}_script_edit].json"
+                    "InputList": "{StorageSolutionDirPath}/dataframe_script_file/{ProcessNumber}_{ProcessName}_inputlist.json",
+                    "MiddleFrame": "{StorageSolutionDirPath}/dataframe_script_file/{ProcessNumber}_{ProcessName}_middleframe.json",
+                    "DataSet": "{StorageSolutionDirPath}/dataset_script_file/{ProcessNumber}_{ProcessName}_dataset.json",
+                    "Edit": "{StorageSolutionDirPath}/master_script_file/[{ProjectName}_script_edit].json"
                 },
                 "Txt": {},
                 "Pdf": {
-                    "Script": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file/ScriptPDFs/({Idx})Script.pdf",
-                    "ResizeScript": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file/ResizeScriptPDFs/({Idx})ResizeScript.pdf"
+                    "Script": "{StorageSolutionDirPath}/mixed_script_file/ScriptPDFs/({Idx})Script.pdf",
+                    "ResizeScript": "{StorageSolutionDirPath}/mixed_script_file/ResizeScriptPDFs/({Idx})ResizeScript.pdf"
                 },
                 "Jpg": {
-                    "SampleScript": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file/SampleScriptJpgs/({Idx})SampleScript.jpg",
-                    "TrimSampleScript": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file/TrimSampleScriptJpgs/({Idx})TrimSampleScript.jpg",
-                    "Script": "{StorageSolutionDirPath}/{ProjectName}_mixed_script_file/ScriptJpgs/({Idx})Script.jpg"
+                    "SampleScript": "{StorageSolutionDirPath}/mixed_script_file/SampleScriptJpgs/({Idx})SampleScript.jpg",
+                    "TrimSampleScript": "{StorageSolutionDirPath}/mixed_script_file/TrimSampleScriptJpgs/({Idx})TrimSampleScript.jpg",
+                    "Script": "{StorageSolutionDirPath}/mixed_script_file/ScriptJpgs/({Idx})Script.jpg"
                 },
                 "Wav": {},
                 "Mp3": {}

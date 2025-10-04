@@ -46,11 +46,11 @@
                 "DataFrame": "{StorageSolutionDirPath}/dataframe_script_file",
                 "DataSet": "{StorageSolutionDirPath}/dataset_script_file",
                 "Mixed": "{StorageSolutionDirPath}/mixed_script_file",
-                "SampleScriptJpgs": "{StorageSolutionDirPath}/mixed_script_file/SampleScriptJpgs",
-                "TrimSampleScriptJpgs": "{StorageSolutionDirPath}/mixed_script_file/TrimSampleScriptJpgs",
-                "ScriptPDFs": "{StorageSolutionDirPath}/mixed_script_file/ScriptPDFs",
-                "ResizeScriptPDFs": "{StorageSolutionDirPath}/mixed_script_file/ResizeScriptPDFs",
-                "ScriptJpegs": "{StorageSolutionDirPath}/mixed_script_file/ScriptJpgs",
+                "SampleScriptJpgs": "{StorageSolutionDirPath}/mixed_script_file/{ProcessNumber}_{ProcessName}_SampleScriptJpgs",
+                "TrimSampleScriptJpgs": "{StorageSolutionDirPath}/mixed_script_file/{ProcessNumber}_{ProcessName}_TrimSampleScriptJpgs",
+                "ScriptPDFs": "{StorageSolutionDirPath}/mixed_script_file/{ProcessNumber}_{ProcessName}_ScriptPDFs",
+                "ResizeScriptPDFs": "{StorageSolutionDirPath}/mixed_script_file/{ProcessNumber}_{ProcessName}_ResizeScriptPDFs",
+                "ScriptJpegs": "{StorageSolutionDirPath}/mixed_script_file/{ProcessNumber}_{ProcessName}_ScriptJpgs",
                 "Master": "{StorageSolutionDirPath}/master_script_file"
             },
             "File": {

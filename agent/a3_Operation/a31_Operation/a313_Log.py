@@ -76,7 +76,7 @@ class Log(Base):
             OperatingTime 업데이트: 'core' 작업의 'Start'부터 'Stop' 또는 'End'까지의 시간만 합산하여 업데이트합니다.
         """
         # - innerfunc: timestamp 계산기 -
-        def calculate_timestamp_difference(start_timestamp: str, end_timestamp: str) -> int:
+        def calculate_timestamp_difference_func(start_timestamp: str, end_timestamp: str) -> int:
             """
             'YYYY-MM-DD HH:MM:SS' 형식의 두 시간 문자열을 받아
             시간 차이를 'HH:MM:SS' 형식과 초로 반환합니다.
@@ -141,7 +141,7 @@ class Log(Base):
             elif current_info in ["Stop", "End"]:
                 # 세션이 시작된 상태에서 Stop 또는 End를 만나면 시간 계산
                 if start_timestamp_for_session:
-                    duration_seconds = calculate_timestamp_difference(
+                    duration_seconds = calculate_timestamp_difference_func(
                         start_timestamp_for_session, 
                         current_timestamp
                     )

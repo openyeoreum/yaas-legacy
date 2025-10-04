@@ -93,7 +93,7 @@ class LoadAgent:
         self.InputCountKey = InputCountKey # 입력 수의 기준키 설정 (InputCount의 수가 단순 데이터 리스트의 총 개수랑 맞지 않는 경우)
         self.IgnoreCountCheck = IgnoreCountCheck # 입력 수 체크 안함 (입력의 카운트가 의미가 없는 경우 예시로 IndexDefine 등)
         self.FilterPass = FilterPass # 필터 오류 3회가 넘어가는 경우 그냥 패스 (에러의 수준이 글자 1000자 중 1자 수준으로 매우 작으나, Response 오류 회수가 너무 빈번한 경우 예시로 TranslationProofreading 등)
-        self.EditCheck, self.EditResponseCompletion, self.EditResponsePostProcessCompletion, self.EditOutputCompletion = self._SolutionEditCheck(OutputsPerInput, InputCountKey, IgnoreCountCheck)
+        self.EditCheck, self.EditResponseCompletion, self.EditResponsePostProcessCompletion, self.EditOutputCompletion = self._SolutionEditCheck()
 
         # PesponsePostProcess 설정
         self.PesponsePostProcessFunc = PesponsePostProcessFunc
@@ -194,7 +194,7 @@ class LoadAgent:
             return NextInputCount, DataFrameCompletion
 
     ## 솔루션 Edit의 파일, 완료 체크 메서드 ##
-    def _SolutionEditCheck(self, OutputsPerInput = 1, InputCountKey = None, IgnoreCountCheck = False):
+    def _SolutionEditCheck(self):
         """프로세스 Edit 및 Completion을 확인하는 메서드"""
         # EditCheck 및 EditResponseCompletion 및 EditOutputCompletion 설정 함수
         def EditCheckFunc(EditCheck, EditResponseCompletion, EditResponsePostProcessCompletion, EditOutputCompletion):
@@ -228,18 +228,18 @@ class LoadAgent:
                 SolutionEdit = json.load(SolutionEditJson)
             
             # 입력 수 체크 안함 (입력의 카운트가 의미가 없는 경우 예시로 IndexDefine 등)
-            if IgnoreCountCheck:
+            if self.IgnoreCountCheck:
                 if self.ProcessName in SolutionEdit.keys():
                     EditCheck, EditResponseCompletion, EditResponsePostProcessCompletion, EditOutputCompletion = EditCheckFunc(EditCheck, EditResponseCompletion, EditResponsePostProcessCompletion, EditOutputCompletion)
             else:
                 # 입력 수의 기준키 설정 (InputCount의 수가 단순 데이터 리스트의 총 개수랑 맞지 않는 경우)
-                if InputCountKey:
-                    if self.ProcessName in SolutionEdit.keys() and SolutionEdit[self.ProcessName][-1][InputCountKey] == self.TotalInputCount * OutputsPerInput:
+                if self.InputCountKey:
+                    if self.ProcessName in SolutionEdit.keys() and SolutionEdit[self.ProcessName][-1][self.InputCountKey] == self.TotalInputCount * self.OutputsPerInput:
                         EditCheck, EditResponseCompletion, EditResponsePostProcessCompletion, EditOutputCompletion = EditCheckFunc(EditCheck, EditResponseCompletion, EditResponsePostProcessCompletion, EditOutputCompletion)
                         
                 # 일반적인 입력 수 체크
                 else:
-                    if self.ProcessName in SolutionEdit and len(SolutionEdit[self.ProcessName]) == self.TotalInputCount * OutputsPerInput:
+                    if self.ProcessName in SolutionEdit and len(SolutionEdit[self.ProcessName]) == self.TotalInputCount * self.OutputsPerInput:
                         EditCheck, EditResponseCompletion, EditResponsePostProcessCompletion, EditOutputCompletion = EditCheckFunc(EditCheck, EditResponseCompletion, EditResponsePostProcessCompletion, EditOutputCompletion)
 
         return EditCheck, EditResponseCompletion, EditResponsePostProcessCompletion, EditOutputCompletion

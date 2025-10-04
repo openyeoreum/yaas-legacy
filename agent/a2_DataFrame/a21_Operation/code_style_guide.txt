@@ -112,6 +112,8 @@
             * innerfunc *
 
                 # - innerfunc: ... -
+                def ..._func(...):
+                ...
                 # - innerfunc end -
 
 

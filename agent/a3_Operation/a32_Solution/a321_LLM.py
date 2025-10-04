@@ -329,8 +329,8 @@ class LLM(Manager):
             openai_messages (list): OpenAI API에 전달할 메시지 리스트
         """
         # - innerfunc: image file 업로드 함수 -
-        def upload_single_file(client,
-                               image_path: str) -> str:
+        def upload_single_file_func(client,
+                                    image_path: str) -> str:
             """단일 이미지 파일을 업로드하여 파일 ID를 반환합니다.
 
             Args:
@@ -346,7 +346,7 @@ class LLM(Manager):
         # - innerfunc end -
 
         # 모든 이미지 파일을 업로드하고 파일 ID 리스트를 생성
-        image_file_ids = [upload_single_file(self.client, image_path) for image_path in self.input]
+        image_file_ids = [upload_single_file_func(self.client, image_path) for image_path in self.input]
 
         # Messages[1]["content"]가 문자열이라면, input_text 블록으로 변환
         if isinstance(self.messages[1]["content"], str):

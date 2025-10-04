@@ -133,13 +133,53 @@ class Agent(LLM):
     # --- func-set: check, completion ---------------------------
     # --- class-func: process_middle_frame의 파일, 카운트, 완료 체크 ---
     def _check_process_middle_frame(self):
-        """process_middle_frame의 파일, 카운트, 완료 체크 메서드"""
+        """process_middle_frame의 파일, 카운트, 완료 체크 합니다.
+        
+        Returns:
+            input_count (int): input_count
+            middle_frame_completion (bool): middle_frame_completion
+        """
         input_count = 1
-        data_frame_completion = False
+        middle_frame_completion = False
 
-        # process_data_frame가 존재하지 않는 경우
-        if os.path.exists(self.read_path_map("Solution", [self.solution, "File", "Json", "MiddleFrame"])):
-            return input_count, data_frame_completion
+        # process_middle_frame이 존재하지 않는 경우
+        if not os.path.exists(self.read_path_map("Solution", [self.solution, "File", "Json", "MiddleFrame"])):
+            return input_count, middle_frame_completion
+        else:
+            # process_middle_frame 불러오기
+            solution_process_middle_frame = self.load_json("Solution", [self.solution, "File", "Json", "MiddleFrame"])
+
+            # input_count, middle_frame_completion 확인
+            next_input_count = solution_process_middle_frame[0]['InputCount'] + 1
+            middle_frame_completion = solution_process_middle_frame[0]['Completion']
+
+            return next_input_count, middle_frame_completion
+
+    # --- class-func: solution_edit의 파일, 완료 체크 ---
+    def _check_solution_edit(self):
+        """solution_edit의 파일, 완료 체크 합니다.
+
+        Returns:
+        """
+        # - innerfunc: edit check 함수 -
+        def edit_check_func(solution_edit, edit_check, edit_response_completion, edit_response_post_process_completion, edit_output_completion):
+            # edit_check 확인
+            edit_check = True
+            
+            # edit_response_completion 확인
+            if solution_edit[f"{self.process_name}ResponseCompletion"] == 'Completion':
+                edit_response_completion = True
+            
+            # edit_response_post_process_completion 확인
+            if solution_edit.get(f"{self.process_name}ResponsePostProcessCompletion") == 'Completion':
+                edit_response_post_process_completion = True
+            
+            # edit_output_completion 확인
+            if solution_edit[f"{self.process_name}OutputCompletion"] == 'Completion':
+                edit_output_completion = True
+
+            return edit_check, edit_response_completion, edit_response_post_process_completion, edit_output_completion
+        # - innerfunc end -
 
 if __name__ == "__main__":
 

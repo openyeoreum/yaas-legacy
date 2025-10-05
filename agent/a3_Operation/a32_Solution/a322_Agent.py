@@ -311,10 +311,11 @@ class Agent(LLM):
                     input_count = self.input_list[i]['Id']
                     input = self.input_list[i]['Input']
                     comparison_input = self.input_list[i]['ComparisonInput']
+                    memory_note = self.input_list[i]['MemoryNote']
 
                     if self.response_mode == "Prompt":
                         ## Response 생성
-                        response = self.request_llm(input)
+                        response = self.request_llm(input, self.memory_note, input_count, self.total_input_count)
                     if self.response_mode in ["Algorithm", "Manual"]:
                         response = input
 

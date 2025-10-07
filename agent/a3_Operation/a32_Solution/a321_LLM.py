@@ -689,17 +689,17 @@ class LLM(Manager):
 
     # --- class-func: llm request 요청 ---
     def request_llm(self,
-            input: str | list,
-            memory_note: str,
-            idx: int,
-            idx_length: int) -> str:
+                    input: str | list,
+                    memory_note: str,
+                    input_count: int,
+                    total_input_count: int) -> str:
         """LLM 요청을 수행합니다.
 
         Args:
             input (list): 입력 데이터
             memory_note (str): 메모리 노트
-            idx (int): 인덱스
-            idx_length (int): 인덱스 길이
+            input_count (int): 인덱스
+            total_input_count (int): 인덱스 길이
 
         Returns:
             response (str): 응답 문자열
@@ -725,7 +725,7 @@ class LLM(Manager):
                 # request와 response 출력
                 request_and_response_text = self._print_request_and_response(response, usage)
 
-                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], idx=idx, idx_length=idx_length, function_name="llm.run", _print=request_and_response_text)
+                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], input_count=input_count, total_input_count=total_input_count, function_name="llm.run", _print=request_and_response_text)
 
                 return response
 
@@ -773,5 +773,5 @@ if __name__ == "__main__":
     response = llm.request_llm(
         input=input,
         memory_note="",
-        idx=1,
-        idx_length=1)
+        input_count=1,
+        total_input_count=1)

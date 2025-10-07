@@ -1,14 +1,7 @@
 import os
-import re
-import shutil
-import json
-import time
-import spacy
-import copy
 import sys
 sys.path.append("/yaas")
 
-from PyPDF2 import PdfReader, PdfWriter
 from agent.a3_Operation.a32_Solution.a321_LLM import LLM
 
 # ======================================================================
@@ -260,6 +253,51 @@ class Agent(LLM):
         self.input_count, self.middle_frame_completion = self._check_process_middle_frame()
         self.edit_check, self.edit_response_completion, self.edit_response_post_process_completion, self.edit_output_completion = self._check_solution_edit()
 
+    # --- class-func: agent request 요청 ---
+    def _request_agent(self,
+                       input: str | list,
+                       memory_note: str,
+                       input_count: int,
+                       total_input_count: int,
+                       comparison_input: str | list) -> str:
+        """agent request 요청을 수행합니다.
+
+        Args:
+            input (str | list): 입력 데이터
+            memory_note (str): 메모리 노트
+            input_count (int): 인덱스
+            total_input_count (int): 인덱스 길이
+            comparison_input (str | list): 비교 입력 데이터
+        """
+        error_count = 0
+        while True:
+            # request llm 요청
+            response = self.request_llm(input, memory_note, input_count, total_input_count)
+
+            # 생성된 response 필터
+            filtered_response = self.response_post_process_func(response, comparison_input)
+
+            # 필터 에외처리, JSONDecodeError 처리
+            if isinstance(filtered_response, str):
+                error_count += 1
+                self.print_log("Task", ["Log", "Info"], ["Info", "Error"], function_name="agent._request_agent", _print=f"오류횟수 {error_count}회, 10초 후 프롬프트 재시도")
+
+                # Error 3회시 해당 프로세스 사용 안함 예외처리
+                if self.filter_pass and error_count >= 3:
+                    self.print_log("Task", ["Log", "Info"], ["Info", "Complete"], function_name="agent._request_agent", _print="ErrorPass 완료")
+
+                    return "ErrorPass"
+
+                # Error 10회시 프롬프트 종료
+                if error_count >= 10:
+                    self.print_log("Task", ["Log", "Info"], ["Info", "Error"], function_name="agent._request_agent", _print=f"오류횟수 {error_count}회 초과, 프롬프트 종료", exit=True)
+
+                continue
+
+            self.print_log("Task", ["Log", "Info"], ["Info", "Complete"], function_name="agent._request_agent", _print="FilteredResponse, JSONDecode 완료")
+
+            return filtered_response
+
     # --- class-func: agent 실행 ---
     def run_agent(self,
                   input_list_func: callable = None,
@@ -315,7 +353,7 @@ class Agent(LLM):
 
                     if self.response_mode == "Prompt":
                         ## Response 생성
-                        response = self.request_llm(input, self.memory_note, input_count, self.total_input_count)
+                        response = self._request_agent(input, memory_note, input_count, self.total_input_count, comparison_input)
                     if self.response_mode in ["Algorithm", "Manual"]:
                         response = input
 
@@ -324,21 +362,22 @@ class Agent(LLM):
 
             ## Edit 저장
             self._update_solution_edit()
-            print(f"[ {self.ProcessInfo}Update 완료 ]\n")
+            self.print_log("Solution", ["Log", "Task"], ["Info", "End"], input_count=self.input_count, total_input_count=self.total_input_count)
 
-            if self.edit_mode == "Manual":
-                sys.exit(f"[ {self.ProjectName}_Script_Edit 생성 완료 -> {self.ProcessName}: (({self.ProcessName}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({self.ProcessName}Completion: Completion))으로 변경 ]\n\n{self.SolutionEditPath}")
+            if not self.edit_mode:
+                self.print_log("Task", ["Log", "Info"], ["Info", "Manual"], function_name="agent.run_agent", _print=f"{self.ProjectName}_Script_Edit 생성 완료 -> {self.ProcessName}: (({self.ProcessName}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({self.ProcessName}Completion: Completion))으로 변경", exit=True)
 
-        if self.edit_mode == "Manual":
+        if not self.edit_mode:
             if self.edit_check:
                 if not self.edit_response_completion:
                     ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-                    sys.exit(f"[ {self.ProjectName}_Script_Edit -> {self.ProcessName}: (({self.ProcessName}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({self.ProcessName}Completion: Completion))으로 변경 ]\n\n{self.SolutionEditPath}")
+                    self.print_log("Task", ["Log", "Info"], ["Info", "Manual"], function_name="agent.run_agent", _print=f"{self.ProjectName}_Script_Edit -> {self.ProcessName}: (({self.ProcessName}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({self.ProcessName}Completion: Completion))으로 변경", exit=True)
         if self.edit_response_completion:
-            print(f"[ {self.ProcessInfo}Update는 이미 완료됨 ]\n")
+            self.print_log("Solution", ["Log", "Task"], ["Info", "Skip"], input_count=self.input_count, total_input_count=self.total_input_count)
 
         ## Edit 불러오기
         SolutionEdit = self._load_edit()
+        self.load_json
 
         ## Response 후처리
         if self.edit_response_post_process_completion:

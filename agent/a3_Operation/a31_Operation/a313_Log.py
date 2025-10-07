@@ -168,20 +168,22 @@ class Log(Base):
                   log: str,
                   log_keys: list,
                   info_keys: list,
-                  idx: int = None,
-                  idx_length: int = None,
+                  input_count: int = None,
+                  total_input_count: int = None,
                   function_name = None,
-                  _print: str = None) -> str:
+                  _print: str = None,
+                  exit: bool = False) -> str:
         """로그 설정에서 지정된 키에 해당하는 로그 데이터를 가져와 포맷팅합니다.
 
         Args:
             log (str): 로그 종류 (예: "Access", "Work", "Task")
             log_keys (list): 로그 데이터에서 가져올 키들의 리스트
             info_keys (list): 추가 정보에서 가져올 키들의 리스트
-            idx (int, optional): 솔루션 안에 프로세스 안에 테스크 인덱스 번호로 jpg, wav, mp3 등 file명에 사용 (기본값: None)
-            idx_length (int, optional): idx의 전체 길이 (기본값: None)
+            input_count (int, optional): 솔루션 안에 프로세스 안에 테스크 인덱스 번호로 jpg, wav, mp3 등 file명에 사용 (기본값: None)
+            total_input_count (int, optional): input_count의 전체 길이 (기본값: None)
             function_name (str, optional): 함수 이름 (예: "InputPreprocess", "Prompt" 등)
             print (str, optional): 출력할 추가 정보
+            exit (bool, optional): 종료 여부 (기본값: False)
 
         Print:
             formatted_log_data (str): 포맷팅된 로그 데이터
@@ -228,8 +230,8 @@ class Log(Base):
             ProcessName=self.process_name,
             FunctionName=function_name if function_name is not None else "",
             Info=formatted_info,
-            Idx=idx if idx is not None else 0,
-            IdxLength=idx_length if idx_length is not None else 0)
+            input_count=input_count if input_count is not None else 0,
+            input_countLength=total_input_count if total_input_count is not None else 0)
 
         # formatting된 loggig 출력
         if log == "Access" and "Access" in log_keys:
@@ -244,6 +246,10 @@ class Log(Base):
             self._append_log_data(timestamp,
                                   _solution,
                                   _info)
+        
+        # exit 처리
+        if exit:
+            sys.exit()
 
 if __name__ == "__main__":
 

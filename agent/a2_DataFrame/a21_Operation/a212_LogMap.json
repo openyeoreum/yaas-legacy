@@ -25,24 +25,24 @@
     },
     "Task": {
         "Log": {
-            "InputsPreprocess": "(⭐️ Run) 🕐 {Timestamp} > 🟥-( InputPreprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟥\n{Info}",
-            "Inputs": "(⭐️ Run) 🕐 {Timestamp} > 🟨-( Inputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟨\n{Info}",
-            "Message": "(⭐️ Run) 🕐 {Timestamp} > 🟦-( Message | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟦\n{Info}",
-            "ResponsePreprocess": "(⭐️ Run) 🕐 {Timestamp} > 🟫-( ResponsePreprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟫\n{Info}",
-            "ResponsePostprocess": "(⭐️ Run) 🕐 {Timestamp} > 🟪-( ResponsePostprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟪\n{Info}",
-            "MiddleFrame": "(⭐️ Run) 🕐 {Timestamp} > 🟩-( MiddleFrame | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟩\n{Info}",
-            "Outputs": "(⭐️ Run) 🕐 {Timestamp} > 🟧-( Outputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) -> {FunctionName} )-🟧\n{Info}",
-            "Info": "{Info}"
+            "InputsPreprocess": "(⭐️ Run) 🕐 {Timestamp} > 🟥(InputPreprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) > {FunctionName} )🟥 > \n{Info}",
+            "Inputs": "(⭐️ Run) 🕐 {Timestamp} > 🟨(Inputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) > {FunctionName} )🟨 > \n{Info}",
+            "Message": "(⭐️ Run) 🕐 {Timestamp} > 🟦(Message | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) > {FunctionName} )🟦 > \n{Info}",
+            "ResponsePreprocess": "(⭐️ Run) 🕐 {Timestamp} > 🟫(ResponsePreprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) > {FunctionName} )🟫 > \n{Info}",
+            "ResponsePostprocess": "(⭐️ Run) 🕐 {Timestamp} > 🟪(ResponsePostprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) > {FunctionName} )🟪 > \n{Info}",
+            "MiddleFrame": "(⭐️ Run) 🕐 {Timestamp} > 🟩(MiddleFrame | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) > {FunctionName} )🟩 > \n{Info}",
+            "Outputs": "(⭐️ Run) 🕐 {Timestamp} > 🟧( Outputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) > {FunctionName} )🟧 > \n{Info}",
+            "Info": "{FunctionName} > {Info}"
         },
         "Info": {
-            "Complete": "> (✅ Complete: {Print})",
-            "Create": "> (🆕 Create: {Print})",
-            "Update": "> (🔄 Update: {Print})",
-            "Load": "> (🔄 Load: {Print})",
-            "Notice": "> (✔️ Notice: {Print})",
-            "Message": "> (💬 Message)\n\n{Print}",
-            "Manual": "> (👉 Manual)\n\n{Print}",
-            "Error": "> (❗️ Error: {Print})"
+            "Complete": "(✅ Complete: {Print})",
+            "Create": "(🆕 Create: {Print})",
+            "Update": "(🔄 Update: {Print})",
+            "Load": "(🔄 Load: {Print})",
+            "Notice": "(✔️ Notice: {Print})",
+            "Message": "(💬 Message)\n\n{Print}",
+            "Manual": "(👉 Manual)\n\n{Print}",
+            "Error": "(❗️ Error: {Print})"
         }
     },
     "DataFrame": {

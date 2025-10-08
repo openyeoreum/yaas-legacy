@@ -1,8 +1,6 @@
 import os
 import re
-import shutil
 import json
-import time
 import spacy
 import copy
 import sys

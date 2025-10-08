@@ -1,4 +1,10 @@
 import os
+import re
+import shutil
+import json
+import time
+import spacy
+import copy
 import sys
 sys.path.append("/yaas")
 
@@ -168,6 +174,470 @@ class Agent(LLM):
 
         return edit_check, edit_response_completion, edit_response_post_process_completion, edit_output_completion
 
+    # -----------------------------------
+    # --- func-set: response filter ------
+    # --- class-func: response filter ---
+    def _response_filter(self, response: str, comparison_input: str, response_structure: dict) -> dict:
+        """response filter를 수행합니다.
+
+        Args:
+            response (str): response
+            comparison_input: str: comparison_input
+            response_structure (dict): response_structure
+
+        Effects:
+            response filter 수행 (dict): self.response_filter(response, comparison_input, response_structure)
+
+        Returns:
+            filtered_response (dict): filtered_response
+        """
+        # filter1: json 포멧화
+        # - innerfunc: json 형식 체크 함수 -
+        def format_json(response: str) -> str:
+            """response를 json으로 포맷팅하여 반환합니다.
+            
+            Returns:
+                response (dict): json 형식의 response
+            """
+            try:
+                filtered_response = json.loads(response)
+                return filtered_response
+            except json.JSONDecodeError:
+                return "JsonFormatError: 응답 형식이 (Json)이 아닙니다"
+        # - innerfunc end -
+
+        # Filter2: filtered_response 전처리
+        # NOTE: filtered_response 전처리도 values_check에 포함시킬지 고민
+
+        # filter3: key 체크
+        # - innerfunc: key 체크 함수 -
+        def check_key(filtered_response: dict, response_structure: dict) -> dict:
+            """response_structure에 맞는 key 체크를 실행합니다.
+
+            Args:
+                filtered_response (dict): filtered_response
+                response_structure (dict): response_structure
+
+            Returns:
+                filtered_response (dict): filtered_response
+            """
+            # type map 정의
+            type_map = {
+                "int": int,
+                "str": str,
+                "float": float,
+                "bool": bool,
+                "list": list,
+                "dict": dict
+            }
+            value_type = type_map.get(response_structure["ValueType"])
+
+            if filtered_response and response_structure["Key"] in filtered_response:
+                if value_type == "int" and isinstance(filtered_response[response_structure["Key"]], str):
+                    if filtered_response[response_structure["Key"]].isdigit() or (filtered_response[response_structure["Key"]].startswith("-") and filtered_response[response_structure["Key"]][1:].isdigit()):
+                        try:
+                            filtered_response[response_structure["Key"]] = int(filtered_response[response_structure["Key"]])
+                        except ValueError:
+                            return f"KeyTypeError: ({response_structure["Key"]}) 키의 데이터 타입이 ({value_type})가 아닙니다"
+                
+                if isinstance(filtered_response[response_structure["Key"]], value_type):
+                    return filtered_response
+                else:
+                    return f"KeyTypeError: ({response_structure["Key"]}) 키의 데이터 타입이 ({value_type})가 아닙니다"
+            else:
+                return f"CheckKeyError: ({response_structure["Key"]}) 키가 누락되었습니다"
+        # - innerfunc end -
+
+        # filter4: values 체크
+        # - innerfunc: values 체크 함수 -
+        def values_check(filtered_response: dict, response_structure: dict, comparison_input: str) -> dict:
+            """response_structure에 맞는 value 체크를 실행합니다.
+
+            Args:
+                filtered_response (dict): filtered_response
+                response_structure (dict): response_structure
+                comparison_input (str): comparison_input
+
+            Returns:
+                filtered_response (dict): filtered_response
+            """
+            _value = filtered_response[response_structure["Key"]]
+            for value_check_dict in response_structure["ValueCheckList"]:
+                value_check = value_check_dict["ValueCheck"]
+                # value check item 처리
+                if isinstance(value_check_dict['ValueCheckItem'], list):
+                    value_check_item = value_check_dict['ValueCheckItem']
+                else:
+                    value_check_item = [item.strip() for item in str(value_check_dict['ValueCheckItem']).split(",")]
+                # comparison input 처리
+                if isinstance(comparison_input, list):
+                    comparison_input_item = comparison_input
+                else:
+                    comparison_input_item = [item.strip() for item in str(comparison_input).split(",")]
+
+                # filter4-1: listDataAnswerRangeCheck, 벨류가 리스트인 경우 객관식 답의 범주 체크 (ValueCheckItem: 객관식 답의 범주 리스트)
+                if value_check == "listDataAnswerRangeCheck":
+                    value_check_target = comparison_input_item if value_check_item[0] in ["", "ComparisonInput"] else value_check_item
+
+                    for value in _value:
+                        if value not in value_check_target:
+                            return f"ListDataAnswerRangeCheckError: ({value}) 항목은 ({value_check_target})에 포함되지 않습니다"
+
+                # Filter4-2: listDataInclusionCheck, 벨류가 리스트인 경우 꼭 포함되어야할 데이터 체크 (ValueCheckItem: 포함되어야할 데이터 리스트)
+                if value_check == "listDataInclusionCheck":
+                    value_check_target = comparison_input_item if value_check_item[0] in ["", "ComparisonInput"] else value_check_item
+
+                    for check_item in value_check_target:
+                        if check_item not in _value:
+                            return f"ListDataInclusionCheckError: ({check_item}) 항목이 ({_value})에 포함되어야 합니다"
+
+                # filter4-3: listDataExclusionCheck, 벨류가 리스트인 경우 꼭 포함되지 말아야할 데이터 체크 (ValueCheckItem: 포함되지 말아야할 데이터 리스트)
+                if value_check == "listDataExclusionCheck":
+                    value_check_target = comparison_input_item if value_check_item[0] in ["", "ComparisonInput"] else value_check_item
+
+                    for check_item in value_check_target:
+                        if check_item in _value:
+                            return f"ListDataExclusionCheckError: ({check_item}) 항목이 ({_value})에 포함되어서는 안됩니다"
+
+                # filter4-4: listDataLengthCheck, 벨류가 리스트인 경우 리스트의 길이 체크 (ValueCheckItem: 리스트의 길이 [정수])
+                if value_check == "listDataLengthCheck":
+                    value_check_target = comparison_input_item[0] if value_check_item[0] in ["", "ComparisonInput"] else value_check_item[0]
+
+                    if len(_value) != int(value_check_target):
+                        return f"ListDataLengthCheckError: ({_value}) 의 개수는 ({value_check_target}) 개가 되어야 합니다."
+
+                # filter4-5: listDataRangeCheck, 벨류가 리스트인 경우 리스트 길이의 범위 체크 (ValueCheckItem: 리스트의 길이 범위 [최소, 최대])
+                if value_check == "listDataRangeCheck":
+                    min_target = comparison_input_item[0] if value_check_item[0] in ["", "ComparisonInput"] else value_check_item[0]
+                    max_target = comparison_input_item[1] if value_check_item[0] in ["", "ComparisonInput"] else value_check_item[1]
+
+                    if not (int(min_target) <= len(_value) <= int(max_target)):
+                        return f"ListDataRangeCheckError: ({_value}) 의 개수는 ({min_target}) 개 이상 ({max_target}) 개 이하여야 합니다."
+
+                # filter4-6: strDataAnswerRangeCheck, 벨류가 문자인 경우 객관식 답의 범주 체크 (ValueCheckItem: 객관식 답의 범주 리스트)
+                if value_check == "strDataAnswerRangeCheck":
+                    value_check_target = comparison_input_item if value_check_item[0] in ["", "ComparisonInput"] else value_check_item
+
+                    if _value not in value_check_target:
+                        return f"StrDataAnswerRangeCheckError: ({_value}) 항목은 ({value_check_target})에 포함되지 않습니다"
+
+                # filter4-7: strDataInclusionCheck, 벨류가 문자인 경우 꼭 포함되어야할 문자 체크 (ValueCheckItem: 포함되어야할 문자 리스트)
+                if value_check == "strDataInclusionCheck":
+                    value_check_target = comparison_input_item if value_check_item[0] in ["", "ComparisonInput"] else value_check_item
+
+                    for check_item in value_check_target:
+                        if check_item not in _value:
+                            return f"StrDataInclusionCheckError: ({check_item}) 항목이 ({_value})에 포함되어야 합니다"
+
+                # filter4-8: strDataExclusionCheck, 벨류가 문자인 경우 꼭 포함되지 말아야할 문자 체크 (ValueCheckItem: 포함되지 말아야할 문자 리스트)
+                if value_check == "strDataExclusionCheck":
+                    value_check_target = comparison_input_item if value_check_item[0] in ["", "ComparisonInput"] else value_check_item
+
+                    for check_item in value_check_target:
+                        if check_item in _value:
+                            return f"StrDataExclusionCheckError: ({check_item}) 항목이 ({_value})에 포함되어서는 안됩니다"
+
+                # filter4-9: strDataSameCheck, 벨류가 문자인 경우 문자 일치 여부 체크 (ValueCheckItem: 비교할 문자)
+                if value_check == "strDataSameCheck":
+                    value_check_target = comparison_input_item[0] if value_check_item[0] in ["", "ComparisonInput"] else value_check_item[0]
+
+                    if _value != value_check_target:
+                        return f"StrDataSameCheckError: ({_value}) 는 ({value_check_target}) 여야 합니다"
+
+                # filter4-10: strCleanDataSameCheck, 특수문자/공백 제거 후 동일성 체크
+                if value_check == "strCleanDataSameCheck":
+                    value_check_target = comparison_input_item[0] if value_check_item[0] in ["", "ComparisonInput"] else value_check_item[0]
+
+                    clean_value = re.sub(r'\W+', '', _value, flags=re.UNICODE)
+                    clean_value_check_target = re.sub(r'\W+', '', value_check_target, flags=re.UNICODE)
+                    if clean_value != clean_value_check_target:
+                        return f"StrCleanDataSameCheckError: ({_value}) 는 ({value_check_target}) 여야 합니다"
+
+                # filter4-11: strDataLengthCheck, 문자열 길이 일치 여부 체크
+                if value_check == "strDataLengthCheck":
+                    value_check_target = comparison_input_item[0] if value_check_item[0] in ["", "ComparisonInput"] else value_check_item[0]
+
+                    if len(_value) != int(value_check_target):
+                        return f"StrDataLengthCheckError: ({_value}) 의 개수는 ({value_check_target}) 개가 되어야 합니다."
+
+                # filter4-12: strCleanDataLengthCheck, 특수문자/공백 제거 후 문자열 길이 일치 여부 체크
+                if value_check == "strCleanDataLengthCheck":
+                    value_check_target = comparison_input_item[0] if value_check_item[0] in ["", "ComparisonInput"] else value_check_item[0]
+
+                    clean_value = re.sub(r'\W+', '', _value, flags=re.UNICODE)
+                    clean_value_check_target = re.sub(r'\W+', '', value_check_target, flags=re.UNICODE)
+                    if len(clean_value) != len(clean_value_check_target):
+                        return f"StrCleanDataLengthCheckError: ({_value}) 의 개수는 ({value_check_target}) 개가 되어야 합니다."
+
+                # filter4-13: strDataRangeCheck, 문자열 길이의 범위 체크 (ValueCheckItem: 문자열의 길이 범위 [최소, 최대])
+                if value_check == "strDataRangeCheck":
+                    min_target = comparison_input_item[0] if value_check_item[0] in ["", "ComparisonInput"] else value_check_item[0]
+                    max_target = comparison_input_item[1] if value_check_item[0] in ["", "ComparisonInput"] else value_check_item[1]
+
+                    if not (int(min_target) <= len(_value) <= int(max_target)):
+                        return f"StrDataRangeCheckError: ({_value}) 의 개수는 ({min_target}) 개 이상 ({max_target}) 개 이하여야 합니다."
+
+                # filter4-14: strDataStartEndInclusionCheck, 문자열 처음과 끝에 존재해야하는 필수 문자 체크 (ValueCheckItem: 문자열 처음과 끝에 존재해야하는 문자 리스트 [시작 문자, 끝 문자], 시작 문자 또는 끝 문자중 존재하지 않는 부분은 빈문자 ""로 작성)
+                if value_check == "strDataStartEndInclusionCheck":
+                    start_target = comparison_input_item[0] if value_check_item[0] in ["", "ComparisonInput"] else value_check_item[0]
+                    end_target = comparison_input_item[1] if value_check_item[0] in ["", "ComparisonInput"] else value_check_item[1]
+
+                    if start_target not in _value[0:len(start_target)+10] or end_target not in _value[-len(end_target)-10:-1]:
+                        return f"StrDataStartEndInclusionCheckError: ({_value}) 는 ({start_target}) 로 시작하고 ({end_target}) 로 끝나야 합니다"
+
+                # filter4-15: strDataStartEndExclusionCheck, 문자열 처음과 끝에 존재하지 말아야할 문자 체크 (ValueCheckItem: 문자열 처음과 끝에 존재하지 말아야할 문자 리스트 [시작 문자, 끝 문자], 시작 문자 또는 끝 문자중 존재하지 않는 부분은 빈문자 ""로 작성)
+                if value_check == "strDataStartEndExclusionCheck":
+                    start_check_item = comparison_input_item[0] if value_check_item[0] in ["", "ComparisonInput"] else value_check_item[0]
+                    end_check_item = comparison_input_item[1] if value_check_item[0] in ["", "ComparisonInput"] else value_check_item[1]
+
+                    start_check_item = "(포@함-방$지_문^구#)" if len(start_check_item) == 0 else start_check_item
+                    end_check_item = "(포@함-방$지_문^구#)" if len(end_check_item) == 0 else end_check_item
+
+                    if start_check_item in _value[0:len(start_check_item)+20] or end_check_item in _value[-len(end_check_item)-20:-1]:
+                        return f"StrDataStartEndExclusionCheckError: ({_value}) 는 ({start_check_item}) 로 시작하고 ({end_check_item}) 로 끝나지 않아야 합니다"
+
+                # filter4-16: strMainLangCheck, 문자열 주요 언어 체크 (ValueCheckItem: 주요 언어 코드 ko, en, ja, zh 등)
+                if value_check == "strMainLangCheck":
+                    # - inner-innerfunc: spaCy 기반 언어 감지 함수 정의 -
+                    def detect_lang_with_spacy(text):
+                        """spaCy 기반 언어 감지 (가능하면 SpacyFastlang, 안되면 SpacyLangdetect), 모두 실패하면 간단한 유니코드 휴리스틱으로 추정, 반환: ISO 639-1 소문자 코드(가능한 경우), 실패 시 'unknown'
+                        Args:
+                            text (str): 텍스트
+
+                        Returns:
+                            str: 언어 코드
+                        """
+                        # spacy_fastlang 및 spacy_langdetect 설치 여부 확인
+                        try:
+                            from spacy_fastlang import Language as FastLang  # type: ignore
+                        except ImportError:
+                            FastLang = None
+
+                        try:
+                            from spacy_langdetect import LanguageDetector  # type: ignore
+                        except ImportError:
+                            LanguageDetector = None
+                        
+                        # spacy_fastlang 시도
+                        try:
+                            if FastLang is not None:
+                                nlp = spacy.blank("xx")
+                                if "language_detector" not in nlp.pipe_names:
+                                    nlp.add_pipe("language_detector")
+                                doc = nlp(text)
+                                lang_attr = getattr(doc._, "language", None)
+                                if isinstance(lang_attr, str) and 2 <= len(lang_attr) <= 3:
+                                    return lang_attr.lower()
+                                if isinstance(lang_attr, dict) and "language" in lang_attr:
+                                    return str(lang_attr["language"]).lower()
+                        except Exception:
+                            pass
+
+                        # spacy_langdetect 시도
+                        try:
+                            if LanguageDetector is not None:
+                                @spacy.Language.factory("language_detector")
+                                def create_lang_detector(nlp, name):
+                                    return LanguageDetector()
+
+                                nlp = spacy.blank("xx")
+                                if "language_detector" not in nlp.pipe_names:
+                                    nlp.add_pipe("language_detector")
+                                doc = nlp(text)
+                                lang_attr = getattr(doc._, "language", None)
+                                if isinstance(lang_attr, dict) and "language" in lang_attr:
+                                    return str(lang_attr["language"]).lower()
+                        except Exception:
+                            pass
+
+                        # 휴리스틱(유니코드 범위 기반 간단 추정)
+                        try:
+                            hangul = len(re.findall(r"[가-힣]", text))
+                            kana = len(re.findall(r"[\u3040-\u309F\u30A0-\u30FF]", text))
+                            hanzi = len(re.findall(r"[\u4E00-\u9FFF]", text))
+                            latin = len(re.findall(r"[A-Za-z]", text))
+
+                            counts = {
+                                "ko": hangul,
+                                "ja": kana,
+                                "zh": hanzi,
+                                "en": latin,
+                            }
+                            best = max(counts.items(), key=lambda x: x[1])
+                            return best[0] if best[1] > 0 else "unknown"
+                        except Exception:
+                            return "unknown"
+                    # - inner-innerfunc end -
+
+                    # filter4-16-2: 주요 언어 체크
+                    value_check_target = comparison_input_item[0] if value_check_item[0] in ["", "ComparisonInput"] else value_check_item[0]
+                    value_check_target = value_check_target.lower()
+
+                    detected_lang = detect_lang_with_spacy(_value).lower()
+                    if detected_lang != value_check_target:
+                        return f"StrMainLangCheckError: ({_value}) 의 주요 언어는 ({value_check_target}) 여야 합니다 (감지된 언어: {detected_lang})"
+
+                # filter4-17: intDataAnswerRangeCheck, 벨류가 숫자인 경우 답의 범주 체크 (ValueCheckItem: 객관식 답의 범주 리스트)
+                if value_check == "intDataAnswerRangeCheck":
+                    value_check_target = comparison_input_item if value_check_item[0] in ["", "ComparisonInput"] else value_check_item
+                    value_check_target = [int(item) for item in value_check_target]
+
+                    if isinstance(_value, int) or (isinstance(_value, str) and _value.isdigit()):
+                        filtered_response[response_structure["Key"]] = int(_value)
+                        if _value not in value_check_target:
+                            return f"IntDataAnswerRangeCheckError: ({_value}) 항목은 ({value_check_target})에 포함되지 않습니다"
+                
+                # filter4-18: intDataRangeCheck, 벨류가 숫자인 경우 수의 범위 체크 (ValueCheckItem: 수의 범위 [최소, 최대])
+                if value_check == "intDataRangeCheck":
+                    min_target = comparison_input_item[0] if value_check_item[0] in ["", "ComparisonInput"] else value_check_item[0]
+                    max_target = comparison_input_item[1] if value_check_item[0] in ["", "ComparisonInput"] else value_check_item[1]
+
+                    if isinstance(_value, int) or (isinstance(_value, str) and _value.isdigit()):
+                        filtered_response[response_structure["Key"]] = int(_value)
+                        if not (int(min_target) <= _value <= int(max_target)):
+                            return f"IntDataRangeCheckError: ({_value}) 의 개수는 ({min_target}) 개 이상 ({max_target}) 개 이하여야 합니다."
+                
+                # filter4-19: intDataSameCheck, 벨류가 숫자인 경우 수 일치 여부 체크 (ValueCheckItem: 비교할 숫자)
+                if value_check == "intDataSameCheck":
+                    value_check_target = comparison_input_item[0] if value_check_item[0] in ["", "ComparisonInput"] else value_check_item[0]
+
+                    if isinstance(_value, int) or (isinstance(_value, str) and _value.isdigit()):
+                        filtered_response[response_structure["Key"]] = int(_value)
+                        self.print_log("Task", ["Log", "Info"], ["Info", "Error"], function_name="agent._response_filter.value_check -> intDataSameCheck", _print=f"{int(value_check_target)} -> {int(_value)}")
+                        if _value != int(value_check_target):
+                            return f"IntDataSameCheckError: ({filtered_response[response_structure["Key"]]}) 는 ({value_check_target}) 여야 합니다."
+
+            return filtered_response
+        # - innerfunc end -
+
+        # filter error1: main_check
+        # filter error1-1: format_json
+        filtered_response = format_json(response)
+        if isinstance(filtered_response, str):
+            filtered_response_error_message = filtered_response
+            return filtered_response_error_message
+        
+        # filter error1-2: main_check_key
+        filtered_response = check_key(filtered_response, response_structure)
+        if isinstance(filtered_response, str):
+            filtered_response_error_message = filtered_response
+            return filtered_response_error_message
+               
+        # filter error1-3: main_values_check
+        filtered_response = values_check(filtered_response, response_structure, comparison_input)
+        if isinstance(filtered_response, str):
+            filtered_response_error_message = filtered_response
+            return filtered_response_error_message
+        
+        
+        # filter error2: sub-check
+        # filter error2(1): main_value_type이 dict인 경우
+        if response_structure["ValueType"] == "dict":
+            sub_filtered_response = filtered_response[response_structure["Key"]]
+            for i in range(len(response_structure["Value"])):
+
+                # filter error2(1)-2: sub_check_key
+                _sub_filtered_response = check_key(sub_filtered_response, response_structure["Value"][i])
+                if isinstance(_sub_filtered_response, str):
+                    filtered_response_error_message = _sub_filtered_response
+                    return filtered_response_error_message
+
+                # filter error2(1)-3: sub_values_check
+                _sub_filtered_response = values_check(sub_filtered_response, response_structure["Value"][i], comparison_input)
+                if isinstance(_sub_filtered_response, str):
+                    filtered_response_error_message = _sub_filtered_response
+                    return filtered_response_error_message
+                
+                # filter error2(1)-4: sub_value_type이 dict 또는 list인 경우에만 sub_Sub 체크
+                # sub_value_type이 dict인 경우
+                if response_structure["Value"][i]["ValueType"] == "dict":
+                    sub_sub_filtered_response = sub_filtered_response[response_structure["Value"][i]["Key"]]
+                    for j in range(len(response_structure["Value"][i]["Value"])):
+                        
+                        # filter error2(1)-4-1: sub_sub_check_key
+                        _sub_sub_filtered_response = check_key(sub_sub_filtered_response, response_structure["Value"][i]["Value"][j])
+                        if isinstance(_sub_sub_filtered_response, str):
+                            filtered_response_error_message = _sub_sub_filtered_response
+                            return filtered_response_error_message
+
+                        # filter error2(1)-4-2: sub_sub_values_check
+                        _sub_sub_filtered_response = values_check(sub_sub_filtered_response, response_structure["Value"][i]["Value"][j], comparison_input)
+                        if isinstance(_sub_sub_filtered_response, str):
+                            filtered_response_error_message = _sub_sub_filtered_response
+                            return filtered_response_error_message
+
+                # filter error2(1)-4: sub_value_type이 list인 경우
+                if response_structure["Value"][i]["ValueType"] == "list":
+                    for sub_sub_filtered_response in sub_filtered_response[response_structure["Value"][i]["Key"]]:
+                        for j in range(len(response_structure["Value"][i]["Value"])):
+
+                            # filter error2(1)-4-1: sub_sub_check_key
+                            _sub_sub_filtered_response = check_key(sub_sub_filtered_response, response_structure["Value"][i]["Value"][j])
+                            if isinstance(_sub_sub_filtered_response, str):
+                                filtered_response_error_message = _sub_sub_filtered_response
+                                return filtered_response_error_message
+
+                            # filter error2(1)-4-2: sub_sub_values_check
+                            _sub_sub_filtered_response = values_check(sub_sub_filtered_response, response_structure["Value"][i]["Value"][j], comparison_input)
+                            if isinstance(_sub_sub_filtered_response, str):
+                                filtered_response_error_message = _sub_sub_filtered_response
+                                return filtered_response_error_message
+
+        # filter error2(2): main_value_type이 list인 경우
+        if response_structure["ValueType"] == "list":
+            for sub_filtered_response in filtered_response[response_structure["Key"]]:
+                for i in range(len(response_structure["Value"])):
+
+                    # filter error2(2)-2: sub_check_key
+                    _sub_filtered_response = check_key(sub_filtered_response, response_structure["Value"][i])
+                    if isinstance(_sub_filtered_response, str):
+                        filtered_response_error_message = _sub_filtered_response
+                        return filtered_response_error_message
+
+                    # filter error2(2)-3: sub_values_check
+                    _sub_filtered_response = values_check(sub_filtered_response, response_structure["Value"][i], comparison_input)
+                    if isinstance(_sub_filtered_response, str):
+                        filtered_response_error_message = _sub_filtered_response
+                        return filtered_response_error_message
+
+                    # filter error2(2)-4: sub_value_type이 dict 또는 list인 경우에만 sub_Sub 체크
+                    # sub_value_type이 dict인 경우
+                    if response_structure["Value"][i]["ValueType"] == "dict":
+                        sub_sub_filtered_response = sub_filtered_response[response_structure["Value"][i]["Key"]]
+                        for j in range(len(response_structure["Value"][i]["Value"])):
+                            
+                            # filter error2(2)-4-1: sub_sub_check_key
+                            _sub_sub_filtered_response = check_key(sub_sub_filtered_response, response_structure["Value"][i]["Value"][j])
+                            if isinstance(_sub_sub_filtered_response, str):
+                                filtered_response_error_message = _sub_sub_filtered_response
+                                return filtered_response_error_message
+
+                            # filter error2(2)-4-2: sub_sub_values_check
+                            _sub_sub_filtered_response = values_check(sub_sub_filtered_response, response_structure["Value"][i]["Value"][j], comparison_input)
+                            if isinstance(_sub_sub_filtered_response, str):
+                                filtered_response_error_message = _sub_sub_filtered_response
+                                return filtered_response_error_message
+
+                    # filter error2(2)-4: sub_value_type이 list인 경우
+                    if response_structure["Value"][i]["ValueType"] == "list":
+                        for sub_sub_filtered_response in sub_filtered_response[response_structure["Value"][i]["Key"]]:
+                            for j in range(len(response_structure["Value"][i]["Value"])):
+
+                                # filter error2(2)-4-1: sub_sub_check_key
+                                _sub_sub_filtered_response = check_key(sub_sub_filtered_response, response_structure["Value"][i]["Value"][j])
+                                if isinstance(_sub_sub_filtered_response, str):
+                                    filtered_response_error_message = _sub_sub_filtered_response
+                                    return filtered_response_error_message
+
+                                # filter error2(2)-4-2: sub_sub_values_check
+                                _sub_sub_filtered_response = values_check(sub_sub_filtered_response, response_structure["Value"][i]["Value"][j], comparison_input)
+                                if isinstance(_sub_sub_filtered_response, str):
+                                    filtered_response_error_message = _sub_sub_filtered_response
+                                    return filtered_response_error_message
+
+        # 모든 조건을 만족하면 필터링된 응답 반환
+        return filtered_response[response_structure["Key"]]
+
     # -------------------------------
     # --- func-set: agent run -------
     # --- class-func: agent 초기화 ---
@@ -245,6 +715,9 @@ class Agent(LLM):
         self.ignore_count_check = ignore_count_check
         self.filter_pass = filter_pass
 
+        # response_structure 설정
+        self.response_structure = self.read_json("Solution", [self.solution, "Form", self.process_name], ["Message", self.main_lang, "ResponseStructure"])
+
         # input_list 설정
         self.input_list = self._create_input_list()
         self.total_input_count = len(self.input_list)
@@ -275,26 +748,26 @@ class Agent(LLM):
             response = self.request_llm(input, memory_note, input_count, total_input_count)
 
             # 생성된 response 필터
-            filtered_response = self.response_post_process_func(response, comparison_input)
+            filtered_response = self._response_filter(response, comparison_input, self.response_structure)
 
             # 필터 에외처리, JSONDecodeError 처리
             if isinstance(filtered_response, str):
                 error_count += 1
                 self.print_log("Task", ["Log", "Info"], ["Info", "Error"], function_name="agent._request_agent", _print=f"오류횟수 {error_count}회, 10초 후 프롬프트 재시도")
 
-                # Error 3회시 해당 프로세스 사용 안함 예외처리
+                # filter error 3회시 해당 프로세스 사용 안함 예외처리
                 if self.filter_pass and error_count >= 3:
                     self.print_log("Task", ["Log", "Info"], ["Info", "Complete"], function_name="agent._request_agent", _print="ErrorPass 완료")
 
                     return "ErrorPass"
 
-                # Error 10회시 프롬프트 종료
+                # filter error 10회시 프롬프트 종료
                 if error_count >= 10:
                     self.print_log("Task", ["Log", "Info"], ["Info", "Error"], function_name="agent._request_agent", _print=f"오류횟수 {error_count}회 초과, 프롬프트 종료", exit=True)
 
                 continue
 
-            self.print_log("Task", ["Log", "Info"], ["Info", "Complete"], function_name="agent._request_agent", _print="FilteredResponse, JSONDecode 완료")
+            self.print_log("Task", ["Log", "Info"], ["Info", "Complete"], function_name="agent._request_agent", _print="filtered_response, JSONDecode 완료")
 
             return filtered_response
 

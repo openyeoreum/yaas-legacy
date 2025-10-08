@@ -117,6 +117,14 @@
                 # - innerfunc end -
 
 
+            * inner-innerfunc *
+
+                # - inner-innerfunc: ... -
+                def ..._func(...):
+                ...
+                # - inner-innerfunc end -
+
+
             * for, if 등의 기능단위 *
 
                 ## 기능설명

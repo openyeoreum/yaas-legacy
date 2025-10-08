@@ -50,7 +50,7 @@ class Agent(LLM):
             main_lang)
 
     # ----------------------------------------
-    # --- func-set: input --------------------
+    # --- func-set: requset input ------------
     # --- class-func: input_list 생성 및 처리 ---
     def _create_input_list(self):
         """input_list를 생성합니다.
@@ -94,9 +94,9 @@ class Agent(LLM):
         """comparison_input을 후처리 합니다."""
         pass
 
-    # -------------------------------------------------------------
-    # --- func-set: check, completion -----------------------------
-    # --- class-func: process_middle_frame의 파일, 카운트, 완료 체크 ---
+    # ----------------------------------------------------------------------
+    # --- func-set: check, completion --------------------------------------
+    # --- class-func: solution_process_middle_frame의 파일, 카운트, 완료 체크 ---
     def _check_process_middle_frame(self):
         """process_middle_frame의 파일, 카운트, 완료 체크 합니다.
         
@@ -107,11 +107,8 @@ class Agent(LLM):
         input_count = 1
         middle_frame_completion = False
 
-        # process_middle_frame이 존재하지 않는 경우
-        if not os.path.exists(self.read_path_map("Solution", [self.solution, "File", "Json", "MiddleFrame"])):
-            return input_count, middle_frame_completion
-        else:
-            # process_middle_frame 불러오기
+        # solution_process_middle_frame이 존재 여부 확인
+        if os.path.exists(self.read_path_map("Solution", [self.solution, "File", "Json", "MiddleFrame"])):
             solution_process_middle_frame = self.load_json("Solution", [self.solution, "File", "Json", "MiddleFrame"])
 
             # input_count, middle_frame_completion 확인
@@ -119,6 +116,8 @@ class Agent(LLM):
             middle_frame_completion = solution_process_middle_frame[0]['Completion']
 
             return next_input_count, middle_frame_completion
+        else:
+            return input_count, middle_frame_completion
 
     # --- class-func: solution_edit의 파일, 완료 체크 ---
     def _check_solution_edit(self):
@@ -152,7 +151,7 @@ class Agent(LLM):
         edit_response_post_process_completion = False
         edit_output_completion = False
 
-        # solution_edit 경로가 존재하는지 확인 후 불러오기
+        # solution_edit 존재 여부 확인
         if os.path.exists(self.read_path_map("Solution", [self.solution, "File", "Json", "Edit"])):
             # solution_edit 체크
             solution_edit = self.load_json("Solution", [self.solution, "File", "Json", "Edit"])
@@ -398,7 +397,7 @@ class Agent(LLM):
 
                 # filter4-16: strMainLangCheck, 문자열 주요 언어 체크 (ValueCheckItem: 주요 언어 코드 ko, en, ja, zh 등)
                 if value_check == "strMainLangCheck":
-                    # - inner-innerfunc: spaCy 기반 언어 감지 함수 정의 -
+                    # - inner-innerfunc: spaCy 기반 언어 감지 함수 -
                     def detect_lang_with_spacy(text):
                         """spaCy 기반 언어 감지 (가능하면 SpacyFastlang, 안되면 SpacyLangdetect), 모두 실패하면 간단한 유니코드 휴리스틱으로 추정, 반환: ISO 639-1 소문자 코드(가능한 경우), 실패 시 'unknown'
                         Args:
@@ -638,6 +637,143 @@ class Agent(LLM):
         # 모든 조건을 만족하면 필터링된 응답 반환
         return filtered_response[response_structure["Key"]]
 
+    # --------------------------------------------------------
+    # --- func-set: response update --------------------------
+    # --- class-func: solution_process_middle_frame 업데이트 ---
+    def _update_process_middle_frame(self, input_count: int, response: dict | list) -> None:
+        """solution_process_middle_frame을 업데이트합니다.
+
+        Args:
+            input_count (int): 입력 수
+            response (dict | list): 응답
+        """
+         # - innerfunc: response의 global 통합 함수 -
+        def update_solution_process_global_data(solution_process_data: dict | list) -> dict | list:
+            """response의 global, ko의 global 통합 함수
+            
+            Args:
+                solution_process_data (dict | list): 응답
+
+            Returns:
+                solution_process_data (dict | list): 응답
+            """
+            if self.main_lang == "ko":
+                # solution_process_middle_frame wordpairs 불러오기
+                word_pairs = self.load_json("Solution", [self.solution, "Form", self.process_name, "MiddleFrame"], json_keys=["WordPairs"])
+                
+                # solution_process_data global 통합
+                if word_pairs != []:
+                    # solution_process_data가 dict인 경우
+                    if isinstance(solution_process_data, dict):
+                        for word_pair in word_pairs:
+                            for i, ko_value in enumerate(word_pair["ko"]):
+                                if solution_process_data[word_pair["key"]] == ko_value:
+                                    solution_process_data[word_pair["key"]] = word_pair["global"][i]
+
+                    # solution_process_data가 list인 경우
+                    elif isinstance(solution_process_data, list):
+                        for i in range(len(solution_process_data)):
+                            for word_pair in word_pairs:
+                                for j, ko_value in enumerate(word_pair["ko"]):
+                                    if solution_process_data[i][word_pair["key"]] == ko_value:
+                                        solution_process_data[i][word_pair["key"]] = word_pair["global"][j]
+
+            return solution_process_data
+        # - innerfunc end -
+
+        # solution_process_middle_frame 존재 여부 확인
+        if os.path.exists(self.read_path_map("Solution", [self.solution, "File", "Json", "MiddleFrame"])):
+            solution_process_middle_frame = self.load_json("Solution", [self.solution, "File", "Json", "MiddleFrame"])
+        else:
+            solution_process_middle_frame = self.load_json("Solution", [self.solution, "Form", self.process_name, "MiddleFrame", self.main_lang])
+
+        # solution_process_info 데이터 업데이트
+        solution_process_info = solution_process_middle_frame[0].copy()
+        for key, value_expression in solution_process_info.items():
+            if key in ["InputCount", "Completion"]:
+                continue
+            
+            actual_value = value_expression
+            if isinstance(value_expression, str) and value_expression.startswith("eval(") and value_expression.endswith(")"):
+                # "eval("와 ")" 부분을 제외한 안쪽 코드만 추출
+                code_to_eval = eval(value_expression[5:-1])
+                actual_value = eval(code_to_eval)
+
+            solution_process_middle_frame[0][key] = actual_value
+        
+        # solution_process_data 데이터 업데이트
+        # response가 dict인 경우
+        solution_process_data = copy.deepcopy(solution_process_middle_frame[1][0])
+        if isinstance(solution_process_data, dict):
+            for key, value_expression in solution_process_data.items():
+                actual_value = value_expression
+                if isinstance(value_expression, str) and value_expression.startswith("eval(") and value_expression.endswith(")"):
+                    # "eval("와 ")" 부분을 제외한 안쪽 코드만 추출
+                    code_to_eval = value_expression[5:-1]
+                    actual_value = eval(code_to_eval)
+
+                solution_process_data[key] = actual_value
+        
+        # response가 list인 경우
+        elif isinstance(solution_process_data, list):
+            for i in range(len(solution_process_data)):
+                for key, value_expression in solution_process_data[i].items():
+                    actual_value = value_expression
+                    if isinstance(value_expression, str) and value_expression.startswith("eval(") and value_expression.endswith(")"):
+                        # "eval("와 ")" 부분을 제외한 안쪽 코드만 추출
+                        code_to_eval = value_expression[5:-1]
+                        actual_value = eval(code_to_eval)
+
+                    solution_process_data[i][key] = actual_value
+        
+        # solution_process_middle_frame 데이터 프레임 업데이트
+        solution_process_middle_frame[1].append(update_solution_process_global_data(solution_process_data))
+        
+        # solution_process_middle_frame process_count 및 completion 업데이트
+        solution_process_middle_frame[0]['InputCount'] = input_count
+        if input_count == self.total_input_count:
+            solution_process_middle_frame[0]['Completion'] = 'Yes'
+        
+        # solution_process_middle_frame 저장
+        self.save_storage_json("Solution", [self.solution, "File", "Json", "MiddleFrame"], solution_process_middle_frame)
+
+    # --- class-func: solution_edit 업데이트 ---
+    def _update_solution_edit(self):
+        """solution_edit을 업데이트합니다.
+        """
+        # solution_process_middle_frame 불러온 뒤 completion 확인
+        solution_project_middle_frame = self.load_json("Solution", [self.solution, "File", "Json", "MiddleFrame"])
+        if solution_project_middle_frame["Completion"] == "Yes":
+            # solution_edit 존재 여부 확인
+            if os.path.exists(self.read_path_map("Solution", [self.solution, "File", "Json", "Edit"])):
+                solution_edit = self.load_json("Solution", [self.solution, "File", "Json", "Edit"])
+            # solution_edit 존재 안할때
+            else:
+                solution_edit = {}
+            
+            # solution_edit 업데이트
+            solution_edit[self.process_name] = []
+            if self.edit_mode:
+                solution_edit[f"{self.process_name}ResponseCompletion"] = "Completion"
+            else:
+                solution_edit[f"{self.process_name}ResponseCompletion"] = "완료 후 Completion"
+            solution_edit[f"{self.process_name}ResponsePostProcessCompletion"] = "완료 후 자동 Completion"
+            solution_edit[f"{self.process_name}OutputCompletion"] = "완료 후 자동 Completion"
+
+            solution_project_data_list = solution_project_middle_frame[1]
+            for i in range(1, len(solution_project_data_list)):
+                solution_project_data = solution_project_data_list[i]
+                solution_edit[self.process_name].append(solution_project_data)
+
+            # solution_project_middle_frame에서 추가 데이터가 존재하는 경우 예외 저장
+            if len(solution_project_middle_frame) > 2:
+                for i, additional_data in enumerate(solution_project_middle_frame[2:], start=1):
+                    additional_key = f"{self.process_name}AdditionalData{i}"
+                    solution_edit[additional_key] = additional_data
+
+            # solution_edit 저장
+            self.save_storage_json("Solution", [self.solution, "File", "Json", "Edit"], solution_edit)
+
     # -------------------------------
     # --- func-set: agent run -------
     # --- class-func: agent 초기화 ---
@@ -716,7 +852,7 @@ class Agent(LLM):
         self.filter_pass = filter_pass
 
         # response_structure 설정
-        self.response_structure = self.read_json("Solution", [self.solution, "Form", self.process_name], ["Message", self.main_lang, "ResponseStructure"])
+        self.response_structure = self.load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["Message", self.main_lang, "ResponseStructure"])
 
         # input_list 설정
         self.input_list = self._create_input_list()
@@ -831,7 +967,7 @@ class Agent(LLM):
                         response = input
 
                     ## DataFrame 저장
-                    self._update_process_data_frame(input_count, response)
+                    self._update_process_middle_frame(input_count, response)
 
             ## Edit 저장
             self._update_solution_edit()

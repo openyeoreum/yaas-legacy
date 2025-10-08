@@ -149,10 +149,10 @@ class LLM(Manager):
         message_time = f"current time: {str(datetime.now())}\n\n"
 
         # 메세지 불러오기
-        message_dict = self.read_json("Solution", [self.solution, "Form", self.process_name], ["Message", self.main_lang])
+        message_dict = self.load_json("Solution", [self.solution, "Form", self.process_name],json_keys=["Message", self.main_lang])
 
         # InputFormat 불러오기
-        input_format = self.read_json("Solution", [self.solution, "Form", self.process_name], ["Format", "InputFormat"])
+        input_format = self.load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["Format", "InputFormat"])
 
         # InputFormat이 Text가 아닌 경우에는 파일리스트 정리
         if input_format != "text":
@@ -251,7 +251,7 @@ class LLM(Manager):
         self.memory_note = memory_note
 
         api_config_dict = self._load_api_config()
-        api_dict = self.read_json("Solution", [self.solution, "Form", self.process_name], ["API"])
+        api_dict = self.load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["API"])
         self.service = api_dict["Service"]
         level = api_dict["Level"]
         self.client = self._load_api_client(self.service)
@@ -261,7 +261,7 @@ class LLM(Manager):
         if "MaxTokens" in api_config_dict["LanguageModel"][self.service][level]:
             self.max_tokens = api_config_dict["LanguageModel"][self.service][level]["MaxTokens"]
 
-        format_dict = self.read_json("Solution", [self.solution, "Form", self.process_name], ["Format"])
+        format_dict = self.load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["Format"])
         self.input_format = format_dict["InputFormat"]
         self.response_format = format_dict["ResponseFormat"]
 

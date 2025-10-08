@@ -48,27 +48,9 @@ class Manager(Log):
     # --- class-func: storage json 불러오기 ---
     def load_json(self,
                   work: str,
-                  common_keys: list) -> dict:
-        """self.read_path_map(work, common_keys)의 json을 불러옵니다.
-
-        Args:
-            work (str): "Core" 또는 "Solution" 또는 "Generation"
-            common_keys (list): path_map json의 연속된 키 값 (form_keys, file_keys 사용 권장)
-
-        Returns:
-            json_data 불러오기 (dict): self.read_path_map(work, common_keys)
-        """
-        with open(self.read_path_map(work, common_keys), "r", encoding="utf-8") as f:
-            json_data = json.load(f)
-
-        return json_data
-
-    # --- class-func: storage json data 가져오기 ---
-    def read_json(self,
-                  work: str,
                   common_keys: list,
-                  json_keys: list) -> str | dict | list:
-        """self.read_path_map(work, common_keys)의 json에서 데이터를 가져옵니다.
+                  json_keys: list = None) -> str | dict | list:
+        """self.read_path_map(work, common_keys)의 json을 불러옵니다.
 
         Args:
             work (str): "Core" 또는 "Solution" 또는 "Generation"

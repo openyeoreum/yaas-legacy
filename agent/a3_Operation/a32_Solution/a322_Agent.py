@@ -85,12 +85,12 @@ class Agent(LLM):
         return input_list
 
     # --- class-func: input을 후처리 ---
-    def _post_process_input(self):
+    def _postprocess_input(self):
         """input을 후처리 합니다."""
         pass
 
     # --- class-func: comparison_input을 후처리 ---
-    def _post_process_comparison_input(self):
+    def _postprocess_comparison_input(self):
         """comparison_input을 후처리 합니다."""
         pass
 
@@ -126,7 +126,7 @@ class Agent(LLM):
         Returns:
         """
         # - innerfunc: edit check 함수 -
-        def edit_check_func(solution_edit, edit_check, edit_response_completion, edit_response_post_process_completion, edit_output_completion):
+        def edit_check_func(solution_edit, edit_check, edit_response_completion, edit_response_postprocess_completion, edit_output_completion):
             # edit_check 확인
             edit_check = True
             
@@ -134,21 +134,21 @@ class Agent(LLM):
             if solution_edit[f"{self.process_name}ResponseCompletion"] == 'Completion':
                 edit_response_completion = True
             
-            # edit_response_post_process_completion 확인
+            # edit_response_postprocess_completion 확인
             if solution_edit.get(f"{self.process_name}ResponsePostProcessCompletion") == 'Completion':
-                edit_response_post_process_completion = True
+                edit_response_postprocess_completion = True
             
             # edit_output_completion 확인
             if solution_edit[f"{self.process_name}OutputCompletion"] == 'Completion':
                 edit_output_completion = True
 
-            return edit_check, edit_response_completion, edit_response_post_process_completion, edit_output_completion
+            return edit_check, edit_response_completion, edit_response_postprocess_completion, edit_output_completion
         # - innerfunc end -
 
         # edit_check 초기화
         edit_check = False
         edit_response_completion = False
-        edit_response_post_process_completion = False
+        edit_response_postprocess_completion = False
         edit_output_completion = False
 
         # solution_edit 존재 여부 확인
@@ -159,19 +159,19 @@ class Agent(LLM):
             # 입력 수 체크 안함 (입력의 카운트가 의미가 없는 경우 예시로 IndexDefine 등)
             if self.ignore_count_check:
                 if self.process_name in solution_edit.keys():
-                    edit_check, edit_response_completion, edit_response_post_process_completion, edit_output_completion = edit_check_func(solution_edit, edit_check, edit_response_completion, edit_response_post_process_completion, edit_output_completion)
+                    edit_check, edit_response_completion, edit_response_postprocess_completion, edit_output_completion = edit_check_func(solution_edit, edit_check, edit_response_completion, edit_response_postprocess_completion, edit_output_completion)
             else:
                 # 입력 수의 기준키 설정 (InputCount의 수가 단순 데이터 리스트의 총 개수랑 맞지 않는 경우)
                 if self.input_count_key:
                     if self.process_name in solution_edit.keys() and solution_edit[self.process_name][-1][self.input_count_key] == self.total_input_count * self.outputs_per_input:
-                        edit_check, edit_response_completion, edit_response_post_process_completion, edit_output_completion = edit_check_func(solution_edit, edit_check, edit_response_completion, edit_response_post_process_completion, edit_output_completion)
+                        edit_check, edit_response_completion, edit_response_postprocess_completion, edit_output_completion = edit_check_func(solution_edit, edit_check, edit_response_completion, edit_response_postprocess_completion, edit_output_completion)
                 
                 # 일반적인 입력 수 체크
                 else:
                     if self.process_name in solution_edit and len(solution_edit[self.process_name]) == self.total_input_count * self.outputs_per_input:
-                        edit_check, edit_response_completion, edit_response_post_process_completion, edit_output_completion = edit_check_func(solution_edit, edit_check, edit_response_completion, edit_response_post_process_completion, edit_output_completion)
+                        edit_check, edit_response_completion, edit_response_postprocess_completion, edit_output_completion = edit_check_func(solution_edit, edit_check, edit_response_completion, edit_response_postprocess_completion, edit_output_completion)
 
-        return edit_check, edit_response_completion, edit_response_post_process_completion, edit_output_completion
+        return edit_check, edit_response_completion, edit_response_postprocess_completion, edit_output_completion
 
     # -----------------------------------
     # --- func-set: response filter ------
@@ -640,22 +640,22 @@ class Agent(LLM):
     # --------------------------------------------------------
     # --- func-set: response update --------------------------
     # --- class-func: solution_process_middle_frame 업데이트 ---
-    def _update_process_middle_frame(self, input_count: int, response: dict | list) -> None:
+    def _update_process_middle_frame(self, input_count: int, response: dict) -> None:
         """solution_process_middle_frame을 업데이트합니다.
 
         Args:
             input_count (int): 입력 수
-            response (dict | list): 응답
+            response (dict): 응답
         """
          # - innerfunc: response의 global 통합 함수 -
-        def update_solution_process_global_data(solution_process_data: dict | list) -> dict | list:
+        def update_solution_process_global_data(solution_process_data: dict) -> dict:
             """response의 global, ko의 global 통합 함수
             
             Args:
-                solution_process_data (dict | list): 응답
+                solution_process_data (dict): 응답
 
             Returns:
-                solution_process_data (dict | list): 응답
+                solution_process_data (dict): 응답
             """
             if self.main_lang == "ko":
                 # solution_process_middle_frame wordpairs 불러오기
@@ -774,13 +774,62 @@ class Agent(LLM):
             # solution_edit 저장
             self.save_storage_json("Solution", [self.solution, "File", "Json", "Edit"], solution_edit)
 
+    # ------------------------------------------
+    # --- func-set: response pre/postprocess ---
+    # --- class-func: response 전처리 ------------
+    def _preprocess_response(self, response: dict) -> dict:
+        """response를 전처리합니다.
+        """
+        # NOTE: response 전처리 개발 진행
+        return response
+    
+    # --- class-func: response 후처리 ---
+    def _postprocess_response(self, solution_edit: dict) -> dict:
+        """response를 후처리합니다.
+
+        Args:
+            solution_edit (dict): solution_edit
+
+        Effects:
+            solution_edit 업데이트
+        """
+        solution_edit_process = solution_edit[self.process_name]
+
+        # solution_edit_process 후처리 함수 실행
+        if self.output_func(solution_edit_process):
+            solution_edit[f"{self.process_name}ResponsePostProcessCompletion"] = "Completion"
+
+            # solution_edit 저장
+            self.save_storage_json("Solution", [self.solution, "File", "Json", "Edit"], solution_edit)
+
+    # -------------------------------
+    # --- func-set: output create ---
+    # --- class-func: output 생성 ----
+    def _create_output(self, solution_edit: dict) -> dict:
+        """output을 생성합니다.
+
+        Args:
+            solution_edit (dict): solution_edit
+
+        Effects:
+            solution_edit 업데이트
+        """
+        solution_edit_process = solution_edit[self.process_name]
+
+        # solution_edit_process 출력 함수 실행
+        if self.output_func(solution_edit_process):
+            solution_edit[f"{self.process_name}OutputCompletion"] = "Completion"
+
+            # solution_edit 저장
+            self.save_storage_json("Solution", [self.solution, "File", "Json", "Edit"], solution_edit)
+
     # -------------------------------
     # --- func-set: agent run -------
     # --- class-func: agent 초기화 ---
     def _init_agent(self,
                     input_list_func: callable,
                     response_preprocess_func: callable,
-                    response_post_process_func: callable,
+                    response_postprocess_func: callable,
                     output_func: callable,
 
                     response_mode: str,
@@ -795,7 +844,7 @@ class Agent(LLM):
         Args:
             input_list_func (callable): 입력 리스트 생성 함수
             response_preprocess_func (callable): 응답 전처리 함수
-            response_post_process_func (callable): 응답 후처리 함수
+            response_postprocess_func (callable): 응답 후처리 함수
             output_func (callable): 출력 함수
 
             response_mode (str): LLM 모드 사용 여부 ("Prompt", "Algorithm", "Manual")
@@ -810,12 +859,12 @@ class Agent(LLM):
             input_list 생성
             total_input_count 설정
             input_count 및 middle_frame_completion 설정
-            edit_check 및 edit_response_completion 및 edit_response_post_process_completion 및 edit_output_completion 설정
+            edit_check 및 edit_response_completion 및 edit_response_postprocess_completion 및 edit_output_completion 설정
 
         Attributes:
             input_list_func (callable): 입력 리스트 생성 함수
             response_preprocess_func (callable): 응답 전처리 함수
-            response_post_process_func (callable): 응답 후처리 함수
+            response_postprocess_func (callable): 응답 후처리 함수
             output_func (callable): 출력 함수
 
             response_mode (str): LLM 모드 사용 여부 ("Prompt", "Algorithm", "Manual")
@@ -832,14 +881,14 @@ class Agent(LLM):
             middle_frame_completion (bool): middle_frame_completion
             edit_check (bool): edit_check
             edit_response_completion (bool): edit_response_completion
-            edit_response_post_process_completion (bool): edit_response_post_process_completion
+            edit_response_postprocess_completion (bool): edit_response_postprocess_completion
             edit_output_completion (bool): edit_output_completion
         """
         # attributes 설정
         # func 설정
         self.input_list_func = input_list_func
         self.response_preprocess_func = response_preprocess_func
-        self.response_post_process_func = response_post_process_func
+        self.response_postprocess_func = response_postprocess_func
         self.output_func = output_func
 
         # mode 설정
@@ -860,7 +909,7 @@ class Agent(LLM):
 
         # input_count 및 middle_frame_completion 설정
         self.input_count, self.middle_frame_completion = self._check_process_middle_frame()
-        self.edit_check, self.edit_response_completion, self.edit_response_post_process_completion, self.edit_output_completion = self._check_solution_edit()
+        self.edit_check, self.edit_response_completion, self.edit_response_postprocess_completion, self.edit_output_completion = self._check_solution_edit()
 
     # --- class-func: agent request 요청 ---
     def _request_agent(self,
@@ -911,7 +960,7 @@ class Agent(LLM):
     def run_agent(self,
                   input_list_func: callable = None,
                   response_preprocess_func: callable = None,
-                  response_post_process_func: callable = None,
+                  response_postprocess_func: callable = None,
                   output_func: callable = None,
 
                   response_mode: bool = True,
@@ -926,7 +975,7 @@ class Agent(LLM):
         Args:
             input_list_func (callable): 입력 리스트 생성 함수
             response_preprocess_func (callable): 응답 전처리 함수
-            response_post_process_func (callable): 응답 후처리 함수
+            response_postprocess_func (callable): 응답 후처리 함수
             output_func (callable): 출력 함수
 
             response_mode (str): LLM 모드 사용 여부 ("Prompt", "Algorithm", "Manual")
@@ -940,7 +989,7 @@ class Agent(LLM):
         # run 초기화
         self._init_agent(input_list_func,
             response_preprocess_func,
-            response_post_process_func,
+            response_postprocess_func,
             output_func,
             response_mode,
             edit_mode,
@@ -989,10 +1038,10 @@ class Agent(LLM):
         self.load_json
 
         ## Response 후처리
-        if self.edit_response_post_process_completion:
+        if self.edit_response_postprocess_completion:
             print(f"[ {self.ProcessInfo}Response 후처리는 이미 완료됨 ]\n")
         else:
-            self._response_post_process(SolutionEdit)
+            self._response_postprocess(SolutionEdit)
 
         ## Output 실행
         if self.edit_output_completion:

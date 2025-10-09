@@ -15,7 +15,7 @@
         "Ko": {
             "ResponseExample": {
                 "언어": {
-                    "태그": "ko, en, de ... pl 중 <도서페이지> 자료 10개를 보고 해당 도서의 주요 언어 1개를 (언어태그)에서 지정하여 작성"
+                    "태그": "ko, en, de ... pl 중 <도서페이지> 자료 10개를 보고 해당 도서의 주요 언어 1개를 (보기: 언어태그)에서 지정하여 작성"
                 }
             },
             "ResponseStructure": {
@@ -106,61 +106,41 @@
                     }
                 ]
             },
-            "Master": [
-                {
-                    "Role": "system",
-                    "Mark": "(Role and Task)\n",
-                    "Message": "You are a Language Data Expert. Your task is to analyze the ten given <BookPage> data items, determine the single (LanguageTag) for the book, and complete the task by generating a <BookLanguageTag.json> file."
+            "Messages": {
+                "System": {
+                    "Mark": "(Role: Language Data Expert)",
+                    "MarkLineBreak": "\n",
+                    "Message": "You are a Language Data Expert. Your task is to analyze the ten given <BookPage> data items, determine the single (LanguageTag) for the book, and complete the task by generating a <BookLanguageTag.json> file.",
+                    "MessageLineBreak": "\n\n\n"
                 },
-                {
-                    "Role": "user",
-                    "Request": [
-                        {
-                            "Mark": "(LanguageTags)\n",
-                            "Message": "ko: Korean - 한국어\nen: English - English\nde: German - Deutsch\nfr: French - Français\nes: Spanish - Español\nzh: Chinese - 中文\nja: Japanese - 日本語\nit: Italian - Italiano\npt: Portuguese - Português\nnl: Dutch - Nederlands\nsv: Swedish - Svenska\nno: Norwegian - Norsk\nda: Danish - Dansk\npl: Polish - Polski"
-                        },
-                        {
-                            "Mark": "\n\n(Structure and Content of <BookLanguageTag.json>)\n",
-                            "Message": "{'Language': {'TBased on the <BookPage> data, assign the single language tag for the book from the list: ko, en, de, ..., pl'}}"
-                        },
-                        {
-                            "Mark": null,
-                            "Message": null
-                        },
-                        {
-                            "Mark": null,
-                            "InputMasterMark": null,
-                            "InputMaster": null,
-                            "OutputMasterMark": null,
-                            "OutputMaster": null
-                        },
-                        {
-                            "Mark": null,
-                            "InputMasterMark": null,
-                            "InputMaster": null,
-                            "OutputMasterMark": null,
-                            "OutputMaster": null
-                        },
-                        {
-                            "Mark": null,
-                            "InputMasterMark": null,
-                            "InputMaster": null,
-                            "OutputMasterMark": null,
-                            "OutputMaster": null
-                        },
-                        {
-                            "Mark": "\n\n\n(Please analyze the ten given <BookPage> data items, determine the single (LanguageTag) for the book, and provide the output in the <BookLanguageTag.json> format)\n\n"
-                        }
-                    ]
-                },
-                {
-                    "Role": "assistant",
-                    "OutputMark": "\n\n<BookLanguageTag.json>",
-                    "MemoryNote": "MemoryNote",
-                    "OutputStarter": null,
-                    "Output": "OUTPUT"
+                "User": [
+                    {
+                        "Mark": "(Options: LanguageTags)",
+                        "MarkLineBreak": "\n",
+                        "Message": "ko: Korean - 한국어\nen: English - English\nde: German - Deutsch\nfr: French - Français\nes: Spanish - Español\nzh: Chinese - 中文\nja: Japanese - 日本語\nit: Italian - Italiano\npt: Portuguese - Português\nnl: Dutch - Nederlands\nsv: Swedish - Svenska\nno: Norwegian - Norsk\nda: Danish - Dansk\npl: Polish - Polski",
+                        "MessageLineBreak": "\n\n"
+                    },
+                    {
+                        "Mark": "(Example: Structure and Content of <BookLanguageTag.json>)",
+                        "MarkLineBreak": "\n",
+                        "Message": "{ResponseExample}",
+                        "MessageLineBreak": "\n\n\n"
+                    },
+                    {
+                        "Request": "(Request: Please analyze the ten given <BookPage> data items, determine the single (Options: LanguageTags) for the book, and provide the output in the <BookLanguageTag.json> format)",
+                        "RequestLineBreak": "\n",
+                        "MemoryNote": "{MemoryNote}",
+                        "MemoryNoteLineBreak": "\n\n",
+                        "InputMark": "<BookPage>",
+                        "InputMarkLineBreak": "\n",
+                        "Input": "{Input}",
+                        "InputLineBreak": "\n\n"
+                    }
+                ],
+                "Assistant": {
+                    "ResponseMark": "<BookLanguageTag.json>"
                 }
-            ]
+            }
         }
     },
     "ResponsePreprocess": {},

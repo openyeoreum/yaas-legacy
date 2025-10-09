@@ -96,14 +96,20 @@ class LoadSolution:
 
 
     ## [AbstractMethod] Inputs: ... Inputs 생성 ##
-    def _Create_Inputs(self):
+    def _CreateInputs(self):
         """... Inputs 생성"""
         # Inputs 초기화
         return [], []
 
 
+    ## [AbstractMethod] PreprocessResponse: ... Response 전처리 메서드 ##
+    def _PreprocessResponse(self):
+        """Response 전처리 메서드"""
+        pass
+
+
     ## [AbstractMethod] ResponsePostprocess: ... Output 메서드 ##
-    def _ResponsePostprocess(self, SolutionEditProcess):
+    def _PostprocessResponse(self, SolutionEditProcess):
         """Output을 통한 ..."""
         # Output 스위치
         return True

@@ -64,10 +64,8 @@ class Agent(LLM):
             # input_list 불러오기
             input_list = self.load_json("Solution", [self.solution, "File", "Json", "InputList"])
         else:
-            # # input_list 생성
-            # inputs, comparison_inputs = self.input_list_func()
-            inputs = ["test1", "test2", "test3"]
-            comparison_inputs = ["test1", "test2", "test3"]
+            # input_list 생성
+            inputs, comparison_inputs = self.inputs_func()
 
             # input_list 생성
             input_list = []
@@ -500,7 +498,7 @@ class Agent(LLM):
 
                     if isinstance(_value, int) or (isinstance(_value, str) and _value.isdigit()):
                         filtered_response[response_structure["Key"]] = int(_value)
-                        self.print_log("Task", ["Log", "Info"], ["Info", "Error"], function_name="agent._response_filter.value_check -> intDataSameCheck", _print=f"{int(value_check_target)} -> {int(_value)}")
+                        self.print_log("Task", ["Log", "Function"], ["Info", "Error"], function_name="agent._response_filter.value_check -> intDataSameCheck", _print=f"{int(value_check_target)} -> {int(_value)}")
                         if _value != int(value_check_target):
                             return f"IntDataSameCheckError: ({filtered_response[response_structure["Key"]]}) 는 ({value_check_target}) 여야 합니다."
 
@@ -777,8 +775,16 @@ class Agent(LLM):
     # --- class-func: response 전처리 ------------
     def _preprocess_response(self, response: dict) -> dict:
         """response를 전처리합니다.
+
+        Args:
+            response (dict): response
+
+        Returns:
+            response (dict): response
         """
-        # NOTE: response 전처리 개발 진행
+        # response 전처리 함수 실행
+        response = self.preprocess_response_func(response)
+
         return response
     
     # --- class-func: response 후처리 ---
@@ -794,7 +800,7 @@ class Agent(LLM):
         solution_edit_process = solution_edit[self.process_name]
 
         # solution_edit_process 후처리 함수 실행
-        if self.output_func(solution_edit_process):
+        if self.postprocess_response_func(solution_edit_process):
             solution_edit[f"{self.process_name}ResponsePostProcessCompletion"] = "Completion"
 
             # solution_edit 저장
@@ -825,9 +831,9 @@ class Agent(LLM):
     # --- func-set: agent run -------
     # --- class-func: agent 초기화 ---
     def _init_agent(self,
-                    input_list_func: callable,
-                    response_preprocess_func: callable,
-                    response_postprocess_func: callable,
+                    inputs_func: callable,
+                    preprocess_response_func: callable,
+                    postprocess_response_func: callable,
                     output_func: callable,
 
                     response_mode: str,
@@ -840,9 +846,9 @@ class Agent(LLM):
         """agent를 초기화 합니다.
 
         Args:
-            input_list_func (callable): 입력 리스트 생성 함수
-            response_preprocess_func (callable): 응답 전처리 함수
-            response_postprocess_func (callable): 응답 후처리 함수
+            inputs_func (callable): 입력 리스트 생성 함수
+            preprocess_response_func (callable): 응답 전처리 함수
+            postprocess_response_func (callable): 응답 후처리 함수
             output_func (callable): 출력 함수
 
             response_mode (str): LLM 모드 사용 여부 ("Prompt", "Algorithm", "Manual")
@@ -860,9 +866,9 @@ class Agent(LLM):
             edit_check 및 edit_response_completion 및 edit_response_postprocess_completion 및 edit_output_completion 설정
 
         Attributes:
-            input_list_func (callable): 입력 리스트 생성 함수
-            response_preprocess_func (callable): 응답 전처리 함수
-            response_postprocess_func (callable): 응답 후처리 함수
+            inputs_func (callable): 입력 리스트 생성 함수
+            preprocess_response_func (callable): 응답 전처리 함수
+            postprocess_response_func (callable): 응답 후처리 함수
             output_func (callable): 출력 함수
 
             response_mode (str): LLM 모드 사용 여부 ("Prompt", "Algorithm", "Manual")
@@ -884,9 +890,9 @@ class Agent(LLM):
         """
         # attributes 설정
         # func 설정
-        self.input_list_func = input_list_func
-        self.response_preprocess_func = response_preprocess_func
-        self.response_postprocess_func = response_postprocess_func
+        self.inputs_func = inputs_func
+        self.preprocess_response_func = preprocess_response_func
+        self.postprocess_response_func = postprocess_response_func
         self.output_func = output_func
 
         # mode 설정
@@ -936,29 +942,29 @@ class Agent(LLM):
             # 필터 에외처리, JSONDecodeError 처리
             if isinstance(filtered_response, str):
                 error_count += 1
-                self.print_log("Task", ["Log", "Info"], ["Info", "Error"], function_name="agent._request_agent", _print=f"오류횟수 {error_count}회, 10초 후 프롬프트 재시도")
+                self.print_log("Task", ["Log", "Function"], ["Info", "Error"], function_name="agent._request_agent", _print=f"오류횟수 {error_count}회, 10초 후 프롬프트 재시도")
 
                 # filter error 3회시 해당 프로세스 사용 안함 예외처리
                 if self.filter_pass and error_count >= 3:
-                    self.print_log("Task", ["Log", "Info"], ["Info", "Complete"], function_name="agent._request_agent", _print="ErrorPass 완료")
+                    self.print_log("Task", ["Log", "Function"], ["Info", "Complete"], function_name="agent._request_agent", _print="ErrorPass 완료")
 
                     return "ErrorPass"
 
                 # filter error 10회시 프롬프트 종료
                 if error_count >= 10:
-                    self.print_log("Task", ["Log", "Info"], ["Info", "Error"], function_name="agent._request_agent", _print=f"오류횟수 {error_count}회 초과, 프롬프트 종료", exit=True)
+                    self.print_log("Task", ["Log", "Function"], ["Info", "Error"], function_name="agent._request_agent", _print=f"오류횟수 {error_count}회 초과, 프롬프트 종료", exit=True)
 
                 continue
 
-            self.print_log("Task", ["Log", "Info"], ["Info", "Complete"], function_name="agent._request_agent", _print="filtered_response, JSONDecode 완료")
+            self.print_log("Task", ["Log", "Function"], ["Info", "Complete"], function_name="agent._request_agent", _print="filtered_response, JSONDecode 완료")
 
             return filtered_response
 
     # --- class-func: agent 실행 ---
     def run_agent(self,
-                  input_list_func: callable = None,
-                  response_preprocess_func: callable = None,
-                  response_postprocess_func: callable = None,
+                  inputs_func: callable = None,
+                  preprocess_response_func: callable = None,
+                  postprocess_response_func: callable = None,
                   output_func: callable = None,
 
                   response_mode: bool = True,
@@ -971,9 +977,9 @@ class Agent(LLM):
         """agent를 실행합니다.
 
         Args:
-            input_list_func (callable): 입력 리스트 생성 함수
-            response_preprocess_func (callable): 응답 전처리 함수
-            response_postprocess_func (callable): 응답 후처리 함수
+            inputs_func (callable): 입력 리스트 생성 함수
+            preprocess_response_func (callable): 응답 전처리 함수
+            postprocess_response_func (callable): 응답 후처리 함수
             output_func (callable): 출력 함수
 
             response_mode (str): LLM 모드 사용 여부 ("Prompt", "Algorithm", "Manual")
@@ -985,10 +991,11 @@ class Agent(LLM):
             filter_pass (bool): 필터 오류 3회가 넘어가는 경우 그냥 패스 여부 (기본값: False)
         """
         # run 초기화
-        self._init_agent(input_list_func,
-            response_preprocess_func,
-            response_postprocess_func,
+        self._init_agent(inputs_func,
+            preprocess_response_func,
+            postprocess_response_func,
             output_func,
+
             response_mode,
             edit_mode,
             auto_template,
@@ -997,57 +1004,60 @@ class Agent(LLM):
             ignore_count_check,
             filter_pass)
 
+        # Start 로그 출력
+        self.print_log("Solution", ["Log", "Task"], ["Info", "Start"], input_count=self.input_count, total_input_count=self.total_input_count)
+
         # edit_check 확인
         if not self.edit_check:
             if not self.middle_frame_completion:
                 for i in range(self.input_count - 1, self.total_input_count):
-                    ## Input 생성
+                    # input_count, input, comparison_input, memory_note 생성
                     input_count = self.input_list[i]['Id']
                     input = self.input_list[i]['Input']
                     comparison_input = self.input_list[i]['ComparisonInput']
                     memory_note = self.input_list[i]['MemoryNote']
 
                     if self.response_mode == "Prompt":
-                        ## Response 생성
+                        # response 생성
                         response = self._request_agent(input, memory_note, input_count, self.total_input_count, comparison_input)
+                        # response 전처리
+                        response = self._preprocess_response(response)
                     if self.response_mode in ["Algorithm", "Manual"]:
                         response = input
 
-                    ## DataFrame 저장
+                    # middle_frame 저장
                     self._update_process_middle_frame(input_count, response)
 
-            ## Edit 저장
+            # solution_edit 저장
             self._update_solution_edit()
-            self.print_log("Solution", ["Log", "Task"], ["Info", "End"], input_count=self.input_count, total_input_count=self.total_input_count)
 
             if not self.edit_mode:
-                self.print_log("Task", ["Log", "Info"], ["Info", "Manual"], function_name="agent.run_agent", _print=f"{self.ProjectName}_Script_Edit 생성 완료 -> {self.ProcessName}: (({self.ProcessName}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({self.ProcessName}Completion: Completion))으로 변경", exit=True)
+                self.print_log("Task", ["Log", "Function"], ["Info", "Manual"], function_name="agent.run_agent", _print=f"{self.ProjectName}_Script_Edit 생성 완료 -> {self.ProcessName}: (({self.ProcessName}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({self.ProcessName}Completion: Completion))으로 변경", exit=True)
 
         if not self.edit_mode:
             if self.edit_check:
                 if not self.edit_response_completion:
-                    ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-                    self.print_log("Task", ["Log", "Info"], ["Info", "Manual"], function_name="agent.run_agent", _print=f"{self.ProjectName}_Script_Edit -> {self.ProcessName}: (({self.ProcessName}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({self.ProcessName}Completion: Completion))으로 변경", exit=True)
-        if self.edit_response_completion:
+                    ## 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ##
+                    self.print_log("Task", ["Log", "Function"], ["Info", "Manual"], function_name="agent.run_agent", _print=f"{self.ProjectName}_Script_Edit -> {self.ProcessName}: (({self.ProcessName}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({self.ProcessName}Completion: Completion))으로 변경", exit=True)
+
+        # solution_edit 불러오기
+        solution_edit = self.load_json("Solution", [self.solution, "File", "Json", "Edit"])
+
+        # response 후처리
+        if not self.edit_response_postprocess_completion:
+            self._postprocess_response(solution_edit)
+
+        # output 생성
+        if not self.edit_output_completion:
+            self._create_output(solution_edit)
+
+            # Complete 로그 출력
+            self.print_log("Solution", ["Log", "Task"], ["Info", "Complete"], input_count=self.input_count, total_input_count=self.total_input_count)
+        else:
+            # Skip 로그 출력
             self.print_log("Solution", ["Log", "Task"], ["Info", "Skip"], input_count=self.input_count, total_input_count=self.total_input_count)
 
-        ## Edit 불러오기
-        SolutionEdit = self._load_edit()
-        self.load_json
-
-        ## Response 후처리
-        if self.edit_response_postprocess_completion:
-            print(f"[ {self.ProcessInfo}Response 후처리는 이미 완료됨 ]\n")
-        else:
-            self._response_postprocess(SolutionEdit)
-
-        ## Output 실행
-        if self.edit_output_completion:
-            print(f"[ {self.ProcessInfo}Output은 이미 완료됨 ]\n")
-        else:
-            self._create_output(SolutionEdit)
-
-        return SolutionEdit
+        return solution_edit
 
 if __name__ == "__main__":
 

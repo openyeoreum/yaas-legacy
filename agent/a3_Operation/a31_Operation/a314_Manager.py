@@ -291,4 +291,4 @@ if __name__ == "__main__":
     time.sleep(3)
 
     # 테스트3: 로그 출력 및 생성
-    manager.print_log("Solution", ["Log", "Core"], ["Info", "End"])
+    manager.print_log("Solution", ["Log", "Core"], ["Info", "Complete"])

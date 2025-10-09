@@ -730,7 +730,7 @@ class LLM(Manager):
                 return response
 
             except Exception as e:
-                self.print_log("Task", ["Log", "Info"], ["Info", "Error"], function_name="llm.run", _print=e)
+                self.print_log("Task", ["Log", "Function"], ["Info", "Error"], function_name="llm.run", _print=e)
                 time.sleep(random.uniform(2, 5))
                 continue
 

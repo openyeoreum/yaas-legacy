@@ -1,8 +1,8 @@
 {
     "Access": {
         "Log": {
-            "Access": "\n{Info} 🕐 {Timestamp} >>> 👋-[[ ((Access)) | {Email} | {ProjectName} ]]-🤘\n",
-            "Complete": "\n{Info} 🕐 {Timestamp} >>> 👏-[[ ((Complete)) | {Email} | {ProjectName} ]]-👍\n"
+            "Access": "{Info} 🕐 {Timestamp} >>> 👋[((Access)) | {Email} | {ProjectName}]🤘",
+            "Complete": "{Info} 🕐 {Timestamp} >>> 👏[((Complete)) | {Email} | {ProjectName}]👍"
         },
         "Info": {
             "Hello": "((🤗 Hello))",
@@ -11,28 +11,28 @@
     },
     "Solution": {
         "Log": {
-            "Core": "{Info} 🕐 {Timestamp} >> 🔴-[ (Core) | {ProjectName} | {Solution}({NextSolution}) ]-🔴",
-            "Solution": "{Info} 🕐 {Timestamp} >> 🟡-[ (Solution) | {ProjectName} | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName} ]-🟡",
-            "Process": "{Info} 🕐 {Timestamp} >> 🔵-[ (Process) | {ProjectName} | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName} ]-🔵",
-            "Task": "{Info} 🕐 {Timestamp} >> 🟣-[ (Task) | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) ]-🟣"
+            "Core": "{Info} 🕐 {Timestamp} >> 🔴[(Core) | {ProjectName} | {Solution}({NextSolution})]🔴",
+            "Solution": "{Info} 🕐 {Timestamp} >> 🟡[(Solution) | {ProjectName} | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName}]🟡",
+            "Process": "{Info} 🕐 {Timestamp} >> 🔵[(Process) | {ProjectName} | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName}]🔵",
+            "Task": "{Info} 🕐 {Timestamp} >> 🟣[(Task) | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength})]🟣"
         },
         "Info": {
             "Start": "(⚡️ Start)",
-            "End": "(🔆 End)",
+            "Complete": "(✅ Complete)",
             "Skip": "(☑️ Skip)",
             "Stop": "(⛔️ Stop)"
         }
     },
     "Task": {
         "Log": {
-            "InputsPreprocess": "(⭐️ Run) 🕐 {Timestamp} > 🟥(InputPreprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) > {FunctionName} )🟥 > \n{Info}",
-            "Inputs": "(⭐️ Run) 🕐 {Timestamp} > 🟨(Inputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) > {FunctionName} )🟨 > \n{Info}",
-            "Message": "(⭐️ Run) 🕐 {Timestamp} > 🟦(Message | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) > {FunctionName} )🟦 > \n{Info}",
-            "ResponsePreprocess": "(⭐️ Run) 🕐 {Timestamp} > 🟫(ResponsePreprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) > {FunctionName} )🟫 > \n{Info}",
-            "ResponsePostprocess": "(⭐️ Run) 🕐 {Timestamp} > 🟪(ResponsePostprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) > {FunctionName} )🟪 > \n{Info}",
-            "MiddleFrame": "(⭐️ Run) 🕐 {Timestamp} > 🟩(MiddleFrame | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) > {FunctionName} )🟩 > \n{Info}",
-            "Outputs": "(⭐️ Run) 🕐 {Timestamp} > 🟧( Outputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}) > {FunctionName} )🟧 > \n{Info}",
-            "Info": "{FunctionName} > {Info}"
+            "InputsPreprocess": "(⭐️ Run) 🕐 {Timestamp} > 🟥(InputPreprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}))🟥\n└─{FunctionName} > {Info}",
+            "Inputs": "(⭐️ Run) 🕐 {Timestamp} > 🟨(Inputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}))🟨\n└─{FunctionName} > {Info}",
+            "Message": "(⭐️ Run) 🕐 {Timestamp} > 🟦(Message | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}))🟦\n└─{FunctionName} > {Info}",
+            "ResponsePreprocess": "(⭐️ Run) 🕐 {Timestamp} > 🟫(ResponsePreprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}))🟫\n└─{FunctionName} > {Info}",
+            "ResponsePostprocess": "(⭐️ Run) 🕐 {Timestamp} > 🟪(ResponsePostprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}))🟪\n└─{FunctionName} > {Info}",
+            "MiddleFrame": "(⭐️ Run) 🕐 {Timestamp} > 🟩(MiddleFrame | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}))🟩\n└─{FunctionName} > {Info}",
+            "Outputs": "(⭐️ Run) 🕐 {Timestamp} > 🟧(Outputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}))🟧\n└─{FunctionName} > {Info}",
+            "Function": "└─{FunctionName} > {Info}"
         },
         "Info": {
             "Complete": "(✅ Complete: {Print})",

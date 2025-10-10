@@ -1,22 +1,15 @@
 import os
-import fitz
-import random
-import shutil
-import json
-import math
-import spacy
 import sys
 sys.path.append("/yaas")
 
-from PIL import Image, ImageDraw, ImageFont, ImageChops
-from PyPDF2 import PdfReader, PdfWriter
-from agent.a3_Operation.a32_Solution.a322_LoadAgent_temp import LoadAgent
+from agent.a3_Operation.a32_Solution.a322_Agent import Agent
 
-
-########################
-##### LoadSolution #####
-########################
-class LoadSolution:
+# ======================================================================
+# [a333-1] Operation-Solution
+# ======================================================================
+# class: Solution
+# ======================================================================
+class Solution(Agent):
 
     Solution = "Script"
     SubSolution = "ScriptSegmentation"

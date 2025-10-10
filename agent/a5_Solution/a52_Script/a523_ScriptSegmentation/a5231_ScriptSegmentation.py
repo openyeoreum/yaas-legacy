@@ -24,7 +24,7 @@ class ScriptSegmentationSolution:
 
 
     ## [Method] Init: ScriptSegmentation 초기화 ##
-    def __init__(self, Email, ProjectName, ProcessNumber, ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview):
+    def __init__(self, Email, ProjectName, ProcessNumber, ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview):
         """솔루션 초기화"""
         # 업데이트 정보
         self.Email = Email
@@ -35,10 +35,10 @@ class ScriptSegmentationSolution:
         self.AutoTemplate = AutoTemplate
         self.MainLang = MainLang
         self.Model = Model
-        self.ResponseMethod = ResponseMethod
+        self.ResponseMode = ResponseMode
         self.EditMode = "Auto"
-        if self.ResponseMethod == "Manual":
-            self.EditMode = self.ResponseMethod
+        if self.ResponseMode == "Manual":
+            self.EditMode = self.ResponseMode
         self.UploadedScriptFilePath = UploadedScriptFilePath
 
         # 업로드 스크립트 파일 확장자
@@ -126,9 +126,9 @@ class ScriptLoadProcess(ScriptSegmentationSolution):
 
 
     ## Init: ScriptLoad 초기화 ##
-    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview):
         """솔루션 상속 및 프로세스 초기화"""
-        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview)
+        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview)
 
 
     ## InputsPreprocess: 스크립트 파일 확장자 확인 및 표준화 전처리 메서드 ##
@@ -180,7 +180,7 @@ class ScriptLoadProcess(ScriptSegmentationSolution):
     def Run(self):
         """스크립트 로드 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._CreateSolutionInfoToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._CreateSolutionInfoToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMode = self.ResponseMode, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         # SolutionEdit 추출
@@ -207,9 +207,9 @@ class PDFMainLangCheckProcess(ScriptSegmentationSolution):
 
 
     ## Init: PDFMainLangCheck 초기화 ##
-    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview):
         """솔루션 상속 및 프로세스 초기화"""
-        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview)
+        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview)
 
 
     ## InputsPreprocess: PDF 샘플 이미지 생성 및 라벨 생성 전처리 메서드 ##
@@ -347,7 +347,7 @@ class PDFMainLangCheckProcess(ScriptSegmentationSolution):
     def Run(self):
         """PDF 언어 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._CreateLabeledSamplePathToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._CreateLabeledSamplePathToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMode = self.ResponseMode, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         # SolutionEdit 추출
@@ -366,9 +366,9 @@ class PDFLayoutCheckProcess(ScriptSegmentationSolution):
 
 
     ## Init: PDFLayoutCheck 초기화 ##
-    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview):
         """솔루션 상속 및 프로세스 초기화"""
-        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview)
+        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview)
 
 
     ## Inputs: PDF 라벨 샘플 이미지 Inputs 생성 메서드##
@@ -509,7 +509,7 @@ class PDFLayoutCheckProcess(ScriptSegmentationSolution):
     def Run(self):
         """PDF 인쇄 파일 형식인 단면, 양면 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._LoadPDFToLabeledSampleJPEGToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._LoadPDFToLabeledSampleJPEGToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMode = self.ResponseMode, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -525,9 +525,9 @@ class PDFResizeProcess(ScriptSegmentationSolution):
 
 
     ## Init: PDFResize 초기화 ##
-    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview):
         """솔루션 상속 및 프로세스 초기화"""
-        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview)
+        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview)
 
 
     ## InputsPreprocess: PDF 방향별 보조선 샘플 이미지 생성 전처리 메서드 ##
@@ -664,7 +664,7 @@ class PDFResizeProcess(ScriptSegmentationSolution):
 
         OutputPaths = []
 
-        if self.ResponseMethod == "Prompt":
+        if self.ResponseMode == "Prompt":
             # 방향별로 개별 저장 + 중앙 라벨
             for DirKey in ["Left", "Right", "Top", "Bottom"]:
                 Img = BaseImg.copy()
@@ -676,7 +676,7 @@ class PDFResizeProcess(ScriptSegmentationSolution):
                 OutPath = SaveImage(Img, FilenameSuffix[DirKey])
                 OutputPaths.append(OutPath)
 
-        if self.ResponseMethod == "Manual":
+        if self.ResponseMode == "Manual":
             # 1) 4방향 'RGB(흰 배경)' 레이어 생성 (투명처리 없음)
             layer_dict = {}
             for DirKey in ["Left", "Right", "Top", "Bottom"]:
@@ -767,7 +767,7 @@ class PDFResizeProcess(ScriptSegmentationSolution):
         else:
             SelectedPageIndices = random.sample(range(TotalPages), K)
 
-        if self.ResponseMethod == "Prompt":
+        if self.ResponseMode == "Prompt":
             # 각 페이지별로 출력물 생성 → 하나의 Input
             Inputs = []
             ComparisonInputs = []
@@ -777,7 +777,7 @@ class PDFResizeProcess(ScriptSegmentationSolution):
                 Inputs.append(OutputPaths)
                 ComparisonInputs.append("")
                 
-        if self.ResponseMethod == "Manual":
+        if self.ResponseMode == "Manual":
             if self.MainLang == "ko":
                 Inputs = [
                     [
@@ -944,7 +944,7 @@ class PDFResizeProcess(ScriptSegmentationSolution):
     def Run(self):
         """PDF 가로 재단 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._CreateTrimLineJPEGToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutputToResizedPDF, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._CreateTrimLineJPEGToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMode = self.ResponseMode, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutputToResizedPDF, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -960,9 +960,9 @@ class PDFSplitProcess(ScriptSegmentationSolution):
 
 
     ## Init: PDFSplit 초기화 ##
-    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview):
         """솔루션 상속 및 프로세스 초기화"""
-        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview)
+        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview)
 
 
     ## Inputs: PDF 파일을 페이지별로 분할 및 저장 및 Inputs 생성 메서드 ##
@@ -1015,7 +1015,7 @@ class PDFSplitProcess(ScriptSegmentationSolution):
     def Run(self):
         """PDF 분할 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._SplitPDFToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._SplitPDFToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMode = self.ResponseMode, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -1031,9 +1031,9 @@ class PDFFormCheckProcess(ScriptSegmentationSolution):
 
 
     ## Init: PDFFormCheck 초기화 ##
-    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview):
         """솔루션 상속 및 프로세스 초기화"""
-        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview)
+        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview)
 
 
     ## InputsPreprocess: PDF 이미지 생성 및 라벨 생성 전처리 메서드 ##
@@ -1150,7 +1150,7 @@ class PDFFormCheckProcess(ScriptSegmentationSolution):
     def Run(self):
         """PDF 페이지 형식 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._CreateLabeledJPEGsToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._CreateLabeledJPEGsToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMode = self.ResponseMode, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -1166,9 +1166,9 @@ class PDFIndexGenProcess(ScriptSegmentationSolution):
 
 
     ## Init: PDFIndexGen 초기화 ##
-    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview):
         """솔루션 상속 및 프로세스 초기화"""
-        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview)
+        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview)
 
 
     ## InputsPreprocess: 생성된 라벨 선별 ##
@@ -1202,9 +1202,9 @@ class TXTMainLangCheckProcess(ScriptSegmentationSolution):
 
 
     ## Init: TXTMainLangCheck 초기화 ##
-    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview):
         """솔루션 상속 및 프로세스 초기화"""
-        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview)
+        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview)
 
 
     ## Inputs: TXT 샘플 Inputs 생성 메서드 ##
@@ -1265,7 +1265,7 @@ class TXTMainLangCheckProcess(ScriptSegmentationSolution):
     def Run(self):
         """TXT 언어 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._CreateTXTToSampleTextToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._CreateTXTToSampleTextToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMode = self.ResponseMode, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         # MainLang 추출
@@ -1284,9 +1284,9 @@ class TXTSplitProcess(ScriptSegmentationSolution):
 
 
     ## Init: TXTSplit 초기화 ##
-    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview):
         """솔루션 상속 및 프로세스 초기화"""
-        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview)
+        super().__init__(Email, ProjectName, self.ProcessNumber, self.ProcessName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview)
 
 
     ## InputsPreprocess1: 언어별 MaxTokens 전처리 메서드 ##
@@ -1404,7 +1404,7 @@ class TXTSplitProcess(ScriptSegmentationSolution):
     def Run(self):
         """TXT 분할 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-        LoadAgentInstance = LoadAgent(self._SplitTXTToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMethod = self.ResponseMethod, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(self._SplitTXTToInputs, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, ResponseMode = self.ResponseMode, ResponsePostProcessFunc = self._ResponsePostprocess, OutputFunc = self._CreateOutput, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, EditMode = self.EditMode, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -1418,7 +1418,7 @@ def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTempla
     ## 기본 인자 정의
     MainLang = "ko"
     Model = "OpenAI"
-    ResponseMethod = "Prompt"
+    ResponseMode = "Prompt"
     
     ## PT01 통합: ScriptLoad (업로드 된 스크립트 파일 확인)
     ScriptLoadInstance = ScriptLoadProcess(email, projectName, NextSolution, AutoTemplate, MainLang, Model, "Algorithm", None, None, MessagesReview)
@@ -1428,11 +1428,11 @@ def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTempla
     if FileExtension == 'pdf':
 
         ## P02 PDFMainLangCheck (PDF 언어 체크)
-        PDFMainLangCheckProcessInstance = PDFMainLangCheckProcess(email, projectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview)
+        PDFMainLangCheckProcessInstance = PDFMainLangCheckProcess(email, projectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview)
         SolutionEdit, MainLang = PDFMainLangCheckProcessInstance.Run()
         
         ## P03 PDFLayoutCheck (PDF 인쇄 파일 형식인 단면, 양면 체크) <- 여기서 페이지 분할 동시 진행
-        PDFLayoutCheckInstance = PDFLayoutCheckProcess(email, projectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview)
+        PDFLayoutCheckInstance = PDFLayoutCheckProcess(email, projectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview)
         SolutionEdit = PDFLayoutCheckInstance.Run()
         
         ## P04 PDFResize (PDF 파일 재단)
@@ -1444,13 +1444,13 @@ def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTempla
         SolutionEdit = PDFSplitterInstance.Run()
 
         ## P06 PDFFormCheck (PDF 파일 페이지 형식 체크)
-        PDFFormCheckInstance = PDFFormCheckProcess(email, projectName, NextSolution, AutoTemplate, MainLang, "Google", ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview)
+        PDFFormCheckInstance = PDFFormCheckProcess(email, projectName, NextSolution, AutoTemplate, MainLang, "Google", ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview)
         SolutionEdit = PDFFormCheckInstance.Run()
         
     elif FileExtension == 'txt':
 
         ## T02 TXTMainLangCheck (TXT 언어 체크)
-        TXTMainLangCheckInstance = TXTMainLangCheckProcess(email, projectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMethod, UploadedScriptFilePath, SolutionEdit, MessagesReview)
+        TXTMainLangCheckInstance = TXTMainLangCheckProcess(email, projectName, NextSolution, AutoTemplate, MainLang, Model, ResponseMode, UploadedScriptFilePath, SolutionEdit, MessagesReview)
         SolutionEdit, MainLang = TXTMainLangCheckInstance.Run()
 
         ## T03 TXTSplit (텍스트 파일 지정 토큰수 분할)

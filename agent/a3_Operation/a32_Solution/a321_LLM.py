@@ -33,8 +33,7 @@ class LLM(Manager):
                  solution: str,
                  next_solution: str,
                  process_number: str,
-                 process_name: str,
-                 main_lang: str) -> None:
+                 process_name: str) -> None:
         """사용자-프로젝트의 Operation에 통합 LLM 기능을 셋팅하는 클래스입니다.
 
         Attributes:
@@ -55,6 +54,13 @@ class LLM(Manager):
             process_number,
             process_name)
 
+    # --- class-func: main_lang 초기화 ---
+    def _init_main_lang(self, main_lang: str) -> None:
+        """main_lang을 초기화합니다.
+
+        Args:
+            main_lang (str): 주요 언어
+        """
         # attributes 설정
         self.main_lang = main_lang
 

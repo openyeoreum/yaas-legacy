@@ -24,8 +24,7 @@ class Agent(LLM):
                  solution: str,
                  next_solution: str,
                  process_number: str,
-                 process_name: str,
-                 main_lang: str = "Ko") -> None:
+                 process_name: str) -> None:
         """사용자-프로젝트의 Operation에 통합 Agent 기능을 셋팅하는 클래스입니다.
 
         Attributes:
@@ -44,8 +43,74 @@ class Agent(LLM):
             solution,
             next_solution,
             process_number,
-            process_name,
-            main_lang)
+            process_name)
+
+    # --- class-func: function 초기화 ---
+    def _init_function(self,
+                       inputs_func: callable,
+                       preprocess_response_func: callable,
+                       postprocess_response_func: callable,
+                       output_func: callable) -> None:
+        """사용자-프로젝트의 Operation에 통합 Agent의 function을 초기화합니다.
+
+        Args:
+            inputs_func (callable): inputs_func
+            preprocess_response_func (callable): preprocess_response_func
+            postprocess_response_func (callable): postprocess_response_func
+            output_func (callable): output_func
+
+        Attributes:
+            inputs_func (callable): inputs_func
+            preprocess_response_func (callable): preprocess_response_func
+            postprocess_response_func (callable): postprocess_response_func
+            output_func (callable): output_func
+        """
+
+        # attributes 설정
+        self.inputs_func = inputs_func
+        self.preprocess_response_func = preprocess_response_func
+        self.postprocess_response_func = postprocess_response_func
+        self.output_func = output_func
+
+    # --- class-func: mode 초기화 ---
+    def _init_mode(self,
+                   response_mode: str,
+                   edit_mode: bool,
+                   outputs_per_input: int,
+                   input_count_key: str,
+                   ignore_count_check: bool,
+                   filter_pass: bool,
+                   main_lang: str = "Ko") -> None:
+        """사용자-프로젝트의 Operation에 통합 Agent의 mode을 초기화합니다.
+
+        Args:
+            response_mode (str): response_mode
+            edit_mode (bool): edit_mode
+            outputs_per_input (int): outputs_per_input
+            input_count_key (str): input_count_key
+            ignore_count_check (bool): ignore_count_check
+            filter_pass (bool): filter_pass
+            main_lang (str): main_lang
+
+        Attributes:
+            response_mode (str): response_mode
+            edit_mode (bool): edit_mode
+            outputs_per_input (int): outputs_per_input
+            input_count_key (str): input_count_key
+            ignore_count_check (bool): ignore_count_check
+            filter_pass (bool): filter_pass
+            main_lang (str): main_lang
+        """
+        # LLM main_lang 초기화
+        super()._init_main_lang(main_lang)
+
+        # attributes 설정
+        self.response_mode = response_mode
+        self.edit_mode = edit_mode
+        self.outputs_per_input = outputs_per_input
+        self.input_count_key = input_count_key
+        self.ignore_count_check = ignore_count_check
+        self.filter_pass = filter_pass
 
     # ----------------------------------------
     # --- func-set: requset input ------------
@@ -233,14 +298,14 @@ class Agent(LLM):
                         try:
                             filtered_response[response_structure["Key"]] = int(filtered_response[response_structure["Key"]])
                         except ValueError:
-                            return f"KeyTypeError: ({response_structure["Key"]}) 키의 데이터 타입이 ({value_type})가 아닙니다"
+                            return f"KeyTypeError: ({response_structure['Key']}) 키의 데이터 타입이 ({value_type})가 아닙니다"
                 
                 if isinstance(filtered_response[response_structure["Key"]], value_type):
                     return filtered_response
                 else:
-                    return f"KeyTypeError: ({response_structure["Key"]}) 키의 데이터 타입이 ({value_type})가 아닙니다"
+                    return f"KeyTypeError: ({response_structure['Key']}) 키의 데이터 타입이 ({value_type})가 아닙니다"
             else:
-                return f"CheckKeyError: ({response_structure["Key"]}) 키가 누락되었습니다"
+                return f"CheckKeyError: ({response_structure['Key']}) 키가 누락되었습니다"
         # - innerfunc end -
 
         # filter4: values 체크
@@ -395,12 +460,12 @@ class Agent(LLM):
                 if value_check == "strMainLangCheck":
                     # - inner-innerfunc: spaCy 기반 언어 감지 함수 -
                     def detect_lang_with_spacy(text):
-                        """spaCy 기반 언어 감지 (가능하면 SpacyFastlang, 안되면 SpacyLangdetect), 모두 실패하면 간단한 유니코드 휴리스틱으로 추정, 반환: ISO 639-1 소문자 코드(가능한 경우), 실패 시 'unknown'
+                        """spaCy 기반 언어 감지 (가능하면 SpacyFastlang, 안되면 SpacyLangdetect), 모두 실패하면 간단한 유니코드 휴리스틱으로 추정, 반환: ISO 639-1 첫글자 대문자 코드(가능한 경우), 실패 시 'unknown'
                         Args:
                             text (str): 텍스트
 
                         Returns:
-                            str: 언어 코드
+                            str: 언어 코드 (예: Ko, En)
                         """
                         # spacy_fastlang 및 spacy_langdetect 설치 여부 확인
                         try:
@@ -422,9 +487,11 @@ class Agent(LLM):
                                 doc = nlp(text)
                                 lang_attr = getattr(doc._, "language", None)
                                 if isinstance(lang_attr, str) and 2 <= len(lang_attr) <= 3:
-                                    return lang_attr.lower()
+                                    # 수정된 부분 1
+                                    return lang_attr.lower().capitalize()
                                 if isinstance(lang_attr, dict) and "language" in lang_attr:
-                                    return str(lang_attr["language"]).lower()
+                                    # 수정된 부분 2
+                                    return str(lang_attr["language"]).lower().capitalize()
                         except Exception:
                             pass
 
@@ -441,7 +508,8 @@ class Agent(LLM):
                                 doc = nlp(text)
                                 lang_attr = getattr(doc._, "language", None)
                                 if isinstance(lang_attr, dict) and "language" in lang_attr:
-                                    return str(lang_attr["language"]).lower()
+                                    # 수정된 부분 3
+                                    return str(lang_attr["language"]).lower().capitalize()
                         except Exception:
                             pass
 
@@ -459,9 +527,10 @@ class Agent(LLM):
                                 "en": latin,
                             }
                             best = max(counts.items(), key=lambda x: x[1])
-                            return best[0] if best[1] > 0 else "unknown"
+                            # 수정된 부분 4
+                            return best[0].capitalize() if best[1] > 0 else "Unknown"
                         except Exception:
-                            return "unknown"
+                            return "Unknown"
                     # - inner-innerfunc end -
 
                     # filter4-16-2: 주요 언어 체크
@@ -827,94 +896,8 @@ class Agent(LLM):
             # solution_edit 저장
             self.save_storage_json("Solution", [self.solution, "File", "Json", "Edit"], solution_edit)
 
-    # -------------------------------
-    # --- func-set: agent run -------
-    # --- class-func: agent 초기화 ---
-    def _init_agent(self,
-                    inputs_func: callable,
-                    preprocess_response_func: callable,
-                    postprocess_response_func: callable,
-                    output_func: callable,
-
-                    response_mode: str,
-                    edit_mode: bool,
-                    auto_template: bool,
-                    outputs_per_input: int,
-                    input_count_key: str,
-                    ignore_count_check: bool,
-                    filter_pass: bool) -> None:
-        """agent를 초기화 합니다.
-
-        Args:
-            inputs_func (callable): 입력 리스트 생성 함수
-            preprocess_response_func (callable): 응답 전처리 함수
-            postprocess_response_func (callable): 응답 후처리 함수
-            output_func (callable): 출력 함수
-
-            response_mode (str): LLM 모드 사용 여부 ("Prompt", "Algorithm", "Manual")
-            edit_mode (bool): 편집 모드
-            auto_template (bool): 자동 템플릿 사용 여부
-            outputs_per_input (int): 출력 배수
-            input_count_key (str): 입력 수의 기준키
-            ignore_count_check (bool): 입력 수 체크 무시 여부
-            filter_pass (bool): 필터 오류 3회가 넘어가는 경우 그냥 패스 여부
-        
-        Effects:
-            input_list 생성
-            total_input_count 설정
-            input_count 및 middle_frame_completion 설정
-            edit_check 및 edit_response_completion 및 edit_response_postprocess_completion 및 edit_output_completion 설정
-
-        Attributes:
-            inputs_func (callable): 입력 리스트 생성 함수
-            preprocess_response_func (callable): 응답 전처리 함수
-            postprocess_response_func (callable): 응답 후처리 함수
-            output_func (callable): 출력 함수
-
-            response_mode (str): LLM 모드 사용 여부 ("Prompt", "Algorithm", "Manual")
-            edit_mode (bool): 편집 모드
-            auto_template (bool): 자동 템플릿 사용 여부
-            outputs_per_input (int): 출력 배수
-            input_count_key (str): 입력 수의 기준키
-            ignore_count_check (bool): 입력 수 체크 무시 여부
-            filter_pass (bool): 필터 오류 3회가 넘어가는 경우 그냥 패스 여부
-
-            input_list (list): 입력 리스트
-            total_input_count (int): 입력 수
-            input_count (int): 입력 수
-            middle_frame_completion (bool): middle_frame_completion
-            edit_check (bool): edit_check
-            edit_response_completion (bool): edit_response_completion
-            edit_response_postprocess_completion (bool): edit_response_postprocess_completion
-            edit_output_completion (bool): edit_output_completion
-        """
-        # attributes 설정
-        # func 설정
-        self.inputs_func = inputs_func
-        self.preprocess_response_func = preprocess_response_func
-        self.postprocess_response_func = postprocess_response_func
-        self.output_func = output_func
-
-        # mode 설정
-        self.response_mode = response_mode
-        self.edit_mode = edit_mode
-        self.auto_template = auto_template
-        self.outputs_per_input = outputs_per_input
-        self.input_count_key = input_count_key
-        self.ignore_count_check = ignore_count_check
-        self.filter_pass = filter_pass
-
-        # response_structure 설정
-        self.response_structure = self.load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["Message", self.main_lang, "ResponseStructure"])
-
-        # input_list 설정
-        self.input_list = self._create_input_list()
-        self.total_input_count = len(self.input_list)
-
-        # input_count 및 middle_frame_completion 설정
-        self.input_count, self.middle_frame_completion = self._check_process_middle_frame()
-        self.edit_check, self.edit_response_completion, self.edit_response_postprocess_completion, self.edit_output_completion = self._check_solution_edit()
-
+    # -------------------------------------
+    # --- func-set: agent run -------------
     # --- class-func: agent request 요청 ---
     def _request_agent(self,
                        input: str | list,
@@ -969,7 +952,6 @@ class Agent(LLM):
 
                   response_mode: bool = True,
                   edit_mode: bool = True,
-                  auto_template: bool = True,
                   outputs_per_input: int = 1,
                   input_count_key: str = None,
                   ignore_count_check: bool = False,
@@ -984,21 +966,20 @@ class Agent(LLM):
 
             response_mode (str): LLM 모드 사용 여부 ("Prompt", "Algorithm", "Manual")
             edit_mode (bool): 편집 모드 (기본값: True)
-            auto_template (bool): 자동 템플릿 사용 여부 (기본값: True)
             outputs_per_input (int): 출력 배수 (기본값: 1)
             input_count_key (str): 입력 수의 기준키 (기본값: None)
             ignore_count_check (bool): 입력 수 체크 무시 여부 (기본값: False)
             filter_pass (bool): 필터 오류 3회가 넘어가는 경우 그냥 패스 여부 (기본값: False)
         """
-        # run 초기화
-        self._init_agent(inputs_func,
+        # function 초기화
+        self._init_function(inputs_func,
             preprocess_response_func,
             postprocess_response_func,
-            output_func,
+            output_func)
 
-            response_mode,
+        # mode 초기화
+        self._init_mode(response_mode,
             edit_mode,
-            auto_template,
             outputs_per_input,
             input_count_key,
             ignore_count_check,

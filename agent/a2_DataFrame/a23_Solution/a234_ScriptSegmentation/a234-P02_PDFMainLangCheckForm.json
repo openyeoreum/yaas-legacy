@@ -149,7 +149,6 @@
         "Ko": [
             {
                 "NextSolution": "eval(self.next_solution)",
-                "AutoTemplate": "eval(self.auto_template)",
                 "FileExtension": "pdf",
                 "MainLang": "eval(response['태그'])",
                 "InputCount": 0,
@@ -164,7 +163,6 @@
         "Global": [
             {
                 "NextSolution": "eval(self.NextSolution)",
-                "AutoTemplate": "eval(self.AutoTemplate)",
                 "FileExtension": "pdf",
                 "MainLang": "eval(Response['Tag'])",
                 "InputCount": 0,

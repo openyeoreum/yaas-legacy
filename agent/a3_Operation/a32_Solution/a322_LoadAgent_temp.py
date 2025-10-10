@@ -9,7 +9,7 @@ import sys
 sys.path.append("/yaas")
 
 from PyPDF2 import PdfReader, PdfWriter
-from agent.a3_Operation.a32_Solution.a321_LoadLLM import OpenAI_LLMresponse, ANTHROPIC_LLMresponse, GOOGLE_LLMresponse, DEEPSEEK_LLMresponse
+from agent.a3_Operation.a32_Solution.a321_LoadLLM_temp import OpenAI_LLMresponse, ANTHROPIC_LLMresponse, GOOGLE_LLMresponse, DEEPSEEK_LLMresponse
 
 #####################
 ##### LoadAgent #####

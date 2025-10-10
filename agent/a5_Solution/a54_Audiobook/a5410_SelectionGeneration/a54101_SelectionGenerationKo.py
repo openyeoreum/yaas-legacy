@@ -9,7 +9,7 @@ from tqdm import tqdm
 from langdetect import detect
 from langdetect.lang_detect_exception import LangDetectException
 from agent.a4_Core.a42_Access.a424_GetProcessData import GetProject, GetPromptFrame
-from agent.a3_Operation.a32_Solution.a321_LoadLLM import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
+from agent.a3_Operation.a32_Solution.a321_LoadLLM_temp import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 from agent.a5_Solution.a54_Audiobook.a541_DataCommit.a5411_DataFrameCommit import FindDataframeFilePaths, AddExistedSelectionGenerationKoToDB, AddSelectionGenerationKoBookContextToDB, AddSelectionGenerationKoSplitedIndexsToDB, SelectionGenerationKoCountLoad, UpdatedSelectionGenerationKo, SelectionGenerationKoCompletionUpdate
 from agent.a5_Solution.a54_Audiobook.a541_DataCommit.a5412_DataSetCommit import AddExistedDataSetToDB
 

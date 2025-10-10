@@ -9,7 +9,7 @@ sys.path.append("/yaas")
 
 from mistralai import Mistral
 from langdetect import detect_langs, DetectorFactory
-from agent.a3_Operation.a32_Solution.a321_LoadLLM import OpenAI_LLMresponse, ANTHROPIC_LLMresponse, GOOGLE_LLMresponse, DEEPSEEK_LLMresponse
+from agent.a3_Operation.a32_Solution.a321_LoadLLM_temp import OpenAI_LLMresponse, ANTHROPIC_LLMresponse, GOOGLE_LLMresponse, DEEPSEEK_LLMresponse
 
 ###############################################
 ##### Translation PDF, Index, Body 불러오기 #####

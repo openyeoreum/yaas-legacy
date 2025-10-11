@@ -1,5 +1,5 @@
 {
-    "ProjectName": "eval(self.ProjectName)",
+    "ProjectName": ["self", "project_name"],
     "Domain": "Publishing",
     "MainLang": "Ko",
     "ProcessName": "PDFLanguageCheck",
@@ -155,29 +155,29 @@
     "MiddleFrame": {
         "Ko": [
             {
-                "NextSolution": "eval(self.next_solution)",
+                "NextSolution": ["self", "next_solution"],
                 "FileExtension": "pdf",
-                "MainLang": "eval(response['태그'])",
+                "MainLang": ["dict", "response", "태그"],
                 "InputCount": 0,
                 "Completion": "No"
             },
             [
                 {
-                    "MainLang": "eval(Response['태그'])"
+                    "MainLang": ["dict", "response", "태그"]
                 }
             ]
         ],
         "Global": [
             {
-                "NextSolution": "eval(self.NextSolution)",
+                "NextSolution": ["self", "next_solution"],
                 "FileExtension": "pdf",
-                "MainLang": "eval(Response['Tag'])",
+                "MainLang": ["dict", "response", "Tag"],
                 "InputCount": 0,
                 "Completion": "No"
             },
             [
                 {
-                    "MainLang": "eval(Response['Tag'])"
+                    "MainLang": ["dict", "response", "Tag"]
                 }
             ]
         ],

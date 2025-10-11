@@ -35,14 +35,23 @@
             "Function": "└─{FunctionName} > {Info}"
         },
         "Info": {
-            "Complete": "(✅ Complete: {Print})",
-            "Create": "(🆕 Create: {Print})",
-            "Update": "(🔄 Update: {Print})",
-            "Load": "(🔄 Load: {Print})",
-            "Notice": "(✔️ Notice: {Print})",
-            "Message": "(💬 Message)\n\n{Print}",
-            "Manual": "(👉 Manual)\n\n{Print}",
-            "Error": "(❗️ Error: {Print})"
+            "Complete": "✅ Complete: {Print}",
+            "Create": "🆕 Create: {Print}",
+            "Update": "🔄 Update: {Print}",
+            "Load": "🔄 Load: {Print}",
+            "Notice": "✔️ Notice: {Print}",
+            "Message": "💬 Message\n\n{Print}",
+            "Manual": "👉 Manual\n\n{Print}",
+            "Error": "❗️ Error: {Print}"
+        }
+    },
+    "Func": {
+        "Log": {
+            "Function": "└───{FunctionName} > {Info}"
+        },
+        "Info": {
+            "Notice": "Notice: {Print}",
+            "Error": "Error: {Print}"
         }
     },
     "DataFrame": {

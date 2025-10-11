@@ -43,9 +43,9 @@ class Manager(Log):
             process_number=process_number,
             process_name=process_name)
 
-    # ---------------------------------------
-    # --- func-set: common manager ----------
-    # --- class-func: storage json 불러오기 ---
+    # -------------------------------------
+    # --- func-set: common json manager ---
+    # --- class-func: json 불러오기 ---------
     def load_json(self,
                   work: str,
                   common_keys: list,
@@ -70,6 +70,46 @@ class Manager(Log):
             json_dict = json_dict[key]
 
         return json_dict
+
+    # -----------------------------------------
+    # --- func-set: json value resolver -------
+    # --- class-func: json 값 해석 및 인자 반환 ---
+    def get_json_arg(self,
+                     rule_list: list,
+                     context: dict = None) -> any:
+        """rule_list에 따라 동적인 값을 해석하여 반환합니다.
+
+        Args:
+            rule_list (list): 규칙 리스트
+            context (dict): 해석에 필요한 동적 객체
+
+        Returns:
+            any: rule_list에 따라 해석된 최종 값
+        """
+        # class 속성 값 가져오기
+        if rule_list[0] == "self":
+            if context is not None:
+                super().print_log("Func", ["Log", "Function"], ["Info", "Error"], [f"self.인자 호출에 context가 전달됨, context 또는 {rule_list}를 확인해주세요."])
+                return None
+
+            attr_name = rule_list[1]
+            target_attr = getattr(self, attr_name, None)
+
+            return target_attr
+
+        # dict 값 가져오기
+        if rule_list[0] == "dict":
+            dict_name = rule_list[1]
+            if context is None or dict_name not in context:
+                super().print_log("Func", ["Log", "Function"], ["Info", "Error"], [f"context가 없거나 잘못됨, {rule_list}에 적합한 올바른 context를 전달해주세요."])
+                return None
+
+            rule_keys = rule_list[2:]
+            target_dict = context.get(dict_name)
+            for key in rule_keys:
+                target_dict = target_dict[key]
+
+            return target_dict
 
     # --------------------------------------
     # --- func-set: storage dir manager ----

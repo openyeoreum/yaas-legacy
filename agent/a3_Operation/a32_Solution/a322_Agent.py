@@ -759,10 +759,8 @@ class Agent(LLM):
                 continue
             
             actual_value = value_expression
-            if isinstance(value_expression, str) and value_expression.startswith("eval(") and value_expression.endswith(")"):
-                # "eval("와 ")" 부분을 제외한 안쪽 코드만 추출
-                code_to_eval = eval(value_expression[5:-1])
-                actual_value = eval(code_to_eval)
+            if isinstance(value_expression, list):
+                actual_value = super().get_json_arg(value_expression)
 
             solution_process_middle_frame[0][key] = actual_value
         
@@ -772,22 +770,18 @@ class Agent(LLM):
         if isinstance(solution_process_data, dict):
             for key, value_expression in solution_process_data.items():
                 actual_value = value_expression
-                if isinstance(value_expression, str) and value_expression.startswith("eval(") and value_expression.endswith(")"):
-                    # "eval("와 ")" 부분을 제외한 안쪽 코드만 추출
-                    code_to_eval = value_expression[5:-1]
-                    actual_value = eval(code_to_eval)
+                if isinstance(value_expression, list):
+                    actual_value = super().get_json_arg(value_expression, context=response)
 
                 solution_process_data[key] = actual_value
         
         # response가 list인 경우
-        elif isinstance(solution_process_data, list):
+        if isinstance(solution_process_data, list):
             for i in range(len(solution_process_data)):
                 for key, value_expression in solution_process_data[i].items():
                     actual_value = value_expression
-                    if isinstance(value_expression, str) and value_expression.startswith("eval(") and value_expression.endswith(")"):
-                        # "eval("와 ")" 부분을 제외한 안쪽 코드만 추출
-                        code_to_eval = value_expression[5:-1]
-                        actual_value = eval(code_to_eval)
+                    if isinstance(value_expression, list):
+                        actual_value = super().get_json_arg(value_expression, context=response)
 
                     solution_process_data[i][key] = actual_value
         

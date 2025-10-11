@@ -74,7 +74,7 @@ class LLM(Manager):
             api_config_dict (dict): API 설정이 담긴 딕셔너리
         """
         # JSON 파일 열기 및 로드
-        with open(self.read_path_map("Operation", ["APIConfig"]), 'r', encoding='utf-8') as f:
+        with open(super().read_path_map("Operation", ["APIConfig"]), 'r', encoding='utf-8') as f:
             api_config_dict = json.load(f)
         
         return api_config_dict
@@ -106,7 +106,7 @@ class LLM(Manager):
     # ------------------------------------
     # --- func-set: format message -------
     # --- class-func: file list 텍스트화 ---
-    def _format_input_paths_to_str(self, input_paths: list) -> str:
+    def _format_input_path_to_str(self, input_paths: list) -> str:
         """파일 리스트를 문자열로 포맷팅하여 반환합니다.
 
         Args:
@@ -155,15 +155,15 @@ class LLM(Manager):
         message_time = f"current time: {str(datetime.now())}\n\n"
 
         # 메세지 불러오기
-        message_dict = self.load_json("Solution", [self.solution, "Form", self.process_name],json_keys=["Message", self.main_lang])
+        message_dict = super().load_json("Solution", [self.solution, "Form", self.process_name],json_keys=["Message", self.main_lang])
 
         # InputFormat 불러오기
-        input_format = self.load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["Format", "InputFormat"])
+        input_format = super().load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["Format", "InputFormat"])
 
         # InputFormat이 Text가 아닌 경우에는 파일리스트 정리
         if input_format != "text":
             input_paths = input
-            input = self._format_input_paths_to_str(input_paths)
+            input = self._format_input_path_to_str(input_paths)
 
         # ResponseExample 포맷팅
         response_example = self._format_response_example_dict_to_str(message_dict["ResponseExample"])
@@ -257,7 +257,7 @@ class LLM(Manager):
         self.memory_note = memory_note
 
         api_config_dict = self._load_api_config()
-        api_dict = self.load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["API"])
+        api_dict = super().load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["API"])
         self.service = api_dict["Service"]
         level = api_dict["Level"]
         self.client = self._load_api_client(self.service)
@@ -267,7 +267,7 @@ class LLM(Manager):
         if "MaxTokens" in api_config_dict["LanguageModel"][self.service][level]:
             self.max_tokens = api_config_dict["LanguageModel"][self.service][level]["MaxTokens"]
 
-        format_dict = self.load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["Format"])
+        format_dict = super().load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["Format"])
         self.input_format = format_dict["InputFormat"]
         self.response_format = format_dict["ResponseFormat"]
 
@@ -731,12 +731,12 @@ class LLM(Manager):
                 # request와 response 출력
                 request_and_response_text = self._print_request_and_response(response, usage)
 
-                self.print_log("Task", ["Log", "Message"], ["Info", "Message"], input_count=input_count, total_input_count=total_input_count, function_name="llm.run", _print=request_and_response_text)
+                super().print_log("Task", ["Log", "Message"], ["Info", "Message"], input_count=input_count, total_input_count=total_input_count, function_name="llm.run", _print=request_and_response_text)
 
                 return response
 
             except Exception as e:
-                self.print_log("Task", ["Log", "Function"], ["Info", "Error"], function_name="llm.run", _print=e)
+                super().print_log("Task", ["Log", "Function"], ["Info", "Error"], function_name="llm.run", _print=e)
                 time.sleep(random.uniform(2, 5))
                 continue
 

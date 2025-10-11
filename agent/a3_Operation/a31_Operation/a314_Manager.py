@@ -50,7 +50,7 @@ class Manager(Log):
                   work: str,
                   common_keys: list,
                   json_keys: list = None) -> str | dict | list:
-        """self.read_path_map(work, common_keys)의 json을 불러옵니다.
+        """super().read_path_map(work, common_keys)의 json을 불러옵니다.
 
         Args:
             work (str): "Core" 또는 "Solution" 또는 "Generation"
@@ -58,10 +58,10 @@ class Manager(Log):
             json_keys (list): 불러온 json_data의 연속된 키 값 (json_keys로 사용 권장)
 
         Returns:
-            data 가져오기 (str | dict | list): self.read_path_map(work, common_keys)[json_keys]
+            data 가져오기 (str | dict | list): super().read_path_map(work, common_keys)[json_keys]
         """
-        # self.read_path_map(work, common_keys) 파일 불러오기
-        with open(self.read_path_map(work, common_keys), "r", encoding="utf-8") as f:
+        # super().read_path_map(work, common_keys) 파일 불러오기
+        with open(super().read_path_map(work, common_keys), "r", encoding="utf-8") as f:
             json_data = json.load(f)
 
         # json_data에서 json_keys에 해당하는 경로 가져오기
@@ -77,17 +77,17 @@ class Manager(Log):
     def make_storage_dir(self,
                          work: str,
                          dir_keys: list) -> None:
-        """self.read_path_map(work, keys) 디렉토리를 생성합니다.
+        """super().read_path_map(work, keys) 디렉토리를 생성합니다.
 
         Args:
             work (str): "Core" 또는 "Solution" 또는 "Generation"
             dir_keys (list): path_map json의 연속된 키 값 (dir_keys로 사용 권장)
 
         Effects:
-            dir 생성: self.read_path_map(work, dir_keys)
+            dir 생성: super().read_path_map(work, dir_keys)
         """
-        if not os.path.exists(self.read_path_map(work, dir_keys)):
-            os.makedirs(self.read_path_map(work, dir_keys), exist_ok = True)
+        if not os.path.exists(super().read_path_map(work, dir_keys)):
+            os.makedirs(super().read_path_map(work, dir_keys), exist_ok = True)
 
     # -------------------------------------------------------
     # --- func-set: storage json manager --------------------
@@ -96,7 +96,7 @@ class Manager(Log):
                             work: str,
                             form_keys: list,
                             file_keys: list) -> None:
-        """self.form_path의 json을 복사하여 self.read_path_map(work, file_keys)의 json을 생성합니다.
+        """self.form_path의 json을 복사하여 super().read_path_map(work, file_keys)의 json을 생성합니다.
 
         Args:
             work (str): "Core" 또는 "Solution" 또는 "Generation"
@@ -105,12 +105,12 @@ class Manager(Log):
 
         Effects:
             form file 복사 (json): self.form_path
-            storage file 생성 (json): self.read_path_map(work, file_keys)
+            storage file 생성 (json): super().read_path_map(work, file_keys)
         """
-        if not os.path.exists(self.read_path_map(work, file_keys)):
-            with open(self.read_path_map(work, form_keys), "r", encoding="utf-8") as f:
+        if not os.path.exists(super().read_path_map(work, file_keys)):
+            with open(super().read_path_map(work, form_keys), "r", encoding="utf-8") as f:
                 form_data = json.load(f)
-            with open(self.read_path_map(work, file_keys), "w", encoding="utf-8") as f:
+            with open(super().read_path_map(work, file_keys), "w", encoding="utf-8") as f:
                 json.dump(form_data, f, ensure_ascii=False, indent=4)
 
     # --- class-func: storage json 생성하기 및 덮어쓰기 ---
@@ -118,7 +118,7 @@ class Manager(Log):
                                work: str,
                                file_keys: list,
                                json_data: dict) -> None:
-        """self.read_path_map(work, file_keys)의 json을 저장합니다.
+        """super().read_path_map(work, file_keys)의 json을 저장합니다.
 
         Args:
             work (str): "Core" 또는 "Solution" 또는 "Generation"
@@ -128,7 +128,7 @@ class Manager(Log):
         Effects:
             json 저장 (dict): self.json_path
         """
-        with open(self.read_path_map(work, file_keys), "w", encoding="utf-8") as f:
+        with open(super().read_path_map(work, file_keys), "w", encoding="utf-8") as f:
             json.dump(json_data, f, ensure_ascii=False, indent=4)
 
     # --- class-func: storage json data 추가하기 ---
@@ -137,7 +137,7 @@ class Manager(Log):
                             file_keys: list,
                             json_keys: list,
                             data: dict) -> None:
-        """self.read_path_map(work, file_keys)의 json에 데이터를 추가합니다.
+        """super().read_path_map(work, file_keys)의 json에 데이터를 추가합니다.
 
         Args:
             work (str): "Core" 또는 "Solution" 또는 "Generation"
@@ -146,10 +146,10 @@ class Manager(Log):
             data (dict): 추가할 데이터
 
         Effects:
-            data 추가 (dict): self.read_path_map(work, file_keys)[json_keys].append(data)
+            data 추가 (dict): super().read_path_map(work, file_keys)[json_keys].append(data)
         """
-        # self.read_path_map(work, file_keys) 파일 불러오기
-        with open(self.read_path_map(work, file_keys), "r", encoding="utf-8") as f:
+        # super().read_path_map(work, file_keys) 파일 불러오기
+        with open(super().read_path_map(work, file_keys), "r", encoding="utf-8") as f:
             json_data = json.load(f)
 
         # json_data에서 json_keys에 해당하는 경로 가져오기
@@ -160,8 +160,8 @@ class Manager(Log):
         # 데이터 추가
         json_dict.append(data)
 
-        # self.read_path_map(work, file_keys) 파일에 저장
-        with open(self.read_path_map(work, file_keys), "w", encoding="utf-8") as f:
+        # super().read_path_map(work, file_keys) 파일에 저장
+        with open(super().read_path_map(work, file_keys), "w", encoding="utf-8") as f:
             json.dump(json_data, f, ensure_ascii=False, indent=4)
 
     # --- class-func: storage json data 수정하기 ---
@@ -170,7 +170,7 @@ class Manager(Log):
                          file_keys: list,
                          json_keys: list,
                          data: str | dict | list) -> None:
-        """self.read_path_map(work, file_keys)의 json에 데이터를 수정, 변경합니다.
+        """super().read_path_map(work, file_keys)의 json에 데이터를 수정, 변경합니다.
 
         Args:
             work (str): "Core" 또는 "Solution" 또는 "Generation"
@@ -179,10 +179,10 @@ class Manager(Log):
             data (str | dict | list): 수정, 변경할 데이터
 
         Effects:
-            data 수정, 변경 (str | dict | list): self.read_path_map(work, file_keys)[json_keys].append(data)
+            data 수정, 변경 (str | dict | list): super().read_path_map(work, file_keys)[json_keys].append(data)
         """
-        # self.read_path_map(work, file_keys) 파일 불러오기
-        with open(self.read_path_map(work, file_keys), "r", encoding="utf-8") as f:
+        # super().read_path_map(work, file_keys) 파일 불러오기
+        with open(super().read_path_map(work, file_keys), "r", encoding="utf-8") as f:
             json_data = json.load(f)
 
         # json_data에서 json_keys에 해당하는 경로 가져오기
@@ -194,8 +194,8 @@ class Manager(Log):
         # 데이터 수정, 변경
         json_dict[last_key] = data
 
-        # self.read_path_map(work, file_keys) 파일에 저장
-        with open(self.read_path_map(work, file_keys), "w", encoding="utf-8") as f:
+        # super().read_path_map(work, file_keys) 파일에 저장
+        with open(super().read_path_map(work, file_keys), "w", encoding="utf-8") as f:
             json.dump(json_data, f, ensure_ascii=False, indent=4)
 
     # -----------------------------------------------
@@ -205,7 +205,7 @@ class Manager(Log):
                            work: str,
                            file_keys: list,
                            text: str) -> None:
-        """self.read_path_map(work, file_keys)의 txt를 저장합니다.
+        """super().read_path_map(work, file_keys)의 txt를 저장합니다.
 
         Args:
             work (str): "Core" 또는 "Solution" 또는 "Generation"
@@ -213,27 +213,27 @@ class Manager(Log):
             text (str): 저장할 텍스트
 
         Effects:
-            txt 저장 (str): self.read_path_map(work, file_keys)
+            txt 저장 (str): super().read_path_map(work, file_keys)
         """
-        # self.read_path_map(work, file_keys) 파일 불러오기
-        with open(self.read_path_map(work, file_keys), "w", encoding="utf-8") as f:
+        # super().read_path_map(work, file_keys) 파일 불러오기
+        with open(super().read_path_map(work, file_keys), "w", encoding="utf-8") as f:
             f.write(text)
 
     # --- class-func: storage txt 불러오기 ---
     def load_storage_txt(self,
                          work: str,
                          file_keys: list) -> str:
-        """self.read_path_map(work, file_keys)의 txt를 불러옵니다.
+        """super().read_path_map(work, file_keys)의 txt를 불러옵니다.
 
         Args:            
             work (str): "Core" 또는 "Solution" 또는 "Generation"
             file_keys (list): path_map json의 연속된 키 값
 
         Returns:
-            text 불러오기 (str): self.read_path_map(work, file_keys)
+            text 불러오기 (str): super().read_path_map(work, file_keys)
         """
-        # self.read_path_map(work, file_keys) 파일 불러오기
-        with open(self.read_path_map(work, file_keys), "r", encoding="utf-8") as f:
+        # super().read_path_map(work, file_keys) 파일 불러오기
+        with open(super().read_path_map(work, file_keys), "r", encoding="utf-8") as f:
             text = f.read()
 
         return text

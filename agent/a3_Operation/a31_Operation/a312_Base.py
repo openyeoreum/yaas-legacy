@@ -80,11 +80,11 @@ class Base(Access):
         Returns:
             formatted_path (str): 포맷팅된 경로
         """
-        # paths_dict 가져오기
-        paths_dict = self._load_path_map()[work]
+        # path_dict 가져오기
+        path_dict = self._load_path_map()[work]
 
-        # paths_dict에서 keys에 해당하는 경로 가져오기
-        path = paths_dict
+        # path_dict에서 keys에 해당하는 경로 가져오기
+        path = path_dict
         for key in path_keys:
             path = path[key]
 

@@ -110,7 +110,7 @@ class Log(Base):
         }
 
         # ProjectLog 파일 불러오기
-        with open(self.read_path_map("Core", ["File", "Json", "ProjectLog"]), 'r', encoding='utf-8') as f:
+        with open(super().read_path_map("Core", ["File", "Json", "ProjectLog"]), 'r', encoding='utf-8') as f:
             log_json_data = json.load(f)
 
         # 첫 로그 데이터인 경우 Email과 ProjectName 추가
@@ -160,7 +160,7 @@ class Log(Base):
         # --- 로직 수정 끝 ---
 
         # 업데이트된 로그 데이터를 다시 ProjectLog 파일에 저장
-        with open(self.read_path_map("Core", ["File", "Json", "ProjectLog"]), 'w', encoding='utf-8') as f:
+        with open(super().read_path_map("Core", ["File", "Json", "ProjectLog"]), 'w', encoding='utf-8') as f:
             json.dump(log_json_data, f, ensure_ascii=False, indent=4)
 
     # --- class-func: log data 가져오고 포맷팅하고 출력하기 ---

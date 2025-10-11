@@ -4237,7 +4237,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ProjectMasterTranslationPath = os.path.join(ProjectTranslationPath, f'{projectName}_master_translation_file')
     TranslationEditPath = os.path.join(ProjectMasterTranslationPath, f'[{projectName}_Translation_Edit].json')
     
-    TranslationDataFramePath = "/yaas/agent/a0_Database/a03_ProjectData/a032_TranslationProject"
+    TranslationDataFramePath = "/yaas/agent/a0_Database_temp/a03_ProjectData/a032_TranslationProject"
 
     ########################
     ### Process0: PDF OCR ##

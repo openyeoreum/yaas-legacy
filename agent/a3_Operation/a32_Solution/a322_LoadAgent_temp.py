@@ -18,8 +18,8 @@ class LoadAgent:
 
     ## 기본 경로 정의 ##
     StoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
-    ProjectDataPath = "/yaas/agent/a0_Database/a03_ProjectData"
-    PromptDataPath = "/yaas/agent/a0_Database/a04_PromptData"
+    ProjectDataPath = "/yaas/agent/a0_Database_temp/a03_ProjectData"
+    PromptDataPath = "/yaas/agent/a0_Database_temp/a04_PromptData"
 
     ## LoadAgent 초기화 ##
     def __init__(self, InputListFunc, Email, ProjectName, Solution, ProcessNumber, ProcessName, MainLang = "ko", Model = "OpenAI", ResponseMethod = "Prompt", ResponsePostProcessFunc = None, OutputFunc = None, MessagesReview = "off", SubSolution = None, NextSolution = None, EditMode = "Auto", AutoTemplate = "on", OutputsPerInput = 1, InputCountKey = None, IgnoreCountCheck = False, FilterPass = False):

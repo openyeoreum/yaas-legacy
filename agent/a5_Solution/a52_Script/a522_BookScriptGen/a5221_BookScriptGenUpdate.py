@@ -1441,7 +1441,7 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
     ModifiedScriptEditPath = os.path.join(ProjectMasterScriptPath, BaseModifyFolder, f'[{ModifyTime}_{projectName}_Script_ModifiedEdit].json')
 
     
-    BookScriptGenDataFramePath = "/yaas/agent/a0_Database/a03_ProjectData/a031_ScriptProject/a0311_BookScriptGen"
+    BookScriptGenDataFramePath = "/yaas/agent/a0_Database_temp/a03_ProjectData/a031_ScriptProject/a0311_BookScriptGen"
 
     #########################################
     ### Process1: ScriptPlan Response 생성 ###

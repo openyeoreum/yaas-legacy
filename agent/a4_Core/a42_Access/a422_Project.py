@@ -10,7 +10,7 @@ def GetProjectPath(projectName, email):
 
 ## Init audiobookDataFrame 경로 불러오기
 def GetProjectDataPath():
-    ProjectDataPath = "/yaas/agent/a0_Database/a03_ProjectData/a034_AudioBookProject"
+    ProjectDataPath = "/yaas/agent/a0_Database_temp/a03_ProjectData/a034_AudioBookProject"
     return ProjectDataPath
 
 ## audiobookDataFrameConfig 경로 설정

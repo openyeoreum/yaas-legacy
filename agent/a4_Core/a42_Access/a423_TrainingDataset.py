@@ -11,7 +11,7 @@ def GetDataSetPath(projectName, email):
 
 ## Init TrainingDataset 경로 불러오기
 def GetTrainingDatasetPath():
-    TrainingDatasetPath = "/yaas/agent/a0_Database/a05_TrainingDataset/a051_TrainingDataset.json"
+    TrainingDatasetPath = "/yaas/agent/a0_Database_temp/a05_TrainingDataset/a051_TrainingDataset.json"
     return TrainingDatasetPath
 
 ## audiobookDataSetConfig 경로 설정

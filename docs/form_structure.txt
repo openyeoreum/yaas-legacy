@@ -84,11 +84,61 @@
         (4) ScriptGen
             (가) ...
         (5) ScriptSegmentation
-            (가) ...
+            (가) P01 (PDF)ScriptLoad
+            (나) P02 PDFMainLangCheck
+            (다) P03 PDFLayoutCheck
+            (라) P04 PDFResize
+            (마) P05 PDFSplit
+            (바) P06 PDFFormCheck
+            (사) P07 PDFIndexGen
+            (아) P08 PDFIndexMatching
+            (자) P09 PDFBodyCaptionComponentCheck
+            (차) P10 PDFChunkAnnotationComponentCheck
+
+            (카) T01 (TXT)ScriptLoad
+            (타) T02 TXTMainLangCheck
+            (파) T03 TXTSplit
+            (하) T04 TXTFormCheck
+            (거) T05 TXTIndexGen
+            (너) T06 TXTIndexMatching
+            (더) T07 TXTBodyCaptionComponentCheck
+            (러) T08 TXTChunkAnnotationComponentCheck
+
+            (머) S01 CaptionGen
+            (버) S02 AnnotationGen
+            (서) S03 ImageDescriptionGen
+            (어) S04 DiagramGen
+            (저) S05 ChartGen
+            (처) S06 GraphGen
+            (커) S07 TableGen
+            (터) S08 SignGen
+            (퍼) S09 CommentGen
+            (허) S10 BodyFrame
         (6) ScriptStructuration
             (가) ...
         (7) Translation
-            (가) ...
+            (가) 01 TranslationBodySummary
+            (나) 02 WordListGen
+            (다) 03 UniqueWordListGen
+            (라) 04 WordListPostprocessing
+            (마) 05 IndexTranslation
+            (바) 06 BodyTranslationPreprocessing
+            (사) 07 BodyTranslation
+            (아) 07 BodyTranslationWordCheck
+            (자) 07 BodyTranslationCheck
+            (차) 07 BodyToneEditing
+            (카) 07 BodyLanguageEditing
+            (타) 07-1 TranslationEditing
+            (파) 07-2 TranslationRefinement
+            (하) 07-3 TranslationKinfolkStyleRefinement
+            (거) 08 TranslationProofreading
+            (너) 09 TranslationDialogueAnalysis
+            (더) 09 TranslationDialogueEditing
+            (러) 09 TranslationDialoguePostprocessing
+            (머) 10 AfterTranslationBodySummary
+            (버) 11 AuthorResearch
+            (서) 12 TranslationCatchphrase
+            (어) 13 TranslationFundingCatchphrase
         (8) TextBook
             (가) ...
         (9) AudioBook

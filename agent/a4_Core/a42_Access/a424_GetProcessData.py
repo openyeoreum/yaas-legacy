@@ -26,7 +26,7 @@ def SaveJsonData(FilePath, Data):
 ## PromptFrame을 가져오는 함수
 def GetPromptFrame(Process, MainLang):
 
-    PromptDataPath = "/yaas/agent/a0_Database/a04_PromptData"
+    PromptDataPath = "/yaas/agent/a0_Database_temp/a04_PromptData"
     PromptFileMap = {
         # GeneralPrompt
         "JsonParsing": "/a041_DataCollectionPrompt/a0410_GeneralPrompt/a0412-01_JsonParsingPrompt.json",
@@ -148,7 +148,7 @@ def GetPromptFrame(Process, MainLang):
 ## SoundDataSet을 가져오는 함수
 def GetSoundDataSet(soundDataSet):
 
-    SoundDataPath = "/yaas/agent/a0_Database/a07_RelationalDatabase"
+    SoundDataPath = "/yaas/agent/a0_Database_temp/a07_RelationalDatabase"
     SoundFileMap = {
         "VoiceDataSet": "/a072_Character/a072-01_VoiceDataSet.json",
         "LogoDataSet": "/a073_Logo/a073-01_LogoDataSet.json",

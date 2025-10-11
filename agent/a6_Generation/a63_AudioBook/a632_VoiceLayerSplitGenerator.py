@@ -1926,7 +1926,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
     ## Narrator가 "VoiceActor" 이면서 성우가 지정된 경우 CloneVoiceDic 생성 ##
     elif Narrator == 'VoiceActor' and CloneVoiceName != '':
         # VoiceDataSetPath 로드
-        VoiceDataSetPath = "/yaas/agent/a0_Database/a07_RelationalDatabase/a072_Character/a072-01_VoiceDataSet.json"
+        VoiceDataSetPath = "/yaas/agent/a0_Database_temp/a07_RelationalDatabase/a072_Character/a072-01_VoiceDataSet.json"
         with open(VoiceDataSetPath, 'r', encoding = 'utf-8') as VoiceDataSetJson:
             VoiceDataSet = json.load(VoiceDataSetJson)
         VoiceActos = VoiceDataSet[1]['Characters']
@@ -1949,11 +1949,11 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                 try:
                     AfterNarratorName = MatchedVoiceActor['Name']
                 except UnboundLocalError:
-                    sys.exit(f'[ (({CloneVoiceName})) a072-01_VoiceDataSet에 성우가 존재하지 않음 ]\n/yaas/agent/a0_Database/a07_RelationalDatabase/a072_Character/a072-01_VoiceDataSet.json')
+                    sys.exit(f'[ (({CloneVoiceName})) a072-01_VoiceDataSet에 성우가 존재하지 않음 ]\n/yaas/agent/a0_Database_temp/a07_RelationalDatabase/a072_Character/a072-01_VoiceDataSet.json')
                 try:
                     _Matched['ActorName'] = AfterNarratorName
                 except UnboundLocalError:
-                    sys.exit(f'[ (({CloneVoiceName})) a072-01_VoiceDataSet에 성우가 존재하지 않음 ]\n/yaas/agent/a0_Database/a07_RelationalDatabase/a072_Character/a072-01_VoiceDataSet.json')
+                    sys.exit(f'[ (({CloneVoiceName})) a072-01_VoiceDataSet에 성우가 존재하지 않음 ]\n/yaas/agent/a0_Database_temp/a07_RelationalDatabase/a072_Character/a072-01_VoiceDataSet.json')
                 _Matched['ApiSetting'] = MatchedVoiceActor['ApiSetting']
             if _Matched['CharacterTag'] == 'SecondaryNarrator':
                 if MatchedSecondaryVoiceActor != 'None':
@@ -1961,11 +1961,11 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                     try:
                         AfterSecondaryNarratorName = MatchedSecondaryVoiceActor['Name']
                     except UnboundLocalError:
-                        sys.exit(f'[ (({CloneVoiceName}의 SecondaryVoice인 {MatchedSecondaryVoiceActor["Name"]})) a072-01_VoiceDataSet에 성우가 존재하지 않음 ]\n/yaas/agent/a0_Database/a07_RelationalDatabase/a072_Character/a072-01_VoiceDataSet.json')
+                        sys.exit(f'[ (({CloneVoiceName}의 SecondaryVoice인 {MatchedSecondaryVoiceActor["Name"]})) a072-01_VoiceDataSet에 성우가 존재하지 않음 ]\n/yaas/agent/a0_Database_temp/a07_RelationalDatabase/a072_Character/a072-01_VoiceDataSet.json')
                     try:
                         _Matched['ActorName'] = AfterSecondaryNarratorName
                     except UnboundLocalError:
-                        sys.exit(f'[ (({CloneVoiceName}의 SecondaryVoice인 {MatchedSecondaryVoiceActor["Name"]})) a072-01_VoiceDataSet에 성우가 존재하지 않음 ]\n/yaas/agent/a0_Database/a07_RelationalDatabase/a072_Character/a072-01_VoiceDataSet.json')
+                        sys.exit(f'[ (({CloneVoiceName}의 SecondaryVoice인 {MatchedSecondaryVoiceActor["Name"]})) a072-01_VoiceDataSet에 성우가 존재하지 않음 ]\n/yaas/agent/a0_Database_temp/a07_RelationalDatabase/a072_Character/a072-01_VoiceDataSet.json')
                     _Matched['ApiSetting'] = MatchedSecondaryVoiceActor['ApiSetting']
                 
         ## AudioBook_Edit 변경

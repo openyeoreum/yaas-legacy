@@ -1,0 +1,135 @@
+1. ConfigForm
+
+
+    가. Email
+
+
+    나. ProjectName
+
+
+    다. Domain
+
+
+    라. Solution-Generation
+
+
+        (1) Estimate
+        (2) DataCollection
+        (3) Search
+        (4) Domain (Damain에 따라서 변경, Agent 생성 자동화 부분)
+            (가) Publishing
+                (a) ScriptGen
+                (b) ScriptSegmentation
+                (c) ScriptStructuration
+                (d) Translation
+                (e) TextBook
+                (f) AudioBook
+                (g) VideoBook
+            (나) Construction
+                ...
+            (다) Meditation
+                ...
+        (5) Marketing
+
+
+2. LogForm
+
+
+    가. Email
+
+
+    나. ProjectName
+
+
+    다. Domain
+
+
+    라. OperatingTime
+
+
+    마. OperatingToken
+
+
+    바. Log
+
+
+        (1) TimeStamp
+        (2) TokenUsage
+        (3) Solution
+        (4) NextSolution
+        (4) ProcessNumber
+        (5) ProcessName
+        (6) Info
+
+
+3. CoreForm
+
+
+    가. ProjectName
+
+
+    나. Domain
+
+
+    다. MainLang
+
+
+    라. Solution-Generation (Domain이 Publishing인 경우)
+        (1) Estimate
+            (가) ...
+        (2) DataCollection
+            (가) ...
+        (3) Search
+            (가) ...
+        (4) ScriptGen
+            (가) ...
+        (5) ScriptSegmentation
+            (가) ...
+        (6) ScriptStructuration
+            (가) ...
+        (7) Translation
+            (가) ...
+        (8) TextBook
+            (가) ...
+        (9) AudioBook
+            (가) ...
+        (10) VideoBook
+            (가) ...
+        (11) Marketing
+            (가) ...
+
+
+4. SolutionForm
+
+
+    가. ProjectName
+
+
+    나. Domain
+
+
+    다. MainLang
+
+
+    라. ProcessName
+
+
+    마. API
+
+
+    바. Format
+
+
+    사. Mode
+
+
+    아. Method
+
+
+    자. InputFrame
+
+
+    차. Message
+
+
+    카. MiddleFrame

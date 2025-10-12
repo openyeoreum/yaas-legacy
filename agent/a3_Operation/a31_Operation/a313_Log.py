@@ -13,7 +13,7 @@ from agent.a3_Operation.a31_Operation.a312_Base import Base
 class Log(Base):
 
     # operation 경로
-    log_file_path = "/yaas/agent/a2_DataFrame/a21_Operation/a212_LogMap.json"
+    log_file_path = "/yaas/agent/a2_DataFrame/a21_Operation/a213_LogMap.json"
 
     # ----------------------------
     # --- class-init -------------

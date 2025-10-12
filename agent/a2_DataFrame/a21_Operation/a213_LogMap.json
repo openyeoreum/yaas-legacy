@@ -23,7 +23,7 @@
             "Stop": "(⛔️ Stop)"
         }
     },
-    "Task": {
+    "Process": {
         "Log": {
             "InputsPreprocess": "(⭐️ Run) 🕐 {Timestamp} > 🟥(InputPreprocess | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}))🟥\n└─{FunctionName} > {Info}",
             "Inputs": "(⭐️ Run) 🕐 {Timestamp} > 🟨(Inputs | {ProcessNumber}_{ProcessName}({Idx}/{IdxLength}))🟨\n└─{FunctionName} > {Info}",
@@ -45,7 +45,7 @@
             "Error": "❗️ Error: {Print}"
         }
     },
-    "Func": {
+    "Function": {
         "Log": {
             "Function": "└───{FunctionName} > {Info}"
         },
@@ -54,6 +54,9 @@
             "Error": "Error: {Print}"
         }
     },
+
+
+    
     "DataFrame": {
         "RawData": null,
         "StartFrame": null,

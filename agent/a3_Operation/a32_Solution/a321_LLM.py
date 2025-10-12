@@ -155,7 +155,7 @@ class LLM(Manager):
         message_time = f"current time: {str(datetime.now())}\n\n"
 
         # 메세지 불러오기
-        message_dict = super().load_json("Solution", [self.solution, "Form", self.process_name],json_keys=["Message", self.main_lang])
+        message_dict = super().load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["Frame", "RequestMessage", self.main_lang])
 
         # InputFormat 불러오기
         input_format = super().load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["Format", "InputFormat"])
@@ -731,12 +731,12 @@ class LLM(Manager):
                 # request와 response 출력
                 request_and_response_text = self._print_request_and_response(response, usage)
 
-                super().print_log("Task", ["Log", "Message"], ["Info", "Message"], input_count=input_count, total_input_count=total_input_count, function_name="llm.run", _print=request_and_response_text)
+                super().print_log("Process", ["Log", "Message"], ["Info", "Message"], input_count=input_count, total_input_count=total_input_count, function_name="llm.run", _print=request_and_response_text)
 
                 return response
 
             except Exception as e:
-                super().print_log("Task", ["Log", "Function"], ["Info", "Error"], function_name="llm.run", _print=e)
+                super().print_log("Process", ["Log", "Function"], ["Info", "Error"], function_name="llm.run", _print=e)
                 time.sleep(random.uniform(2, 5))
                 continue
 

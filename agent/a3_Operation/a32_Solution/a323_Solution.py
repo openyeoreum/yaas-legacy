@@ -40,7 +40,48 @@ class Solution(Agent):
             process_number,
             process_name)
 
-    # --- class-func: solution 디렉토리 생성 ---
+        # solution dir 생성
+        self._make_solution_dir()
+
+    # --- class-func: form 초기화 ---
+    def _init_form(self):
+        """form을 초기화합니다."""
+        # form 불러오기
+        form_dict = super().load_json("Solution", [self.solution, "Form", self.process_name])
+
+        # info 설정
+        info_dict = form_dict["Info"]
+        self.process_name = info_dict["ProcessName"]
+        self.next_solution = info_dict["NextSolution"]
+        self.auto_template = info_dict["AutoTemplate"]
+        self.file_extension = info_dict["FileExtension"]
+        self.main_lang = info_dict["MainLang"]
+        self.input_count = info_dict["InputCount"]
+        self.completion = info_dict["Completion"]
+
+        # function 설정
+        function_dict = form_dict["Function"]
+        self.preprocess_inputs = function_dict["PreprocessInputs"]
+        self.inputs = function_dict["Inputs"]
+        self.preprocess_response = function_dict["PreprocessResponse"]
+        self.postprocess_response = function_dict["PostprocessResponse"]
+        self.outputs = function_dict["Outputs"]
+
+        # mode 설정
+        mode_dict = form_dict["Mode"]
+        self.response_mode = mode_dict["ResponseMode"]
+        self.edit_mode = mode_dict["EditMode"]
+        self.outputs_per_input = mode_dict["OutputsPerInput"]
+        self.input_count_key = mode_dict["InputCountKey"]
+        self.ignore_count_check = mode_dict["IgnoreCountCheck"]
+        self.filter_pass = mode_dict["FilterPass"]
+
+
+
+
+    # ------------------------------------
+    # --- func-set: make dir -------------
+    # --- class-func: solution dir 생성 ---
     def _make_solution_dir(self):
         """path_map의 solution dir 경로 키 리스트를 순회하며 solution dir 생성합니다.
         
@@ -52,8 +93,9 @@ class Solution(Agent):
         paths_key_list = list(solution_dir_paths_dict.keys())
 
         # paths_key_list 순회하며 solution dir 생성
-        for paths_key in paths_key_list:
-            super().make_storage_dir("Solution", ["Solution", self.solution, "Dir", paths_key])
+        if not os.path.exists(super().read_path_map("Solution", ["Solution", self.solution, "Dir", paths_key_list[0]])):
+            for paths_key in paths_key_list:
+                super().make_storage_dir("Solution", ["Solution", self.solution, "Dir", paths_key])
 
     # --------------------------------
     # --- func-set: inputs -----------
@@ -111,8 +153,10 @@ class Solution(Agent):
         Effects:
             Agent 실행
         """
-        # Solutionmode 초기화
-        # Agent 실행
+        # solution_mode 불러오기
+        response_mode, edit_mode, outputs_per_input, input_count_key, ignore_count_check, filter_pass, main_lang = self.read_solution_mode()
+
+        # agent 실행
         super().run_agent(
             self._create_inputs,
             self._preprocess_response,

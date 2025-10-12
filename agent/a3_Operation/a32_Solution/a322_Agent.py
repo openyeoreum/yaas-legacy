@@ -567,7 +567,7 @@ class Agent(LLM):
 
                     if isinstance(_value, int) or (isinstance(_value, str) and _value.isdigit()):
                         filtered_response[response_structure["Key"]] = int(_value)
-                        super().print_log("Task", ["Log", "Function"], ["Info", "Error"], function_name="agent._response_filter.value_check -> intDataSameCheck", _print=f"{int(value_check_target)} -> {int(_value)}")
+                        super().print_log("Process", ["Log", "Function"], ["Info", "Error"], function_name="agent._response_filter.value_check -> intDataSameCheck", _print=f"{int(value_check_target)} -> {int(_value)}")
                         if _value != int(value_check_target):
                             return f"IntDataSameCheckError: ({filtered_response[response_structure["Key"]]}) 는 ({value_check_target}) 여야 합니다."
 
@@ -919,21 +919,21 @@ class Agent(LLM):
             # 필터 에외처리, JSONDecodeError 처리
             if isinstance(filtered_response, str):
                 error_count += 1
-                super().print_log("Task", ["Log", "Function"], ["Info", "Error"], function_name="agent._request_agent", _print=f"오류횟수 {error_count}회, 10초 후 프롬프트 재시도")
+                super().print_log("Process", ["Log", "Function"], ["Info", "Error"], function_name="agent._request_agent", _print=f"오류횟수 {error_count}회, 10초 후 프롬프트 재시도")
 
                 # filter error 3회시 해당 프로세스 사용 안함 예외처리
                 if self.filter_pass and error_count >= 3:
-                    super().print_log("Task", ["Log", "Function"], ["Info", "Complete"], function_name="agent._request_agent", _print="ErrorPass 완료")
+                    super().print_log("Process", ["Log", "Function"], ["Info", "Complete"], function_name="agent._request_agent", _print="ErrorPass 완료")
 
                     return "ErrorPass"
 
                 # filter error 10회시 프롬프트 종료
                 if error_count >= 10:
-                    super().print_log("Task", ["Log", "Function"], ["Info", "Error"], function_name="agent._request_agent", _print=f"오류횟수 {error_count}회 초과, 프롬프트 종료", exit=True)
+                    super().print_log("Process", ["Log", "Function"], ["Info", "Error"], function_name="agent._request_agent", _print=f"오류횟수 {error_count}회 초과, 프롬프트 종료", exit=True)
 
                 continue
 
-            super().print_log("Task", ["Log", "Function"], ["Info", "Complete"], function_name="agent._request_agent", _print="filtered_response, JSONDecode 완료")
+            super().print_log("Process", ["Log", "Function"], ["Info", "Complete"], function_name="agent._request_agent", _print="filtered_response, JSONDecode 완료")
 
             return filtered_response
 
@@ -1007,13 +1007,13 @@ class Agent(LLM):
             self._update_solution_edit()
 
             if not self.edit_mode:
-                super().print_log("Task", ["Log", "Function"], ["Info", "Manual"], function_name="agent.run_agent", _print=f"{self.ProjectName}_Script_Edit 생성 완료 -> {self.ProcessName}: (({self.ProcessName}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({self.ProcessName}Completion: Completion))으로 변경", exit=True)
+                super().print_log("Process", ["Log", "Function"], ["Info", "Manual"], function_name="agent.run_agent", _print=f"{self.ProjectName}_Script_Edit 생성 완료 -> {self.ProcessName}: (({self.ProcessName}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({self.ProcessName}Completion: Completion))으로 변경", exit=True)
 
         if not self.edit_mode:
             if self.edit_check:
                 if not self.edit_response_completion:
                     ## 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ##
-                    super().print_log("Task", ["Log", "Function"], ["Info", "Manual"], function_name="agent.run_agent", _print=f"{self.ProjectName}_Script_Edit -> {self.ProcessName}: (({self.ProcessName}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({self.ProcessName}Completion: Completion))으로 변경", exit=True)
+                    super().print_log("Process", ["Log", "Function"], ["Info", "Manual"], function_name="agent.run_agent", _print=f"{self.ProjectName}_Script_Edit -> {self.ProcessName}: (({self.ProcessName}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({self.ProcessName}Completion: Completion))으로 변경", exit=True)
 
         # solution_edit 불러오기
         solution_edit = super().load_json("Solution", [self.solution, "File", "Json", "Edit"])

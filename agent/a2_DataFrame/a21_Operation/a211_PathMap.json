@@ -2,11 +2,11 @@
     "Operation": {
         "PathMap": "/yaas/agent/a2_DataFrame/a21_Operation/a211_PathMap.json",
         "LogMap": "/yaas/agent/a2_DataFrame/a21_Operation/a212_LogMap.json",
-        "APIConfig": "/yaas/agent/a2_DataFrame/a21_Operation/a213_APIConfig.json"
+        "APIConfig": "/yaas/agent/a2_DataFrame/a21_Operation/a213_APIMap.json"
     },
     "Core": {
         "Form": {
-            "Config": "/yaas/agent/a2_DataFrame/a22_Core/a22-01_ConfigForm.json",
+            "Config": "/yaas/agent/a2_DataFrame/a22_Core/a22-01_CoreForm.json",
             "Log": "/yaas/agent/a2_DataFrame/a22_Core/a22-02_LogForm.json"
         },
         "Dir": {

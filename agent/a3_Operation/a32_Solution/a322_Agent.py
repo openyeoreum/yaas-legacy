@@ -45,33 +45,6 @@ class Agent(LLM):
             process_number,
             process_name)
 
-    # --- class-func: function 초기화 ---
-    def _init_function(self,
-                       inputs_func: callable,
-                       preprocess_response_func: callable,
-                       postprocess_response_func: callable,
-                       output_func: callable) -> None:
-        """사용자-프로젝트의 Operation에 통합 Agent의 function을 초기화합니다.
-
-        Args:
-            inputs_func (callable): inputs_func
-            preprocess_response_func (callable): preprocess_response_func
-            postprocess_response_func (callable): postprocess_response_func
-            output_func (callable): output_func
-
-        Attributes:
-            inputs_func (callable): inputs_func
-            preprocess_response_func (callable): preprocess_response_func
-            postprocess_response_func (callable): postprocess_response_func
-            output_func (callable): output_func
-        """
-
-        # attributes 설정
-        self.inputs_func = inputs_func
-        self.preprocess_response_func = preprocess_response_func
-        self.postprocess_response_func = postprocess_response_func
-        self.output_func = output_func
-
     # --- class-func: mode 초기화 ---
     def _init_mode(self,
                    response_mode: str,
@@ -112,6 +85,34 @@ class Agent(LLM):
         self.ignore_count_check = ignore_count_check
         self.filter_pass = filter_pass
 
+
+    # --- class-func: function 초기화 ---
+    def _init_function(self,
+                       inputs_func: callable,
+                       preprocess_response_func: callable,
+                       postprocess_response_func: callable,
+                       output_func: callable) -> None:
+        """사용자-프로젝트의 Operation에 통합 Agent의 function을 초기화합니다.
+
+        Args:
+            inputs_func (callable): inputs_func
+            preprocess_response_func (callable): preprocess_response_func
+            postprocess_response_func (callable): postprocess_response_func
+            output_func (callable): output_func
+
+        Attributes:
+            inputs_func (callable): inputs_func
+            preprocess_response_func (callable): preprocess_response_func
+            postprocess_response_func (callable): postprocess_response_func
+            output_func (callable): output_func
+        """
+
+        # attributes 설정
+        self.inputs_func = inputs_func
+        self.preprocess_response_func = preprocess_response_func
+        self.postprocess_response_func = postprocess_response_func
+        self.output_func = output_func
+
     # ----------------------------------------
     # --- func-set: requset input ------------
     # --- class-func: input_list 생성 및 처리 ---
@@ -119,13 +120,13 @@ class Agent(LLM):
         """input_list를 생성합니다.
         
         Effects:
-            input_list 생성 (dict): self.read_path_map("Solution", [self.solution, "File", "Json", "InputList"])
+            input_list 생성 (dict): super().read_path_map("Solution", [self.solution, "File", "Json", "InputList"])
         
         Returns:
             input_list (dict): input_list
         """
         # input_list 존재 여부 확인
-        if os.path.exists(self.read_path_map("Solution", [self.solution, "File", "Json", "InputList"])):
+        if os.path.exists(super().read_path_map("Solution", [self.solution, "File", "Json", "InputList"])):
             # input_list 불러오기
             input_list = super().load_json("Solution", [self.solution, "File", "Json", "InputList"])
         else:
@@ -169,12 +170,12 @@ class Agent(LLM):
         middle_frame_completion = False
 
         # solution_process_middle_frame이 존재 여부 확인
-        if os.path.exists(self.read_path_map("Solution", [self.solution, "File", "Json", "MiddleFrame"])):
+        if os.path.exists(super().read_path_map("Solution", [self.solution, "File", "Json", "MiddleFrame"])):
             solution_process_middle_frame = super().load_json("Solution", [self.solution, "File", "Json", "MiddleFrame"])
 
             # input_count, middle_frame_completion 확인
-            next_input_count = solution_process_middle_frame[0]['InputCount'] + 1
-            middle_frame_completion = solution_process_middle_frame[0]['Completion']
+            next_input_count = solution_process_middle_frame["Info"]["InputCount"] + 1
+            middle_frame_completion = solution_process_middle_frame["Info"]["Completion"]
 
             return next_input_count, middle_frame_completion
         else:
@@ -187,7 +188,26 @@ class Agent(LLM):
         Returns:
         """
         # - innerfunc: edit check 함수 -
-        def edit_check_func(solution_edit, edit_check, edit_response_completion, edit_response_postprocess_completion, edit_output_completion):
+        def edit_check_func(solution_edit: dict,
+                            edit_check: bool, 
+                            edit_response_completion: bool,
+                            edit_response_postprocess_completion: bool,
+                            edit_output_completion: bool) -> tuple[bool, bool, bool, bool]:
+            """solution_edit의 파일, 완료 체크 합니다.
+
+            Args:
+                solution_edit (dict): solution_edit
+                edit_check (bool): edit_check
+                edit_response_completion (bool): edit_response_completion
+                edit_response_postprocess_completion (bool): edit_response_postprocess_completion
+                edit_output_completion (bool): edit_output_completion
+
+            Returns:
+                edit_check (bool): edit_check
+                edit_response_completion (bool): edit_response_completion
+                edit_response_postprocess_completion (bool): edit_response_postprocess_completion
+                edit_output_completion (bool): edit_output_completion
+            """
             # edit_check 확인
             edit_check = True
             
@@ -213,7 +233,7 @@ class Agent(LLM):
         edit_output_completion = False
 
         # solution_edit 존재 여부 확인
-        if os.path.exists(self.read_path_map("Solution", [self.solution, "File", "Json", "Edit"])):
+        if os.path.exists(super().read_path_map("Solution", [self.solution, "File", "Json", "Edit"])):
             # solution_edit 체크
             solution_edit = super().load_json("Solution", [self.solution, "File", "Json", "Edit"])
 
@@ -237,7 +257,10 @@ class Agent(LLM):
     # -----------------------------------
     # --- func-set: response filter ------
     # --- class-func: response filter ---
-    def _response_filter(self, response: str, comparison_input: str, response_structure: dict) -> dict:
+    def _response_filter(self,
+                         response: str,
+                         comparison_input: str,
+                         response_structure: dict) -> dict:
         """response filter를 수행합니다.
 
         Args:
@@ -310,7 +333,9 @@ class Agent(LLM):
 
         # filter4: values 체크
         # - innerfunc: values 체크 함수 -
-        def values_check(filtered_response: dict, response_structure: dict, comparison_input: str) -> dict:
+        def values_check(filtered_response: dict,
+                         response_structure: dict,
+                         comparison_input: str) -> dict:
             """response_structure에 맞는 value 체크를 실행합니다.
 
             Args:
@@ -567,6 +592,8 @@ class Agent(LLM):
 
                     if isinstance(_value, int) or (isinstance(_value, str) and _value.isdigit()):
                         filtered_response[response_structure["Key"]] = int(_value)
+
+                        # error 로그 출력
                         super().print_log("Process", ["Log", "Function"], ["Info", "Error"], function_name="agent._response_filter.value_check -> intDataSameCheck", _print=f"{int(value_check_target)} -> {int(_value)}")
                         if _value != int(value_check_target):
                             return f"IntDataSameCheckError: ({filtered_response[response_structure["Key"]]}) 는 ({value_check_target}) 여야 합니다."
@@ -705,7 +732,9 @@ class Agent(LLM):
     # --------------------------------------------------------
     # --- func-set: response update --------------------------
     # --- class-func: solution_process_middle_frame 업데이트 ---
-    def _update_process_middle_frame(self, input_count: int, response: dict) -> None:
+    def _update_process_middle_frame(self,
+                                     input_count: int,
+                                     response: dict) -> None:
         """solution_process_middle_frame을 업데이트합니다.
 
         Args:
@@ -724,7 +753,7 @@ class Agent(LLM):
             """
             if self.main_lang == "ko":
                 # solution_process_middle_frame wordpairs 불러오기
-                word_pairs = super().load_json("Solution", [self.solution, "Form", self.process_name, "MiddleFrame"], json_keys=["WordPairs"])
+                word_pairs = super().load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["AgentForm", "Frame", "MiddleFrame", "WordPairs"])
                 
                 # solution_process_data global 통합
                 if word_pairs != []:
@@ -747,13 +776,13 @@ class Agent(LLM):
         # - innerfunc end -
 
         # solution_process_middle_frame 존재 여부 확인
-        if os.path.exists(self.read_path_map("Solution", [self.solution, "File", "Json", "MiddleFrame"])):
+        if os.path.exists(super().read_path_map("Solution", [self.solution, "File", "Json", "MiddleFrame"])):
             solution_process_middle_frame = super().load_json("Solution", [self.solution, "File", "Json", "MiddleFrame"])
         else:
-            solution_process_middle_frame = super().load_json("Solution", [self.solution, "Form", self.process_name, "MiddleFrame", self.main_lang])
+            solution_process_middle_frame = super().load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["AgentForm", "Frame", "MiddleFrame", self.main_lang])
 
         # solution_process_info 데이터 업데이트
-        solution_process_info = solution_process_middle_frame[0].copy()
+        solution_process_info = solution_process_middle_frame["Info"].copy()
         for key, value_expression in solution_process_info.items():
             if key in ["InputCount", "Completion"]:
                 continue
@@ -762,11 +791,11 @@ class Agent(LLM):
             if isinstance(value_expression, list):
                 actual_value = super().get_json_arg(value_expression)
 
-            solution_process_middle_frame[0][key] = actual_value
+            solution_process_middle_frame["Info"][key] = actual_value
         
         # solution_process_data 데이터 업데이트
         # response가 dict인 경우
-        solution_process_data = copy.deepcopy(solution_process_middle_frame[1][0])
+        solution_process_data = copy.deepcopy(solution_process_middle_frame["MiddleFrame"][0])
         if isinstance(solution_process_data, dict):
             for key, value_expression in solution_process_data.items():
                 actual_value = value_expression
@@ -786,12 +815,12 @@ class Agent(LLM):
                     solution_process_data[i][key] = actual_value
         
         # solution_process_middle_frame 데이터 프레임 업데이트
-        solution_process_middle_frame[1].append(update_solution_process_global_data(solution_process_data))
+        solution_process_middle_frame["MiddleFrame"].append(update_solution_process_global_data(solution_process_data))
         
         # solution_process_middle_frame process_count 및 completion 업데이트
-        solution_process_middle_frame[0]['InputCount'] = input_count
+        solution_process_middle_frame["Info"]["InputCount"] = input_count
         if input_count == self.total_input_count:
-            solution_process_middle_frame[0]['Completion'] = 'Yes'
+            solution_process_middle_frame["Info"]["Completion"] = 'Yes'
         
         # solution_process_middle_frame 저장
         super().save_storage_json("Solution", [self.solution, "File", "Json", "MiddleFrame"], solution_process_middle_frame)
@@ -804,7 +833,7 @@ class Agent(LLM):
         solution_project_middle_frame = super().load_json("Solution", [self.solution, "File", "Json", "MiddleFrame"])
         if solution_project_middle_frame["Completion"] == "Yes":
             # solution_edit 존재 여부 확인
-            if os.path.exists(self.read_path_map("Solution", [self.solution, "File", "Json", "Edit"])):
+            if os.path.exists(super().read_path_map("Solution", [self.solution, "File", "Json", "Edit"])):
                 solution_edit = super().load_json("Solution", [self.solution, "File", "Json", "Edit"])
             # solution_edit 존재 안할때
             else:
@@ -836,7 +865,8 @@ class Agent(LLM):
     # ------------------------------------------
     # --- func-set: response pre/postprocess ---
     # --- class-func: response 전처리 ------------
-    def _preprocess_response(self, response: dict) -> dict:
+    def _preprocess_response(self,
+                             response: dict) -> dict:
         """response를 전처리합니다.
 
         Args:
@@ -851,7 +881,8 @@ class Agent(LLM):
         return response
     
     # --- class-func: response 후처리 ---
-    def _postprocess_response(self, solution_edit: dict) -> dict:
+    def _postprocess_response(self,
+                              solution_edit: dict) -> dict:
         """response를 후처리합니다.
 
         Args:
@@ -872,7 +903,8 @@ class Agent(LLM):
     # -------------------------------
     # --- func-set: output create ---
     # --- class-func: output 생성 ----
-    def _create_output(self, solution_edit: dict) -> dict:
+    def _create_output(self,
+                       solution_edit: dict) -> dict:
         """output을 생성합니다.
 
         Args:
@@ -919,58 +951,59 @@ class Agent(LLM):
             # 필터 에외처리, JSONDecodeError 처리
             if isinstance(filtered_response, str):
                 error_count += 1
+
+                # error 로그 출력
                 super().print_log("Process", ["Log", "Function"], ["Info", "Error"], function_name="agent._request_agent", _print=f"오류횟수 {error_count}회, 10초 후 프롬프트 재시도")
 
                 # filter error 3회시 해당 프로세스 사용 안함 예외처리
                 if self.filter_pass and error_count >= 3:
+
+                    # complete 로그 출력
                     super().print_log("Process", ["Log", "Function"], ["Info", "Complete"], function_name="agent._request_agent", _print="ErrorPass 완료")
 
                     return "ErrorPass"
 
                 # filter error 10회시 프롬프트 종료
                 if error_count >= 10:
+
+                    # error 로그 출력
                     super().print_log("Process", ["Log", "Function"], ["Info", "Error"], function_name="agent._request_agent", _print=f"오류횟수 {error_count}회 초과, 프롬프트 종료", exit=True)
 
                 continue
 
+            # complete 로그 출력
             super().print_log("Process", ["Log", "Function"], ["Info", "Complete"], function_name="agent._request_agent", _print="filtered_response, JSONDecode 완료")
 
             return filtered_response
 
     # --- class-func: agent 실행 ---
     def run_agent(self,
-                  inputs_func: callable = None,
-                  preprocess_response_func: callable = None,
-                  postprocess_response_func: callable = None,
-                  output_func: callable = None,
-
                   response_mode: bool = True,
                   edit_mode: bool = True,
                   outputs_per_input: int = 1,
                   input_count_key: str = None,
                   ignore_count_check: bool = False,
-                  filter_pass: bool = False) -> None:
+                  filter_pass: bool = False,
+
+                  inputs_func: callable = None,
+                  preprocess_response_func: callable = None,
+                  postprocess_response_func: callable = None,
+                  output_func: callable = None) -> None:
         """agent를 실행합니다.
 
         Args:
-            inputs_func (callable): 입력 리스트 생성 함수
-            preprocess_response_func (callable): 응답 전처리 함수
-            postprocess_response_func (callable): 응답 후처리 함수
-            output_func (callable): 출력 함수
-
             response_mode (str): LLM 모드 사용 여부 ("Prompt", "Algorithm", "Manual")
             edit_mode (bool): 편집 모드 (기본값: True)
             outputs_per_input (int): 출력 배수 (기본값: 1)
             input_count_key (str): 입력 수의 기준키 (기본값: None)
             ignore_count_check (bool): 입력 수 체크 무시 여부 (기본값: False)
             filter_pass (bool): 필터 오류 3회가 넘어가는 경우 그냥 패스 여부 (기본값: False)
-        """
-        # function 초기화
-        self._init_function(inputs_func,
-            preprocess_response_func,
-            postprocess_response_func,
-            output_func)
 
+            inputs_func (callable): 입력 리스트 생성 함수
+            preprocess_response_func (callable): 응답 전처리 함수
+            postprocess_response_func (callable): 응답 후처리 함수
+            output_func (callable): 출력 함수
+        """
         # mode 초기화
         self._init_mode(response_mode,
             edit_mode,
@@ -979,7 +1012,13 @@ class Agent(LLM):
             ignore_count_check,
             filter_pass)
 
-        # Start 로그 출력
+        # function 초기화
+        self._init_function(inputs_func,
+            preprocess_response_func,
+            postprocess_response_func,
+            output_func)
+
+        # start 로그 출력
         super().print_log("Solution", ["Log", "Task"], ["Info", "Start"], input_count=self.input_count, total_input_count=self.total_input_count)
 
         # edit_check 확인
@@ -1007,12 +1046,16 @@ class Agent(LLM):
             self._update_solution_edit()
 
             if not self.edit_mode:
+
+                # manual 로그 출력
                 super().print_log("Process", ["Log", "Function"], ["Info", "Manual"], function_name="agent.run_agent", _print=f"{self.ProjectName}_Script_Edit 생성 완료 -> {self.ProcessName}: (({self.ProcessName}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({self.ProcessName}Completion: Completion))으로 변경", exit=True)
 
         if not self.edit_mode:
             if self.edit_check:
                 if not self.edit_response_completion:
                     ## 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ##
+
+                    # manual 로그 출력
                     super().print_log("Process", ["Log", "Function"], ["Info", "Manual"], function_name="agent.run_agent", _print=f"{self.ProjectName}_Script_Edit -> {self.ProcessName}: (({self.ProcessName}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({self.ProcessName}Completion: Completion))으로 변경", exit=True)
 
         # solution_edit 불러오기
@@ -1026,10 +1069,10 @@ class Agent(LLM):
         if not self.edit_output_completion:
             self._create_output(solution_edit)
 
-            # Complete 로그 출력
+            # complete 로그 출력
             super().print_log("Solution", ["Log", "Task"], ["Info", "Complete"], input_count=self.input_count, total_input_count=self.total_input_count)
         else:
-            # Skip 로그 출력
+            # skip 로그 출력
             super().print_log("Solution", ["Log", "Task"], ["Info", "Skip"], input_count=self.input_count, total_input_count=self.total_input_count)
 
         return solution_edit

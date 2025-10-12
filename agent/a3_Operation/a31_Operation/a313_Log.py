@@ -72,11 +72,12 @@ class Log(Base):
             _info (str): 'Start', 'End', 'Stop' 등 로그 정보
 
         Effects:
-            log_json_data 추가 (dict): self.project_log_file_path["Log"].append(log_data)
+            log_dict 추가 (dict): self.project_log_file_path["Log"].append(log_data)
             OperatingTime 업데이트: 'core' 작업의 'Start'부터 'Stop' 또는 'End'까지의 시간만 합산하여 업데이트합니다.
         """
         # - innerfunc: timestamp 계산기 -
-        def calculate_timestamp_difference_func(start_timestamp: str, end_timestamp: str) -> int:
+        def calculate_timestamp_difference_func(start_timestamp: str,
+                                                end_timestamp: str) -> int:
             """
             'YYYY-MM-DD HH:MM:SS' 형식의 두 시간 문자열을 받아
             시간 차이를 'HH:MM:SS' 형식과 초로 반환합니다.
@@ -101,6 +102,7 @@ class Log(Base):
         # 현재 로그 데이터를 딕셔너리로 생성
         current_log_data = {
             "Timestamp": timestamp,
+            "Tokenstamp": None,
             "Work": _solution,
             "Solution": self.solution,
             "NextSolution": self.next_solution,
@@ -111,40 +113,37 @@ class Log(Base):
 
         # ProjectLog 파일 불러오기
         with open(super().read_path_map("Core", ["File", "Json", "ProjectLog"]), 'r', encoding='utf-8') as f:
-            log_json_data = json.load(f)
+            log_dict = json.load(f)
 
         # 첫 로그 데이터인 경우 Email과 ProjectName 추가
-        if len(log_json_data["Log"]) == 1:
-            log_json_data["Email"] = self.email
-            log_json_data["ProjectName"] = self.project_name
+        if len(log_dict["Log"]) == 1:
+            log_dict["Email"] = self.email
+            log_dict["ProjectName"] = self.project_name
 
         # 현재 로그 데이터를 기존 로그 데이터에 추가
-        log_json_data["Log"].append(current_log_data)
+        log_dict["Log"].append(current_log_data)
         
         # OperatingTime 계산
         total_operating_seconds = 0
         start_timestamp_for_session = None
 
         # "Work"가 "Core"인 로그만 필터링하여 계산
-        core_logs = [log for log in log_json_data["Log"] if log.get("Work") == "Core"]
+        core_logs = [log for log in log_dict["Log"] if log["Work"] == "Core"]
 
         for log in core_logs:
             # 타임스탬프와 정보가 유효한지 확인
-            current_timestamp = log.get("Timestamp")
-            current_info = log.get("Info")
+            current_timestamp = log["Timestamp"]
+            current_info = log["Info"]
             if not current_timestamp or not current_info:
                 continue
 
             if current_info == "Start":
                 # 새로운 세션 시작으로 간주하고 시작 시간 기록
                 start_timestamp_for_session = current_timestamp
-            elif current_info in ["Stop", "End"]:
+            elif current_info in ["Stop", "Complete"]:
                 # 세션이 시작된 상태에서 Stop 또는 End를 만나면 시간 계산
                 if start_timestamp_for_session:
-                    duration_seconds = calculate_timestamp_difference_func(
-                        start_timestamp_for_session, 
-                        current_timestamp
-                    )
+                    duration_seconds = calculate_timestamp_difference_func(start_timestamp_for_session, current_timestamp)
                     total_operating_seconds += duration_seconds
                     # 계산 후 세션 시작 시간 초기화
                     start_timestamp_for_session = None
@@ -154,14 +153,13 @@ class Log(Base):
         minutes, seconds = divmod(remainder, 60)
         formatted_total_time = f"{hours:02}:{minutes:02}:{seconds:02}"
 
-        # 최종 OperatingTime 업데이트
-        log_json_data["OperatingTime"]["Time"] = formatted_total_time
-        log_json_data["OperatingTime"]["Second"] = total_operating_seconds
-        # --- 로직 수정 끝 ---
+        # 최종 operating_time 업데이트
+        log_dict["Time"]["Time"] = formatted_total_time
+        log_dict["Time"]["Second"] = total_operating_seconds
 
         # 업데이트된 로그 데이터를 다시 ProjectLog 파일에 저장
         with open(super().read_path_map("Core", ["File", "Json", "ProjectLog"]), 'w', encoding='utf-8') as f:
-            json.dump(log_json_data, f, ensure_ascii=False, indent=4)
+            json.dump(log_dict, f, ensure_ascii=False, indent=4)
 
     # --- class-func: log data 가져오고 포맷팅하고 출력하기 ---
     def print_log(self,
@@ -230,8 +228,8 @@ class Log(Base):
             ProcessName=self.process_name,
             FunctionName=function_name if function_name is not None else "",
             Info=formatted_info,
-            input_count=input_count if input_count is not None else 0,
-            input_countLength=total_input_count if total_input_count is not None else 0)
+            InputCount=input_count if input_count is not None else 0,
+            InputCountLength=total_input_count if total_input_count is not None else 0)
 
         # formatting된 loggig 출력
         if log == "Access" and "Access" in log_keys:
@@ -240,7 +238,7 @@ class Log(Base):
 
         # log data 추가
         _info = info_keys[-1]
-        if log == "Solution" and _info in ["Start", "End", "Stop"]:
+        if log == "Solution" and _info in ["Start", "Complete", "Stop"]:
             _solution = log_keys[-1]
 
             self._append_log_data(timestamp,

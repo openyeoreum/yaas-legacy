@@ -55,7 +55,8 @@ class LLM(Manager):
             process_name)
 
     # --- class-func: main_lang 초기화 ---
-    def _init_main_lang(self, main_lang: str) -> None:
+    def init_main_lang(self,
+                       main_lang: str) -> None:
         """main_lang을 초기화합니다.
 
         Args:
@@ -80,7 +81,8 @@ class LLM(Manager):
         return api_config_dict
 
     # --- class-func: api_client 불러오기 ---
-    def _load_api_client(self, service: str) -> str:
+    def _load_api_client(self,
+                         service: str) -> str:
         """API 클라이언트를 로드하여 반환합니다.
 
         Args:
@@ -106,7 +108,8 @@ class LLM(Manager):
     # ------------------------------------
     # --- func-set: format message -------
     # --- class-func: file list 텍스트화 ---
-    def _format_input_path_to_str(self, input_paths: list) -> str:
+    def _format_input_path_to_str(self,
+                                  input_paths: list) -> str:
         """파일 리스트를 문자열로 포맷팅하여 반환합니다.
 
         Args:
@@ -130,7 +133,8 @@ class LLM(Manager):
         return input_str
 
     # --- class-func: response example 텍스트화 ---
-    def _format_response_example_dict_to_str(self, response_example_dict: dict) -> str:
+    def _format_response_example_dict_to_str(self,
+                                            response_example_dict: dict) -> str:
         """딕셔너리 데이터를 JSON 형식의 문자열로 변환합니다.
 
         Args:
@@ -145,7 +149,9 @@ class LLM(Manager):
         return response_str
 
     # --- class-func: messages 포맷팅 ---
-    def _format_prompt_to_messages(self, input: str | list, memory_note: str) -> str:
+    def _format_prompt_to_request_message(self,
+                                   input: str | list,
+                                   memory_note: str) -> str:
         """프롬프트 텍스트를 메세지로 포맷팅하여 반환합니다.
 
         Returns:
@@ -155,10 +161,10 @@ class LLM(Manager):
         message_time = f"current time: {str(datetime.now())}\n\n"
 
         # 메세지 불러오기
-        message_dict = super().load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["Frame", "RequestMessage", self.main_lang])
+        request_message_dict = super().load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["LLMForm", "RequestMessage", self.main_lang])
 
         # InputFormat 불러오기
-        input_format = super().load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["Format", "InputFormat"])
+        input_format = super().load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["LLMForm", "Format", "InputFormat"])
 
         # InputFormat이 Text가 아닌 경우에는 파일리스트 정리
         if input_format != "text":
@@ -166,13 +172,13 @@ class LLM(Manager):
             input = self._format_input_path_to_str(input_paths)
 
         # ResponseExample 포맷팅
-        response_example = self._format_response_example_dict_to_str(message_dict["ResponseExample"])
+        response_example = self._format_response_example_dict_to_str(request_message_dict["ResponseExample"])
 
         # 프롬프트 포맷팅
-        system_message = message_dict["Messages"]["System"]
+        system_message = request_message_dict["Messages"]["System"]
         system_content =  message_time + system_message["Mark"] + system_message["MarkLineBreak"] + system_message["Message"] + system_message["MessageLineBreak"]
 
-        user_message = message_dict["Messages"]["User"]
+        user_message = request_message_dict["Messages"]["User"]
         _user_content = ""
         for message in user_message[:-1]:
             _user_content += message["Mark"] + message["MarkLineBreak"] + message["Message"] + message["MessageLineBreak"]
@@ -182,7 +188,7 @@ class LLM(Manager):
             MemoryNote=memory_note or "",
             Input=input)
 
-        assistant_message = message_dict["Messages"]["Assistant"]
+        assistant_message = request_message_dict["Messages"]["Assistant"]
         assistant_content = assistant_message["ResponseMark"]
 
         messages = [
@@ -196,7 +202,9 @@ class LLM(Manager):
     # --------------------------------------------
     # --- func-set: print request and response ---
     # --- class-func: request와 response 출력 ------
-    def _print_request_and_response(self, response: dict, usage: str) -> str:
+    def _print_request_and_response(self,
+                                    response: dict,
+                                    usage: str) -> str:
         """request와 response를 출력합니다.
 
         Args:
@@ -251,35 +259,39 @@ class LLM(Manager):
             messages (list): 메시지
             MAX_ATTEMPTS (int): 최대 시도 횟수
         """
-
         # attributes 설정
         self.input = input
         self.memory_note = memory_note
 
+        # api 설정
         api_config_dict = self._load_api_config()
-        api_dict = super().load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["API"])
+        api_dict = super().load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["LLMForm", "API"])
         self.service = api_dict["Service"]
         level = api_dict["Level"]
+
+        # format 설정
+        format_dict = super().load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["LLMForm", "Format"])
+        self.input_format = format_dict["InputFormat"]
+        self.response_format = format_dict["ResponseFormat"]
+
+        # request 설정
         self.client = self._load_api_client(self.service)
         self.model = api_config_dict["LanguageModel"][self.service][level]["Model"]
         self.reasoning_effort = api_config_dict["LanguageModel"][self.service][level]["ReasoningEffort"]
         self.max_tokens = None
         if "MaxTokens" in api_config_dict["LanguageModel"][self.service][level]:
             self.max_tokens = api_config_dict["LanguageModel"][self.service][level]["MaxTokens"]
-
-        format_dict = super().load_json("Solution", [self.solution, "Form", self.process_name], json_keys=["Format"])
-        self.input_format = format_dict["InputFormat"]
-        self.response_format = format_dict["ResponseFormat"]
-
-        self.messages = self._format_prompt_to_messages(self.input, self.memory_note)
-        self.print_messages = copy.deepcopy(self.messages)
-
         self.MAX_ATTEMPTS = 100
+
+        # request_message 설정
+        self.messages = self._format_prompt_to_request_message(self.input, self.memory_note)
+        self.print_messages = copy.deepcopy(self.messages)
 
     # ------------------------------------
     # --- func-set: normalize response ---
     # --- class-func: json 포멧 정규화 ------
-    def _normalize_response_json_format(self, response: str) -> str:
+    def _normalize_response_json_format(self,
+                                        response: str) -> str:
         """응답 문자열을 JSON 형식으로 정규화합니다.
 
         Args:
@@ -444,7 +456,7 @@ class LLM(Manager):
 
     # --- class-func: anthropic 요청 ---
     def _request_anthropic(self,
-                          MAX_TOKENS: int = 16000) -> str:
+                           MAX_TOKENS: int = 16000) -> str:
         """Anthropic에 요청합니다.
 
         Args:
@@ -715,7 +727,7 @@ class LLM(Manager):
 
         # Google API 요청 및 응답
         for _ in range(self.MAX_ATTEMPTS):
-            try:
+            # try:
                 if self.service == "OPENAI":
                     response, usage = self._request_openai()
                 if self.service == "ANTHROPIC":
@@ -731,14 +743,17 @@ class LLM(Manager):
                 # request와 response 출력
                 request_and_response_text = self._print_request_and_response(response, usage)
 
-                super().print_log("Process", ["Log", "Message"], ["Info", "Message"], input_count=input_count, total_input_count=total_input_count, function_name="llm.run", _print=request_and_response_text)
+                # message 로그 출력
+                super().print_log("Process", ["Log", "Message"], ["Info", "Message"], input_count=input_count, total_input_count=total_input_count, function_name="request_llm.run", _print=request_and_response_text)
 
                 return response
 
-            except Exception as e:
-                super().print_log("Process", ["Log", "Function"], ["Info", "Error"], function_name="llm.run", _print=e)
-                time.sleep(random.uniform(2, 5))
-                continue
+            # except Exception as e:
+
+            #     # error 로그 출력
+            #     super().print_log("Process", ["Log", "Function"], ["Info", "Error"], function_name="request_llm.run", _print=e)
+            #     time.sleep(random.uniform(2, 5))
+            #     continue
 
 if __name__ == "__main__":
 
@@ -772,8 +787,10 @@ if __name__ == "__main__":
         solution,
         next_solution,
         process_number,
-        process_name,
-        main_lang)
+        process_name)
+
+    # main_lang 설정
+    llm.init_main_lang(main_lang)
 
     # run
     response = llm.request_llm(

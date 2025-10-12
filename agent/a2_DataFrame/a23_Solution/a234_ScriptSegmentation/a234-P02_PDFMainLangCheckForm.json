@@ -4,6 +4,7 @@
     "Solution": "ScriptSegmentation",
     "ProcessNumber": "P02",
     "ProcessName": "PDFMainLangCheck",
+    "MainLang": "Ko",
     "LLMForm": {
         "API": {
             "Service": "OPENAI",

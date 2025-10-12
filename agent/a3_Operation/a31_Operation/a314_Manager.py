@@ -89,6 +89,8 @@ class Manager(Log):
         # class 속성 값 가져오기
         if rule_list[0] == "self":
             if context is not None:
+
+                # error 로그 출력
                 super().print_log("Function", ["Log", "Function"], ["Info", "Error"], [f"self.인자 호출에 context가 전달됨, context 또는 {rule_list}를 확인해주세요."])
                 return None
 
@@ -101,6 +103,8 @@ class Manager(Log):
         if rule_list[0] == "dict":
             dict_name = rule_list[1]
             if context is None or dict_name not in context:
+
+                # error 로그 출력
                 super().print_log("Function", ["Log", "Function"], ["Info", "Error"], [f"context가 없거나 잘못됨, {rule_list}에 적합한 올바른 context를 전달해주세요."])
                 return None
 

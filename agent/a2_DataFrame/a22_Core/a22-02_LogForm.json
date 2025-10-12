@@ -1,14 +1,18 @@
-
 {
     "Email": null,
     "ProjectName": null,
-    "OperatingTime": {
+    "Time": {
         "Time": null,
         "Second": null
+    },
+    "Token": {
+        "Token": null,
+        "RemainingToken": null
     },
     "Log": [
         {
             "Timestamp": null,
+            "Tokenstamp": null,
             "Work": null,
             "Solution": null,
             "NextSolution": null,

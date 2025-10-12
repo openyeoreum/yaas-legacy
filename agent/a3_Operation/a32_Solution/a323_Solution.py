@@ -50,7 +50,7 @@ class Solution(Agent):
         form_dict = super().load_json("Solution", [self.solution, "Form", self.process_name])
 
         # info 설정
-        info_dict = form_dict["Info"]
+        info_dict = form_dict["AgentForm"]["Info"]
         self.process_name = info_dict["ProcessName"]
         self.next_solution = info_dict["NextSolution"]
         self.auto_template = info_dict["AutoTemplate"]
@@ -59,16 +59,8 @@ class Solution(Agent):
         self.input_count = info_dict["InputCount"]
         self.completion = info_dict["Completion"]
 
-        # function 설정
-        function_dict = form_dict["Function"]
-        self.preprocess_inputs = function_dict["PreprocessInputs"]
-        self.inputs = function_dict["Inputs"]
-        self.preprocess_response = function_dict["PreprocessResponse"]
-        self.postprocess_response = function_dict["PostprocessResponse"]
-        self.outputs = function_dict["Outputs"]
-
         # mode 설정
-        mode_dict = form_dict["Mode"]
+        mode_dict = form_dict["AgentForm"]["Mode"]
         self.response_mode = mode_dict["ResponseMode"]
         self.edit_mode = mode_dict["EditMode"]
         self.outputs_per_input = mode_dict["OutputsPerInput"]
@@ -76,8 +68,13 @@ class Solution(Agent):
         self.ignore_count_check = mode_dict["IgnoreCountCheck"]
         self.filter_pass = mode_dict["FilterPass"]
 
-
-
+        # function 설정
+        function_dict = form_dict["AgentForm"]["Function"]
+        self.preprocess_inputs = function_dict["PreprocessInputs"]
+        self.inputs = function_dict["Inputs"]
+        self.preprocess_response = function_dict["PreprocessResponse"]
+        self.postprocess_response = function_dict["PostprocessResponse"]
+        self.outputs = function_dict["Outputs"]
 
     # ------------------------------------
     # --- func-set: make dir -------------
@@ -132,44 +129,25 @@ class Solution(Agent):
     # --- func-set: solution run -----
     # --- class-func: run solution ---
     def run_solution(self,
-                     response_mode: bool = True,
-                     edit_mode: bool = True,
-                     outputs_per_input: int = 1,
-                     input_count_key: str = None,
-                     ignore_count_check: bool = False,
-                     filter_pass: bool = False,
                      main_lang: str = "Ko") -> None:
         """solution을 실행 합니다.
-
-        Args:
-            response_mode (bool): response 모드
-            edit_mode (bool): 편집 모드
-            outputs_per_input (int): 출력 배수
-            input_count_key (str): input 수의 기준키
-            ignore_count_check (bool): 입력 수 체크 무시 여부
-            filter_pass (bool): 필터 오류 3회가 넘어가는 경우 그냥 패스 여부
-            main_lang (str): 주요 언어
 
         Effects:
             Agent 실행
         """
-        # solution_mode 불러오기
-        response_mode, edit_mode, outputs_per_input, input_count_key, ignore_count_check, filter_pass, main_lang = self.read_solution_mode()
-
         # agent 실행
         super().run_agent(
+            self.response_mode,
+            self.edit_mode,
+            self.outputs_per_input,
+            self.input_count_key,
+            self.ignore_count_check,
+            self.filter_pass,
+
             self._create_inputs,
             self._preprocess_response,
             self._postprocess_response,
-            self._create_output,
-
-            response_mode,
-            edit_mode,
-            outputs_per_input,
-            input_count_key,
-            ignore_count_check,
-            filter_pass,
-            main_lang)
+            self._create_output)
 
     # --- class-func: return solution edit ---
     def return_solution_edit(self):

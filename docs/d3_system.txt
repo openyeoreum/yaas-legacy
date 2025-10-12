@@ -75,15 +75,17 @@
 
 
     라. Solution-Generation (Domain이 Publishing인 경우)
-        (1) Estimate
+        (1) Common
             (가) ...
-        (2) DataCollection
+        (2) Estimate
             (가) ...
-        (3) Search
+        (3) DataCollection
             (가) ...
-        (4) ScriptGen
+        (4) Search
             (가) ...
-        (5) ScriptSegmentation
+        (5) ScriptGen
+            (가) ...
+        (6) ScriptSegmentation
             (가) P01 (PDF)ScriptLoad
             (나) P02 PDFMainLangCheck
             (다) P03 PDFLayoutCheck
@@ -114,9 +116,9 @@
             (터) S08 SignGen
             (퍼) S09 CommentGen
             (허) S10 BodyFrame
-        (6) ScriptStructuration
+        (7) ScriptStructuration
             (가) ...
-        (7) Translation
+        (8) Translation
             (가) 01 TranslationBodySummary
             (나) 02 WordListGen
             (다) 03 UniqueWordListGen
@@ -139,13 +141,28 @@
             (버) 11 AuthorResearch
             (서) 12 TranslationCatchphrase
             (어) 13 TranslationFundingCatchphrase
-        (8) TextBook
+        (9) TextBook
             (가) ...
-        (9) AudioBook
+        (10) AudioBook
+            (가) 01 Duplication
+            (나) 02 Pronunciation
+            (다) 03 Caption
+            (라) 04 ContextDefine
+            (마) 05 ContextComplition
+            (바) 06 WMWMDefine
+            (사) 07 WMWMMatching
+            (아) 08 CharacterDefine
+            (자) 09 CharacterCompletion
+            (차) 10 CharacterPostCompletion
+            (카) 11 CharacterPostCompletionLiterary
+            (타) 12 SoundMatching
+            (파) 13 SFXMatching
+            (하) 14 SFXMultiQuery
+            (거) 15 Correction
+            (너) 16 Selection
+        (11) VideoBook
             (가) ...
-        (10) VideoBook
-            (가) ...
-        (11) Marketing
+        (12) Marketing
             (가) ...
 
 

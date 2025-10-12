@@ -59,24 +59,24 @@ class Solution(Agent):
     # --- func-set: inputs -----------
     # --- class-func: inputs 전처리 ---
     def _preprocess_inputs(self):
-        """inputs을 전처리 합니다."""
+        """inputs를 전처리 합니다."""
         pass
 
     # --- class-func: inputs 생성 ---
     def _create_inputs(self):
-        """inputs을 생성 합니다."""
+        """inputs를 생성 합니다."""
         pass
 
     # ----------------------------------
     # --- func-set: response -----------
     # --- class-func: response 전처리 ---
     def _preprocess_response(self):
-        """response을 전처리 합니다."""
+        """response를 전처리 합니다."""
         pass
 
     # --- class-func: response 후처리 ---
     def _postprocess_response(self):
-        """response을 후처리 합니다."""
+        """response를 후처리 합니다."""
         pass
 
     # ------------------------------

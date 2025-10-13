@@ -77,142 +77,142 @@
         {
             "Number": "PT01",
             "Name": "ScriptLoad",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "P02",
             "Name": "pdfMainLangCheck",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "P03",
             "Name": "pdfLayoutCheck",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "P04",
             "Name": "pdfResize",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "P05",
             "Name": "pdfSplit",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "P06",
             "Name": "pdfFormCheck",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "P07",
             "Name": "pdfIndexGen",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "P08",
             "Name": "pdfIndexMatching",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "P09",
             "Name": "pdfBodyCaptionComponentCheck",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "P10",
             "Name": "pdfChunkAnnotationComponentCheck",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "T02",
             "Name": "txtMainLangCheck",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "T03",
             "Name": "txtSplit",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "T04",
             "Name": "txtFormCheck",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "T05",
             "Name": "txtIndexGen",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "T06",
             "Name": "txtIndexMatching",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "T07",
             "Name": "txtBodyCaptionComponentCheck",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "T08",
             "Name": "txtChunkAnnotationComponentCheck",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "S01",
             "Name": "CaptionGen",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "S02",
             "Name": "AnnotationGen",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "S03",
             "Name": "ImageDescriptionGen",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "S04",
             "Name": "DiagramGen",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "S05",
             "Name": "ChartGen",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "S06",
             "Name": "GraphGen",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "S07",
             "Name": "TableGen",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "S08",
             "Name": "SignGen",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "S09",
             "Name": "CommentGen",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "S10",
             "Name": "BodyFrame",
-            "Config": null
+            "Mode": null
         },
         {
             "Number": "S11",
             "Name": "Endnote",
-            "Config": null
+            "Mode": null
         }
     ]
 }

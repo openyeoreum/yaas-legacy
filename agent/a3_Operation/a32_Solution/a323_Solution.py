@@ -45,7 +45,13 @@ class Solution(Agent):
 
     # --- class-func: form 초기화 ---
     def _init_form(self):
-        """form을 초기화합니다."""
+        """form을 초기화합니다.
+        
+        Effects:
+            info 설정
+            config 설정
+            function 설정
+        """
         # form 불러오기
         form_dict = super().load_json("Solution", [self.solution, "Form", self.process_name])
 

@@ -1,0 +1,1 @@
+memo: d6_operation은 YaaS의 Solution과 Generation 코드의 기반(상속)이 되는 (Access, Base, Log, Manager) 코드를 설명하는 doc 입니다.

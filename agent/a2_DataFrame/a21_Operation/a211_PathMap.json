@@ -28,7 +28,8 @@
         "Form": {
             "Log": "/yaas/agent/a2_DataFrame/a21_Operation/a212_LogMap.json",
             "Core": "/yaas/agent/a2_DataFrame/a22_Core/a22-02_CoreForm.json",
-            "Solution": "/yaas/agent/a2_DataFrame/a22_Core/a22-03_SolutionForm.json"
+            "Solution": "/yaas/agent/a2_DataFrame/a22_Core/a22-03_SolutionForm.json",
+            "Generation": "/yaas/agent/a2_DataFrame/a22_Core/a22-04_GenerationForm.json"
         },
         "Dir": {
             "User": "/yaas/storage/s1_Yeoreum/s12_UserStorage/{Email}",

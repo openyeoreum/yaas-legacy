@@ -1,14 +1,34 @@
 {
     "Operation": {
         "PathMap": "/yaas/agent/a2_DataFrame/a21_Operation/a211_PathMap.json",
-        "CoreMap": "/yaas/agent/a2_DataFrame/a21_Operation/a212_CoreMap.json",
-        "LogMap": "/yaas/agent/a2_DataFrame/a21_Operation/a213_LogMap.json",
-        "APIConfig": "/yaas/agent/a2_DataFrame/a21_Operation/a214_APIMap.json"
+        "LogMap": "/yaas/agent/a2_DataFrame/a21_Operation/a212_LogMap.json",
+        "APIMap": "/yaas/agent/a2_DataFrame/a21_Operation/a213_APIMap.json",
+        "CoreMap": "/yaas/agent/a2_DataFrame/a21_Operation/a214_CoreMap.json",
+        "SolutionMap": {
+            "Publishing": {
+                "Common": "/yaas/agent/a2_DataFrame/a21_Operation/a215_SolutionMap/a2152_Publishing/a2152-01_Common.json",
+                "Estimate": "/yaas/agent/a2_DataFrame/a21_Operation/a215_SolutionMap/a2152_Publishing/a2152-02_Estimate.json",
+                "Collection": "/yaas/agent/a2_DataFrame/a21_Operation/a215_SolutionMap/a2152_Publishing/a2152-03_Collection.json",
+                "Search": "/yaas/agent/a2_DataFrame/a21_Operation/a215_SolutionMap/a2152_Publishing/a2152-04_Search.json",
+                "ScriptGen": "/yaas/agent/a2_DataFrame/a21_Operation/a215_SolutionMap/a2152_Publishing/a2152-05_ScriptGen.json",
+                "ScriptSegmentation": "/yaas/agent/a2_DataFrame/a21_Operation/a215_SolutionMap/a2152_Publishing/a2152-06_ScriptSegmentation.json",
+                "ScriptStructuration": "/yaas/agent/a2_DataFrame/a21_Operation/a215_SolutionMap/a2152_Publishing/a2152-07_ScriptStructuration.json",
+                "Translation": "/yaas/agent/a2_DataFrame/a21_Operation/a215_SolutionMap/a2152_Publishing/a2152-08_Translation.json",
+                "TextBook": "/yaas/agent/a2_DataFrame/a21_Operation/a215_SolutionMap/a2152_Publishing/a2152-09_TextBook.json",
+                "AudioBook": "/yaas/agent/a2_DataFrame/a21_Operation/a215_SolutionMap/a2152_Publishing/a2152-10_AudioBook.json",
+                "VideoBook": "/yaas/agent/a2_DataFrame/a21_Operation/a215_SolutionMap/a2152_Publishing/a2152-11_VideoBook.json",
+                "Marketing": "/yaas/agent/a2_DataFrame/a21_Operation/a215_SolutionMap/a2152_Publishing/a2152-12_Marketing.json"
+            },
+            "Architecture": {},
+            "Meditation": {},
+            "Investment": {}
+        }
     },
     "Core": {
         "Form": {
-            "Config": "/yaas/agent/a2_DataFrame/a22_Core/a22-01_CoreForm.json",
-            "Log": "/yaas/agent/a2_DataFrame/a22_Core/a22-02_LogForm.json"
+            "Log": "/yaas/agent/a2_DataFrame/a21_Operation/a212_LogMap.json",
+            "Core": "/yaas/agent/a2_DataFrame/a22_Core/a22-02_CoreForm.json",
+            "Solution": "/yaas/agent/a2_DataFrame/a22_Core/a22-03_SolutionForm.json"
         },
         "Dir": {
             "User": "/yaas/storage/s1_Yeoreum/s12_UserStorage/{Email}",

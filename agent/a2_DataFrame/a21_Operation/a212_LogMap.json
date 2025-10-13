@@ -1,5 +1,6 @@
 {
     "Access": {
+        "Memo": "대상: Core",
         "Log": {
             "Access": "{Info} 🕐 {Timestamp} >>> 👋[((Access)) | {Email} | {ProjectName}]🤘",
             "Complete": "{Info} 🕐 {Timestamp} >>> 👏[((Complete)) | {Email} | {ProjectName}]👍"
@@ -10,6 +11,7 @@
         }
     },
     "Solution": {
+        "Memo": "대상: Solution",
         "Log": {
             "Core": "{Info} 🕐 {Timestamp} >> 🔴[(Core) | {ProjectName} | {Solution}({NextSolution})]🔴",
             "Solution": "{Info} 🕐 {Timestamp} >> 🟡[(Solution) | {ProjectName} | {Solution}({NextSolution}) | {ProcessNumber}_{ProcessName}]🟡",
@@ -24,6 +26,7 @@
         }
     },
     "Process": {
+        "Memo": "대상: Agent, LLM",
         "Log": {
             "InputsPreprocess": "(⭐️ Run) 🕐 {Timestamp} > 🟥(InputPreprocess | {ProcessNumber}_{ProcessName}({InputCount}/{InputCountLength}))🟥\n└─{FunctionName} > {Info}",
             "Inputs": "(⭐️ Run) 🕐 {Timestamp} > 🟨(Inputs | {ProcessNumber}_{ProcessName}({InputCount}/{InputCountLength}))🟨\n└─{FunctionName} > {Info}",
@@ -46,49 +49,13 @@
         }
     },
     "Function": {
+        "Memo": "대상: 모든 함수",
         "Log": {
             "Function": "└───{FunctionName} > {Info}"
         },
         "Info": {
             "Notice": "Notice: {Print}",
             "Error": "Error: {Print}"
-        }
-    },
-
-
-
-    "DataFrame": {
-        "RawData": null,
-        "StartFrame": null,
-        "MiddleFrame": null,
-        "EndFrame": null,
-        "Edit": null
-    },
-    "EditStructure": {
-        "Index": {
-            "Title": null,
-            "Part": null,
-            "Chapter": null,
-            "Index": null,
-            "Logue": null
-        },
-        "Body": {
-            "Body": null,
-            "Caption": {
-                "Figure": null,
-                "Diagram": null,
-                "Chart": null,
-                "Graph": null,
-                "Table": null,
-                "Code": null,
-                "Formula": null
-            }
-        },
-        "Chunk": {
-            "Chunk": null,
-            "Sign": null,
-            "Comment": null,
-            "Annotation": null
         }
     }
 }

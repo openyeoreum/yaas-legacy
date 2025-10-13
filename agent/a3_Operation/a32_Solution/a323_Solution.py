@@ -144,6 +144,7 @@ class Solution(Agent):
             self.ignore_count_check,
             self.filter_pass,
 
+            self._preprocess_inputs,
             self._create_inputs,
             self._preprocess_response,
             self._postprocess_response,

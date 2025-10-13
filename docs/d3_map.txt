@@ -10,13 +10,20 @@
     다. Domain
 
 
+        (1) Publishing
+        (2) Architecture
+        (3) Meditation
+        (4) Investment
+
+
     라. Solution-Generation
 
 
-        (1) Estimate
-        (2) DataCollection
-        (3) Search
-        (4) Domain (Damain에 따라서 변경, Agent 생성 자동화 부분)
+        (1) Common
+        (2) Estimate
+        (3) Collection
+        (4) Search
+        (5) Domain (Damain에 따라서 변경, Agent 생성 자동화 부분)
             (가) Publishing
                 (a) ScriptGen
                 (b) ScriptSegmentation
@@ -25,10 +32,11 @@
                 (e) TextBook
                 (f) AudioBook
                 (g) VideoBook
-            (나) Construction
+            (나) Architecture
                 ...
             (다) Meditation
                 ...
+            (라) Investment
         (5) Marketing
 
 
@@ -79,7 +87,7 @@
             (가) ...
         (2) Estimate
             (가) ...
-        (3) DataCollection
+        (3) Collection
             (가) ...
         (4) Search
             (가) ...

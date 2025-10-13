@@ -715,15 +715,18 @@ Body(Body, Caption, Annotation)
 Chunk(Chunk, Sign, Comment)
 
 
+
+
+#S11 Endnote (Image(이미지), Annotation(주석) 미주 처리) <- 다음 솔루션이 오디오북인 경우, 번역인 경우는 번역의 마지막 프로세스
+# 다음 솔루션이 번역인 경우는 S11Endnote가 번역의 마지막 프로세스
+# 다음 솔루션이 오디오북인 경우 S11 Endnote로 인해 분리된 Endnote가 필요없음, 제외됨
+
+
+
+
 ---- 후처리 ----
 
 
-#1 Image(이미지), Annotation(주석) 미주로 처리 <- 이 부분은 번역 마지막 태스크
 
 
-
-#2 Duplication <- 이 부분은 오디오북 앞 태스크 (위 프로세스가 모두 완료되면 필요 없음, 삭제)
-
-
-
-#3 Pronunciation <- 이 부분은 오디오북 앞 태스크
+#01 Pronunciation (발음 교정 텍스트) <- 이 부분은 오디오북 앞 태스크

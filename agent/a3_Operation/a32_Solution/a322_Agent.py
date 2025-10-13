@@ -88,30 +88,34 @@ class Agent(LLM):
 
     # --- class-func: function 초기화 ---
     def _init_function(self,
-                       inputs_func: callable,
+                       preprocess_inputs_func: callable,
+                       create_inputs_func: callable,
                        preprocess_response_func: callable,
                        postprocess_response_func: callable,
-                       output_func: callable) -> None:
+                       create_output_func: callable) -> None:
         """사용자-프로젝트의 Operation에 통합 Agent의 function을 초기화합니다.
 
         Args:
-            inputs_func (callable): inputs_func
-            preprocess_response_func (callable): preprocess_response_func
-            postprocess_response_func (callable): postprocess_response_func
-            output_func (callable): output_func
+            preprocess_inputs_func (callable): inputs 전처리 함수
+            create_inputs_func (callable): 입력 리스트 생성 함수
+            preprocess_response_func (callable): 응답 전처리 함수
+            postprocess_response_func (callable): 응답 후처리 함수
+            create_output_func (callable): 출력 함수
 
         Attributes:
-            inputs_func (callable): inputs_func
-            preprocess_response_func (callable): preprocess_response_func
-            postprocess_response_func (callable): postprocess_response_func
-            output_func (callable): output_func
+            preprocess_inputs_func (callable): inputs 전처리 함수
+            create_inputs_func (callable): 입력 리스트 생성 함수
+            preprocess_response_func (callable): 응답 전처리 함수
+            postprocess_response_func (callable): 응답 후처리 함수
+            create_output_func (callable): 출력 함수
         """
 
         # attributes 설정
-        self.inputs_func = inputs_func
+        self.preprocess_inputs_func = preprocess_inputs_func
+        self.create_inputs_func = create_inputs_func
         self.preprocess_response_func = preprocess_response_func
         self.postprocess_response_func = postprocess_response_func
-        self.output_func = output_func
+        self.create_output_func = create_output_func
 
     # ----------------------------------------
     # --- func-set: requset input ------------
@@ -131,7 +135,7 @@ class Agent(LLM):
             input_list = super().load_json("Solution", [self.solution, "File", "Json", "InputList"])
         else:
             # input_list 생성
-            inputs, comparison_inputs = self.inputs_func()
+            inputs, comparison_inputs = self.create_inputs_func()
 
             # input_list 생성
             input_list = []
@@ -916,7 +920,7 @@ class Agent(LLM):
         solution_edit_process = solution_edit[self.process_name]
 
         # solution_edit_process 출력 함수 실행
-        if self.output_func(solution_edit_process):
+        if self.create_output_func(solution_edit_process):
             solution_edit[f"{self.process_name}OutputCompletion"] = "Completion"
 
             # solution_edit 저장
@@ -985,10 +989,11 @@ class Agent(LLM):
                   ignore_count_check: bool = False,
                   filter_pass: bool = False,
 
-                  inputs_func: callable = None,
+                  preprocess_inputs_func: callable = None,
+                  create_inputs_func: callable = None,
                   preprocess_response_func: callable = None,
                   postprocess_response_func: callable = None,
-                  output_func: callable = None) -> None:
+                  create_output_func: callable = None) -> None:
         """agent를 실행합니다.
 
         Args:
@@ -999,10 +1004,11 @@ class Agent(LLM):
             ignore_count_check (bool): 입력 수 체크 무시 여부 (기본값: False)
             filter_pass (bool): 필터 오류 3회가 넘어가는 경우 그냥 패스 여부 (기본값: False)
 
-            inputs_func (callable): 입력 리스트 생성 함수
+            preprocess_inputs_func (callable): inputs 전처리 함수
+            create_inputs_func (callable): 입력 리스트 생성 함수
             preprocess_response_func (callable): 응답 전처리 함수
             postprocess_response_func (callable): 응답 후처리 함수
-            output_func (callable): 출력 함수
+            create_output_func (callable): 출력 함수
         """
         # mode 초기화
         self._init_mode(response_mode,
@@ -1013,13 +1019,14 @@ class Agent(LLM):
             filter_pass)
 
         # function 초기화
-        self._init_function(inputs_func,
+        self._init_function(preprocess_inputs_func,
+            create_inputs_func,
             preprocess_response_func,
             postprocess_response_func,
-            output_func)
+            create_output_func)
 
         # start 로그 출력
-        super().print_log("Solution", ["Log", "Task"], ["Info", "Start"], input_count=self.input_count, total_input_count=self.total_input_count)
+        super().print_log("Solution", ["Log", "Process"], ["Info", "Start"], input_count=self.input_count, total_input_count=self.total_input_count)
 
         # edit_check 확인
         if not self.edit_check:
@@ -1070,10 +1077,10 @@ class Agent(LLM):
             self._create_output(solution_edit)
 
             # complete 로그 출력
-            super().print_log("Solution", ["Log", "Task"], ["Info", "Complete"], input_count=self.input_count, total_input_count=self.total_input_count)
+            super().print_log("Solution", ["Log", "Process"], ["Info", "Complete"], input_count=self.input_count, total_input_count=self.total_input_count)
         else:
             # skip 로그 출력
-            super().print_log("Solution", ["Log", "Task"], ["Info", "Skip"], input_count=self.input_count, total_input_count=self.total_input_count)
+            super().print_log("Solution", ["Log", "Process"], ["Info", "Skip"], input_count=self.input_count, total_input_count=self.total_input_count)
 
         return solution_edit
 

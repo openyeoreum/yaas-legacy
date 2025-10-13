@@ -75,7 +75,7 @@ class LLM(Manager):
             api_config_dict (dict): API 설정이 담긴 딕셔너리
         """
         # JSON 파일 열기 및 로드
-        with open(super().read_path_map("Operation", ["APIConfig"]), 'r', encoding='utf-8') as f:
+        with open(super().read_path_map("Operation", ["APIMap"]), 'r', encoding='utf-8') as f:
             api_config_dict = json.load(f)
         
         return api_config_dict
@@ -727,7 +727,7 @@ class LLM(Manager):
 
         # Google API 요청 및 응답
         for _ in range(self.MAX_ATTEMPTS):
-            # try:
+            try:
                 if self.service == "OPENAI":
                     response, usage = self._request_openai()
                 if self.service == "ANTHROPIC":
@@ -748,12 +748,12 @@ class LLM(Manager):
 
                 return response
 
-            # except Exception as e:
+            except Exception as e:
 
-            #     # error 로그 출력
-            #     super().print_log("Process", ["Log", "Function"], ["Info", "Error"], function_name="request_llm.run", _print=e)
-            #     time.sleep(random.uniform(2, 5))
-            #     continue
+                # error 로그 출력
+                super().print_log("Process", ["Log", "Function"], ["Info", "Error"], function_name="request_llm.run", _print=repr(e))
+                time.sleep(random.uniform(2, 5))
+                continue
 
 if __name__ == "__main__":
 

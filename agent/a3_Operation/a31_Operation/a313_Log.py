@@ -174,7 +174,7 @@ class Log(Base):
         """로그 설정에서 지정된 키에 해당하는 로그 데이터를 가져와 포맷팅합니다.
 
         Args:
-            log (str): 로그 종류 (예: "Access", "Work", "Task")
+            log (str): 로그 종류 (예: "Access", "Work", "Process")
             log_keys (list): 로그 데이터에서 가져올 키들의 리스트
             info_keys (list): 추가 정보에서 가져올 키들의 리스트
             input_count (int, optional): 솔루션 안에 프로세스 안에 테스크 인덱스 번호로 jpg, wav, mp3 등 file명에 사용 (기본값: None)

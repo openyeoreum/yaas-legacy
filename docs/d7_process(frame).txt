@@ -1,0 +1,34 @@
+"DataFrame": {
+    "RawData": null,
+    "StartFrame": null,
+    "MiddleFrame": null,
+    "EndFrame": null,
+    "Edit": null
+},
+"EditStructure": {
+    "Index": {
+        "Title": null,
+        "Part": null,
+        "Chapter": null,
+        "Index": null,
+        "Logue": null
+    },
+    "Body": {
+        "Body": null,
+        "Caption": {
+            "Figure": null,
+            "Diagram": null,
+            "Chart": null,
+            "Graph": null,
+            "Table": null,
+            "Code": null,
+            "Formula": null
+        }
+    },
+    "Chunk": {
+        "Chunk": null,
+        "Sign": null,
+        "Comment": null,
+        "Annotation": null
+    }
+}

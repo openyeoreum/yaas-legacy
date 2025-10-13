@@ -1,0 +1,218 @@
+{
+    "Solution": [
+        {
+            "Solution": "ScriptSegmentation",
+            "Config": {
+                "NextSolution": "Translation",
+                "FileExtension": "pdf",
+                "AutoTemplate": true
+            },
+            "ProcessList": ["PT01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09", "P10", ["S01", "S02", "S03", "S04", "S05", "S06", "S07", "S08", "S09"], "S10"]
+        },
+        {
+            "Solution": "ScriptSegmentation",
+            "Config": {
+                "NextSolution": "Translation",
+                "FileExtension": "pdf",
+                "AutoTemplate": false
+            },
+            "ProcessList": ["PT01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09", "P10", "S10"]
+        },
+        {
+            "Solution": "ScriptSegmentation",
+            "Config": {
+                "NextSolution": "Translation",
+                "FileExtension": "txt",
+                "AutoTemplate": true
+            },
+            "ProcessList": ["PT01", "T02", "T03", "T04", "T05", "T06", "T07", "T08", ["S01", "S02", "S03", "S04", "S05", "S06", "S07", "S08", "S09"], "S10"]
+        },
+        {
+            "Solution": "ScriptSegmentation",
+            "Config": {
+                "NextSolution": "Translation",
+                "FileExtension": "txt",
+                "AutoTemplate": false
+            },
+            "ProcessList": ["PT01", "T02", "T03", "T04", "T05", "T06", "T07", "T08", "S10"]
+        },
+        {
+            "Solution": "ScriptSegmentation",
+            "Config": {
+                "NextSolution": "Audiobook",
+                "FileExtension": "pdf",
+                "AutoTemplate": true
+            },
+            "ProcessList": ["PT01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09", "P10", ["S01", "S02", "S03", "S04", "S05", "S06", "S07", "S08", "S09"], "S10", "S11"]
+        },
+        {
+            "Solution": "ScriptSegmentation",
+            "Config": {
+                "NextSolution": "Audiobook",
+                "FileExtension": "pdf",
+                "AutoTemplate": false
+            },
+            "ProcessList": ["PT01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09", "P10", "S10", "S11"]
+        },
+        {
+            "Solution": "ScriptSegmentation",
+            "Config": {
+                "NextSolution": "Audiobook",
+                "FileExtension": "txt",
+                "AutoTemplate": true
+            },
+            "ProcessList": ["PT01", "T02", "T03", "T04", "T05", "T06", "T07", "T08", ["S01", "S02", "S03", "S04", "S05", "S06", "S07", "S08", "S09"], "S10", "S11"]
+        },
+        {
+            "Solution": "ScriptSegmentation",
+            "Config": {
+                "NextSolution": "Audiobook",
+                "FileExtension": "txt",
+                "AutoTemplate": false
+            },
+            "ProcessList": ["PT01", "T02", "T03", "T04", "T05", "T06", "T07", "T08", "S10", "S11"]
+        }
+    ],
+    "Process": [
+        {
+            "Number": "PT01",
+            "Name": "ScriptLoad",
+            "Config": null
+        },
+        {
+            "Number": "P02",
+            "Name": "pdfMainLangCheck",
+            "Config": null
+        },
+        {
+            "Number": "P03",
+            "Name": "pdfLayoutCheck",
+            "Config": null
+        },
+        {
+            "Number": "P04",
+            "Name": "pdfResize",
+            "Config": null
+        },
+        {
+            "Number": "P05",
+            "Name": "pdfSplit",
+            "Config": null
+        },
+        {
+            "Number": "P06",
+            "Name": "pdfFormCheck",
+            "Config": null
+        },
+        {
+            "Number": "P07",
+            "Name": "pdfIndexGen",
+            "Config": null
+        },
+        {
+            "Number": "P08",
+            "Name": "pdfIndexMatching",
+            "Config": null
+        },
+        {
+            "Number": "P09",
+            "Name": "pdfBodyCaptionComponentCheck",
+            "Config": null
+        },
+        {
+            "Number": "P10",
+            "Name": "pdfChunkAnnotationComponentCheck",
+            "Config": null
+        },
+        {
+            "Number": "T02",
+            "Name": "txtMainLangCheck",
+            "Config": null
+        },
+        {
+            "Number": "T03",
+            "Name": "txtSplit",
+            "Config": null
+        },
+        {
+            "Number": "T04",
+            "Name": "txtFormCheck",
+            "Config": null
+        },
+        {
+            "Number": "T05",
+            "Name": "txtIndexGen",
+            "Config": null
+        },
+        {
+            "Number": "T06",
+            "Name": "txtIndexMatching",
+            "Config": null
+        },
+        {
+            "Number": "T07",
+            "Name": "txtBodyCaptionComponentCheck",
+            "Config": null
+        },
+        {
+            "Number": "T08",
+            "Name": "txtChunkAnnotationComponentCheck",
+            "Config": null
+        },
+        {
+            "Number": "S01",
+            "Name": "CaptionGen",
+            "Config": null
+        },
+        {
+            "Number": "S02",
+            "Name": "AnnotationGen",
+            "Config": null
+        },
+        {
+            "Number": "S03",
+            "Name": "ImageDescriptionGen",
+            "Config": null
+        },
+        {
+            "Number": "S04",
+            "Name": "DiagramGen",
+            "Config": null
+        },
+        {
+            "Number": "S05",
+            "Name": "ChartGen",
+            "Config": null
+        },
+        {
+            "Number": "S06",
+            "Name": "GraphGen",
+            "Config": null
+        },
+        {
+            "Number": "S07",
+            "Name": "TableGen",
+            "Config": null
+        },
+        {
+            "Number": "S08",
+            "Name": "SignGen",
+            "Config": null
+        },
+        {
+            "Number": "S09",
+            "Name": "CommentGen",
+            "Config": null
+        },
+        {
+            "Number": "S10",
+            "Name": "BodyFrame",
+            "Config": null
+        },
+        {
+            "Number": "S11",
+            "Name": "Endnote",
+            "Config": null
+        }
+    ]
+}

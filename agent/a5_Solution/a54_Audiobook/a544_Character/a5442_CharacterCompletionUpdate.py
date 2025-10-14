@@ -9,7 +9,7 @@ from tqdm import tqdm
 from collections import Counter
 from agent.a4_Core.a42_Access.a424_GetProcessData import GetSoundDataSet
 from agent.a4_Core.a42_Access.a424_GetProcessData import GetProject, GetPromptFrame
-from agent.a3_Operation.a32_Solution.a321_LoadLLM_temp import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
+from agent.a3_Operation.a32_Solution.a321_LoadLLM import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 from agent.a5_Solution.a54_Audiobook.a541_DataCommit.a5411_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedCharacterCompletionToDB, AddCharacterCompletionChunksToDB, AddCharacterCompletionCheckedCharacterTagsToDB, CharacterCompletionCountLoad, UpdatedCharacterCompletion, CharacterCompletionCompletionUpdate
 from agent.a5_Solution.a54_Audiobook.a541_DataCommit.a5412_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 

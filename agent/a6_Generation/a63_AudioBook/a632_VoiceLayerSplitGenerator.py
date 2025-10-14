@@ -15,7 +15,7 @@ import pyloudnorm as pyln
 import sys
 sys.path.append("/yaas")
 
-from agent.a3_Operation.a32_Solution.a321_LoadLLM_temp import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
+from agent.a3_Operation.a32_Solution.a321_LoadLLM import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 from io import BytesIO
 from tqdm import tqdm
 from time import sleep
@@ -629,7 +629,7 @@ def ActorMatchedSelectionGenerationChunks(projectName, email, MainLang, messages
             try:
                 name = Actor["ApiSetting"]["name"]
             except TypeError:
-                sys.exit(f"[ a072-01_VoiceDataSet에 낭독할 성우가 부족함, 아래 경로의 ActorsNeededFileName을 보고 성우를 생성해주세요. ]\n{ActorsNeededFilePath}")
+                sys.exit(f"[ a272-01_VoiceDataSet에 낭독할 성우가 부족함, 아래 경로의 ActorsNeededFileName을 보고 성우를 생성해주세요. ]\n{ActorsNeededFilePath}")
             GroupedData[name].append(Actor)
         # 정렬된 그룹을 기반으로 최종 리스트 재구성
         SortedMatchedActors = []
@@ -1926,7 +1926,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
     ## Narrator가 "VoiceActor" 이면서 성우가 지정된 경우 CloneVoiceDic 생성 ##
     elif Narrator == 'VoiceActor' and CloneVoiceName != '':
         # VoiceDataSetPath 로드
-        VoiceDataSetPath = "/yaas/agent/a0_Database_temp/a07_RelationalDatabase/a072_Character/a072-01_VoiceDataSet.json"
+        VoiceDataSetPath = "/yaas/agent/a2_Database/a27_RelationalDatabase/a272_Character/a272-01_VoiceDataSet.json"
         with open(VoiceDataSetPath, 'r', encoding = 'utf-8') as VoiceDataSetJson:
             VoiceDataSet = json.load(VoiceDataSetJson)
         VoiceActos = VoiceDataSet[1]['Characters']
@@ -1949,11 +1949,11 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                 try:
                     AfterNarratorName = MatchedVoiceActor['Name']
                 except UnboundLocalError:
-                    sys.exit(f'[ (({CloneVoiceName})) a072-01_VoiceDataSet에 성우가 존재하지 않음 ]\n/yaas/agent/a0_Database_temp/a07_RelationalDatabase/a072_Character/a072-01_VoiceDataSet.json')
+                    sys.exit(f'[ (({CloneVoiceName})) a272-01_VoiceDataSet에 성우가 존재하지 않음 ]\n/yaas/agent/a2_Database/a27_RelationalDatabase/a272_Character/a272-01_VoiceDataSet.json')
                 try:
                     _Matched['ActorName'] = AfterNarratorName
                 except UnboundLocalError:
-                    sys.exit(f'[ (({CloneVoiceName})) a072-01_VoiceDataSet에 성우가 존재하지 않음 ]\n/yaas/agent/a0_Database_temp/a07_RelationalDatabase/a072_Character/a072-01_VoiceDataSet.json')
+                    sys.exit(f'[ (({CloneVoiceName})) a272-01_VoiceDataSet에 성우가 존재하지 않음 ]\n/yaas/agent/a2_Database/a27_RelationalDatabase/a272_Character/a272-01_VoiceDataSet.json')
                 _Matched['ApiSetting'] = MatchedVoiceActor['ApiSetting']
             if _Matched['CharacterTag'] == 'SecondaryNarrator':
                 if MatchedSecondaryVoiceActor != 'None':
@@ -1961,11 +1961,11 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                     try:
                         AfterSecondaryNarratorName = MatchedSecondaryVoiceActor['Name']
                     except UnboundLocalError:
-                        sys.exit(f'[ (({CloneVoiceName}의 SecondaryVoice인 {MatchedSecondaryVoiceActor["Name"]})) a072-01_VoiceDataSet에 성우가 존재하지 않음 ]\n/yaas/agent/a0_Database_temp/a07_RelationalDatabase/a072_Character/a072-01_VoiceDataSet.json')
+                        sys.exit(f'[ (({CloneVoiceName}의 SecondaryVoice인 {MatchedSecondaryVoiceActor["Name"]})) a272-01_VoiceDataSet에 성우가 존재하지 않음 ]\n/yaas/agent/a2_Database/a27_RelationalDatabase/a272_Character/a272-01_VoiceDataSet.json')
                     try:
                         _Matched['ActorName'] = AfterSecondaryNarratorName
                     except UnboundLocalError:
-                        sys.exit(f'[ (({CloneVoiceName}의 SecondaryVoice인 {MatchedSecondaryVoiceActor["Name"]})) a072-01_VoiceDataSet에 성우가 존재하지 않음 ]\n/yaas/agent/a0_Database_temp/a07_RelationalDatabase/a072_Character/a072-01_VoiceDataSet.json')
+                        sys.exit(f'[ (({CloneVoiceName}의 SecondaryVoice인 {MatchedSecondaryVoiceActor["Name"]})) a272-01_VoiceDataSet에 성우가 존재하지 않음 ]\n/yaas/agent/a2_Database/a27_RelationalDatabase/a272_Character/a272-01_VoiceDataSet.json')
                     _Matched['ApiSetting'] = MatchedSecondaryVoiceActor['ApiSetting']
                 
         ## AudioBook_Edit 변경

@@ -33,7 +33,7 @@ services:
       - ./backend:/yaas/backend
       - ./frontend:/yaas/frontend
       - ./extension:/yaas/extension
-      - ./storage:/yaas/storage
+      - ./storage-legacy:/yaas/storage
       - ./.git:/yaas/.git
       - ./.gitignore:/yaas/.gitignore
       - ./docker-compose.yml:/yaas/docker-compose.yml

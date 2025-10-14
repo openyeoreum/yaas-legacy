@@ -271,7 +271,7 @@ def InitScriptGen(projectName, email):
 
     project["ScriptGenFrame"][0]["ScriptCount"] = 0
     project["ScriptGenFrame"][0]["Completion"] = "No"
-    project["ScriptGenFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a030_ScriptGen/a030-00_ScriptGenFrame.json")[1]
+    project["ScriptGenFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a230_ScriptGen/a230-00_ScriptGenFrame.json")[1]
 
     SaveProject(projectName, email, project)
         
@@ -338,7 +338,7 @@ def InitBookPreprocess(projectName, email):
 
     project["BookPreprocessFrame"][0]["PageCount"] = 0
     project["BookPreprocessFrame"][0]["Completion"] = "No"
-    project["BookPreprocessFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a0341_Script/a0341-00_BookPreprocessFrame.json")[1]
+    project["BookPreprocessFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a2341_Script/a2341-00_BookPreprocessFrame.json")[1]
 
     SaveProject(projectName, email, project)
         
@@ -406,7 +406,7 @@ def InitIndexFrame(projectName, email):
 
     project["IndexFrame"][0]["IndexCount"] = 0
     project["IndexFrame"][0]["Completion"] = "No"
-    project["IndexFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a0341_Script/a0341-01_IndexFrame.json")[1]
+    project["IndexFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a2341_Script/a2341-01_IndexFrame.json")[1]
         
     SaveProject(projectName, email, project)
         
@@ -474,7 +474,7 @@ def InitDuplicationPreprocess(projectName, email):
 
     project["DuplicationPreprocessFrame"][0]["PreprocessCount"] = 0
     project["DuplicationPreprocessFrame"][0]["Completion"] = "No"
-    project["DuplicationPreprocessFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a0341_Script/a0341-02_DuplicationPreprocessFrame.json")[1]
+    project["DuplicationPreprocessFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a2341_Script/a2341-02_DuplicationPreprocessFrame.json")[1]
         
     SaveProject(projectName, email, project)
         
@@ -542,7 +542,7 @@ def InitPronunciationPreprocess(projectName, email):
 
     project["PronunciationPreprocessFrame"][0]["PreprocessCount"] = 0
     project["PronunciationPreprocessFrame"][0]["Completion"] = "No"
-    project["PronunciationPreprocessFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a0341_Script/a0341-03_PronunciationPreprocessFrame.json")[1]
+    project["PronunciationPreprocessFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a2341_Script/a2341-03_PronunciationPreprocessFrame.json")[1]
         
     SaveProject(projectName, email, project)
         
@@ -680,8 +680,8 @@ def InitBodyFrame(projectName, email):
     project["BodyFrame"][0]["BodyCount"] = 0
     project["BodyFrame"][0]["ChunkCount"] = 0
     project["BodyFrame"][0]["Completion"] = "No"
-    project["BodyFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a0341_Script/a0341-04_BodyFrame.json")[1]
-    project["BodyFrame"][2] = LoadJsonFrame(ProjectDataPath + "/a0341_Script/a0341-04_BodyFrame.json")[2]
+    project["BodyFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a2341_Script/a2341-04_BodyFrame.json")[1]
+    project["BodyFrame"][2] = LoadJsonFrame(ProjectDataPath + "/a2341_Script/a2341-04_BodyFrame.json")[2]
         
     SaveProject(projectName, email, project)
         
@@ -819,8 +819,8 @@ def InitHalfBodyFrame(projectName, email):
     project["HalfBodyFrame"][0]["BodyCount"] = 0
     project["HalfBodyFrame"][0]["ChunkCount"] = 0
     project["HalfBodyFrame"][0]["Completion"] = "No"
-    project["HalfBodyFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a0341_Script/a0341-04_BodyFrame.json")[1]
-    project["HalfBodyFrame"][2] = LoadJsonFrame(ProjectDataPath + "/a0341_Script/a0341-04_BodyFrame.json")[2]
+    project["HalfBodyFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a2341_Script/a2341-04_BodyFrame.json")[1]
+    project["HalfBodyFrame"][2] = LoadJsonFrame(ProjectDataPath + "/a2341_Script/a2341-04_BodyFrame.json")[2]
         
     SaveProject(projectName, email, project)
         
@@ -891,7 +891,7 @@ def InitCaptionCompletion(projectName, email):
 
     project["CaptionFrame"][0]["CaptionCount"] = 0
     project["CaptionFrame"][0]["Completion"] = "No"
-    project["CaptionFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a0341_Script/a0341-05_CaptionFrame.json")[1]
+    project["CaptionFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a2341_Script/a2341-05_CaptionFrame.json")[1]
 
     SaveProject(projectName, email, project)
         
@@ -967,7 +967,7 @@ def InitContextDefine(projectName, email):
     project["ContextDefine"][0]["ContextChunkCount"] = 0
     project["ContextDefine"][0]["ContextCount"] = 0
     project["ContextDefine"][0]["Completion"] = "No"
-    project["ContextDefine"][1] = LoadJsonFrame(ProjectDataPath + "/a0342_Context/a0342-01_ContextDefine.json")[1]
+    project["ContextDefine"][1] = LoadJsonFrame(ProjectDataPath + "/a2342_Context/a2342-01_ContextDefine.json")[1]
         
     SaveProject(projectName, email, project)
         
@@ -1068,8 +1068,8 @@ def InitContextCompletion(projectName, email):
     project["ContextCompletion"][0]["ContextChunkCount"] = 0
     project["ContextCompletion"][0]["ContextCount"] = 0
     project["ContextCompletion"][0]["Completion"] = "No"
-    project["ContextCompletion"][1] = LoadJsonFrame(ProjectDataPath + "/a0342_Context/a0342-02_ContextCompletion.json")[1]
-    project["ContextCompletion"][2] = LoadJsonFrame(ProjectDataPath + "/a0342_Context/a0342-02_ContextCompletion.json")[2]
+    project["ContextCompletion"][1] = LoadJsonFrame(ProjectDataPath + "/a2342_Context/a2342-02_ContextCompletion.json")[1]
+    project["ContextCompletion"][2] = LoadJsonFrame(ProjectDataPath + "/a2342_Context/a2342-02_ContextCompletion.json")[2]
         
     SaveProject(projectName, email, project)
         
@@ -1173,8 +1173,8 @@ def InitWMWMDefine(projectName, email):
     project["WMWMDefine"][0]["WMWMChunkCount"] = 0
     project["WMWMDefine"][0]["WMWMCount"] = 0
     project["WMWMDefine"][0]["Completion"] = "No"
-    project["WMWMDefine"][1] = LoadJsonFrame(ProjectDataPath + "/a0342_Context/a0342-03_WMWMDefine.json")[1]
-    project["WMWMDefine"][2] = LoadJsonFrame(ProjectDataPath + "/a0342_Context/a0342-03_WMWMDefine.json")[2]
+    project["WMWMDefine"][1] = LoadJsonFrame(ProjectDataPath + "/a2342_Context/a2342-03_WMWMDefine.json")[1]
+    project["WMWMDefine"][2] = LoadJsonFrame(ProjectDataPath + "/a2342_Context/a2342-03_WMWMDefine.json")[2]
         
     SaveProject(projectName, email, project)
         
@@ -1310,7 +1310,7 @@ def InitWMWMMatching(projectName, email):
     project["WMWMMatching"][0]["WMWMBodyCount"] = 0
     project["WMWMMatching"][0]["WMWMIndexCount"] = 0
     project["WMWMMatching"][0]["Completion"] = "No"
-    project["WMWMMatching"][1] = LoadJsonFrame(ProjectDataPath + "/a0342_Context/a0342-04_WMWMMatching.json")[1]
+    project["WMWMMatching"][1] = LoadJsonFrame(ProjectDataPath + "/a2342_Context/a2342-04_WMWMMatching.json")[1]
         
     SaveProject(projectName, email, project)
         
@@ -1386,7 +1386,7 @@ def InitCharacterDefine(projectName, email):
     project["CharacterDefine"][0]["CharacterChunkCount"] = 0
     project["CharacterDefine"][0]["CharacterCount"] = 0
     project["CharacterDefine"][0]["Completion"] = "No"
-    project["CharacterDefine"][1] = LoadJsonFrame(ProjectDataPath + "/a0343_Character/a0343-01_CharacterDefine.json")[1]
+    project["CharacterDefine"][1] = LoadJsonFrame(ProjectDataPath + "/a2343_Character/a2343-01_CharacterDefine.json")[1]
         
     SaveProject(projectName, email, project)
         
@@ -1489,8 +1489,8 @@ def InitCharacterCompletion(projectName, email):
     project["CharacterCompletion"][0]["CharacterChunkCount"] = 0
     project["CharacterCompletion"][0]["CharacterCount"] = 0
     project["CharacterCompletion"][0]["Completion"] = "No"
-    project["CharacterCompletion"][1] = LoadJsonFrame(ProjectDataPath + "/a0343_Character/a0343-02_CharacterCompletion.json")[1]
-    project["CharacterCompletion"][2] = LoadJsonFrame(ProjectDataPath + "/a0343_Character/a0343-02_CharacterCompletion.json")[2]
+    project["CharacterCompletion"][1] = LoadJsonFrame(ProjectDataPath + "/a2343_Character/a2343-02_CharacterCompletion.json")[1]
+    project["CharacterCompletion"][2] = LoadJsonFrame(ProjectDataPath + "/a2343_Character/a2343-02_CharacterCompletion.json")[2]
         
     SaveProject(projectName, email, project)
         
@@ -1556,7 +1556,7 @@ def InitSoundMatching(projectName, email):
 
     project["SoundMatching"][0]["BodyCount"] = 0
     project["SoundMatching"][0]["Completion"] = "No"
-    project["SoundMatching"][1] = LoadJsonFrame(ProjectDataPath + "/a0345_Sound/a0345-01_SoundMatching.json")[1]
+    project["SoundMatching"][1] = LoadJsonFrame(ProjectDataPath + "/a2345_Sound/a2345-01_SoundMatching.json")[1]
         
     SaveProject(projectName, email, project)
         
@@ -1624,7 +1624,7 @@ def InitSFXMatching(projectName, email):
 
     project["SFXMatching"][0]["BodyCount"] = 0
     project["SFXMatching"][0]["Completion"] = "No"
-    project["SFXMatching"][1] = LoadJsonFrame(ProjectDataPath + "/a0346_SFX/a0346-01_SFXMatching.json")[1]
+    project["SFXMatching"][1] = LoadJsonFrame(ProjectDataPath + "/a2346_SFX/a2346-01_SFXMatching.json")[1]
         
     SaveProject(projectName, email, project)
         
@@ -1719,7 +1719,7 @@ def InitCorrectionKo(projectName, email):
     project["CorrectionKo"][0]["IndexCount"] = 0
     project["CorrectionKo"][0]["ChunkCount"] = 0
     project["CorrectionKo"][0]["Completion"] = "No"
-    project["CorrectionKo"][1] = LoadJsonFrame(ProjectDataPath + "/a0348_Correction/a0348-01_CorrectionKo.json")[1]
+    project["CorrectionKo"][1] = LoadJsonFrame(ProjectDataPath + "/a2348_Correction/a2348-01_CorrectionKo.json")[1]
         
     SaveProject(projectName, email, project)
         
@@ -1805,7 +1805,7 @@ def InitSelectionGenerationKo(projectName, email):
 
     project["SelectionGenerationKo"][0]["IndexCount"] = 0
     project["SelectionGenerationKo"][0]["Completion"] = "No"
-    project["SelectionGenerationKo"][1] = LoadJsonFrame(ProjectDataPath + "/a0349_SelectionGeneration/a0349-01_SelectionGenerationKo.json")[1]
+    project["SelectionGenerationKo"][1] = LoadJsonFrame(ProjectDataPath + "/a2349_SelectionGeneration/a2349-01_SelectionGenerationKo.json")[1]
         
     SaveProject(projectName, email, project)
         

@@ -9,7 +9,7 @@ sys.path.append("/yaas")
 
 from mistralai import Mistral
 from langdetect import detect_langs, DetectorFactory
-from agent.a3_Operation.a32_Solution.a321_LoadLLM_temp import OpenAI_LLMresponse, ANTHROPIC_LLMresponse, GOOGLE_LLMresponse, DEEPSEEK_LLMresponse
+from agent.a3_Operation.a32_Solution.a321_LoadLLM import OpenAI_LLMresponse, ANTHROPIC_LLMresponse, GOOGLE_LLMresponse, DEEPSEEK_LLMresponse
 
 ###############################################
 ##### Translation PDF, Index, Body 불러오기 #####
@@ -3073,7 +3073,7 @@ def TranslationIndexDefineProcessDataFrameSave(ProjectName, MainLang, Translatio
     if os.path.exists(ProjectDataFrameTranslationIndexDefinePath):
         TranslationIndexDefineFramePath = ProjectDataFrameTranslationIndexDefinePath
     else:
-        TranslationIndexDefineFramePath = os.path.join(TranslationDataFramePath, "a032-01_TranslationIndexFrame.json")
+        TranslationIndexDefineFramePath = os.path.join(TranslationDataFramePath, "a232-01_TranslationIndexFrame.json")
     with open(TranslationIndexDefineFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         TranslationIndexDefineFrame = json.load(DataFrameJson)
         
@@ -3106,7 +3106,7 @@ def TranslationIndexDefineProcessDataFrameSave(ProjectName, MainLang, Translatio
 def TranslationBodySplitProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationBodySplitPath, TranslationBodySplitResult, Process, InputCount, TotalInputCount):
     ## TranslationBodySplitFrame 불러오기
     if not os.path.exists(ProjectDataFrameTranslationBodySplitPath):
-        TranslationBodySplitFramePath = os.path.join(TranslationDataFramePath, "a032-01_TranslationBodySplitFrame.json")
+        TranslationBodySplitFramePath = os.path.join(TranslationDataFramePath, "a232-01_TranslationBodySplitFrame.json")
         with open(TranslationBodySplitFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
             TranslationBodySplitFrame = json.load(DataFrameJson)
             
@@ -3134,7 +3134,7 @@ def TranslationBodySummaryProcessDataFrameSave(ProjectName, MainLang, Translatio
     if os.path.exists(ProjectDataFrameTranslationBodySummaryPath):
         TranslationBodySummaryFramePath = ProjectDataFrameTranslationBodySummaryPath
     else:
-        TranslationBodySummaryFramePath = os.path.join(TranslationDataFramePath, "a032-02_TranslationBodySummaryFrame.json")
+        TranslationBodySummaryFramePath = os.path.join(TranslationDataFramePath, "a232-02_TranslationBodySummaryFrame.json")
     with open(TranslationBodySummaryFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         TranslationBodySummaryFrame = json.load(DataFrameJson)
         
@@ -3170,7 +3170,7 @@ def WordListGenProcessDataFrameSave(ProjectName, MainLang, Translation, Translat
     if os.path.exists(ProjectDataFrameWordListGenPath):
         WordListGenFramePath = ProjectDataFrameWordListGenPath
     else:
-        WordListGenFramePath = os.path.join(TranslationDataFramePath, "a032-03_WordListGenFrame.json")
+        WordListGenFramePath = os.path.join(TranslationDataFramePath, "a232-03_WordListGenFrame.json")
     with open(WordListGenFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         WordListGenFrame = json.load(DataFrameJson)
         
@@ -3208,7 +3208,7 @@ def UniqueWordListGenProcessDataFrameSave(ProjectName, MainLang, Translation, Tr
     if os.path.exists(ProjectDataFrameUniqueWordListGenPath):
         UniqueWordListGenFramePath = ProjectDataFrameUniqueWordListGenPath
     else:
-        UniqueWordListGenFramePath = os.path.join(TranslationDataFramePath, "a032-04_UniqueWordListGenFrame.json")
+        UniqueWordListGenFramePath = os.path.join(TranslationDataFramePath, "a232-04_UniqueWordListGenFrame.json")
     with open(UniqueWordListGenFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         UniqueWordListGenFrame = json.load(DataFrameJson)
         
@@ -3246,7 +3246,7 @@ def WordListPostprocessingProcessDataFrameSave(ProjectName, MainLang, Translatio
     if os.path.exists(ProjectDataFrameWordListPostprocessingPath):
         WordListPostprocessingFramePath = ProjectDataFrameWordListPostprocessingPath
     else:
-        WordListPostprocessingFramePath = os.path.join(TranslationDataFramePath, "a032-05_WordListPostprocessingFrame.json")
+        WordListPostprocessingFramePath = os.path.join(TranslationDataFramePath, "a232-05_WordListPostprocessingFrame.json")
     with open(WordListPostprocessingFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         WordListPostprocessingFrame = json.load(DataFrameJson)
 
@@ -3285,7 +3285,7 @@ def IndexTranslationProcessDataFrameSave(ProjectName, MainLang, Translation, Tra
     if os.path.exists(ProjectDataFrameIndexTranslationPath):
         IndexTranslationFramePath = ProjectDataFrameIndexTranslationPath
     else:
-        IndexTranslationFramePath = os.path.join(TranslationDataFramePath, "a032-06_IndexTranslationFrame.json")
+        IndexTranslationFramePath = os.path.join(TranslationDataFramePath, "a232-06_IndexTranslationFrame.json")
     with open(IndexTranslationFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         IndexTranslationFrame = json.load(DataFrameJson)
         
@@ -3322,7 +3322,7 @@ def BodyTranslationPreprocessingProcessDataFrameSave(ProjectName, MainLang, Tran
     if os.path.exists(ProjectDataFrameBodyTranslationPreprocessingPath):
         BodyTranslationPreprocessingFramePath = ProjectDataFrameBodyTranslationPreprocessingPath
     else:
-        BodyTranslationPreprocessingFramePath = os.path.join(TranslationDataFramePath, "a032-07_BodyTranslationPreprocessingFrame.json")
+        BodyTranslationPreprocessingFramePath = os.path.join(TranslationDataFramePath, "a232-07_BodyTranslationPreprocessingFrame.json")
     with open(BodyTranslationPreprocessingFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         BodyTranslationPreprocessingFrame = json.load(DataFrameJson)
         
@@ -3381,7 +3381,7 @@ def BodyTranslationProcessDataFrameSave(ProjectName, MainLang, Translation, Tran
     if os.path.exists(ProjectDataFrameBodyTranslationPath):
         BodyTranslationFramePath = ProjectDataFrameBodyTranslationPath
     else:
-        BodyTranslationFramePath = os.path.join(TranslationDataFramePath, "a032-08_BodyTranslationFrame.json")
+        BodyTranslationFramePath = os.path.join(TranslationDataFramePath, "a232-08_BodyTranslationFrame.json")
     with open(BodyTranslationFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         BodyTranslationFrame = json.load(DataFrameJson)
         
@@ -3420,7 +3420,7 @@ def TranslationEditingProcessDataFrameSave(ProjectName, MainLang, Translation, T
     if os.path.exists(ProjectDataFrameTranslationEditingPath):
         TranslationEditingFramePath = ProjectDataFrameTranslationEditingPath
     else:
-        TranslationEditingFramePath = os.path.join(TranslationDataFramePath, "a032-09_TranslationEditingFrame.json")
+        TranslationEditingFramePath = os.path.join(TranslationDataFramePath, "a232-09_TranslationEditingFrame.json")
     with open(TranslationEditingFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         TranslationEditingFrame = json.load(DataFrameJson)
         
@@ -3459,7 +3459,7 @@ def TranslationRefinementProcessDataFrameSave(ProjectName, MainLang, Translation
     if os.path.exists(ProjectDataFrameTranslationRefinementPath):
         TranslationRefinementFramePath = ProjectDataFrameTranslationRefinementPath
     else:
-        TranslationRefinementFramePath = os.path.join(TranslationDataFramePath, "a032-09_TranslationRefinementFrame.json")
+        TranslationRefinementFramePath = os.path.join(TranslationDataFramePath, "a232-09_TranslationRefinementFrame.json")
     with open(TranslationRefinementFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         TranslationRefinementFrame = json.load(DataFrameJson)
         
@@ -3498,7 +3498,7 @@ def TranslationKinfolkStyleRefinementProcessDataFrameSave(ProjectName, MainLang,
     if os.path.exists(ProjectDataFrameTranslationKinfolkStyleRefinementPath):
         TranslationKinfolkStyleRefinementFramePath = ProjectDataFrameTranslationKinfolkStyleRefinementPath
     else:
-        TranslationKinfolkStyleRefinementFramePath = os.path.join(TranslationDataFramePath, "a032-09_TranslationKinfolkStyleRefinementFrame.json")
+        TranslationKinfolkStyleRefinementFramePath = os.path.join(TranslationDataFramePath, "a232-09_TranslationKinfolkStyleRefinementFrame.json")
     with open(TranslationKinfolkStyleRefinementFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         TranslationKinfolkStyleRefinementFrame = json.load(DataFrameJson)
         
@@ -3537,7 +3537,7 @@ def TranslationProofreadingProcessDataFrameSave(ProjectName, MainLang, Translati
     if os.path.exists(ProjectDataFrameTranslationProofreadingPath):
         TranslationProofreadingFramePath = ProjectDataFrameTranslationProofreadingPath
     else:
-        TranslationProofreadingFramePath = os.path.join(TranslationDataFramePath, "a032-10_TranslationProofreadingFrame.json")
+        TranslationProofreadingFramePath = os.path.join(TranslationDataFramePath, "a232-10_TranslationProofreadingFrame.json")
     with open(TranslationProofreadingFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         TranslationProofreadingFrame = json.load(DataFrameJson)
         
@@ -3592,7 +3592,7 @@ def TranslationDialogueAnalysisProcessDataFrameSave(ProjectName, MainLang, Trans
     if os.path.exists(ProjectDataFrameTranslationDialogueAnalysisPath):
         TranslationDialogueAnalysisFramePath = ProjectDataFrameTranslationDialogueAnalysisPath
     else:
-        TranslationDialogueAnalysisFramePath = os.path.join(TranslationDataFramePath, "a032-11_TranslationDialogueAnalysisFrame.json")
+        TranslationDialogueAnalysisFramePath = os.path.join(TranslationDataFramePath, "a232-11_TranslationDialogueAnalysisFrame.json")
     with open(TranslationDialogueAnalysisFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         TranslationDialogueAnalysisFrame = json.load(DataFrameJson)
 
@@ -3697,7 +3697,7 @@ def TranslationDialogueEditingProcessDataFrameSave(ProjectName, MainLang, Transl
     if os.path.exists(ProjectDataFrameTranslationDialogueEditingPath):
         TranslationDialogueEditingFramePath = ProjectDataFrameTranslationDialogueEditingPath
     else:
-        TranslationDialogueEditingFramePath = os.path.join(TranslationDataFramePath, "a032-12_TranslationDialogueEditingFrame.json")
+        TranslationDialogueEditingFramePath = os.path.join(TranslationDataFramePath, "a232-12_TranslationDialogueEditingFrame.json")
     with open(TranslationDialogueEditingFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         TranslationDialogueEditingFrame = json.load(DataFrameJson)
         
@@ -3790,7 +3790,7 @@ def AfterTranslationBodySummaryProcessDataFrameSave(ProjectName, MainLang, Trans
     if os.path.exists(ProjectDataFrameAfterTranslationBodySummaryPath):
         AfterTranslationBodySummaryFramePath = ProjectDataFrameAfterTranslationBodySummaryPath
     else:
-        AfterTranslationBodySummaryFramePath = os.path.join(TranslationDataFramePath, "a032-14_AfterTranslationBodySummaryFrame.json")
+        AfterTranslationBodySummaryFramePath = os.path.join(TranslationDataFramePath, "a232-14_AfterTranslationBodySummaryFrame.json")
     with open(AfterTranslationBodySummaryFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         AfterTranslationBodySummaryFrame = json.load(DataFrameJson)
         
@@ -3827,7 +3827,7 @@ def AuthorResearchProcessDataFrameSave(ProjectName, MainLang, Translation, Trans
     if os.path.exists(ProjectDataFrameAuthorResearchPath):
         AuthorResearchFramePath = ProjectDataFrameAuthorResearchPath
     else:
-        AuthorResearchFramePath = os.path.join(TranslationDataFramePath, "a032-15_AuthorResearchFrame.json")
+        AuthorResearchFramePath = os.path.join(TranslationDataFramePath, "a232-15_AuthorResearchFrame.json")
     with open(AuthorResearchFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         AuthorResearchFrame = json.load(DataFrameJson)
         
@@ -3868,7 +3868,7 @@ def TranslationCatchphraseProcessDataFrameSave(ProjectName, MainLang, Translatio
     if os.path.exists(ProjectDataFrameTranslationCatchphrasePath):
         TranslationCatchphraseFramePath = ProjectDataFrameTranslationCatchphrasePath
     else:
-        TranslationCatchphraseFramePath = os.path.join(TranslationDataFramePath, "a032-16_TranslationCatchphraseFrame.json")
+        TranslationCatchphraseFramePath = os.path.join(TranslationDataFramePath, "a232-16_TranslationCatchphraseFrame.json")
     with open(TranslationCatchphraseFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         TranslationCatchphraseFrame = json.load(DataFrameJson)
         
@@ -3907,7 +3907,7 @@ def TranslationFundingCatchphraseProcessDataFrameSave(ProjectName, MainLang, Tra
     if os.path.exists(ProjectDataFrameTranslationFundingCatchphrasePath):
         TranslationFundingCatchphraseFramePath = ProjectDataFrameTranslationFundingCatchphrasePath
     else:
-        TranslationFundingCatchphraseFramePath = os.path.join(TranslationDataFramePath, "a032-17_TranslationFundingCatchphraseFrame.json")
+        TranslationFundingCatchphraseFramePath = os.path.join(TranslationDataFramePath, "a232-17_TranslationFundingCatchphraseFrame.json")
     with open(TranslationFundingCatchphraseFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         TranslationFundingCatchphraseFrame = json.load(DataFrameJson)
         
@@ -4237,7 +4237,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ProjectMasterTranslationPath = os.path.join(ProjectTranslationPath, f'{projectName}_master_translation_file')
     TranslationEditPath = os.path.join(ProjectMasterTranslationPath, f'[{projectName}_Translation_Edit].json')
     
-    TranslationDataFramePath = "/yaas/agent/a0_Database_temp/a03_ProjectData/a032_TranslationProject"
+    TranslationDataFramePath = "/yaas/agent/a2_Database/a23_ProjectData/a232_TranslationProject"
 
     ########################
     ### Process0: PDF OCR ##

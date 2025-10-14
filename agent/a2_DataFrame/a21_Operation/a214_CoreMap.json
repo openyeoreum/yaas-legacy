@@ -1,6 +1,0 @@
-{
-    "Publishing": ["Common", "Estimate", "Collection", "Search", "ScriptGen", "ScriptSegmentation", "ScriptStructuration", "Translation", "TextBook", "AudioBook", "VideoBook", "Marketing"],
-    "Architecture": ["Common", "Estimate", "Collection", "Search"],
-    "Meditation": ["Common", "Estimate", "Collection", "Search"],
-    "Investment": ["Common", "Estimate", "Collection", "Search"]
-}

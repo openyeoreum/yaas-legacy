@@ -1,1 +1,0 @@
-memo: d10_service는 YaaS의 agent와 backend를 연결하는 (backend의 api로 전달된 데이터를 agent로 이동) 코드를 설명하는 doc 입니다.

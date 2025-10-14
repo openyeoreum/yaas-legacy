@@ -10,15 +10,15 @@ services:
     volumes:
       - databaseVolumesPostgres:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "15432:5432"
 
   pgadmin:
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: "yeoreum00128@gmail.com"
-      PGADMIN_DEFAULT_PASSWORD: "Dhvmsdufma1!"
+      PGADMIN_DEFAULT_PASSWORD: "yeoreum!"
     ports:
-      - "8080:80"
+      - "18080:80"
     depends_on:
       - yaasdb
 
@@ -27,7 +27,7 @@ services:
     environment:
       - DATABASE_URL=postgres://yeoreum:0128@yaasdb:5432/yaasdb
     ports:
-      - "5174:5174"
+      - "15174:5174"
     volumes:
       - ./agent:/yaas/agent
       - ./backend:/yaas/backend
@@ -46,7 +46,7 @@ services:
     volumes:
       - /dev/shm:/dev/shm
     ports:
-      - "4444:4444"
+      - "14444:4444"
     depends_on:
       - yaasdb
       - yaas

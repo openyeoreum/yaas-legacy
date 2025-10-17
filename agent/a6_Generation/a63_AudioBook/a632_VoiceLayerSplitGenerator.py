@@ -1930,7 +1930,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
         with open(VoiceDataSetPath, 'r', encoding = 'utf-8') as VoiceDataSetJson:
             VoiceDataSet = json.load(VoiceDataSetJson)
         VoiceActos = VoiceDataSet[1]['Characters']
-        
+
         ## VoiceActor 매칭
         MatchedSecondaryVoiceActor = 'None'
         for VoiceActor in VoiceActos:
@@ -1941,7 +1941,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                         if VoiceActor['Name'] == MatchedVoiceActor['SecondaryVoice']:
                             MatchedSecondaryVoiceActor = VoiceActor
                             break
-                
+
         ## MatchedVoices 변경
         for _Matched in MatchedActors:
             if _Matched['CharacterTag'] == 'Narrator':

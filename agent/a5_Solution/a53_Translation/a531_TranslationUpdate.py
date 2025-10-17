@@ -4703,7 +4703,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 Input = Input1 + Input2
                 
                 ## Response 생성
-                BodyTranslationResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, BodyTranslationFilter, CheckCount, "Google", mode, MessagesReview, memoryNote = MemoryNote)
+                BodyTranslationResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, BodyTranslationFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryNote = MemoryNote)
                 
                 #######################################################
                 ### Process8: BodyTranslationCheck, BodyToneEditing ###
@@ -4858,7 +4858,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     Input = Input1 + Input2
                     
                     ## Response 생성
-                    TranslationEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationEditingFilter, CheckCount, "Google", mode, MessagesReview, memoryNote = MemoryNote)
+                    TranslationEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationEditingFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryNote = MemoryNote)
 
                     #######################################################
                     ### Process8: BodyTranslationCheck, BodyToneEditing ###
@@ -5022,7 +5022,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     Input = Input1 + Input2
                     
                     ## Response 생성
-                    TranslationRefinementResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationEditingFilter, CheckCount, "Google", mode, MessagesReview, memoryNote = MemoryNote)
+                    TranslationRefinementResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationEditingFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryNote = MemoryNote)
 
                     #######################################################
                     ### Process8: BodyTranslationCheck, BodyToneEditing ###
@@ -5187,7 +5187,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     Input = Input1 + Input2
                     
                     ## Response 생성
-                    TranslationKinfolkStyleRefinementResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationEditingFilter, CheckCount, "Google", mode, MessagesReview, memoryNote = MemoryNote)
+                    TranslationKinfolkStyleRefinementResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationEditingFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryNote = MemoryNote)
 
                     #######################################################
                     ### Process8: BodyTranslationCheck, BodyToneEditing ###
@@ -5397,7 +5397,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         MemoryNote = f'\n※ 주의사항: <대화내용편집.json>으로 완성될 대화문은 <**작업: 대화중심편집내용>의 {{n 대화: 대화내용}} {CheckCount}개 입니다.'
 
                         ## Response 생성
-                        TranslationDialogueAnalysisResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueAnalysisFilter, CheckCount, "Google", mode, MessagesReview, memoryNote = MemoryNote)
+                        TranslationDialogueAnalysisResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueAnalysisFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryNote = MemoryNote)
                     else:
                         TranslationDialogueAnalysisResponse = []
                         
@@ -5466,7 +5466,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         MemoryNote = f"\n※ 주의사항: <대화내용편집.json>으로 완성될 대화문은 <**작업: 대화중심편집내용>의 {{n 대화: 대화내용}} {CheckCount['CheckCount']}개 입니다.\n※ 주의사항: 특수한 경우 이외에는 \'현재말의높임법\' 표기에 따라서 이에 맞는 말의 높임법대로 '편집대화내용'이 작성되어야 합니다."
 
                         ## Response 생성
-                        TranslationDialogueEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueEditingFilter, CheckCount, "Google", mode, MessagesReview, memoryNote = MemoryNote)
+                        TranslationDialogueEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueEditingFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryNote = MemoryNote)
                     else:
                         TranslationDialogueEditingResponse = []
 
@@ -5579,7 +5579,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 Input = InputList[i]['Input']
                 
                 ## Response 생성
-                AuthorResearchResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, AuthorResearchFilter, CheckCount, "Google", mode, MessagesReview)
+                AuthorResearchResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, AuthorResearchFilter, CheckCount, "OpenAI", mode, MessagesReview)
                 
                 ## DataFrame 저장
                 AuthorResearchProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameAuthorResearchPath, AuthorResearchResponse, Process, inputCount, TotalInputCount)
@@ -5629,7 +5629,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 Input = InputList[i]['Input']
                 
                 ## Response 생성
-                TranslationCatchphraseResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationCatchphraseFilter, CheckCount, "Google", mode, MessagesReview)
+                TranslationCatchphraseResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationCatchphraseFilter, CheckCount, "OpenAI", mode, MessagesReview)
                 
                 ## DataFrame 저장
                 TranslationCatchphraseProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationCatchphrasePath, TranslationCatchphraseResponse, Process, inputCount, TotalInputCount)
@@ -5682,7 +5682,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 Input = InputList[i]['Input']
                 
                 ## Response 생성
-                TranslationFundingCatchphraseResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationFundingCatchphraseFilter, CheckCount, "Google", mode, MessagesReview)
+                TranslationFundingCatchphraseResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationFundingCatchphraseFilter, CheckCount, "OpenAI", mode, MessagesReview)
                 
                 ## DataFrame 저장
                 TranslationFundingCatchphraseProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationFundingCatchphrasePath, TranslationFundingCatchphraseResponse, Process, inputCount, TotalInputCount)

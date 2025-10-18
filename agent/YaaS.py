@@ -79,12 +79,13 @@ def YaasConfigUpdate(email, ProjectName, MainLang, Estimate, DataCollection, Sea
             NextSolution = "Translation"
         elif AudioBook != "" and AudioBook != "None":
             NextSolution = "AudioBook"
-        ScriptConfig = {
-            "Script": Script, # 'Upload', 'BookScript'
-            "Intention": Intention,
-            "NextSolution": NextSolution, # 'Translation', 'AudioBook'
-            "AutoTemplate": "on"
-        }
+        # ScriptConfig = {
+        #     "Script": Script, # 'Upload', 'BookScript'
+        #     "Intention": Intention,
+        #     "NextSolution": NextSolution, # 'Translation', 'AudioBook'
+        #     "AutoTemplate": "on"
+        # }
+        ScriptConfig = {}
 
         ### Step3-5 : TranslationConfig 설정 ###
         if Translation == "" or Translation == "None":

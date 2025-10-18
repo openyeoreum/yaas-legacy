@@ -28958,7 +28958,7 @@
                     "Api": "ElevenLabs",
                     "voice_id": "MLU1twlCnZTgxFHXPJPR",
                     "stability": [1],
-                    "similarity_boost": [0.7],
+                    "similarity_boost": [0.3],
                     "style": [0],
                     "models": {"Ko": "eleven_v3", "En": "eleven_v3", "Zh": "eleven_v3"},
                     "Volume": 1,

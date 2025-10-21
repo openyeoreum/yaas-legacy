@@ -28962,7 +28962,7 @@
                     "style": [0],
                     "models": {"Ko": "eleven_v3", "En": "eleven_v3", "Zh": "eleven_v3"},
                     "Volume": 1,
-                    "Speed": 1,
+                    "Speed": 1.07,
                     "Pitch": 0
                 }
             },
@@ -29035,7 +29035,7 @@
                     "style": [0],
                     "models": {"Ko": "eleven_v3", "En": "eleven_v3", "Zh": "eleven_v3"},
                     "Volume": 1,
-                    "Speed": 1,
+                    "Speed": 1.07,
                     "Pitch": 0
                 }
             }

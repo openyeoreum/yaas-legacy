@@ -3891,6 +3891,63 @@
                         }
                     ]
                 }
+            },
+            {
+                "TitleMusicId": "Custom",
+                "Memo": "고객들의 커스텀 음악",
+                "TitleMusic": {
+                    "Language": ["gb"],
+                    "Genre": [
+                        {"index": "문학", "Score": 9},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                    "Gender": [
+                        {"index": "남성", "Score": 0},
+                        {"index": "여성", "Score": 0},
+                        {"index": "중성", "Score": 0}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}
+                    ],
+                    "Personality": [
+                        {"index": "외향적", "Score": 0},
+                        {"index": "내향적", "Score": 0},
+                        {"index": "중립적", "Score": 0}
+                    ],
+                    "Emotion": [
+                        {"index": "행복", "Score": 0},
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "평온", "Score": 0},
+                        {"index": "침착", "Score": 0},
+                        {"index": "무감정", "Score": 0},
+                        {"index": "슬픔", "Score": 0},
+                        {"index": "두려움", "Score": 0},
+                        {"index": "놀람", "Score": 0},
+                        {"index": "화남", "Score": 0}
+                    ]
+                },
+                "MusicSet": {
+                    "TitleMusic": [],
+                    "PartMusic": [
+                        {
+                            "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s184_TitleMusic/0_CustomMusicSet/251024_비전문학회.wav",
+                            "Setting": {
+                                "Length": [18, 20.5],
+                                "Volume": 100,
+                                "Direction": "뒤"
+                            }
+                        }
+                    ],
+                    "IndexMusic": []
+                }
             }
         ]
     }

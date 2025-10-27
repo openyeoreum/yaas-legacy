@@ -724,6 +724,50 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
         tfm.build(CopyFilePath, VoicePath)
         
         os.remove(CopyFilePath)
+
+    ### ElevenLabs 음성 ids 저장 함수 ###
+    def SaveVoiceIds(projectName, email, name, RequestId):
+        # 파일 경로 생성
+        VoiceIdsFileName = f"{projectName}_VoiceIds.json"
+        VoiceIdsFilePath = VoiceLayerPathGen(projectName, email, VoiceIdsFileName, 'Mixed')
+
+        # 파일 존재 여부 확인(파일 존재 안할 시)
+        if not os.path.exists(VoiceIdsFilePath):
+            VoiceIds = {}
+            VoiceIds[name] = []
+            VoiceIds[name].append(RequestId)
+            with open(VoiceIdsFilePath, 'w', encoding = 'utf-8') as json_file:
+                json.dump(VoiceIds, json_file, ensure_ascii = False, indent = 4)
+
+        # 파일 존재 여부 확인(파일 존재 시)
+        else:
+            with open(VoiceIdsFilePath, 'r', encoding = 'utf-8') as json_file:
+                VoiceIds = json.load(json_file)
+
+            # 이름이 파일에 없는 경우
+            if name not in VoiceIds:
+                VoiceIds[name] = []
+                VoiceIds[name].append(RequestId)
+                with open(VoiceIdsFilePath, 'w', encoding = 'utf-8') as json_file:
+                    json.dump(VoiceIds, json_file, ensure_ascii = False, indent = 4)
+            # 이름이 파일에 있는 경우
+            else:
+                VoiceIds[name].append(RequestId)
+                with open(VoiceIdsFilePath, 'w', encoding = 'utf-8') as json_file:
+                    json.dump(VoiceIds, json_file, ensure_ascii = False, indent = 4)
+
+    ### ElevenLabs음성 ids 로드 함수 ###
+    def LoadVoiceIds(projectName, email):
+        VoiceIdsFileName = f"{projectName}_VoiceIds.json"
+        VoiceIdsFilePath = VoiceLayerPathGen(projectName, email, VoiceIdsFileName, 'Mixed')
+
+        if not os.path.exists(VoiceIdsFilePath):
+            return {}
+
+        with open(VoiceIdsFilePath, 'r', encoding='utf-8') as json_file:
+            VoiceIds = json.load(json_file)
+            return VoiceIds
+
     ##################
     ### ElevenLabs ###
     ##################
@@ -743,13 +787,35 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                 ElevenLabsApikey = os.getenv("ELEVENLABS_API_KEY")
                 client = ElevenLabs(api_key = ElevenLabsApikey)
                 
-                Voice_Audio = client.text_to_speech.convert(
+                # 이전 요청 ids 로드
+                VoiceIds = LoadVoiceIds(projectName, email) or {}
+                PreviousRequestIds = (VoiceIds.get(name) or [])
+                if not len(PreviousRequestIds) % 3 == 0:
+                    PreviousRequestIds = PreviousRequestIds[-2:]
+                else:
+                    PreviousRequestIds = []
+
+                SupportsStitch = Model not in {"eleven_v3"}
+
+                with client.text_to_speech.with_raw_response.convert(
                     text = EL_Chunk,
                     voice_id = VoiceId,
-                    voice_settings = VoiceSettings(speed = Speed, stability = Stability, similarity_boost = SimilarityBoost, style = Style, use_speaker_boost = True),
-                    model_id = Model
-                )
+                    model_id = Model,
+                    voice_settings = VoiceSettings(
+                        speed = Speed, stability = Stability,
+                        similarity_boost = SimilarityBoost, style = Style,
+                        use_speaker_boost = True
+                    ),
+                    **({"previous_request_ids": PreviousRequestIds} if (SupportsStitch and PreviousRequestIds) else {})
+                ) as resp:
+                    RequestId = resp._response.headers.get("request-id")   # (유지)
+                    Voice_Audio = b"".join(chunk for chunk in resp.data)    # FIX: 여기서 바이트로 모아서 바깥으로 들고 나감
 
+                # 여기서는 resp/제너레이터 접근 금지, 바이트만 사용
+                if RequestId and SupportsStitch:
+                    SaveVoiceIds(projectName, email, name, RequestId)
+
+                # 파일명 결정
                 if len(SplitChunks) == 1:
                     if "M.wav" in voiceLayerPath:
                         fileName = voiceLayerPath.replace("M.wav", "_(0)M.wav")

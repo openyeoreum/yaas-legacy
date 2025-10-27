@@ -779,7 +779,10 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
         Stability = random.choice(ApiSetting['stability'])
         SimilarityBoost = random.choice(ApiSetting['similarity_boost'])
         Style = random.choice(ApiSetting['style'])
-        StableConnection = ApiSetting['StableConnection']
+        if 'StableConnection' in ApiSetting:
+            StableConnection = ApiSetting['StableConnection']
+        else:
+            StableConnection = False
         Model = ApiSetting['models']['Ko']
         
         while attempt < 65:

@@ -779,6 +779,7 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
         Stability = random.choice(ApiSetting['stability'])
         SimilarityBoost = random.choice(ApiSetting['similarity_boost'])
         Style = random.choice(ApiSetting['style'])
+        StableConnection = ApiSetting['StableConnection']
         Model = ApiSetting['models']['Ko']
         
         while attempt < 65:
@@ -790,7 +791,7 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                 # 이전 요청 ids 로드
                 VoiceIds = LoadVoiceIds(projectName, email) or {}
                 PreviousRequestIds = (VoiceIds.get(name) or [])
-                if not len(PreviousRequestIds) % 3 == 0:
+                if not len(PreviousRequestIds) % 3 == 0 and StableConnection:
                     PreviousRequestIds = PreviousRequestIds[-2:]
                 else:
                     PreviousRequestIds = []

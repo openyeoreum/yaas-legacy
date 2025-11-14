@@ -47,6 +47,24 @@ def PronunciationPreprocessFilter(responseData, Input, Index):
     
     except json.JSONDecodeError:
         return "JSONDecode에서 오류 발생: JSONDecodeError"
+    
+    # Error2: 금지된 기호 포함 항목 제거
+    BannedChars = [
+        "'", '"', '\"', '‘', '’', '“', '”',
+        '!', '?', '.', ',', ':', ';',
+        '(', ')', '[', ']', '{', '}',
+        '~', '-', '―', '·', '…',
+        '@', '#', '$', '%', '^', '&', '*',
+        '/', '\\', '<', '>', '|', '_', '=',
+        '◆', '◇', '◎', '★', '☆', '○', '●'
+    ]
+
+    OutputDic = [
+        item for item in OutputDic
+        if str(item.get('발음수정전', '')).strip() not in BannedChars
+    ]
+
+    # 발음수정전 길이 순서대로 정렬
     sortedOutputDic = sorted(OutputDic, key = lambda x: len(x["발음수정전"]), reverse = True)
     for Output in sortedOutputDic:
         try:
@@ -58,7 +76,7 @@ def PronunciationPreprocessFilter(responseData, Input, Index):
                 if not Output['발음수정전'] in ['◆', '◇', '◎']:
                     if Output['종류'] not in ['기호', '특수문자']:
                         Input = Input.replace(Output['발음수정전'], Output['발음수정후'])
-        # Error2: 자료의 형태가 Str일 때의 예외처리
+        # Error3: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"
 

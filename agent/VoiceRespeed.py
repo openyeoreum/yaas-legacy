@@ -107,9 +107,9 @@ def speed_up_wav_files_safe(folder_path, name_keyword, speed_factor=1.1):
         print(f"  Errors encountered:   {error_count} file(s)")
 
 # --- Configuration ---
-target_folder = '/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/yeoreum00128@gmail.com/251016_절대목표/251016_절대목표_audiobook/251016_절대목표_mixed_audiobook_file/VoiceLayers'
-keyword = '박한길'
-speed = 1.06
+target_folder = '/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/yeoreum00128@gmail.com/251028_하루이십사시간을사는방법/251028_하루이십사시간을사는방법_audiobook/251028_하루이십사시간을사는방법_mixed_audiobook_file/VoiceLayers'
+keyword = '성중후'
+speed = 1.16
 
 # --- Important Warning ---
 print("="*50)

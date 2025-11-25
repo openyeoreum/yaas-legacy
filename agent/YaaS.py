@@ -321,7 +321,7 @@ if __name__ == "__main__":
     Script = "" # ScriptUpload: '' // BookScriptGen: 'BookScript'
     Translation = "" # '', 'Auto', 'En', 'Ja', 'Zh', 'Es' ... 중 원문언어를 선택
     TextBook = "" # '', 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis' ... 중 텍스트북 제작 템플릿을 다중 선택
-    AudioBook = "정재헌(낭독)" # '', 'Auto', '클로닝성우이름', '성우이름(특성)' ... 중 선택
+    AudioBook = "" # '', 'Auto', '클로닝성우이름', '성우이름(특성)' ... 중 선택
     Marketing = [] # [] 'InstagramTemplate1', 'BlogTemplate1' ... 중 마케팅 제작 템플릿을 다중 선택
     
     MessagesReview = "on" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력

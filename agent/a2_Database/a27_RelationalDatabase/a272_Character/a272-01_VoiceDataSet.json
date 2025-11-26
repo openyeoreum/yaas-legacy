@@ -30294,7 +30294,7 @@
                 "ApiSetting": {
                     "name": "한명석(낭독)",
                     "Api": "ElevenLabs",
-                    "voice_id": "epKqciI7NIGaIpkHDvkS",
+                    "voice_id": "RiUEouwFxy2iTTRBBgOO",
                     "stability": [0.5],
                     "similarity_boost": [0.3],
                     "style": [0],
@@ -30368,7 +30368,7 @@
                 "ApiSetting": {
                     "name": "한명석(연기)",
                     "Api": "ElevenLabs",
-                    "voice_id": "epKqciI7NIGaIpkHDvkS",
+                    "voice_id": "RiUEouwFxy2iTTRBBgOO",
                     "stability": [0.5],
                     "similarity_boost": [0.7],
                     "style": [0],

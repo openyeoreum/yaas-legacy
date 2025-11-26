@@ -2219,7 +2219,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     DialogueAfterPrefix = PrefixMatch.group(3).lstrip() 
                     
                     CurrentActorNameForBuffer = f"{NewActorNamePart}({NewActorAttributePart})" # 현재 컨텍스트 액터 이름 변경
-                    CurrentActorChunksBuffer = []                         # 새 액터를 위해 버퍼 초기화
+                    CurrentActorChunksBuffer = [] # 새 액터를 위해 버퍼 초기화
                     
                     # 3. 패턴이 매칭된 현재 줄의 대사 부분을 새 액터 버퍼의 첫 청크로 추가 (대사가 있을 경우)
                     if DialogueAfterPrefix:
@@ -2442,11 +2442,11 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
 
             ### D. EditGenerationKoChunks에 Edit내 Chunk의 개수 및 텍스트 길이 적정히 조정하기 ###
             combined_text = ''.join([''.join(chunk['Chunk'].split()) for chunk in NewActorChunk])
-            if chunk_count >= 10 or len(combined_text) >= 600:
+            if chunk_count >= 20 or len(combined_text) >= 900:
                 # 분할 수 결정
-                if chunk_count >= 30:
+                if chunk_count >= 60:
                     divisions = 4
-                elif chunk_count >= 20:
+                elif chunk_count >= 40:
                     divisions = 3
                 else:
                     divisions = 2

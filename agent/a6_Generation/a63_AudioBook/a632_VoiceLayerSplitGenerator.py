@@ -2442,7 +2442,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
 
             ### D. EditGenerationKoChunks에 Edit내 Chunk의 개수 및 텍스트 길이 적정히 조정하기 ###
             combined_text = ''.join([''.join(chunk['Chunk'].split()) for chunk in NewActorChunk])
-            if chunk_count >= 10 or len(combined_text) >= 350:
+            if chunk_count >= 10 or len(combined_text) >= 600:
                 # 분할 수 결정
                 if chunk_count >= 30:
                     divisions = 4
@@ -2524,7 +2524,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
         for __chunk in ActorChunk:
             chunk = __chunk['Chunk']
             ChunkLength = len(chunk)
-            if ChunkTokens + ChunkLength >= 400:
+            if ChunkTokens + ChunkLength >= 700:
                 MatchedChunks.append({"EditId": _chunk_['EditId'], "Tag": _chunk_['Tag'], "ActorName": _chunk_['ActorName'], "ActorChunk": SplitActorChunk})
                 SplitActorChunk = []
                 ChunkTokens = 0
@@ -2671,6 +2671,9 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
     ########################################
     for MatchedActor in MatchedActors:
         Api = MatchedActor['ApiSetting']['Api']
+        Version = None
+        if Api == 'ElevenLabs':
+            Version = MatchedActor['ApiSetting']['models'][MainLang]
         Actor = MatchedActor['ActorName']
 
         print(f"< Project: {projectName} | Actor: {Actor} | VoiceLayerGenerator 시작 >")
@@ -2683,6 +2686,16 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
         if (not os.path.exists(MatchedChunksPath)) and (not os.path.exists(unicodedata.normalize('NFC', MatchedChunksPath))) and (not os.path.exists(unicodedata.normalize('NFD', MatchedChunksPath))):
             # SelectionGenerationKoChunks의 EditGenerationKoChunks화
             EditGenerationKoChunks = []
+
+            ## [New] 성우별 Version 정보를 미리 매핑 (후처리 단계에서 eleven_v3 확인용)
+            ActorVersionMap = {}
+            for _actor in MatchedActors:
+                _api = _actor['ApiSetting']['Api']
+                if _api == 'ElevenLabs':
+                    ActorVersionMap[_actor['ActorName']] = _actor['ApiSetting']['models'].get(MainLang)
+                else:
+                    ActorVersionMap[_actor['ActorName']] = None
+
             #### Split을 위한 문장을 합치는 코드 ####
             tempChunk = None
 
@@ -2691,7 +2704,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     EditGenerationKoChunks.append(tempChunk)
                 return newChunk
 
-            def splitChunksAndPauses(chunks, pauses, max_length = 350):
+            def splitChunksAndPauses(chunks, pauses, max_length):
                 split_chunks = []
                 split_pauses = []
                 current_chunk = []
@@ -2725,6 +2738,9 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 actorname = GenerationKoChunk['ActorName']
                 actorchunks = [chunk + "," for chunk in GenerationKoChunk['ActorChunk']]
 
+                # [New] max_length 350 -> 600으로 변경 설정
+                max_length = 600
+
                 if isinstance(GenerationKoChunk['Chunk'], list):
                     chunks = GenerationKoChunk['Chunk']
                 else:
@@ -2733,7 +2749,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
 
                 newChunk = {"EditId": None, "Tag": tag, "ActorName": actorname, "ActorChunk": actorchunks, "Pause": pauses, "Endtime": None}
 
-                if tempChunk and len(' '.join(tempChunk['ActorChunk'] + actorchunks)) <= 350 and (tempChunk['Tag'] == tag and tempChunk['ActorName'] == actorname):
+                if tempChunk and len(' '.join(tempChunk['ActorChunk'] + actorchunks)) <= max_length and (tempChunk['Tag'] == tag and tempChunk['ActorName'] == actorname):
                     # 기존 문장과 새로운 문장을 언어만 남긴 상태로 비교
                     combined_text = extract_text(' '.join(tempChunk['ActorChunk']))
                     new_text = extract_text(' '.join(actorchunks))
@@ -2745,8 +2761,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 else:
                     if tempChunk:  # Check and split before resetting if needed
                         combined_text = ' '.join(tempChunk['ActorChunk'])
-                        if len(combined_text) > 350:
-                            split_chunks, split_pauses = splitChunksAndPauses(tempChunk['ActorChunk'], tempChunk['Pause'])
+                        if len(combined_text) > max_length:
+                            split_chunks, split_pauses = splitChunksAndPauses(tempChunk['ActorChunk'], tempChunk['Pause'], max_length)
                             for sc, sp in zip(split_chunks, split_pauses):
                                 split_chunk = {"EditId": None, "Tag": tempChunk['Tag'], "ActorName": tempChunk['ActorName'], "ActorChunk": sc, "Pause": sp, "Endtime": None}
                                 EditGenerationKoChunks.append(split_chunk)
@@ -2769,6 +2785,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             ## 빈 Edit 및 ActorChunk 삭제 및 목차 및 문장 끝 후처리
             for i in range(len(EditGenerationKoChunks)):
                 _tag = EditGenerationKoChunks[i]['Tag']
+                _actor_name = EditGenerationKoChunks[i]['ActorName'] # [Added] 성우 이름 가져오기
+
                 # 'ActorChunk'를 역순으로 순회합니다
                 for j in reversed(range(len(EditGenerationKoChunks[i]['ActorChunk']))):
                     # 문장 끝 후처리
@@ -2802,7 +2820,25 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                         del EditGenerationKoChunks[i]['ActorChunk'][j]
                         del EditGenerationKoChunks[i]['Pause'][j]
                         del EditGenerationKoChunks[i]['EndTime'][j]
-                        
+
+                ## [Added] eleven_v3인 경우 Edit의 첫 번째와 마지막 문장에 대괄호 처리 로직 추가
+                _current_version = ActorVersionMap.get(_actor_name)
+                # ActorChunk가 존재하는지 확인 후 처리
+                if _current_version == 'eleven_v3' and EditGenerationKoChunks[i]['ActorChunk']:
+                    # 첫 번째 문장 처리
+                    first_chunk = EditGenerationKoChunks[i]['ActorChunk'][0]
+                    # 이미 대괄호로 감싸져 있지 않은 경우에만 적용
+                    if not (first_chunk.startswith('[') and first_chunk.endswith(']')):
+                        EditGenerationKoChunks[i]['ActorChunk'][0] = f"[{first_chunk}]"
+                    
+                    # 마지막 문장 처리 (문장이 1개일 경우 위에서 처리되었으므로 중복 체크 혹은 인덱스 확인)
+                    if len(EditGenerationKoChunks[i]['ActorChunk']) > 0:
+                        last_idx = len(EditGenerationKoChunks[i]['ActorChunk']) - 1
+                        last_chunk = EditGenerationKoChunks[i]['ActorChunk'][last_idx]
+                        # 이미 대괄호로 감싸져 있지 않은 경우에만 적용
+                        if not (last_chunk.startswith('[') and last_chunk.endswith(']')):
+                            EditGenerationKoChunks[i]['ActorChunk'][last_idx] = f"[{last_chunk}]"
+
             ## Index 정렬(Part:1 - Chapter:2 - Index:3 으로 태그 순서 정렬)
             def SorIndexTags(EditGenerationKoChunks):
                 # Part, Chapter, Index 태그에 대한 우선순위를 정의합니다.
@@ -2829,19 +2865,29 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             EditGenerationKoChunks = EditGenerationKoChunksToDic(EditGenerationKoChunks)
             
             #### ReadingStyle: NarratorOnly와 AllCharacters의 설정 ####
-            ## 마지막 스튜디오 여름 관련 문구 삭제(해당 문구는 캐릭터가 없는 경우를 위해 제공됨으로 실제 오디오북 제작에는 필요 없음)
+            ## 마지막 스튜디오 여름 관련 문구 삭제
             EndingChunks = ['끝까지', '들어주셔서', '스튜디오', '열어가겠습니다']
-            # 특정 리스트에서 해당 항목이 몇 개 포함되어 있는지 세는 함수
-            def CountMatchingChunks(target, chunks):
-                return sum(1 for chunk in chunks if chunk in target)
-            # EditGenerationKoChunks[-2]와 [-1]을 검사하여 삭제하는 함수
-            if 'ActorChunk' in EditGenerationKoChunks[-2]:
-                matched_count = sum(CountMatchingChunks(actor_chunk['Chunk'], EndingChunks) for actor_chunk in EditGenerationKoChunks[-2]['ActorChunk'])
+            
+            # [Modified] 검사 로직을 대괄호 제거 후 비교하도록 수정
+            if len(EditGenerationKoChunks) >= 2 and 'ActorChunk' in EditGenerationKoChunks[-2]:
+                matched_count = 0
+                for actor_chunk in EditGenerationKoChunks[-2]['ActorChunk']:
+                    # 문자열에서 대괄호 제거
+                    clean_text = actor_chunk['Chunk'].replace('[', '').replace(']', '').strip()
+                    if clean_text in EndingChunks:
+                        matched_count += 1
+                
                 if matched_count >= 2:
                     del EditGenerationKoChunks[-2]
 
-            if 'ActorChunk' in EditGenerationKoChunks[-1]:
-                matched_count = sum(CountMatchingChunks(actor_chunk['Chunk'], EndingChunks) for actor_chunk in EditGenerationKoChunks[-1]['ActorChunk'])
+            if len(EditGenerationKoChunks) >= 1 and 'ActorChunk' in EditGenerationKoChunks[-1]:
+                matched_count = 0
+                for actor_chunk in EditGenerationKoChunks[-1]['ActorChunk']:
+                    # 문자열에서 대괄호 제거
+                    clean_text = actor_chunk['Chunk'].replace('[', '').replace(']', '').strip()
+                    if clean_text in EndingChunks:
+                        matched_count += 1
+
                 if matched_count >= 2:
                     del EditGenerationKoChunks[-1]
             

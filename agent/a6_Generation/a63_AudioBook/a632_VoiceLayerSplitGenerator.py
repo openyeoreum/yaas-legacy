@@ -2865,29 +2865,19 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             EditGenerationKoChunks = EditGenerationKoChunksToDic(EditGenerationKoChunks)
             
             #### ReadingStyle: NarratorOnly와 AllCharacters의 설정 ####
-            ## 마지막 스튜디오 여름 관련 문구 삭제
+            ## 마지막 스튜디오 여름 관련 문구 삭제(해당 문구는 캐릭터가 없는 경우를 위해 제공됨으로 실제 오디오북 제작에는 필요 없음)
             EndingChunks = ['끝까지', '들어주셔서', '스튜디오', '열어가겠습니다']
-            
-            # [Modified] 검사 로직을 대괄호 제거 후 비교하도록 수정
-            if len(EditGenerationKoChunks) >= 2 and 'ActorChunk' in EditGenerationKoChunks[-2]:
-                matched_count = 0
-                for actor_chunk in EditGenerationKoChunks[-2]['ActorChunk']:
-                    # 문자열에서 대괄호 제거
-                    clean_text = actor_chunk['Chunk'].replace('[', '').replace(']', '').strip()
-                    if clean_text in EndingChunks:
-                        matched_count += 1
-                
+            # 특정 리스트에서 해당 항목이 몇 개 포함되어 있는지 세는 함수
+            def CountMatchingChunks(target, chunks):
+                return sum(1 for chunk in chunks if chunk in target)
+            # EditGenerationKoChunks[-2]와 [-1]을 검사하여 삭제하는 함수
+            if 'ActorChunk' in EditGenerationKoChunks[-2]:
+                matched_count = sum(CountMatchingChunks(actor_chunk['Chunk'], EndingChunks) for actor_chunk in EditGenerationKoChunks[-2]['ActorChunk'])
                 if matched_count >= 2:
                     del EditGenerationKoChunks[-2]
 
-            if len(EditGenerationKoChunks) >= 1 and 'ActorChunk' in EditGenerationKoChunks[-1]:
-                matched_count = 0
-                for actor_chunk in EditGenerationKoChunks[-1]['ActorChunk']:
-                    # 문자열에서 대괄호 제거
-                    clean_text = actor_chunk['Chunk'].replace('[', '').replace(']', '').strip()
-                    if clean_text in EndingChunks:
-                        matched_count += 1
-
+            if 'ActorChunk' in EditGenerationKoChunks[-1]:
+                matched_count = sum(CountMatchingChunks(actor_chunk['Chunk'], EndingChunks) for actor_chunk in EditGenerationKoChunks[-1]['ActorChunk'])
                 if matched_count >= 2:
                     del EditGenerationKoChunks[-1]
             

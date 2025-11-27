@@ -2442,7 +2442,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
 
             ### D. EditGenerationKoChunks에 Edit내 Chunk의 개수 및 텍스트 길이 적정히 조정하기 ###
             combined_text = ''.join([''.join(chunk['Chunk'].split()) for chunk in NewActorChunk])
-            if chunk_count >= 20 or len(combined_text) >= 900:
+            if chunk_count >= 21 or len(combined_text) >= 650:
                 # 분할 수 결정
                 if chunk_count >= 60:
                     divisions = 4
@@ -2723,7 +2723,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                         current_pause.append(pause)
                         current_length += len(chunk)
 
-                if current_chunk:  # Add remaining chunks and pauses
+                if current_chunk: # 남은 청크와 Pause 추가
                     split_chunks.append(current_chunk)
                     split_pauses.append(current_pause)
 
@@ -2740,6 +2740,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
 
                 # [New] max_length 350 -> 600으로 변경 설정
                 max_length = 600
+                max_count = 20 # [New] 문장 개수 제한
 
                 if isinstance(GenerationKoChunk['Chunk'], list):
                     chunks = GenerationKoChunk['Chunk']
@@ -2749,14 +2750,20 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
 
                 newChunk = {"EditId": None, "Tag": tag, "ActorName": actorname, "ActorChunk": actorchunks, "Pause": pauses, "Endtime": None}
 
-                if tempChunk and len(' '.join(tempChunk['ActorChunk'] + actorchunks)) <= max_length and (tempChunk['Tag'] == tag and tempChunk['ActorName'] == actorname):
+                # [수정됨] 합치기 조건: 글자 수 확인 AND 개수 확인 AND 태그/성우 일치 확인
+                if tempChunk and \
+                len(' '.join(tempChunk['ActorChunk'] + actorchunks)) <= max_length and \
+                (len(tempChunk['ActorChunk']) + len(actorchunks)) <= max_count and \
+                (tempChunk['Tag'] == tag and tempChunk['ActorName'] == actorname):
+                    
                     # 기존 문장과 새로운 문장을 언어만 남긴 상태로 비교
                     combined_text = extract_text(' '.join(tempChunk['ActorChunk']))
                     new_text = extract_text(' '.join(actorchunks))
-                    if new_text not in combined_text:  # 새로운 문장이 기존 문장에 포함되어 있지 않은 경우에만 합침
+                    
+                    if new_text not in combined_text:  
                         tempChunk['ActorChunk'] += actorchunks
                         tempChunk['Pause'] += pauses
-                    else:  # 새로운 문장이 기존 문장에 포함되어 있는 경우, 새로운 딕셔너리로 시작
+                    else:  
                         tempChunk = appendAndResetTemp(tempChunk, newChunk)
                 else:
                     if tempChunk:  # Check and split before resetting if needed

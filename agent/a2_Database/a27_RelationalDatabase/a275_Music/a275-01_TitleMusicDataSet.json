@@ -2822,6 +2822,14 @@
                                 "Volume": 90,
                                 "Direction": "뒤"
                             }
+                        },
+                        {
+                            "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s184_TitleMusic/14_TitleMusicSet/144_TitleMusic.wav",
+                            "Setting": {
+                                "Length": [5.2, 10.00, 18.00, 25, 35.80],
+                                "Volume": 80,
+                                "Direction": "뒤"
+                            }
                         }
                     ],
                     "PartMusic": [

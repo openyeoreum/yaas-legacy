@@ -87,7 +87,7 @@
             },
             {
                 "LogoId": 6,
-                "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s182_LogoMusic/6_Logo_에세이(이로안).wav",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s182_LogoMusic/6_Logo_에세이(이로안).wav",
                 "Logo": {
                     "Language": "Ko",
                     "Genre": "에세이"
@@ -100,7 +100,20 @@
             },
             {
                 "LogoId": 7,
-                "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s182_LogoMusic/7_Logo_에세이(성온화).wav",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s182_LogoMusic/7_Logo_에세이(성온화).wav",
+                "Logo": {
+                    "Language": "Ko",
+                    "Genre": "에세이"
+                },
+                "Setting": {
+                    "Length": 0.00,
+                    "Volume": 100,
+                    "Direction": "None"
+                }
+            },
+            {
+                "LogoId": 8,
+                "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s182_LogoMusic/8_Logo_에세이(김민정).wav",
                 "Logo": {
                     "Language": "Ko",
                     "Genre": "에세이"

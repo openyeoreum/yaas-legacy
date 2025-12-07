@@ -3011,8 +3011,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     RetryELChunks.append(ModifyELChunk(_retryChunk))
                     # RetrySplitSents 합치기
                     RetrySplitSents.append({'낭독문장번호': i, '낭독문장': FrontWords, '제거': 'Yes'})
-                    RetrySplitSents.append({'낭독문장번호': i + 1, '낭독문장': FrontWords, '제거': 'Yes'})
-                    RetrySplitSents.append({'낭독문장번호': i + 2, '낭독문장': FrontWords, '제거': 'Yes'})
+                    RetrySplitSents.append({'낭독문장번호': i + 1, '낭독문장': MiddleWords, '제거': 'Yes'})
+                    RetrySplitSents.append({'낭독문장번호': i + 2, '낭독문장': EndWords, '제거': 'Yes'})
                     i += 3
                 
                 Chunk = " ".join(RetryChunks)

@@ -3,7 +3,7 @@
         "TaskName": "VoiceInspection",
         "InputFormat": "text",
         "OpenAI": {
-            "MasterModel": "gpt-5-mini",
+            "MasterModel": "gpt-5-nano",
             "ReasoningEffort": "medium"
         },
         "ANTHROPIC": {

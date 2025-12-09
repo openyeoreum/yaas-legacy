@@ -1046,25 +1046,25 @@ def VoiceFileSplit(SplitSents, Modify, ModifyFolderPath, BracketsSwitch, bracket
 def VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, VoiceLayerPath, SplitSents, LanguageCode = "ko-KR", MessagesReview = "off"):
 
     print(f"VoiceSplit: progress, {name} waiting 5-15 second")
-    # for _ in range(3):
-    #     try:
-    ## 음성파일을 STT로 단어별 시간 계산하기
-    voiceTimeStemps, SplitWords = VoiceTimeStemps(VoiceLayerPath, LanguageCode)
-    ## SentsSpliting Process (STT 보이스 문장별로 분리)
-    RetryIdList = []
-    if any(d['제거'] == 'Yes' for d in SplitSents):
-        RetryIdList = SentsSplitingProcess(projectName, email, SplitSents, SplitWords, RetryIdList, MessagesReview = MessagesReview)
-    ## VoiceSplit 프롬프트 요청
-    ResponseJson = VoiceSplitProcess(projectName, email, name, SplitSents, SplitWords, Process = "VoiceSplit", MessagesReview = MessagesReview)
-    ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps 커팅 데이터 구축
-    SplitTimeList = VoiceTimeStempsClassification(voiceTimeStemps, ResponseJson)
-    ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps(음성 파일에서 커팅되어야 할 부분) 구축
-    segment_durations = VoiceFileSplit(SplitSents, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, VoiceLayerPath, SplitTimeList)
-    
-    return RetryIdList, segment_durations
-        # except TypeError as e:
-        #     print(f"VoiceSplit: retry, {name} waiting 10-20 second | {e}")
-        #     time.sleep(5)  # 5초 대기 후 재시도
+    for _ in range(3):
+        try:
+            ## 음성파일을 STT로 단어별 시간 계산하기
+            voiceTimeStemps, SplitWords = VoiceTimeStemps(VoiceLayerPath, LanguageCode)
+            ## SentsSpliting Process (STT 보이스 문장별로 분리)
+            RetryIdList = []
+            if any(d['제거'] == 'Yes' for d in SplitSents):
+                RetryIdList = SentsSplitingProcess(projectName, email, SplitSents, SplitWords, RetryIdList, MessagesReview = MessagesReview)
+            ## VoiceSplit 프롬프트 요청
+            ResponseJson = VoiceSplitProcess(projectName, email, name, SplitSents, SplitWords, Process = "VoiceSplit", MessagesReview = MessagesReview)
+            ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps 커팅 데이터 구축
+            SplitTimeList = VoiceTimeStempsClassification(voiceTimeStemps, ResponseJson)
+            ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps(음성 파일에서 커팅되어야 할 부분) 구축
+            segment_durations = VoiceFileSplit(SplitSents, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, VoiceLayerPath, SplitTimeList)
+            
+            return RetryIdList, segment_durations
+        except TypeError as e:
+            print(f"VoiceSplit: retry, {name} waiting 10-20 second | {e}")
+            time.sleep(5)  # 5초 대기 후 재시도
 
 if __name__ == "__main__":
 

@@ -739,78 +739,77 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
         Model = ApiSetting['models']['Ko']
         
         while attempt < 65:
-            # try:
-            ########## ElevenLabs API 요청 ##########
-            ElevenLabsApikey = os.getenv("ELEVENLABS_API_KEY")
-            client = ElevenLabs(api_key = ElevenLabsApikey)
-            
-            Voice_Audio = client.text_to_speech.convert(
-                text = EL_Chunk,
-                voice_id = VoiceId,
-                voice_settings = VoiceSettings(speed = Speed, stability = Stability, similarity_boost = SimilarityBoost, style = Style, use_speaker_boost = True),
-                model_id = Model
-            )
-
-            if len(SplitChunks) == 1:
-                if "M.wav" in voiceLayerPath:
-                    fileName = voiceLayerPath.replace("M.wav", "_(0)M.wav")
-                else:
-                    fileName = voiceLayerPath.replace(".wav", "_(0).wav")
-            else:
-                fileName = voiceLayerPath
-
-            print(f"VoiceGen: completion, {name} waiting 1-5 second")
-            
-            fileNameMp3 = fileName.replace(".wav", ".mp3")
-            save(Voice_Audio, fileNameMp3)
-            
-            # mp3으로 저장된 파일을 wav로 변경
-            Voice_Audio_Mp3 = AudioSegment.from_mp3(fileNameMp3)
-            if Volume != 0:
-                Voice_Audio_Mp3 = Voice_Audio_Mp3 + Volume
-            Voice_Audio_Mp3.export(fileName, format = "wav")
-            os.remove(fileNameMp3)
-
-            ## VoiceReverbe ##
-            if voiceReverbe == 'on':
-                ## tag가 Title, Logue인 경우 ##
-                if tag in ['Title', 'Logue']:
-                    print(f"ChangeSpeed(0.89): ({tag}) Voice waiting 1-2 second")
-                    ChangeSpeedIndexVoice(fileName, Volume = 1.04, Speed = 0.95, Pad = 0.5, Reverb = 'off')
-
-                ## tag가 Title, Logue, Part, Chapter, Index인 경우 ##
-                if tag in ['Part', 'Chapter', 'Index']:
-                    print(f"ChangeSpeed(0.91): ({tag}) Voice waiting 1-2 second")
-                    ChangeSpeedIndexVoice(fileName, Volume = 1.07, Speed = 0.95, Pad = 1.0, Reverb = 'off')
-            
-            if len(SplitChunks) > 1:
-                ### 음성파일을 분할하는 코드 ###
-                RetryIdList, segment_durations = VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
-                print(f"RetryIdList: {RetryIdList}")
-                if RetryIdList != []:
-                    return RetryIdList
-            # 수정 파일 별도 저장
-            if len(SplitChunks) == 1 and Modify == "Yes":
-                Voice_Audio_Wav = AudioSegment.from_wav(fileName)
-                InspectionExportPath = fileName.replace("_(0)M.wav", "_(0)Modify.wav")
-                InspectionExportFolder, InspectionExportFile = os.path.split(InspectionExportPath)
-                InspectionExportMasterFilePath = os.path.join(ModifyFolderPath, InspectionExportFile)
-                Voice_Audio_Wav.export(InspectionExportMasterFilePath, format = "wav")
-
-            return "Continue"
-            #     ########## ElevenLabs API 요청 ##########
-            # except KeyError as e:
-            #     attempt += 1
-            #     print(f"[ KeyError 발생, 1분 후 재시도 {attempt}/65: {e} ]")
-            #     time.sleep(60)  # 1분 대기 후 재시도
+            try:
+                ########## ElevenLabs API 요청 ##########
+                ElevenLabsApikey = os.getenv("ELEVENLABS_API_KEY")
+                client = ElevenLabs(api_key = ElevenLabsApikey)
                 
-            # except Exception as e:
-            #     attempt += 1
-            #     if attempt >= 5:
-            #         sys.exit(f"[ 예상치 못한 에러 발생: {e}, 5초 후 재시도 {attempt}/65: {e} ]")
-            #     else:
-            #         print(f"[ 예상치 못한 에러 발생: {e}, 5초 후 재시도 {attempt}/65: {e} ]")
-            #         time.sleep(5)
+                Voice_Audio = client.text_to_speech.convert(
+                    text = EL_Chunk,
+                    voice_id = VoiceId,
+                    voice_settings = VoiceSettings(speed = Speed, stability = Stability, similarity_boost = SimilarityBoost, style = Style, use_speaker_boost = True),
+                    model_id = Model
+                )
+
+                if len(SplitChunks) == 1:
+                    if "M.wav" in voiceLayerPath:
+                        fileName = voiceLayerPath.replace("M.wav", "_(0)M.wav")
+                    else:
+                        fileName = voiceLayerPath.replace(".wav", "_(0).wav")
+                else:
+                    fileName = voiceLayerPath
+
+                print(f"VoiceGen: completion, {name} waiting 1-5 second")
+                
+                fileNameMp3 = fileName.replace(".wav", ".mp3")
+                save(Voice_Audio, fileNameMp3)
+                
+                # mp3으로 저장된 파일을 wav로 변경
+                Voice_Audio_Mp3 = AudioSegment.from_mp3(fileNameMp3)
+                if Volume != 0:
+                    Voice_Audio_Mp3 = Voice_Audio_Mp3 + Volume
+                Voice_Audio_Mp3.export(fileName, format = "wav")
+                os.remove(fileNameMp3)
+
+                ## VoiceReverbe ##
+                if voiceReverbe == 'on':
+                    ## tag가 Title, Logue인 경우 ##
+                    if tag in ['Title', 'Logue']:
+                        print(f"ChangeSpeed(0.89): ({tag}) Voice waiting 1-2 second")
+                        ChangeSpeedIndexVoice(fileName, Volume = 1.04, Speed = 0.95, Pad = 0.5, Reverb = 'off')
+
+                    ## tag가 Title, Logue, Part, Chapter, Index인 경우 ##
+                    if tag in ['Part', 'Chapter', 'Index']:
+                        print(f"ChangeSpeed(0.91): ({tag}) Voice waiting 1-2 second")
+                        ChangeSpeedIndexVoice(fileName, Volume = 1.07, Speed = 0.95, Pad = 1.0, Reverb = 'off')
+                
+                if len(SplitChunks) > 1:
+                    ### 음성파일을 분할하는 코드 ###
+                    RetryIdList, segment_durations = VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
+                    if RetryIdList != []:
+                        return RetryIdList
+                # 수정 파일 별도 저장
+                if len(SplitChunks) == 1 and Modify == "Yes":
+                    Voice_Audio_Wav = AudioSegment.from_wav(fileName)
+                    InspectionExportPath = fileName.replace("_(0)M.wav", "_(0)Modify.wav")
+                    InspectionExportFolder, InspectionExportFile = os.path.split(InspectionExportPath)
+                    InspectionExportMasterFilePath = os.path.join(ModifyFolderPath, InspectionExportFile)
+                    Voice_Audio_Wav.export(InspectionExportMasterFilePath, format = "wav")
+
+                return "Continue"
+                ########## ElevenLabs API 요청 ##########
+            except KeyError as e:
+                attempt += 1
+                print(f"[ KeyError 발생, 1분 후 재시도 {attempt}/65: {e} ]")
+                time.sleep(60)  # 1분 대기 후 재시도
+                
+            except Exception as e:
+                attempt += 1
+                if attempt >= 5:
+                    sys.exit(f"[ 예상치 못한 에러 발생: {e}, 5초 후 재시도 {attempt}/65: {e} ]")
+                else:
+                    print(f"[ 예상치 못한 에러 발생: {e}, 5초 후 재시도 {attempt}/65: {e} ]")
+                    time.sleep(5)
 
     #################
     ### SuperTone ###
@@ -2456,7 +2455,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
         for __chunk in ActorChunk:
             chunk = __chunk['Chunk']
             ChunkLength = len(chunk)
-            if ChunkTokens + ChunkLength >= 500:
+            if ChunkTokens + ChunkLength >= 450:
                 MatchedChunks.append({"EditId": _chunk_['EditId'], "Tag": _chunk_['Tag'], "ActorName": _chunk_['ActorName'], "ActorChunk": SplitActorChunk})
                 SplitActorChunk = []
                 ChunkTokens = 0
@@ -2669,7 +2668,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
 
                 # [New] max_length 350 -> 400으로 변경 설정
                 max_length = 400
-                max_count = 13 # [New] 문장 개수 제한
+                max_count = 12 # [New] 문장 개수 제한
 
                 if isinstance(GenerationKoChunk['Chunk'], list):
                     chunks = GenerationKoChunk['Chunk']

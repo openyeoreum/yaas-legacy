@@ -97,7 +97,17 @@ def SentsSplitingProcess(projectName, email, SplitSents, SplitWords, RetryIdList
     for i in range(len(ResponseJson)):
         Sent = ResponseJson[i]['문장'].lstrip('/').rstrip('/')
         if '형태1' in ResponseJson[i]['형태']:
-            SentForInspection = Sent.replace('될/내용', '될내용').replace('문장/입', '문장입')
+            # 모두 표준 형태인 '될내용'으로 통일시킴
+            SentForInspection = Sent.replace('애온은', '내용은') \
+                                    .replace('에온은', '내용은') \
+                                    .replace('애용은', '내용은') \
+                                    .replace('에용은', '내용은') \
+                                    .replace('생성돼의', '생성될') \
+                                    .replace('될/내용', '될내용') \
+                                    .replace('된/내용', '될내용') \
+                                    .replace('문장/입', '문장입')
+            
+            # 검사 로직 (이제 위에서 정제되었으므로 '될내용은/'만 체크하면 됨)
             if not ('될내용은/' in SentForInspection) and ('/문장입' in SentForInspection):
                 RetryIdList.append(i)
                 if i == len(ResponseJson)-1:
@@ -235,8 +245,7 @@ def VoiceTimeStemps(voiceLayerPath, LanguageCode):
     file = audio_file,
     model = "whisper-1",
     response_format = "verbose_json",
-    timestamp_granularities = ["word"]
-    )
+    timestamp_granularities = ["word"])
 
     # 각 단어의 시작 및 종료 타임스탬프 출력
     voiceTimeStemps = []
@@ -1037,25 +1046,25 @@ def VoiceFileSplit(SplitSents, Modify, ModifyFolderPath, BracketsSwitch, bracket
 def VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, VoiceLayerPath, SplitSents, LanguageCode = "ko-KR", MessagesReview = "off"):
 
     print(f"VoiceSplit: progress, {name} waiting 5-15 second")
-    for _ in range(3):
-        try:
-            ## 음성파일을 STT로 단어별 시간 계산하기
-            voiceTimeStemps, SplitWords = VoiceTimeStemps(VoiceLayerPath, LanguageCode)
-            ## SentsSpliting Process (STT 보이스 문장별로 분리)
-            RetryIdList = []
-            if any(d['제거'] == 'Yes' for d in SplitSents):
-                RetryIdList = SentsSplitingProcess(projectName, email, SplitSents, SplitWords, RetryIdList, MessagesReview = MessagesReview)
-            ## VoiceSplit 프롬프트 요청
-            ResponseJson = VoiceSplitProcess(projectName, email, name, SplitSents, SplitWords, Process = "VoiceSplit", MessagesReview = MessagesReview)
-            ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps 커팅 데이터 구축
-            SplitTimeList = VoiceTimeStempsClassification(voiceTimeStemps, ResponseJson)
-            ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps(음성 파일에서 커팅되어야 할 부분) 구축
-            segment_durations = VoiceFileSplit(SplitSents, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, VoiceLayerPath, SplitTimeList)
-            
-            return RetryIdList, segment_durations
-        except TypeError as e:
-            print(f"VoiceSplit: retry, {name} waiting 10-20 second | {e}")
-            time.sleep(5)  # 5초 대기 후 재시도
+    # for _ in range(3):
+    #     try:
+    ## 음성파일을 STT로 단어별 시간 계산하기
+    voiceTimeStemps, SplitWords = VoiceTimeStemps(VoiceLayerPath, LanguageCode)
+    ## SentsSpliting Process (STT 보이스 문장별로 분리)
+    RetryIdList = []
+    if any(d['제거'] == 'Yes' for d in SplitSents):
+        RetryIdList = SentsSplitingProcess(projectName, email, SplitSents, SplitWords, RetryIdList, MessagesReview = MessagesReview)
+    ## VoiceSplit 프롬프트 요청
+    ResponseJson = VoiceSplitProcess(projectName, email, name, SplitSents, SplitWords, Process = "VoiceSplit", MessagesReview = MessagesReview)
+    ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps 커팅 데이터 구축
+    SplitTimeList = VoiceTimeStempsClassification(voiceTimeStemps, ResponseJson)
+    ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps(음성 파일에서 커팅되어야 할 부분) 구축
+    segment_durations = VoiceFileSplit(SplitSents, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, VoiceLayerPath, SplitTimeList)
+    
+    return RetryIdList, segment_durations
+        # except TypeError as e:
+        #     print(f"VoiceSplit: retry, {name} waiting 10-20 second | {e}")
+        #     time.sleep(5)  # 5초 대기 후 재시도
 
 if __name__ == "__main__":
 

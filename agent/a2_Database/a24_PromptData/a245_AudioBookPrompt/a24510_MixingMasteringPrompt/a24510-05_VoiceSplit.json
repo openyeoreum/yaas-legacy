@@ -4,7 +4,7 @@
         "InputFormat": "text",
         "OpenAI": {
             "MasterModel": "gpt-5-mini",
-            "ReasoningEffort": "medium"
+            "ReasoningEffort": "low"
         },
         "ANTHROPIC": {
             "MasterModel": "claude-sonnet-4-0"

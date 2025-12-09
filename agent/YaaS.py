@@ -315,13 +315,13 @@ if __name__ == "__main__":
     Email = "yeoreum00128@gmail.com"
     ProjectName = "251208_따뜻한말이시작이되어"
     MainLang = "Ko" # 'Ko', 'En', 'Ja', 'Zh', 'Es' ... 중 메인이 되는 언어를 선택 ((번역 후) 결과물의 언어)
-    Estimate = [] # [], 'TextBook', 'AudioBook', 'VideoBook' ... 중 필요한 견적을 다중 선택
+    Estimate = ["AudioBook"] # [], 'TextBook', 'AudioBook', 'VideoBook' ... 중 필요한 견적을 다중 선택
     DataCollection = [] # [], 'Book', 'Meditation', 'Architect' ... 중 데이터 수집이 필요한 도메인을 다중 선택
     Search = {"Search": "", "Intention": "Similarity", "Collection": "Book"} # Search: "", Search: SearchTerm, Match: PublisherData_(Id) // # Intention: Demand, Supply, Similarity ... // Extension: Expertise, Ultimate, Detail, Rethink ... // Collection: Entire, Target, Trend, Publisher, Book ... // Range: 10-100
     Script = "" # ScriptUpload: '' // BookScriptGen: 'BookScript'
     Translation = "" # '', 'Auto', 'En', 'Ja', 'Zh', 'Es' ... 중 원문언어를 선택
     TextBook = "" # '', 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis' ... 중 텍스트북 제작 템플릿을 다중 선택
-    AudioBook = "김민정(낭독)" # '', 'Auto', '클로닝성우이름', '성우이름(특성)' ... 중 선택
+    AudioBook = "" # '', 'Auto', '클로닝성우이름', '성우이름(특성)' ... 중 선택
     Marketing = [] # [] 'InstagramTemplate1', 'BlogTemplate1' ... 중 마케팅 제작 템플릿을 다중 선택
     
     MessagesReview = "on" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력

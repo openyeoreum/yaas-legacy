@@ -1142,18 +1142,20 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     VoiceFiles = []
     # VoiceFilePattern = r".*?_(\d+(?:\.\d+)?)_([가-힣]+\(.*?\))_\((\d+)\)M?\.wav"
     VoiceFilePattern = r".*?_(\d+(?:\.\d+)?)_([가-힣A-Za-z]+\(.*?\))_\((\d+)\)M?\.wav"
+    
     for i in range(len(VoiceRawFiles)):
         VoiceFileMatch = re.match(VoiceFilePattern, VoiceRawFiles[i])
         if VoiceFileMatch == None:
             normalizeVoiceRawFile = unicodedata.normalize('NFC', VoiceRawFiles[i])
             VoiceFileMatch = re.match(VoiceFilePattern, normalizeVoiceRawFile)
-        
+        # [수정] 매칭이 성공했을 때만 진입
         if VoiceFileMatch:
             editid, actorname, _ = VoiceFileMatch.groups()
-        for j in range(len(EditGeneration)):
-            if float(editid) == EditGeneration[j]['EditId'] and actorname == EditGeneration[j]['ActorName']:
-                VoiceFiles.append(VoiceRawFiles[i])
-                break
+            # [수정] for문을 if문 안으로 넣어서, editid가 존재할 때만 실행되도록 변경
+            for j in range(len(EditGeneration)):
+                if float(editid) == EditGeneration[j]['EditId'] and actorname == EditGeneration[j]['ActorName']:
+                    VoiceFiles.append(VoiceRawFiles[i])
+                    break
     
     ## musicLayer 파일 ##
     musicLayerPath = MusicLayerPathGen(projectName, email, '',)

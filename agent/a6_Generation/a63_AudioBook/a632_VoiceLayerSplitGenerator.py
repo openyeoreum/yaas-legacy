@@ -1418,15 +1418,18 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     VoiceFilePattern = r".*?_(\d+(?:\.\d+)?)_([가-힣A-Za-z]+\(.*?\))_\((\d+)\)M?\.wav"
     for i in range(len(RawFiles)):
         VoiceFileMatch = re.match(VoiceFilePattern, RawFiles[i])
-        if VoiceFileMatch == None:
+        # 매칭 안됐을 때 정규화해서 다시 시도
+        if not VoiceFileMatch:
             normalizeRawFile = unicodedata.normalize('NFC', RawFiles[i])
             VoiceFileMatch = re.match(VoiceFilePattern, normalizeRawFile)
+        # [핵심 수정] 매칭이 성공했을 때만! 아래 로직을 실행합니다.
         if VoiceFileMatch:
             editid, actorname, _ = VoiceFileMatch.groups()
-        for j in range(len(EditGenerationKoChunks)):
-            if float(editid) == EditGenerationKoChunks[j]['EditId'] and actorname == EditGenerationKoChunks[j]['ActorName']:
-                Files.append(RawFiles[i])
-                break
+            # for문을 이 if문 안으로 넣어야 안전합니다.
+            for j in range(len(EditGenerationKoChunks)):
+                if float(editid) == EditGenerationKoChunks[j]['EditId'] and actorname == EditGenerationKoChunks[j]['ActorName']:
+                    Files.append(RawFiles[i])
+                    break
 
     # 시간, 분, 초로 변환
     def SecondsToHMS(seconds):
@@ -2442,11 +2445,11 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
 
             ### D. EditGenerationKoChunks에 Edit내 Chunk의 개수 및 텍스트 길이 적정히 조정하기 ###
             combined_text = ''.join([''.join(chunk['Chunk'].split()) for chunk in NewActorChunk])
-            if chunk_count >= 21 or len(combined_text) >= 650:
+            if chunk_count >= 15 or len(combined_text) >= 450:
                 # 분할 수 결정
-                if chunk_count >= 60:
+                if chunk_count >= 45:
                     divisions = 4
-                elif chunk_count >= 40:
+                elif chunk_count >= 30:
                     divisions = 3
                 else:
                     divisions = 2
@@ -2738,9 +2741,9 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 actorname = GenerationKoChunk['ActorName']
                 actorchunks = [chunk + "," for chunk in GenerationKoChunk['ActorChunk']]
 
-                # [New] max_length 350 -> 600으로 변경 설정
-                max_length = 600
-                max_count = 20 # [New] 문장 개수 제한
+                # [New] max_length 350 -> 400으로 변경 설정
+                max_length = 400
+                max_count = 13 # [New] 문장 개수 제한
 
                 if isinstance(GenerationKoChunk['Chunk'], list):
                     chunks = GenerationKoChunk['Chunk']

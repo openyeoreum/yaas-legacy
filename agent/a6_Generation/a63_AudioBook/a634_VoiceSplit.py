@@ -96,16 +96,37 @@ def SentsSplitingProcess(projectName, email, SplitSents, SplitWords, RetryIdList
     voiceInspection = ''
     for i in range(len(ResponseJson)):
         Sent = ResponseJson[i]['문장'].lstrip('/').rstrip('/')
+        CleanSent = Sent.replace('/', '').replace(' ', '')
         if '형태1' in ResponseJson[i]['형태']:
             # 모두 표준 형태인 '될내용'으로 통일시킴
-            SentForInspection = Sent.replace('애온은', '내용은') \
-                                    .replace('에온은', '내용은') \
-                                    .replace('애용은', '내용은') \
-                                    .replace('에용은', '내용은') \
-                                    .replace('생성돼의', '생성될') \
-                                    .replace('될/내용', '될내용') \
-                                    .replace('된/내용', '될내용') \
-                                    .replace('문장/입', '문장입')
+            if ('될내용' in CleanSent and '문장입' in CleanSent) or ('된내용' in CleanSent and '문장입' in CleanSent):
+                SentForInspection = Sent.replace('된/내용', '될내용') \
+                                        .replace('될/내용', '될내용') \
+                                        .replace('문장/입', '문장입')
+            else:
+                SentForInspection = Sent.replace('애온은', '내용은') \
+                                        .replace('에온은', '내용은') \
+                                        .replace('애용은', '내용은') \
+                                        .replace('에용은', '내용은') \
+                                        .replace('에요는', '내용은') \
+                                        .replace('애요는', '내용은') \
+                                        .replace('생상돼의', '생성될') \
+                                        .replace('생상대의', '생성될') \
+                                        .replace('생성돼는', '생성될') \
+                                        .replace('생성돼의', '생성될') \
+                                        .replace('생성된', '생성될') \
+                                        .replace('생성됨', '생성될') \
+                                        .replace('생상도의', '생성될') \
+                                        .replace('생성되는', '생성될') \
+                                        .replace('생성되의', '생성될') \
+                                        .replace('생성됄', '생성될') \
+                                        .replace('생성됀', '생성될') \
+                                        .replace('생성돼', '생성될') \
+                                        .replace('생성되', '생성될') \
+                                        .replace('됨/내용', '될내용') \
+                                        .replace('된/내용', '될내용') \
+                                        .replace('될/내용', '될내용') \
+                                        .replace('문장/입', '문장입')
             
             # 검사 로직 (이제 위에서 정제되었으므로 '될내용은/'만 체크하면 됨)
             if not ('될내용은/' in SentForInspection) and ('/문장입' in SentForInspection):
@@ -119,7 +140,7 @@ def SentsSplitingProcess(projectName, email, SplitSents, SplitWords, RetryIdList
     # print(f"SplitWords: {SplitWords}")
     # print(f"voiceInspection: {voiceInspection}")
     # print(f"RetryIdList: {RetryIdList}")
-        
+
     return RetryIdList
 
 #######################################

@@ -1,6 +1,6 @@
 {
     "ko": {
-        "TaskName": "SentsSpliting",
+        "TaskName": "SentsSplitingKo",
         "InputFormat": "text",
         "OpenAI": {
             "MasterModel": "gpt-5-mini",

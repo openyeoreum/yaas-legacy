@@ -702,7 +702,7 @@ def EditGenerationKoChunksToList(EditGenerationKoChunks):
     return EditGenerationKoListChunks
 
 ## TypecastVoice 생성 ##
-def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, voiceReverbe, tag, name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview):
+def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, voiceReverbe, tag, name, Chunk, EL_Chunk, BracketSentence, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, GenLang, MessagesReview):
     attempt = 0
 
     ### 음성 속도 조절 함수 ###
@@ -785,7 +785,7 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                 
                 if len(SplitChunks) > 1:
                     ### 음성파일을 분할하는 코드 ###
-                    RetryIdList, segment_durations = VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
+                    RetryIdList, segment_durations = VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, voiceLayerPath, SplitChunks, BracketSentence, GenLang, MessagesReview = MessagesReview)
                     if RetryIdList != []:
                         return RetryIdList
                 # 수정 파일 별도 저장
@@ -945,7 +945,7 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                         ChangeSpeedIndexVoice(fileName, Volume=1.07, Speed=0.95, Pad=1.0, Reverb='off')
                 
                 if len(SplitChunks) > 1:
-                    RetryIdList, segment_durations = VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, voiceLayerPath, SplitChunks, MessagesReview=MessagesReview)
+                    RetryIdList, segment_durations = VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, voiceLayerPath, SplitChunks, BracketSentence, GenLang, MessagesReview=MessagesReview)
                     if RetryIdList != []:
                         return RetryIdList
                 
@@ -1056,7 +1056,7 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
 
                     if len(SplitChunks) > 1:
                         ### 음성파일을 분할하는 코드 ###
-                        RetryIdList, segment_durations = VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
+                        RetryIdList, segment_durations = VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, voiceLayerPath, SplitChunks, BracketSentence, GenLang, MessagesReview = MessagesReview)
                         if RetryIdList != []:
                             return RetryIdList
                     # 수정 파일 별도 저장
@@ -1988,7 +1988,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
         return MatchedActors, SelectionGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
-def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', ReadingStyle = 'AllCharacters', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Bracket = "Manual", VolumeEqual = "Mixing", Account = "None", VoiceEnhance = 'off', VoiceFileGen = 'on', MessagesReview = "off"):
+def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'VoiceActor', CloneVoiceName = '저자명', ReadingStyle = 'AllCharacters', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Bracket = "Manual", VolumeEqual = "Mixing", Account = "None", VoiceEnhance = 'off', VoiceFileGen = 'on', MessagesReview = "off"):
     MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationChunks(projectName, email, MainLang, MessagesReview)
 
     ## Modify 시간에 맞추어 폴더 생성 및 이전 끊긴 히스토리 합치기 ##
@@ -2854,6 +2854,20 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
         #### EditGenerationKoChunks 음성 생성 ####
         ########################################
 
+        ## 언어별 설정 ##
+        if GenLang == 'Ko':
+            BracketSentence = ["지금 생성될 내용은", "문장 입니다"]
+        elif GenLang == 'En':
+            BracketSentence = ["The generated now is", "the sentence"]
+        elif GenLang == 'Ja':
+            BracketSentence = ["今の生成は", "その文"]
+        elif GenLang == 'Zh':
+            BracketSentence = ["现在生成是", "这个句子"]
+        elif GenLang == 'Es':
+            BracketSentence = ["Lo generado es", "la frase"]
+        elif GenLang == 'De':
+            BracketSentence = ["Das Generierte ist", "der Satz"]
+
         ## 일부만 생성하는지, 전체를 생성하는지의 옵션
         if Mode == 'Manual':
             GenerationKoChunks = []
@@ -2930,9 +2944,9 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 i = 1
                 for RetryId in RetryIdList:
                     # RetryChunks 합치기
-                    FrontWords = "지금 생성될 내용은"
+                    FrontWords = BracketSentence[0]
                     MiddleWords = RawSplitSents[RetryId]['낭독문장']
-                    EndWords = "문장 입니다"
+                    EndWords = BracketSentence[1]
                     _retryChunk = f'{FrontWords}, "{MiddleWords}", {EndWords}'
                     # RetryChunks 합치기
                     RetryChunks.append(ModifyTCChunk(_retryChunk))
@@ -2980,7 +2994,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 BracketsELChunks = []
                 for idx, _ELChunk in enumerate(Update['ActorChunk']):
                     if _ELChunk.strip().startswith('[') and _ELChunk.strip().endswith(']'):
-                        _ELChunk = f'지금 생성될 내용은, "{_ELChunk.strip().strip("[]")}", 문장 입니다'
+                        _ELChunk = BracketSentence[0] + f'"{_ELChunk.strip().strip("[]")}", -' + BracketSentence[1]
                         if idx + 1 in BracketsNumber:
                             ELChunk = ModifyELChunk(_ELChunk)
                             BracketsELChunks.append(ELChunk)
@@ -3004,7 +3018,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 BracketsChunks = []
                 for idx, _Chunk in enumerate(Update['ActorChunk']):
                     if _Chunk.strip().startswith('[') and _Chunk.strip().endswith(']'):
-                        _Chunk = f'지금 생성될 내용은, "{_Chunk.strip().strip("[]")}", 문장 입니다'
+                        _Chunk = BracketSentence[0] + f'"{_ELChunk.strip().strip("[]")}", -' + BracketSentence[1]
                         if idx + 1 in BracketsNumber:
                             _Chunk = ModifyTCChunk(_Chunk)
                             BracketsChunks.append(_Chunk)
@@ -3033,17 +3047,17 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     # Brackets 부분일 경우 해당 부분 문장만 bracketsSplitChunks로 추가
                     if BracketsSwitch:
                         if i + 1 in BracketsNumber:
-                            bracketsSplitChunks.append('지금 생성될 내용은')
+                            bracketsSplitChunks.append(BracketSentence[0])
                             bracketsSplitChunks.append(f"{RawSplitChunks[i].strip().strip('[]')}")
-                            bracketsSplitChunks.append('문장 입니다')
+                            bracketsSplitChunks.append(BracketSentence[1])
                             removeBracketsSplitChunksNumber.append(bracketNumber)
                             bracketsSplitChunksNumber.append(i)
                             removeBracketsSplitChunksNumber.append(bracketNumber + 2)
                             bracketNumber += 3
 
-                    rawSplitChunks.append('지금 생성될 내용은')
+                    rawSplitChunks.append(BracketSentence[0])
                     rawSplitChunks.append(f"{RawSplitChunks[i].strip().strip('[]')}")
-                    rawSplitChunks.append('문장 입니다')
+                    rawSplitChunks.append(BracketSentence[1])
                     removeSplitChunksNumber.append(Number)
                     removeSplitChunksNumber.append(Number + 2)
                     Number += 2
@@ -3180,7 +3194,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName, 'Mixed')
                     retry = 0
                     while retry <= 3:
-                        ChangedName = ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, VoiceReverbe, Update['Tag'], name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
+                        ChangedName = ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, VoiceReverbe, Update['Tag'], name, Chunk, EL_Chunk, BracketSentence, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, GenLang, MessagesReview)
                         ## retry 시작 (잘못 짤린 음성의 재생성) ##
                         if not isinstance(ChangedName, list):
                             break
@@ -3208,7 +3222,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     if not (os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount}).wav') or os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount})M.wav')):
                         retry = 0
                         while retry <= 3:
-                            ChangedName = ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, VoiceReverbe, Update['Tag'], name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
+                            ChangedName = ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, VoiceReverbe, Update['Tag'], name, Chunk, EL_Chunk, BracketSentence, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, GenLang, MessagesReview)
                             ## retry 시작 (잘못 짤린 음성의 재생성) ##
                             if not isinstance(ChangedName, list):
                                 break
@@ -3254,9 +3268,9 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
     return EditGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 Json을 VoiceLayer에 업데이트
-def VoiceLayerUpdate(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', ReadingStyle = 'AllCharacters', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Bracket = "Manual", VolumeEqual = "Mixing", Account = "None", Intro = "None", VoiceEnhance = 'off', VoiceFileGen = "on", MessagesReview = "off"):
+def VoiceLayerUpdate(projectName, email, GenLang = 'Ko', Narrator = 'VoiceActor', CloneVoiceName = '저자명', ReadingStyle = 'AllCharacters', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Bracket = "Manual", VolumeEqual = "Mixing", Account = "None", Intro = "None", VoiceEnhance = 'off', VoiceFileGen = "on", MessagesReview = "off"):
     print(f"< User: {email} | Project: {projectName} | VoiceLayerGenerator 시작 >")
-    EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, Narrator = Narrator, CloneVoiceName = CloneVoiceName, ReadingStyle = ReadingStyle, VoiceReverbe = VoiceReverbe, MainLang = MainLang, Mode = Mode, Macro = Macro, Bracket = Bracket, VolumeEqual = VolumeEqual, Account = Account, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen, MessagesReview = MessagesReview)
+    EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, GenLang = GenLang, Narrator = Narrator, CloneVoiceName = CloneVoiceName, ReadingStyle = ReadingStyle, VoiceReverbe = VoiceReverbe, MainLang = MainLang, Mode = Mode, Macro = Macro, Bracket = Bracket, VolumeEqual = VolumeEqual, Account = Account, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen, MessagesReview = MessagesReview)
         
     project = GetProject(projectName, email)
 

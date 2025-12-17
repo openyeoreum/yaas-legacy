@@ -17,18 +17,18 @@ from pydub import AudioSegment
 ##### SentsSpliting #####
 #########################
 ## SentsSpliting Input
-def SentsSplitingInput(SplitSents, SplitWords):
+def SentsSplitingInput(SplitSents, BracketSentence, SplitWords):
     SplitSentsList = []
     SplitSentsMerge = ''
     SplitSentsMergeSwitch = False
     for SplitSent in SplitSents:
-        if '지금 생성될 내용은' == SplitSent['낭독문장']:
+        if BracketSentence[0] == SplitSent['낭독문장']:
             SplitSentsMergeSwitch = True
-        elif '문장 입니다' == SplitSent['낭독문장']:
+        elif BracketSentence[1] == SplitSent['낭독문장']:
             SplitSentsMergeSwitch = False
             
-        if '지금 생성될 내용은' == SplitSent['낭독문장'] or '문장 입니다' == SplitSent['낭독문장'] or SplitSentsMergeSwitch:
-            if '문장 입니다' == SplitSent['낭독문장']:
+        if BracketSentence[0] == SplitSent['낭독문장'] or BracketSentence[1] == SplitSent['낭독문장'] or SplitSentsMergeSwitch:
+            if BracketSentence[1] == SplitSent['낭독문장']:
                 SplitSentsMerge += f"{SplitSent['낭독문장']}"
             else:
                 SplitSentsMerge += f"{SplitSent['낭독문장']} "
@@ -73,9 +73,82 @@ def SentsSplitingFilter(Response):
     return OutputDic
 
 ## SentsSpliting Process (STT 보이스 문장별로 분리)
-def SentsSplitingProcess(projectName, email, SplitSents, SplitWords, RetryIdList, Process = "SentsSpliting", MessagesReview = "off"):
+def SentsSplitingProcess(projectName, email, SplitSents, BracketSentence, SplitWords, RetryIdList, GenLang, _Process = "SentsSpliting", MessagesReview = "off"):
+    # --- [내부 함수] 언어별 발음 교정 로직 ---
+    def fix_pronunciation_error(RawSent, GenLang):
+        # 공통 정제: 앞뒤 공백 제거
+        text = RawSent.strip()
+
+        if GenLang == 'Ko':
+            # 한국어: 기존의 강력한 교정 로직 유지
+            text = text.replace('애온은', '내용은').replace('에온은', '내용은') \
+                       .replace('애용은', '내용은').replace('에용은', '내용은') \
+                       .replace('에요는', '내용은').replace('애요는', '내용은') \
+                       .replace('생상돼의', '생성될').replace('생상대의', '생성될') \
+                       .replace('생성돼는', '생성될').replace('생성돼의', '생성될') \
+                       .replace('생성된', '생성될').replace('생성됨', '생성될') \
+                       .replace('생상도의', '생성될').replace('생성되는', '생성될') \
+                       .replace('생성되의', '생성될').replace('생성됄', '생성될') \
+                       .replace('생성됀', '생성될').replace('생성돼', '생성될') \
+                       .replace('생성되', '생성될') \
+                       .replace('됨/내용', '될내용').replace('된/내용', '될내용') \
+                       .replace('될/내용', '될내용').replace('문장/입', '문장입')
+            
+            # # 표준 포맷 통일
+            # if ('될내용' in text.replace(' ','') and '문장입' in text.replace(' ','')) or \
+            #    ('된내용' in text.replace(' ','') and '문장입' in text.replace(' ','')):
+            #      text = text.replace('된/내용', '될내용').replace('될/내용', '될내용')
+
+        elif GenLang == 'En':
+            # 영어: 비슷한 발음 교정
+            # generated -> generator / general
+            # now is -> know is / no is
+            # sentence -> sentance / sense / cents
+            text = text.replace('The generator', 'The generated') \
+                       .replace('The general', 'The generated') \
+                       .replace('know is', 'now is') \
+                       .replace('no is', 'now is') \
+                       .replace('sentance', 'sentence') \
+                       .replace('cents', 'sentence') \
+                       .replace('sense', 'sentence')
+
+        elif GenLang == 'Ja':
+            # 일본어: 한자 변환 오류 및 발음 교정
+            # 生成(Seisei) -> 先生(Sensei) / 精製(Seisei)
+            # その文(Sono bun) -> その分(Sono bun) / その聞(Sono bun - 드물지만)
+            text = text.replace('今の先生', '今の生成') \
+                       .replace('今の精製', '今の生成') \
+                       .replace('その分', 'その文') \
+                       .replace('その聞', 'その文')
+
+        elif GenLang == 'Zh':
+            # 중국어: 성조/유사 발음 교정
+            # 生成(Shēngchéng) -> 生产(Shēngchǎn - 생산)
+            # 句子(Jùzi) -> 橘子(Júzi - 오렌지) / 据子
+            text = text.replace('现在生产', '现在生成') \
+                       .replace('现在生城', '现在生成') \
+                       .replace('这个橘子', '这个句子') \
+                       .replace('这个据子', '这个句子')
+
+        elif GenLang == 'Es':
+            # 스페인어
+            # generado -> general
+            # frase -> fase
+            text = text.replace('Lo general', 'Lo generado') \
+                       .replace('la fase', 'la frase')
+
+        elif GenLang == 'De':
+            # 독일어
+            # Satz -> Saz / Schatz
+            text = text.replace('der Saz', 'der Satz') \
+                       .replace('der Schatz', 'der Satz')
+
+        return text
+    # ---------------------------------------------
+
     # SentsSplitingProcess
-    Input = SentsSplitingInput(SplitSents, SplitWords)
+    Process = _Process + GenLang
+    Input = SentsSplitingInput(SplitSents, BracketSentence, SplitWords)
     ErrorCount = 0
     while 10 >= ErrorCount:
         # Response 생성
@@ -94,53 +167,50 @@ def SentsSplitingProcess(projectName, email, SplitSents, SplitWords, RetryIdList
 
     # VoiceInspection Input 생성 그리고 1차 VoiceInspection(알고리즘)
     voiceInspection = ''
-    for i in range(len(ResponseJson)):
-        Sent = ResponseJson[i]['문장'].lstrip('/').rstrip('/')
-        CleanSent = Sent.replace('/', '').replace(' ', '')
-        if '형태1' in ResponseJson[i]['형태']:
-            # 모두 표준 형태인 '될내용'으로 통일시킴
-            if ('될내용' in CleanSent and '문장입' in CleanSent) or ('된내용' in CleanSent and '문장입' in CleanSent):
-                SentForInspection = Sent.replace('된/내용', '될내용') \
-                                        .replace('될/내용', '될내용') \
-                                        .replace('문장/입', '문장입')
-            else:
-                SentForInspection = Sent.replace('애온은', '내용은') \
-                                        .replace('에온은', '내용은') \
-                                        .replace('애용은', '내용은') \
-                                        .replace('에용은', '내용은') \
-                                        .replace('에요는', '내용은') \
-                                        .replace('애요는', '내용은') \
-                                        .replace('생상돼의', '생성될') \
-                                        .replace('생상대의', '생성될') \
-                                        .replace('생성돼는', '생성될') \
-                                        .replace('생성돼의', '생성될') \
-                                        .replace('생성된', '생성될') \
-                                        .replace('생성됨', '생성될') \
-                                        .replace('생상도의', '생성될') \
-                                        .replace('생성되는', '생성될') \
-                                        .replace('생성되의', '생성될') \
-                                        .replace('생성됄', '생성될') \
-                                        .replace('생성됀', '생성될') \
-                                        .replace('생성돼', '생성될') \
-                                        .replace('생성되', '생성될') \
-                                        .replace('됨/내용', '될내용') \
-                                        .replace('된/내용', '될내용') \
-                                        .replace('될/내용', '될내용') \
-                                        .replace('문장/입', '문장입')
-            
-            # 검사 로직 (이제 위에서 정제되었으므로 '될내용은/'만 체크하면 됨)
-            if not ('될내용은/' in SentForInspection) and ('/문장입' in SentForInspection):
-                RetryIdList.append(i)
-                if i == len(ResponseJson)-1:
-                    voiceInspection += Sent
-                else:
-                    voiceInspection += f"{Sent}, "
-    
-    # print(f"SplitSents: {SplitSents}")
-    # print(f"SplitWords: {SplitWords}")
-    # print(f"voiceInspection: {voiceInspection}")
-    # print(f"RetryIdList: {RetryIdList}")
+    # 검사 기준 문자열 (공백 제거)
+    target_start = BracketSentence[0].replace(" ", "")
+    target_end = BracketSentence[1].replace(" ", "")
 
+    for i in range(len(ResponseJson)):
+        RawSent = ResponseJson[i]['문장'].lstrip('/').rstrip('/')
+        
+        # 발음 교정 함수
+        CorrectedSent = fix_pronunciation_error(RawSent, GenLang)
+        
+        # 검사를 위한 공백 제거 버전
+        CleanSent = CorrectedSent.replace('/', '').replace(' ', '')
+        
+        if '형태1' in ResponseJson[i]['형태']:
+            is_valid = False
+            
+            # [검사 로직]
+            if GenLang == 'Ko':
+                # 한국어는 특수 포맷('/' 포함 여부 등)을 정밀하게 봅니다.
+                if ('될내용은/' in CorrectedSent) and ('/문장입' in CorrectedSent):
+                    is_valid = True
+            else:
+                # 그 외 언어는 '교정된 문장' 안에 '타겟 키워드'가 존재하는지 확인
+                # 대소문자 무시(lower), 구두점 및 ★슬래시★ 제거 후 확인
+                NormalizedSent = CorrectedSent.lower().replace(" ", "").replace(".", "").replace(",", "").replace("/", "") 
+                # ↑ 여기에 .replace("/", "") 가 추가되었습니다.
+                NormalizedStart = target_start.lower()
+                NormalizedEnd = target_end.lower()
+                
+                if (NormalizedStart in NormalizedSent) and (NormalizedEnd in NormalizedSent):
+                    is_valid = True
+            
+            # 유효하지 않으면 Retry 추가
+            if not is_valid:
+                RetryIdList.append(i)
+                # 디버깅용 출력 (필요시 주석 해제)
+                print(f"\n-> 검사 실패({GenLang}): {CorrectedSent}\n")
+
+            # 결과 문자열 합치기 (마지막 문장이면 쉼표 제외)
+            if i == len(ResponseJson)-1:
+                voiceInspection += CorrectedSent
+            else:
+                voiceInspection += f"{CorrectedSent}, "
+    
     return RetryIdList
 
 #######################################
@@ -1064,7 +1134,7 @@ def VoiceFileSplit(SplitSents, Modify, ModifyFolderPath, BracketsSwitch, bracket
     return segment_durations
 
 ## VoiceSplit 최종 함수
-def VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, VoiceLayerPath, SplitSents, LanguageCode = "ko-KR", MessagesReview = "off"):
+def VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, VoiceLayerPath, SplitSents, BracketSentence, GenLang, LanguageCode = "ko-KR", MessagesReview = "off"):
 
     print(f"VoiceSplit: progress, {name} waiting 5-15 second")
     for _ in range(3):
@@ -1074,7 +1144,7 @@ def VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bra
             ## SentsSpliting Process (STT 보이스 문장별로 분리)
             RetryIdList = []
             if any(d['제거'] == 'Yes' for d in SplitSents):
-                RetryIdList = SentsSplitingProcess(projectName, email, SplitSents, SplitWords, RetryIdList, MessagesReview = MessagesReview)
+                RetryIdList = SentsSplitingProcess(projectName, email, SplitSents, BracketSentence, SplitWords, RetryIdList, GenLang, MessagesReview = MessagesReview)
             ## VoiceSplit 프롬프트 요청
             ResponseJson = VoiceSplitProcess(projectName, email, name, SplitSents, SplitWords, Process = "VoiceSplit", MessagesReview = MessagesReview)
             ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps 커팅 데이터 구축

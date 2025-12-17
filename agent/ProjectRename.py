@@ -53,11 +53,21 @@ def ProjectRename(OriginalName, NewName, StoragePath = "/yaas/storage"):
                     os.rename(OriginalDirPath, NewDirPath)
                     print(f"[ 디렉토리 이름 변경: '{OriginalDirPath}' -> '({NewDirPath})' ]")
 
+    # Config ProjectName이름 변경
+    ConfigPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{NewName}/{NewName}_config.json"
+    if os.path.exists(ConfigPath):
+        with open(ConfigPath, 'r', encoding = 'utf-8') as ConfigJson:
+            ConfigData = json.load(ConfigJson)
+        ConfigData['ProjectName'] = NewName
+        with open(ConfigPath, 'w', encoding = 'utf-8') as ConfigJson:
+            json.dump(ConfigData, ConfigJson, ensure_ascii = False, indent = 4)
+        print(f"[ Config ProjectName 이름 변경: '{ConfigPath}' -> '({NewName})' ]")
+
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
-    OriginalName = '250511_생명이란무엇인가'
-    NewName = '250511_생명이란무엇인가'
+    OriginalName = '250226_생각하는대로그렇게된다'
+    NewName = '251217_다개국어프로젝트'
     #########################################################################
 
     # NormalizeUnicode('NFC')

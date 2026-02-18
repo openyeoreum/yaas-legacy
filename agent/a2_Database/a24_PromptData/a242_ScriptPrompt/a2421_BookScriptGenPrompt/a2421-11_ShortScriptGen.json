@@ -10,7 +10,7 @@
             "MasterModel": "claude-sonnet-4-0"
         },
         "GOOGLE": {
-            "MasterModel": "gemini-2.5-flash"
+            "MasterModel": "gemini-3-flash-preview"
         },
         "DEEPSEEK": {
             "MasterModel": "deepseek-reasoner"
@@ -87,7 +87,7 @@
             "MasterModel": "claude-sonnet-4-0"
         },
         "GOOGLE": {
-            "MasterModel": "gemini-2.5-flash"
+            "MasterModel": "gemini-3-flash-preview"
         },
         "DEEPSEEK": {
             "MasterModel": "deepseek-reasoner"

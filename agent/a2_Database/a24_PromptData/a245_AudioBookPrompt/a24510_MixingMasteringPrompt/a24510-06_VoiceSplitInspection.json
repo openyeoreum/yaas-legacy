@@ -7,7 +7,7 @@
             "ReasoningEffort": "low"
         },
         "ANTHROPIC": {
-            "MasterModel": "claude-sonnet-4-0"
+            "MasterModel": "claude-sonnet-4-6"
         },
         "GOOGLE": {
             "MasterModel": "gemini-2.5-flash"
@@ -84,7 +84,7 @@
             "ReasoningEffort": "low"
         },
         "ANTHROPIC": {
-            "MasterModel": "claude-sonnet-4-0"
+            "MasterModel": "claude-sonnet-4-6"
         },
         "GOOGLE": {
             "MasterModel": "gemini-2.5-flash"

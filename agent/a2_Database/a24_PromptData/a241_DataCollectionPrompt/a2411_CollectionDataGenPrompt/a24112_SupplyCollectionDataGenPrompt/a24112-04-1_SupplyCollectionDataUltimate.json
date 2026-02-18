@@ -7,10 +7,10 @@
             "ReasoningEffort": "medium"
         },
         "ANTHROPIC": {
-            "MasterModel": "claude-sonnet-4-0"
+            "MasterModel": "claude-sonnet-4-6"
         },
         "GOOGLE": {
-            "MasterModel": "gemini-2.5-flash"
+            "MasterModel": "gemini-3-flash-preview"
         },
         "DEEPSEEK": {
             "MasterModel": "deepseek-reasoner"
@@ -84,10 +84,10 @@
             "ReasoningEffort": "medium"
         },
         "ANTHROPIC": {
-            "MasterModel": "claude-sonnet-4-0"
+            "MasterModel": "claude-sonnet-4-6"
         },
         "GOOGLE": {
-            "MasterModel": "gemini-2.5-flash"
+            "MasterModel": "gemini-3-flash-preview"
         },
         "DEEPSEEK": {
             "MasterModel": "deepseek-reasoner"

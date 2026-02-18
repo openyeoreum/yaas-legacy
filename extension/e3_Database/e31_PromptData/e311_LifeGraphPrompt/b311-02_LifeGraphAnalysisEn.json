@@ -20,7 +20,7 @@
     "ANTHROPIC": {
         "BaseModel": {
             "ShortTokensModel": "claude-3-5-haiku-latest",
-            "LongTokensModel": "claude-sonnet-4-0"
+            "LongTokensModel": "claude-sonnet-4-6"
         },
         "ExampleFineTunedModel": {
             "ShortTokensModel": [],
@@ -30,10 +30,10 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "claude-sonnet-4-0"
+        "MasterModel": "claude-sonnet-4-6"
     },
     "GOOGLE":{
-        "MasterModel": "gemini-2.5-flash"
+        "MasterModel": "gemini-3-flash-preview"
     },
     "DEEPSEEK":{
         "MasterModel": "deepseek-reasoner"

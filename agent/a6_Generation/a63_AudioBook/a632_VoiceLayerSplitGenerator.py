@@ -2994,7 +2994,7 @@ def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'Voi
                 BracketsELChunks = []
                 for idx, _ELChunk in enumerate(Update['ActorChunk']):
                     if _ELChunk.strip().startswith('[') and _ELChunk.strip().endswith(']'):
-                        _ELChunk = BracketSentence[0] + f'"{_ELChunk.strip().strip("[]")}", -' + BracketSentence[1]
+                        _ELChunk = BracketSentence[0] + f', "{_ELChunk.strip().strip("[]")}", -' + BracketSentence[1]
                         if idx + 1 in BracketsNumber:
                             ELChunk = ModifyELChunk(_ELChunk)
                             BracketsELChunks.append(ELChunk)
@@ -3018,7 +3018,7 @@ def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'Voi
                 BracketsChunks = []
                 for idx, _Chunk in enumerate(Update['ActorChunk']):
                     if _Chunk.strip().startswith('[') and _Chunk.strip().endswith(']'):
-                        _Chunk = BracketSentence[0] + f'"{_ELChunk.strip().strip("[]")}", -' + BracketSentence[1]
+                        _Chunk = BracketSentence[0] + f', "{_ELChunk.strip().strip("[]")}", -' + BracketSentence[1]
                         if idx + 1 in BracketsNumber:
                             _Chunk = ModifyTCChunk(_Chunk)
                             BracketsChunks.append(_Chunk)
@@ -3034,6 +3034,18 @@ def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'Voi
 
             #### Split을 위한 딕셔너리 리스트 생성 ####
             RawSplitChunks = [chunk.replace('~.', '').replace('~,', '').replace('.,', '').replace('.,', '') for chunk in Update['ActorChunk']]
+
+            # eleven_v3_emotion [추가된 로직] *[...] 형태의 감정/지시 태그 텍스트에서 제외
+            CleanedRawSplitChunks = []
+            for chunk in RawSplitChunks:
+                # \*\[.*?\] : *[아무내용] 형태를 찾음
+                # \s* : 태그 뒤에 혹시 모를 띄어쓰기(공백)까지 함께 제거
+                # [*[comforting] 고시원에서] -> [고시원에서]
+                # *[comforting] 고시원에서 -> 고시원에서
+                cleaned = re.sub(r'\*\[.*?\]\s*', '', chunk)
+                CleanedRawSplitChunks.append(cleaned)
+            RawSplitChunks = CleanedRawSplitChunks
+
             # '[내용]'인 부분은 단어의 부드러운 음성 처리 방법
             rawSplitChunks = []
             removeSplitChunksNumber = []

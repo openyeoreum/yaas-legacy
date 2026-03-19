@@ -622,6 +622,8 @@ def ActorMatchedSelectionGenerationChunks(projectName, email, MainLang, messages
                     parts = GenerationKoChunks['Chunk'].split("(0.60)")
                     GenerationKoChunks['Chunk'] = [part + "(0.60)" for part in parts[:-1]] + [parts[-1]]
                 GenerationKoChunks['ApiSetting'] = MatchedActor['ApiSetting']
+
+                break
                 
         # name 값을 기준으로 그룹화(API 변경 횟수 절감)
         GroupedData = defaultdict(list)

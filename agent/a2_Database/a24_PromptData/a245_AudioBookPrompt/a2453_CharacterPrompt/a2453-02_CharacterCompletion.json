@@ -3,7 +3,7 @@
         "TaskName": "CharacterCompletion",
         "InputFormat": "text",
         "OpenAI": {
-            "MasterModel": "gpt-5-mini",
+            "MasterModel": "gpt-5.4-nano",
             "ReasoningEffort": "medium"
         },
         "ANTHROPIC": {
@@ -116,7 +116,7 @@
         "TaskName": "CharacterCompletion",
         "InputFormat": "text",
         "OpenAI": {
-            "MasterModel": "gpt-5-mini",
+            "MasterModel": "gpt-5.4-nano",
             "ReasoningEffort": "medium"
         },
         "ANTHROPIC": {

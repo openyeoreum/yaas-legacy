@@ -3,7 +3,7 @@
         "TaskName": "DemandCollectionDataDetail",
         "InputFormat": "text",
         "OpenAI": {
-            "MasterModel": "gpt-5-mini",
+            "MasterModel": "gpt-5.4-nano",
             "ReasoningEffort": "medium"
         },
         "ANTHROPIC": {
@@ -80,7 +80,7 @@
         "TaskName": "DemandCollectionDataDetail",
         "InputFormat": "text",
         "OpenAI": {
-            "MasterModel": "gpt-5-mini",
+            "MasterModel": "gpt-5.4-nano",
             "ReasoningEffort": "medium"
         },
         "ANTHROPIC": {

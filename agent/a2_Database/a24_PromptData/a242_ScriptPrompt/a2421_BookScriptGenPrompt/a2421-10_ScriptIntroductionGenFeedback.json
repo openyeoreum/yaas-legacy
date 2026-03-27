@@ -3,7 +3,7 @@
         "TaskName": "ScriptIntroductionGenFeedback",
         "InputFormat": "text",
         "OpenAI": {
-            "MasterModel": "gpt-5.4-nano",
+            "MasterModel": "gpt-5-mini",
             "ReasoningEffort": "medium"
         },
         "ANTHROPIC": {
@@ -80,7 +80,7 @@
         "TaskName": "ScriptIntroductionGenFeedback",
         "InputFormat": "text",
         "OpenAI": {
-            "MasterModel": "gpt-5.4-nano",
+            "MasterModel": "gpt-5-mini",
             "ReasoningEffort": "medium"
         },
         "ANTHROPIC": {

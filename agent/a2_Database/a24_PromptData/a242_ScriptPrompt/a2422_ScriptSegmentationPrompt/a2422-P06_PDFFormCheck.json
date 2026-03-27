@@ -3,7 +3,7 @@
         "TaskName": "PDFFormCheck",
         "InputFormat": "jpeg",
         "OpenAI": {
-            "MasterModel": "gpt-5.4-nano",
+            "MasterModel": "gpt-5-mini",
             "ReasoningEffort": "medium"
         },
         "ANTHROPIC": {
@@ -114,7 +114,7 @@
         "TaskName": "PDFFormCheck",
         "InputFormat": "jpeg",
         "OpenAI": {
-            "MasterModel": "gpt-5.4-nano",
+            "MasterModel": "gpt-5-mini",
             "ReasoningEffort": "medium"
         },
         "ANTHROPIC": {

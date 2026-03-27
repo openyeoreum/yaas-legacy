@@ -3,8 +3,8 @@
     "InputFormat": "text",
     "OpenAI": {
         "BaseModel": {
-            "ShortTokensModel": "gpt-5.4-nano",
-            "LongTokensModel": "gpt-5.4-nano"
+            "ShortTokensModel": "gpt-5-mini",
+            "LongTokensModel": "gpt-5-mini"
         },
         "ExampleFineTunedModel": {
             "ShortTokensModel": [],
@@ -14,7 +14,7 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "gpt-5.4-nano",
+        "MasterModel": "gpt-5-mini",
         "ReasoningEffort": "medium"
     },
     "ANTHROPIC": {

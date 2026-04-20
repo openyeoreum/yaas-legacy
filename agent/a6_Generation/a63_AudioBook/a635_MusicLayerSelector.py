@@ -721,9 +721,9 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', MusicDB = '
     # EndTitleMusic 슬라이스
     mixedTitleEndMusicAudio = TitleMusic_Audio[EndTitleLength * 1000 : (EndTitleLength * 1000) + 70000]
 
-    # 볼륨을 10dB, 4dB 낮춤 (+ EndMusicVolume 추가 감쇠)
+    # 볼륨을 10dB, 4dB 낮춤 (음성과 섞이는 구간은 EndMusicVolume 전량, 음성 뒤 구간은 1/3 적용)
     MixedTitleEndMusicAudio = mixedTitleEndMusicAudio - 12 + EndMusicVolume
-    LastMixedTitleEndMusicAudio = mixedTitleEndMusicAudio - 4 + EndMusicVolume
+    LastMixedTitleEndMusicAudio = mixedTitleEndMusicAudio - 4 + int(EndMusicVolume / 3)
 
     # LastMixedTitleEndMusicAudio에서 EndTitleVoices 시간 만큼 무음 처리
     LastMixedTitleEndMusicAudio = LastMixedTitleEndMusicAudio.overlay(AudioSegment.silent(duration=len(EndTitleVoices)), position=500)

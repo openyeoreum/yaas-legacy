@@ -24,6 +24,8 @@ services:
 
   yaas:
     image: yeoreum/yaas:2.0.0
+    env_file:
+      - ./storage-legacy/.env
     environment:
       - DATABASE_URL=postgres://yeoreum:0128@yaasdb:5432/yaasdb
     ports:

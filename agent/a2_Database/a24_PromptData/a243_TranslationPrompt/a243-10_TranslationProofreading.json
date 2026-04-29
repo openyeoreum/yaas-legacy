@@ -80,7 +80,7 @@
         "TaskName": "TranslationProofreading",
         "InputFormat": "text",
         "OpenAI": {
-            "MasterModel": "gpt-4.1",
+            "MasterModel": "gpt-5.4-mini",
             "ReasoningEffort": "medium"
         },
         "ANTHROPIC": {

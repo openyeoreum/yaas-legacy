@@ -3,7 +3,7 @@
         "TaskName": "AfterTranslationBodySummary",
         "InputFormat": "text",
         "OpenAI": {
-            "MasterModel": "gpt-5-mini",
+            "MasterModel": "gpt-5.4-mini",
             "ReasoningEffort": "high"
         },
         "ANTHROPIC": {
@@ -80,7 +80,7 @@
         "TaskName": "AfterTranslationBodySummary",
         "InputFormat": "text",
         "OpenAI": {
-            "MasterModel": "gpt-5-mini",
+            "MasterModel": "gpt-5.4-mini",
             "ReasoningEffort": "high"
         },
         "ANTHROPIC": {

@@ -1,83 +1,98 @@
 import os
+
 import unicodedata
+
 import json
 
-
-############################
-# Unicode Helper
-############################
-
 def ToNFC(text):
-    if isinstance(text, str):
-        return unicodedata.normalize("NFC", text)
-    return text
 
+    if isinstance(text, str):
+
+        return unicodedata.normalize("NFC", text)
+
+    return text
 
 def ToNFD(text):
+
     if isinstance(text, str):
+
         return unicodedata.normalize("NFD", text)
+
     return text
 
+def MakeOriginalCandidates(original_name):
 
-############################
-# JSON 내부 value 변경
-############################
+    return list(set([
+
+        ToNFC(original_name),
+
+        ToNFD(original_name),
+
+    ]))
 
 def ReplaceText(text, original_candidates, new_name):
 
     if not isinstance(text, str):
+
         return text
 
-    text = ToNFC(text)
-
     for original in original_candidates:
+
         text = text.replace(ToNFC(original), new_name)
+
         text = text.replace(ToNFD(original), new_name)
 
     return ToNFC(text)
 
-
 def ReplaceJsonValues(data, original_candidates, new_name):
 
     if isinstance(data, dict):
+
         return {
+
             key: ReplaceJsonValues(value, original_candidates, new_name)
+
             for key, value in data.items()
+
         }
 
-    elif isinstance(data, list):
+    if isinstance(data, list):
+
         return [
+
             ReplaceJsonValues(item, original_candidates, new_name)
+
             for item in data
+
         ]
 
-    elif isinstance(data, str):
+    if isinstance(data, str):
+
         return ReplaceText(data, original_candidates, new_name)
 
     return data
 
-
 def UpdateJsonFile(json_path, original_candidates, new_name):
 
     try:
+
         with open(json_path, "r", encoding="utf-8") as f:
+
             data = json.load(f)
 
         new_data = ReplaceJsonValues(data, original_candidates, new_name)
 
         if new_data != data:
+
             with open(json_path, "w", encoding="utf-8") as f:
+
                 json.dump(new_data, f, ensure_ascii=False, indent=4)
 
-            print(f"[ JSON 내부 변경 완료 ] {json_path}")
+            print(f"[ JSON 내부 value 변경 ] {json_path}")
 
     except Exception as e:
-        print(f"[ JSON 변경 실패 ] {json_path} | {e}")
 
-
-############################
-# Unicode Normalize 전체 수행
-############################
+        print(f"[ JSON 처리 실패 ] {json_path} | {e}")
 
 def NormalizeUnicode(storage_path):
 
@@ -92,10 +107,18 @@ def NormalizeUnicode(storage_path):
             if file != new_file:
 
                 old_path = os.path.join(root, file)
+
                 new_path = os.path.join(root, new_file)
 
                 if not os.path.exists(new_path):
+
                     os.rename(old_path, new_path)
+
+                    print(f"[ 파일 NFC 변경 ] {old_path} -> {new_path}")
+
+                else:
+
+                    print(f"[ 파일 NFC 건너뜀: 이미 존재 ] {new_path}")
 
         for folder in dirs:
 
@@ -104,44 +127,100 @@ def NormalizeUnicode(storage_path):
             if folder != new_folder:
 
                 old_path = os.path.join(root, folder)
+
                 new_path = os.path.join(root, new_folder)
 
                 if not os.path.exists(new_path):
+
                     os.rename(old_path, new_path)
 
+                    print(f"[ 폴더 NFC 변경 ] {old_path} -> {new_path}")
 
-############################
-# Rename Core
-############################
+                else:
 
-def ProjectRename(email, original_name, new_name):
+                    print(f"[ 폴더 NFC 건너뜀: 이미 존재 ] {new_path}")
 
-    email = ToNFC(email)
-    original_name = ToNFC(original_name)
-    new_name = ToNFC(new_name)
+def RenameFiles(storage_root, original_candidates, new_name):
 
-    storage_root = os.path.join(
-        "/yaas/storage",
-        "s1_Yeoreum",
-        "s12_UserStorage",
-        "s123_Storage",
-        email
-    )
+    for root, dirs, files in os.walk(storage_root, topdown=False):
 
-    storage_root = ToNFC(storage_root)
+        root_nfc = ToNFC(root)
 
-    print("\n[ Rename Root ]")
-    print(storage_root)
-    print()
+        for file in files:
 
-    original_candidates = [
-        ToNFC(original_name),
-        ToNFD(original_name)
-    ]
+            file_nfc = ToNFC(file)
 
-    ############################
-    # Step1 JSON 내부 변경
-    ############################
+            for candidate in original_candidates:
+
+                candidate_nfc = ToNFC(candidate)
+
+                if candidate_nfc in file_nfc:
+
+                    old_path = os.path.join(root, file)
+
+                    new_filename = file_nfc.replace(candidate_nfc, new_name)
+
+                    new_filename = ToNFC(new_filename)
+
+                    new_path = os.path.join(root_nfc, new_filename)
+
+                    new_path = ToNFC(new_path)
+
+                    if old_path != new_path:
+
+                        if not os.path.exists(new_path):
+
+                            os.rename(old_path, new_path)
+
+                            print(f"[ 파일 이름 변경 ] {old_path} -> {new_path}")
+
+                        else:
+
+                            print(f"[ 파일 이름 건너뜀: 이미 존재 ] {new_path}")
+
+                    break
+
+def RenameFolders(storage_root, original_candidates, new_name):
+
+    for root, dirs, files in os.walk(storage_root, topdown=False):
+
+        root_nfc = ToNFC(root)
+
+        for folder in dirs:
+
+            folder_nfc = ToNFC(folder)
+
+            for candidate in original_candidates:
+
+                candidate_nfc = ToNFC(candidate)
+
+                if candidate_nfc in folder_nfc:
+
+                    old_path = os.path.join(root, folder)
+
+                    new_folder = folder_nfc.replace(candidate_nfc, new_name)
+
+                    new_folder = ToNFC(new_folder)
+
+                    new_path = os.path.join(root_nfc, new_folder)
+
+                    new_path = ToNFC(new_path)
+
+                    if old_path != new_path:
+
+                        if not os.path.exists(new_path):
+
+                            os.rename(old_path, new_path)
+
+                            print(f"[ 폴더 이름 변경 ] {old_path} -> {new_path}")
+
+                        else:
+
+                            print(f"[ 폴더 이름 건너뜀: 이미 존재 ] {new_path}")
+
+                    break
+
+def UpdateJsonFiles(storage_root, original_candidates, new_name):
 
     for root, dirs, files in os.walk(storage_root):
 
@@ -151,88 +230,55 @@ def ProjectRename(email, original_name, new_name):
 
                 json_path = os.path.join(root, file)
 
-                UpdateJsonFile(
-                    json_path,
-                    original_candidates,
-                    new_name
-                )
+                UpdateJsonFile(json_path, original_candidates, new_name)
 
-    ############################
-    # Step2 파일명 변경
-    ############################
+def ProjectRename(email, original_name, new_name):
 
-    for root, dirs, files in os.walk(storage_root, topdown=False):
+    email = ToNFC(email)
 
-        for file in files:
+    new_name = ToNFC(new_name)
 
-            file_nfc = ToNFC(file)
+    original_candidates = MakeOriginalCandidates(original_name)
 
-            for candidate in original_candidates:
+    storage_root = os.path.join(
 
-                if candidate in file_nfc:
+        "/yaas/storage",
 
-                    old_path = os.path.join(root, file)
+        "s1_Yeoreum",
 
-                    new_filename = file_nfc.replace(candidate, new_name)
+        "s12_UserStorage",
 
-                    new_path = os.path.join(root, new_filename)
+        "s123_Storage",
 
-                    if old_path != new_path:
+        email
 
-                        if not os.path.exists(new_path):
+    )
 
-                            os.rename(old_path, new_path)
+    storage_root = ToNFC(storage_root)
 
-                            print(f"[ 파일 변경 ]")
-                            print(old_path)
-                            print(" → ")
-                            print(new_path)
-                            print()
+    print("\n[ Rename Root ]")
 
-    ############################
-    # Step3 폴더명 변경
-    ############################
+    print(storage_root)
 
-    for root, dirs, files in os.walk(storage_root, topdown=False):
+    print()
 
-        for folder in dirs:
+    print("[ Original Candidates ]")
 
-            folder_nfc = ToNFC(folder)
+    for candidate in original_candidates:
 
-            for candidate in original_candidates:
+        print(candidate)
 
-                if candidate in folder_nfc:
+    print()
 
-                    old_path = os.path.join(root, folder)
+    UpdateJsonFiles(storage_root, original_candidates, new_name)
 
-                    new_folder = folder_nfc.replace(candidate, new_name)
+    RenameFiles(storage_root, original_candidates, new_name)
 
-                    new_path = os.path.join(root, new_folder)
-
-                    if old_path != new_path:
-
-                        if not os.path.exists(new_path):
-
-                            os.rename(old_path, new_path)
-
-                            print(f"[ 폴더 변경 ]")
-                            print(old_path)
-                            print(" → ")
-                            print(new_path)
-                            print()
-
-    ############################
-    # Step4 NFC 최종 정리
-    ############################
+    RenameFolders(storage_root, original_candidates, new_name)
 
     NormalizeUnicode(storage_root)
 
     print("\n[ Rename Complete ]\n")
-
-
-############################
-# Run
-############################
 
 if __name__ == "__main__":
 
@@ -241,8 +287,10 @@ if __name__ == "__main__":
     OriginalName = "000000_템플릿"
 
     ########################################################
+    ########################################################
     # 아래 변경할 이름 작성
     NewName = "260425_지극히사적인일본"
+    ########################################################
     ########################################################
 
     ProjectRename(Email, OriginalName, NewName)

@@ -1,121 +1,248 @@
 import os
 import unicodedata
-import sys
 import json
 
-sys.path.append("/yaas")
+
+############################
+# Unicode Helper
+############################
+
+def ToNFC(text):
+    if isinstance(text, str):
+        return unicodedata.normalize("NFC", text)
+    return text
 
 
-### Sub1 : 한글 유니코드 정규화 ###
-def NormalizeUnicode(Code="NFC", StoragePath="/yaas/storage"):
-    for DirPath, DirNames, FileNames in os.walk(StoragePath, topdown=False):
-
-        # 파일 이름 정규화 및 변경
-        for filename in FileNames:
-            NormalizedFilename = unicodedata.normalize(Code, filename)
-
-            if filename != NormalizedFilename:
-                OriginalFilePath = os.path.join(DirPath, filename)
-                NewFilePath = os.path.join(DirPath, NormalizedFilename)
-
-                os.rename(OriginalFilePath, NewFilePath)
-
-                if "AudioBook_Edit" in filename:
-                    print(f"[ 파일 이름 {Code} 변경: '{filename}' -> '{NormalizedFilename}' ]")
-
-        # 디렉토리 이름 정규화 및 변경
-        for dirname in DirNames:
-            NormalizedDirname = unicodedata.normalize(Code, dirname)
-
-            if dirname != NormalizedDirname:
-                OriginalDirPath = os.path.join(DirPath, dirname)
-                NewDirPath = os.path.join(DirPath, NormalizedDirname)
-
-                os.rename(OriginalDirPath, NewDirPath)
-
-                if "AudioBook_Edit" in dirname:
-                    print(f"[ 디렉토리 이름 {Code} 변경: '{dirname}' -> '{NormalizedDirname}' ]")
+def ToNFD(text):
+    if isinstance(text, str):
+        return unicodedata.normalize("NFD", text)
+    return text
 
 
-### Sub2 : 프로젝트명 변경 ###
-def ProjectRename(OriginalName, NewName, StoragePath="/yaas/storage"):
-    NFCOriginalName = unicodedata.normalize("NFC", OriginalName)
-    NFDOriginalName = unicodedata.normalize("NFD", OriginalName)
+############################
+# JSON 내부 value 변경
+############################
 
-    Unicodes = [NFCOriginalName, NFDOriginalName]
+def ReplaceText(text, original_candidates, new_name):
 
-    for _OriginalName in Unicodes:
+    if not isinstance(text, str):
+        return text
 
-        # 모든 디렉토리와 파일을 거꾸로 순회
-        for root, dirs, files in os.walk(StoragePath, topdown=False):
+    text = ToNFC(text)
 
-            # 파일 이름 변경
-            for name in files:
-                if _OriginalName in name:
-                    OriginalFilePath = os.path.join(root, name)
-                    NewFileName = name.replace(_OriginalName, NewName)
-                    NewFilePath = os.path.join(root, NewFileName)
+    for original in original_candidates:
+        text = text.replace(ToNFC(original), new_name)
+        text = text.replace(ToNFD(original), new_name)
 
-                    os.rename(OriginalFilePath, NewFilePath)
+    return ToNFC(text)
 
-                    print(f"[ 파일 이름 변경: '{OriginalFilePath}' -> '{NewFilePath}' ]")
 
-            # 디렉토리 이름 변경
-            for name in dirs:
-                if _OriginalName in name:
-                    OriginalDirPath = os.path.join(root, name)
-                    NewDirName = name.replace(_OriginalName, NewName)
-                    NewDirPath = os.path.join(root, NewDirName)
+def ReplaceJsonValues(data, original_candidates, new_name):
 
-                    os.rename(OriginalDirPath, NewDirPath)
+    if isinstance(data, dict):
+        return {
+            key: ReplaceJsonValues(value, original_candidates, new_name)
+            for key, value in data.items()
+        }
 
-                    print(f"[ 디렉토리 이름 변경: '{OriginalDirPath}' -> '{NewDirPath}' ]")
+    elif isinstance(data, list):
+        return [
+            ReplaceJsonValues(item, original_candidates, new_name)
+            for item in data
+        ]
 
-        # 핵심 추가:
-        # StoragePath 자체가 OriginalName을 포함하고 있는 경우,
-        # os.walk 내부에서는 root 자기 자신이 dirs에 포함되지 않으므로 별도로 변경해야 함
-        StorageBaseName = os.path.basename(StoragePath)
-        StorageParentPath = os.path.dirname(StoragePath)
+    elif isinstance(data, str):
+        return ReplaceText(data, original_candidates, new_name)
 
-        if _OriginalName in StorageBaseName:
-            NewStorageBaseName = StorageBaseName.replace(_OriginalName, NewName)
-            NewStoragePath = os.path.join(StorageParentPath, NewStorageBaseName)
+    return data
 
-            os.rename(StoragePath, NewStoragePath)
 
-            print(f"[ 최상위 디렉토리 이름 변경: '{StoragePath}' -> '{NewStoragePath}' ]")
+def UpdateJsonFile(json_path, original_candidates, new_name):
 
-            # 이후 ConfigPath 계산을 위해 StoragePath 갱신
-            StoragePath = NewStoragePath
+    try:
+        with open(json_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
 
-    # Config ProjectName 이름 변경
-    ConfigPath = os.path.join(
-        StoragePath,
+        new_data = ReplaceJsonValues(data, original_candidates, new_name)
+
+        if new_data != data:
+            with open(json_path, "w", encoding="utf-8") as f:
+                json.dump(new_data, f, ensure_ascii=False, indent=4)
+
+            print(f"[ JSON 내부 변경 완료 ] {json_path}")
+
+    except Exception as e:
+        print(f"[ JSON 변경 실패 ] {json_path} | {e}")
+
+
+############################
+# Unicode Normalize 전체 수행
+############################
+
+def NormalizeUnicode(storage_path):
+
+    storage_path = ToNFC(storage_path)
+
+    for root, dirs, files in os.walk(storage_path, topdown=False):
+
+        for file in files:
+
+            new_file = ToNFC(file)
+
+            if file != new_file:
+
+                old_path = os.path.join(root, file)
+                new_path = os.path.join(root, new_file)
+
+                if not os.path.exists(new_path):
+                    os.rename(old_path, new_path)
+
+        for folder in dirs:
+
+            new_folder = ToNFC(folder)
+
+            if folder != new_folder:
+
+                old_path = os.path.join(root, folder)
+                new_path = os.path.join(root, new_folder)
+
+                if not os.path.exists(new_path):
+                    os.rename(old_path, new_path)
+
+
+############################
+# Rename Core
+############################
+
+def ProjectRename(email, original_name, new_name):
+
+    email = ToNFC(email)
+    original_name = ToNFC(original_name)
+    new_name = ToNFC(new_name)
+
+    storage_root = os.path.join(
+        "/yaas/storage",
         "s1_Yeoreum",
         "s12_UserStorage",
         "s123_Storage",
-        NewName,
-        f"{NewName}_config.json"
+        email
     )
 
-    if os.path.exists(ConfigPath):
-        with open(ConfigPath, "r", encoding="utf-8") as ConfigJson:
-            ConfigData = json.load(ConfigJson)
+    storage_root = ToNFC(storage_root)
 
-        ConfigData["ProjectName"] = NewName
+    print("\n[ Rename Root ]")
+    print(storage_root)
+    print()
 
-        with open(ConfigPath, "w", encoding="utf-8") as ConfigJson:
-            json.dump(ConfigData, ConfigJson, ensure_ascii=False, indent=4)
+    original_candidates = [
+        ToNFC(original_name),
+        ToNFD(original_name)
+    ]
 
-        print(f"[ Config ProjectName 이름 변경: '{ConfigPath}' -> '{NewName}' ]")
+    ############################
+    # Step1 JSON 내부 변경
+    ############################
 
+    for root, dirs, files in os.walk(storage_root):
+
+        for file in files:
+
+            if file.endswith(".json"):
+
+                json_path = os.path.join(root, file)
+
+                UpdateJsonFile(
+                    json_path,
+                    original_candidates,
+                    new_name
+                )
+
+    ############################
+    # Step2 파일명 변경
+    ############################
+
+    for root, dirs, files in os.walk(storage_root, topdown=False):
+
+        for file in files:
+
+            file_nfc = ToNFC(file)
+
+            for candidate in original_candidates:
+
+                if candidate in file_nfc:
+
+                    old_path = os.path.join(root, file)
+
+                    new_filename = file_nfc.replace(candidate, new_name)
+
+                    new_path = os.path.join(root, new_filename)
+
+                    if old_path != new_path:
+
+                        if not os.path.exists(new_path):
+
+                            os.rename(old_path, new_path)
+
+                            print(f"[ 파일 변경 ]")
+                            print(old_path)
+                            print(" → ")
+                            print(new_path)
+                            print()
+
+    ############################
+    # Step3 폴더명 변경
+    ############################
+
+    for root, dirs, files in os.walk(storage_root, topdown=False):
+
+        for folder in dirs:
+
+            folder_nfc = ToNFC(folder)
+
+            for candidate in original_candidates:
+
+                if candidate in folder_nfc:
+
+                    old_path = os.path.join(root, folder)
+
+                    new_folder = folder_nfc.replace(candidate, new_name)
+
+                    new_path = os.path.join(root, new_folder)
+
+                    if old_path != new_path:
+
+                        if not os.path.exists(new_path):
+
+                            os.rename(old_path, new_path)
+
+                            print(f"[ 폴더 변경 ]")
+                            print(old_path)
+                            print(" → ")
+                            print(new_path)
+                            print()
+
+    ############################
+    # Step4 NFC 최종 정리
+    ############################
+
+    NormalizeUnicode(storage_root)
+
+    print("\n[ Rename Complete ]\n")
+
+
+############################
+# Run
+############################
 
 if __name__ == "__main__":
 
-    ############################ 하이퍼 파라미터 설정 ############################
+    Email = "yeoreum00128@gmail.com"
+    # macOS 붙여넣기 OK (자동 NFC 변환됨)
     OriginalName = "000000_템플릿"
-    NewName = "260425_지극히사적인일본"
-    #########################################################################
 
-    # NormalizeUnicode("NFC")
-    ProjectRename(OriginalName, NewName)
+    ########################################################
+    # 아래 변경할 이름 작성
+    NewName = "260425_지극히사적인일본"
+    ########################################################
+
+    ProjectRename(Email, OriginalName, NewName)

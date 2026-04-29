@@ -15,7 +15,7 @@ import pyloudnorm as pyln
 import sys
 sys.path.append("/yaas")
 
-from agent.a3_Operation.a32_Solution.a321_LoadLLM import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
+from agent.a3_Operation.a32_Solution.a321_LoadLLM import OpenAI_LLMresponse, ANTHROPIC_LLMresponse, DEEPSEEK_LLMresponse
 from io import BytesIO
 from tqdm import tqdm
 from time import sleep
@@ -201,7 +201,7 @@ def ActorMatchingProcess(projectName, email, CharacterInfo, voiceDataSetCharacte
     ErrorCount = 0
     while 10 >= ErrorCount:
         # Response 생성
-        Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryNote = "", messagesReview = MessagesReview)
+        Response, Usage, Model = DEEPSEEK_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryNote = "", messagesReview = MessagesReview)
         Filter = ActorMatchingFilter(Response)
         
         if isinstance(Filter, str):

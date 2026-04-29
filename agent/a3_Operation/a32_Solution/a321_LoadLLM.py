@@ -572,6 +572,7 @@ def DEEPSEEK_LLMresponse(projectName, email, Process, Input, Count, mainLang = "
                     {"role": "system", "content": f"{Messages[0]['content']}"},
                     {"role": "user", "content": f"{Messages[1]['content']}\n\n{Messages[2]['content']}\n```json"},
                 ],
+                response_format = {"type": "json_object"},
                 stream = False
             )
           else:

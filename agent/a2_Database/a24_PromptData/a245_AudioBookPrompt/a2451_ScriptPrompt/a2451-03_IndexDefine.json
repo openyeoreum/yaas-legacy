@@ -13,7 +13,7 @@
             "MasterModel": "gemini-2.5-flash"
         },
         "DEEPSEEK": {
-            "MasterModel": "deepseek-reasoner"
+            "MasterModel": "deepseek-v4-flash"
         },
         "OutputFormat": "text",
         "Master": [
@@ -217,7 +217,7 @@
             "MasterModel": "gemini-2.5-flash"
         },
         "DEEPSEEK": {
-            "MasterModel": "deepseek-reasoner"
+            "MasterModel": "deepseek-v4-flash"
         },
         "OutputFormat": "text",
         "Master": [

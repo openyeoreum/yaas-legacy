@@ -13,7 +13,7 @@
             "MasterModel": "gemini-3-flash-preview"
         },
         "DEEPSEEK": {
-            "MasterModel": "deepseek-reasoner"
+            "MasterModel": "deepseek-v4-flash"
         },
         "OutputFormat": "json",
         "Master": [
@@ -90,7 +90,7 @@
             "MasterModel": "gemini-3-flash-preview"
         },
         "DEEPSEEK": {
-            "MasterModel": "deepseek-reasoner"
+            "MasterModel": "deepseek-v4-flash"
         },
         "OutputFormat": "json",
         "Master": [

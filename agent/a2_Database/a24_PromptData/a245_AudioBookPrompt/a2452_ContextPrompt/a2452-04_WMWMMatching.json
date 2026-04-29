@@ -13,7 +13,7 @@
             "MasterModel": "gemini-2.5-flash"
         },
         "DEEPSEEK": {
-            "MasterModel": "deepseek-reasoner"
+            "MasterModel": "deepseek-v4-flash"
         },
         "OutputFormat": "json",
         "Memo": "벡터데이터 베이스를 통해 1차적으로 <도서메타데이터>와 유사도가 높은 <영상메타데이터.db>를 선정한 후, 이를 통해 완벽한 <영상메타데이터>를 선별하기",
@@ -91,7 +91,7 @@
             "MasterModel": "gemini-2.5-flash"
         },
         "DEEPSEEK": {
-            "MasterModel": "deepseek-reasoner"
+            "MasterModel": "deepseek-v4-flash"
         },
         "OutputFormat": "json",
         "Memo": "벡터데이터 베이스를 통해 1차적으로 <도서메타데이터>와 유사도가 높은 <영상메타데이터.db>를 선정한 후, 이를 통해 완벽한 <영상메타데이터>를 선별하기",

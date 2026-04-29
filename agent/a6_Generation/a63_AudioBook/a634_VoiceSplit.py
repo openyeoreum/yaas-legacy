@@ -9,7 +9,7 @@ import copy
 import sys
 sys.path.append("/yaas")
 
-from agent.a3_Operation.a32_Solution.a321_LoadLLM import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
+from agent.a3_Operation.a32_Solution.a321_LoadLLM import OpenAI_LLMresponse, ANTHROPIC_LLMresponse, DEEPSEEK_LLMresponse
 from openai import OpenAI
 from pydub import AudioSegment
 
@@ -152,7 +152,7 @@ def SentsSplitingProcess(projectName, email, SplitSents, BracketSentence, SplitW
     ErrorCount = 0
     while 10 >= ErrorCount:
         # Response 생성
-        Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryNote = "", messagesReview = MessagesReview)
+        Response, Usage, Model = DEEPSEEK_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryNote = "", messagesReview = MessagesReview)
         Filter = SentsSplitingFilter(Response)
         
         if isinstance(Filter, str):
@@ -268,7 +268,7 @@ def VoiceSplitInspectionProcess(projectName, email, name, ResponseJson, NotSameN
     while 10 >= ErrorCount:
         # Response 생성
         memoryNote = "\n- 매우중요!, 틀려서 ‘검수': '불합격’인 경우 <'단어 [숫자] 단어' 나열>를 꼼꼼히 보고 맞는 정답으로 '수정정답'을 작성합니다. 이것이 가장 중요합니다. -\n"
-        Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryNote = memoryNote, messagesReview = MessagesReview)
+        Response, Usage, Model = DEEPSEEK_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryNote = memoryNote, messagesReview = MessagesReview)
         Filter = VoiceSplitInspectionFilter(Response, ResponseJson)
         
         if isinstance(Filter, str):
@@ -898,7 +898,7 @@ def VoiceSplitProcess(projectName, email, name, SplitSents, SplitWords, Inspecti
                 memoryNote = memoryNote + f"\"숫자부분\": \"{ErrorOutput}\"은 정답이 아님. 실수하지 말것!\n\n"
                 ErrorOutput = ''
             # Response 생성
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryNote = memoryNote, messagesReview = MessagesReview)
+            Response, Usage, Model = DEEPSEEK_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryNote = memoryNote, messagesReview = MessagesReview)
             # Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, 0, Mode = "Example", MemoryNote = memoryNote, messagesReview = MessagesReview)
             ResponseJson = VoiceTimeStempsProcessFilter(Response, NotSameAlphabet, lastNumber, NumberWordList)
             ## VoiceSplit이 많아서 오답률이 클 경우 VoiceSplitInspectionProcess 프롬프트 요청

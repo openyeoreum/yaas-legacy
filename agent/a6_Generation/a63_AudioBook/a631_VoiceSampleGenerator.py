@@ -116,4 +116,8 @@ if __name__ == "__main__":
     pitch = ''
     lastpitch = [-2]
     #########################################################################
+<<<<<<< ours
     VoiceSampleGen(testerName, name, emotion, pitch, lastpitch)
+=======
+    VoiceSampleGen(testerName, name, emotion, pitch, lastpitch)
+>>>>>>> theirs

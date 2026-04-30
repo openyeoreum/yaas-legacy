@@ -127,6 +127,7 @@ def GetPromptFrame(Process, MainLang):
         "VoiceInspection": "/a245_AudioBookPrompt/a24510_MixingMasteringPrompt/a24510-04_VoiceInspection.json",
         "VoiceSplit": "/a245_AudioBookPrompt/a24510_MixingMasteringPrompt/a24510-05_VoiceSplit.json",
         "VoiceSplitInspection": "/a245_AudioBookPrompt/a24510_MixingMasteringPrompt/a24510-06_VoiceSplitInspection.json",
+        "VoiceSplitSTTInspection": "/a245_AudioBookPrompt/a24510_MixingMasteringPrompt/a24510-07_VoiceSplitSTTInspection.json",
     }
 
     # MainLang 태그 설정

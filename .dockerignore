@@ -1,0 +1,13 @@
+.git
+.DS_Store
+storage
+storage-legacy
+databaseVolumesPostgres
+frontend/node_modules
+frontend/dist
+frontend/dist-ssr
+**/__pycache__
+**/*.pyc
+*.log
+.env
+.env.*

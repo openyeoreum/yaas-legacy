@@ -3,6 +3,7 @@ import re
 import json
 import time
 import random
+import ast
 import tiktoken
 import anthropic
 import sys
@@ -150,6 +151,113 @@ def LLMmessagesReview(Process, Input, Count, Response, Usage, Model, MAINLANG = 
     TextReponse = "".join(TextReponseList)
     
     return print(TextMessages + TextReponse)
+
+def NormalizeJsonResponse(Response):
+    if Response is None:
+        return ""
+
+    ResponseText = str(Response).strip().lstrip("\ufeff")
+    if ResponseText == "":
+        return ResponseText
+
+    def ToJsonText(Value):
+        return json.dumps(Value, ensure_ascii = False)
+
+    def TryParse(Text):
+        Text = Text.strip()
+        if Text == "":
+            return None
+        try:
+            Parsed = json.loads(Text)
+            if isinstance(Parsed, str):
+                return TryParse(Parsed)
+            return ToJsonText(Parsed)
+        except json.JSONDecodeError:
+            pass
+        try:
+            Parsed = ast.literal_eval(Text)
+            if isinstance(Parsed, str):
+                return TryParse(Parsed)
+            if isinstance(Parsed, (dict, list)):
+                return ToJsonText(Parsed)
+        except (ValueError, SyntaxError):
+            pass
+        return None
+
+    def RawDecode(Text):
+        Text = Text.strip()
+        if Text == "":
+            return None
+        Decoder = json.JSONDecoder()
+        for Index, Char in enumerate(Text):
+            if Char not in "[{":
+                continue
+            try:
+                Parsed, EndIndex = Decoder.raw_decode(Text[Index:])
+                return ToJsonText(Parsed)
+            except json.JSONDecodeError:
+                continue
+        return None
+
+    def BalancedJsonCandidate(Text):
+        StartIndexes = [Index for Index, Char in enumerate(Text) if Char in "[{"]
+        for StartIndex in StartIndexes:
+            Opening = Text[StartIndex]
+            Closing = "]" if Opening == "[" else "}"
+            Depth = 0
+            InString = False
+            Escape = False
+            for Index in range(StartIndex, len(Text)):
+                Char = Text[Index]
+                if InString:
+                    if Escape:
+                        Escape = False
+                    elif Char == "\\":
+                        Escape = True
+                    elif Char == '"':
+                        InString = False
+                    continue
+
+                if Char == '"':
+                    InString = True
+                elif Char == Opening:
+                    Depth += 1
+                elif Char == Closing:
+                    Depth -= 1
+                    if Depth == 0:
+                        Candidate = Text[StartIndex:Index + 1]
+                        Parsed = TryParse(Candidate)
+                        if Parsed is not None:
+                            return Parsed
+            LastIndex = Text.rfind(Closing)
+            if LastIndex > StartIndex:
+                Candidate = Text[StartIndex:LastIndex + 1]
+                Parsed = TryParse(Candidate)
+                if Parsed is not None:
+                    return Parsed
+        return None
+
+    Candidates = [ResponseText]
+    FencePattern = r'(?:```|\'\'\'|\"\"\")\s*(?:json)?\s*(.*?)(?:```|\'\'\'|\"\"\")'
+    Candidates.extend(match.group(1).strip() for match in re.finditer(FencePattern, ResponseText, re.DOTALL | re.IGNORECASE))
+    Candidates.append(re.sub(r'^\s*```(?:json)?\s*|\s*```\s*$', '', ResponseText, flags = re.IGNORECASE))
+
+    for Candidate in Candidates:
+        Parsed = TryParse(Candidate)
+        if Parsed is not None:
+            return Parsed
+
+    for Candidate in Candidates:
+        Parsed = RawDecode(Candidate)
+        if Parsed is not None:
+            return Parsed
+
+    for Candidate in Candidates:
+        Parsed = BalancedJsonCandidate(Candidate)
+        if Parsed is not None:
+            return Parsed
+
+    return ResponseText
   
 ## 프롬프트 실행
 def OpenAI_LLMresponse(projectName, email, Process, Input, Count, mainLang = "ko", root = "agent", PromptFramePath = "", Mode = "Master", Input2 = "", InputMemory = "", OutputMemory = "", MemoryNote = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
@@ -550,13 +658,13 @@ def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, mainLang = "ko
 #################################
 
 ## 프롬프트 실행
-def DEEPSEEK_LLMresponse(projectName, email, Process, Input, Count, mainLang = "ko", root = "agent", PromptFramePath = "", Mode = "Master", Input2 = "", InputMemory = "", OutputMemory = "", MemoryNote = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
+def DEEPSEEK_LLMresponse(projectName, email, Process, Input, Count, mainLang = "ko", root = "agent", PromptFramePath = "", Mode = "Master", Input2 = "", InputMemory = "", OutputMemory = "", MemoryNote = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off", JsonRepairLLM = "default"):
     DeepSeekClient = OpenAI(api_key = os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com")
     if PromptFramePath == "":
-      promptFrame = GetPromptFrame(Process, mainLang)
+        promptFrame = GetPromptFrame(Process, mainLang)
     else:
-      with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
-        promptFrame = json.load(promptFrameJson)
+        with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
+            promptFrame = json.load(promptFrameJson)
 
     Messages, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', MainLang = mainLang, Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryNote = MemoryNote, outputEnder = OutputEnder)
 
@@ -564,91 +672,67 @@ def DEEPSEEK_LLMresponse(projectName, email, Process, Input, Count, mainLang = "
     Model = promptFrame["DEEPSEEK"]["MasterModel"]
     
     for _ in range(MaxAttempts):
-      try:
-          if promptFrame["OutputFormat"] == 'json':
-            response = DeepSeekClient.chat.completions.create(
-                model = Model,
-                messages = [
-                    {"role": "system", "content": f"{Messages[0]['content']}"},
-                    {"role": "user", "content": f"{Messages[1]['content']}\n\n{Messages[2]['content']}\n```json"},
-                ],
-                response_format = {"type": "json_object"},
-                stream = False
-            )
-          else:
-            response = DeepSeekClient.chat.completions.create(
-                model = Model,
-                messages = [
-                    {"role": "system", "content": f"{Messages[0]['content']}"},
-                    {"role": "user", "content": f"{Messages[1]['content']}\n\n{Messages[2]['content']}"},
-                ],
-                stream = False
-            )
-          Response = response.choices[0].message.content
-          Usage = {'Input': response.usage.prompt_tokens,
-                  'Output': response.usage.completion_tokens,
-                  'Total': response.usage.total_tokens }
-          
-          # Response Mode 전처리1: ([...]와 {...}중 하나로 전처리)
-          if promptFrame["OutputFormat"] == 'json':
-              pattern = r'(?:\'\'\'|```|\"\"\")(.*?)(?:\'\'\'|```|\"\"\")'
-              match = re.search(pattern, Response, re.DOTALL)
-              if match:
-                  Response = match.group(1).strip()
-              Response = Response.replace('\n', '\\n')
-              StartIndexBracket = Response.find('[')
-              StartIndexBrace = Response.find('{')
-              if StartIndexBracket != -1 and StartIndexBrace != -1:
-                  StartIndex = min(StartIndexBracket, StartIndexBrace)
-              elif StartIndexBracket != -1:
-                  StartIndex = StartIndexBracket
-              elif StartIndexBrace != -1:
-                  StartIndex = StartIndexBrace
-              else:
-                  StartIndex = -1
-              if StartIndex != -1:
-                  if Response[StartIndex] == '[':
-                      EndIndex = Response.rfind(']')
-                  else:
-                      EndIndex = Response.rfind('}')
-                  if EndIndex != -1:
-                      JsonResponse = Response[StartIndex:EndIndex+1]
-                  else:
-                      JsonResponse = Response
-              else:
-                  JsonResponse = Response
-          else:
-              JsonResponse = Response
-          
-          if isinstance(email, str):
-              print(f"Project: {projectName} | Process: {Process} | DEEPSEEK_LLMresponse 완료")
-          else:
-              print(f"LifeGraphName: {projectName} | Process: {Process} | DEEPSEEK_LLMresponse 완료")
-          
-          if messagesReview == "on":
-              LLMmessagesReview(Process, Input, Count, JsonResponse, Usage, Model, MAINLANG = mainLang, ROOT = root, MODE = Mode, INPUT2 = Input2, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryNote, OUTPUTENDER = OutputEnder)
+        try:
+            if promptFrame["OutputFormat"] == 'json':
+                response = DeepSeekClient.chat.completions.create(
+                    model = Model,
+                    messages = [
+                        {"role": "system", "content": f"{Messages[0]['content']}"},
+                        {"role": "user", "content": f"{Messages[1]['content']}\n\n{Messages[2]['content']}\n\nJSON만 출력하세요. 코드펜스, 설명문, 머리말, 꼬리말은 출력하지 마세요."},
+                    ],
+                    response_format = {"type": "json_object"},
+                    stream = False
+                )
+            else:
+                response = DeepSeekClient.chat.completions.create(
+                    model = Model,
+                    messages = [
+                        {"role": "system", "content": f"{Messages[0]['content']}"},
+                        {"role": "user", "content": f"{Messages[1]['content']}\n\n{Messages[2]['content']}"},
+                    ],
+                    stream = False
+                )
+            Response = response.choices[0].message.content
+            Usage = {'Input': response.usage.prompt_tokens,
+                     'Output': response.usage.completion_tokens,
+                     'Total': response.usage.total_tokens}
 
-          ## Response Mode 전처리2: JsonParsing의 재구조화
-          if ":" in JsonResponse and "{" in JsonResponse and "}" in JsonResponse:
-              try:
-                  TestResponse = json.loads(JsonResponse)
-              except json.JSONDecodeError:
-                  print(f"Project: {projectName} | Process: {Process} | DEEPSEEK_LLMresponse 파싱오류 | JsonParsingProcess 시작")
-                  JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter, MainLang = mainLang, LLM = "GOOGLE")
-                  try:
-                      TestResponse = json.loads(JsonResponse)
-                  except json.JSONDecodeError:
-                      JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter, MainLang = mainLang, LLM = "OpenAI")
+            if promptFrame["OutputFormat"] == 'json':
+                JsonResponse = NormalizeJsonResponse(Response)
+            else:
+                JsonResponse = Response
 
-          return JsonResponse, Usage, Model
-      
-      except Exception as e:
-          if isinstance(email, str):
-            print(f"Project: {projectName} | Process: {Process} | DEEPSEEK_LLMresponse에서 오류 발생\n\n{e}")
-          else:
-            print(f"LifeGraphName: {projectName} | Process: {Process} | DEEPSEEK_LLMresponse에서 오류 발생\n\n{e}")
-          time.sleep(random.uniform(5, 10))
-          continue
+            if isinstance(email, str):
+                print(f"Project: {projectName} | Process: {Process} | DEEPSEEK_LLMresponse 완료")
+            else:
+                print(f"LifeGraphName: {projectName} | Process: {Process} | DEEPSEEK_LLMresponse 완료")
+
+            if messagesReview == "on":
+                LLMmessagesReview(Process, Input, Count, JsonResponse, Usage, Model, MAINLANG = mainLang, ROOT = root, MODE = Mode, INPUT2 = Input2, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryNote, OUTPUTENDER = OutputEnder)
+
+            if promptFrame["OutputFormat"] == 'json':
+                try:
+                    TestResponse = json.loads(JsonResponse)
+                except json.JSONDecodeError:
+                    if JsonRepairLLM in ["off", "none", "deepseek", "DEEPSEEK"]:
+                        print(f"Project: {projectName} | Process: {Process} | DEEPSEEK_LLMresponse 파싱오류 | 외부 JSON 보정 없이 반환")
+                        return JsonResponse, Usage, Model
+                    print(f"Project: {projectName} | Process: {Process} | DEEPSEEK_LLMresponse 파싱오류 | JsonParsingProcess 시작")
+                    JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter, MainLang = mainLang, LLM = "GOOGLE")
+                    try:
+                        TestResponse = json.loads(JsonResponse)
+                    except json.JSONDecodeError:
+                        JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter, MainLang = mainLang, LLM = "OpenAI")
+
+            return JsonResponse, Usage, Model
+
+        except Exception as e:
+            if isinstance(email, str):
+                print(f"Project: {projectName} | Process: {Process} | DEEPSEEK_LLMresponse에서 오류 발생\n\n{e}")
+            else:
+                print(f"LifeGraphName: {projectName} | Process: {Process} | DEEPSEEK_LLMresponse에서 오류 발생\n\n{e}")
+            time.sleep(random.uniform(5, 10))
+            continue
 
 if __name__ == "__main__":
 

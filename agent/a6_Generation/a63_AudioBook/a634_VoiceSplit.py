@@ -9,7 +9,7 @@ import copy
 import sys
 sys.path.append("/yaas")
 
-from agent.a3_Operation.a32_Solution.a321_LoadLLM import OpenAI_LLMresponse, ANTHROPIC_LLMresponse, DEEPSEEK_LLMresponse
+from agent.a3_Operation.a32_Solution.a321_LoadLLM import DEEPSEEK_LLMresponse
 from openai import OpenAI
 from pydub import AudioSegment
 
@@ -152,7 +152,7 @@ def SentsSplitingProcess(projectName, email, SplitSents, BracketSentence, SplitW
     ErrorCount = 0
     while 10 >= ErrorCount:
         # Response 생성
-        Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryNote = "", messagesReview = MessagesReview)
+        Response, Usage, Model = DEEPSEEK_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryNote = "", messagesReview = MessagesReview, JsonRepairLLM = "off")
         Filter = SentsSplitingFilter(Response)
         
         if isinstance(Filter, str):
@@ -268,7 +268,7 @@ def VoiceSplitInspectionProcess(projectName, email, name, ResponseJson, NotSameN
     while 10 >= ErrorCount:
         # Response 생성
         memoryNote = "\n- 매우중요!, 틀려서 ‘검수': '불합격’인 경우 <'단어 [숫자] 단어' 나열>를 꼼꼼히 보고 맞는 정답으로 '수정정답'을 작성합니다. 이것이 가장 중요합니다. -\n"
-        Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryNote = memoryNote, messagesReview = MessagesReview)
+        Response, Usage, Model = DEEPSEEK_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryNote = memoryNote, messagesReview = MessagesReview, JsonRepairLLM = "off")
         Filter = VoiceSplitInspectionFilter(Response, ResponseJson)
         
         if isinstance(Filter, str):
@@ -550,6 +550,10 @@ def InputText(SplitSents, SplitWords, SameNum):
             CleanSplitLaterSent = re.sub(r'[^가-힣A-Za-z\s]', '', SplitSents[i+1]['낭독문장'].strip())
             LaterWord = CleanSplitLaterSent.split()
             # print(f'{i}-LaterWord: {LaterWord}')
+        if len(BeforeWord) == 0:
+            BeforeWord = ["None"]
+        if len(AfterWord) == 0:
+            AfterWord = ["None"]
         try:
             AlphabetABWordList.append([BeforeWord[-2], BeforeWord[-1], Alphabet, AfterWord[0], AfterWord[1]])
         except IndexError:
@@ -573,8 +577,8 @@ def InputText(SplitSents, SplitWords, SameNum):
             try:
                 AlphabetABWordList = AlphabetABSentListGen(i, SplitSents)
             except IndexError:
-                for j in SplitSents:
-                    Sent = SplitSents[j]['낭독문장']
+                for j, SplitSent in enumerate(SplitSents):
+                    Sent = SplitSent['낭독문장']
                     SplitSents[j]['낭독문장'] = unicodedata.normalize('NFC', Sent)
                 AlphabetABWordList = AlphabetABSentListGen(i, SplitSents)
                 
@@ -898,8 +902,7 @@ def VoiceSplitProcess(projectName, email, name, SplitSents, SplitWords, Inspecti
                 memoryNote = memoryNote + f"\"숫자부분\": \"{ErrorOutput}\"은 정답이 아님. 실수하지 말것!\n\n"
                 ErrorOutput = ''
             # Response 생성
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryNote = memoryNote, messagesReview = MessagesReview)
-            # Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, 0, Mode = "Example", MemoryNote = memoryNote, messagesReview = MessagesReview)
+            Response, Usage, Model = DEEPSEEK_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryNote = memoryNote, messagesReview = MessagesReview, JsonRepairLLM = "off")
             ResponseJson = VoiceTimeStempsProcessFilter(Response, NotSameAlphabet, lastNumber, NumberWordList)
             ## VoiceSplit이 많아서 오답률이 클 경우 VoiceSplitInspectionProcess 프롬프트 요청
             
@@ -1030,59 +1033,43 @@ def VoiceFileSplit(SplitSents, Modify, ModifyFolderPath, BracketsSwitch, bracket
         optimal_split_point = find_optimal_split_point(audio, split_time)
         split_points.append(optimal_split_point)
 
-    # 기존 파일 삭제 (수정 후 Chunk 수가 줄어드는 경우가 있기에 삭제 시행)
-    for i in range(100):
-        NFE = 0
-        Remove_ExportPathText = VoiceLayerPath.replace(".wav", "")
-        Remove_ExportPathText = Remove_ExportPathText.replace("M", "")
-        
-        # '인물(톤)' 부분을 정규식을 사용하여 제거
-        Remove_ExportPathText = re.sub(r'_[^_]+(\([^)]+\))?_', '_', Remove_ExportPathText)
-        
-        Remove_ExportPath = Remove_ExportPathText + f"_({i})M.wav"
+    ExportPathText = VoiceLayerPath.replace(".wav", "")
+    if Modify == "Yes" and ExportPathText.endswith("M"):
+        ExportPathText = ExportPathText[:-1]
+
+    def ExportNumberFor(FileNumber):
+        if BracketsSwitch and FileNumber < len(bracketsSplitChunksNumber):
+            return bracketsSplitChunksNumber[FileNumber]
+        return FileNumber
+
+    def RemoveIfExists(path):
         try:
-            os.remove(Remove_ExportPath)
+            os.remove(path)
         except FileNotFoundError:
-            NFE += 1
+            pass
 
-        Remove_ExportPath = Remove_ExportPathText + f"_({i}).wav"
-        try:
-            os.remove(Remove_ExportPath)
-        except FileNotFoundError:
-            NFE += 1
-        
-        if NFE == 2:
-            break
-
-    # BracketsSwitch 상태에서 M으로 파일명 리네임
-    if BracketsSwitch:
-        VoiceLayerDirPath = os.path.dirname(VoiceLayerPath)
-        VoiceLayerFileRaw = os.path.basename(VoiceLayerPath).replace(".wav", "")
-        files = os.listdir(VoiceLayerDirPath)
-
-        # VoiceLayerFileRaw를 포함하는 파일 찾기
-        ContainsMfiles = []
-        NotContainsMfiles = []
-        for file in files:
-            if file.startswith(VoiceLayerFileRaw):
-                if file.endswith("M.wav"):
-                    ContainsMfiles.append(file)
-                elif file.endswith(".wav"):
-                    NotContainsMfiles.append(file)
-
-        # M.wav 파일이 발견되면 넘어간다.
-        if not ContainsMfiles:
-            # M 파일이 없고, 일반 .wav 파일만 존재하는 경우
-            for file in NotContainsMfiles:
-                # "_(n).wav" 형식의 파일명을 "M.wav"로 변경
-                new_file_name = file.replace(".wav", "M.wav")
-                old_file_path = os.path.join(VoiceLayerDirPath, file)
-                new_file_path = os.path.join(VoiceLayerDirPath, new_file_name)
-                # 파일 이름 변경
-                os.rename(old_file_path, new_file_path)
+    # 기존 파일 삭제. 부분 재생성에서는 재생성 대상 M 파일만 지우고, 합격한 일반 파일은 보존한다.
+    if Modify == "Yes" and BracketsSwitch and bracketsSplitChunksNumber != []:
+        for TargetNumber in bracketsSplitChunksNumber:
+            RemoveIfExists(ExportPathText + f"_({TargetNumber})M.wav")
+            RemoveIfExists(ExportPathText + f"_({TargetNumber})Modify.wav")
+    else:
+        for i in range(100):
+            RemoveCount = 0
+            for RemovePath in [
+                ExportPathText + f"_({i})M.wav",
+                ExportPathText + f"_({i}).wav",
+                ExportPathText + f"_({i})Modify.wav"
+            ]:
+                if os.path.exists(RemovePath):
+                    os.remove(RemovePath)
+                    RemoveCount += 1
+            if RemoveCount == 0:
+                break
 
     # 파일 분할 및 저장
     segment_durations = []
+    exported_segments = []
     start_point = 0
     split_points.append(audio.duration_seconds)  # 마지막 부분 포함하기 위해 추가
     FileNumber = 0
@@ -1103,22 +1090,20 @@ def VoiceFileSplit(SplitSents, Modify, ModifyFolderPath, BracketsSwitch, bracket
             # 세그먼트 재생 시간 저장
             segment_duration = segment.duration_seconds
             segment_durations.append(segment_duration)
-            ExportPathText = VoiceLayerPath.replace(".wav", "")
-            if ExportPathText[-1] == 'M':
-                ExportPathText = ExportPathText.replace("M", "")
-                if BracketsSwitch:
-                    ExportPath = ExportPathText + f"_({bracketsSplitChunksNumber[FileNumber]})M.wav"
-                else:
-                    ExportPath = ExportPathText + f"_({FileNumber})M.wav"
+            ExportNumber = ExportNumberFor(FileNumber)
+            if Modify == "Yes":
+                ExportPath = ExportPathText + f"_({ExportNumber})M.wav"
             else:
-                ExportPath = ExportPathText + f"_({FileNumber}).wav"
+                ExportPath = ExportPathText + f"_({ExportNumber}).wav"
             segment.export(ExportPath, format = "wav")
+            exported_segments.append({
+                "문장번호": FileNumber,
+                "분할지정문장": SplitSents[i]['낭독문장'],
+                "분할파일경로": ExportPath
+            })
             # 수정 파일 별도 저장
             if Modify == "Yes":
-                if BracketsSwitch:
-                    InspectionExportPath = ExportPathText + f"_({bracketsSplitChunksNumber[FileNumber]})Modify.wav"
-                else:
-                    InspectionExportPath = ExportPathText + f"_({FileNumber})Modify.wav"
+                InspectionExportPath = ExportPathText + f"_({ExportNumber})Modify.wav"
                 InspectionExportFolder, InspectionExportFile = os.path.split(InspectionExportPath)
                 InspectionExportMasterFilePath = os.path.join(ModifyFolderPath, InspectionExportFile)
                 segment.export(InspectionExportMasterFilePath, format = "wav")
@@ -1131,7 +1116,83 @@ def VoiceFileSplit(SplitSents, Modify, ModifyFolderPath, BracketsSwitch, bracket
     # 파일 분할이 완료된 후 원본 오디오 파일 삭제
     os.remove(VoiceLayerPath)
        
-    return segment_durations
+    return segment_durations, exported_segments
+
+## 분할 파일을 STT로 다시 듣고 분할 지정 문장과 비교 검수
+def VoiceSplitSTTInspectionFilter(Response, expected_count):
+    try:
+        outputJson = json.loads(Response)
+    except json.JSONDecodeError:
+        return "VoiceSplitSTTInspection, JSONDecode에서 오류 발생: JSONDecodeError"
+    try:
+        OutputDic = outputJson['분할검수']
+    except:
+        return "VoiceSplitSTTInspection, JSON에서 오류 발생: '분할검수' 비생성"
+    if len(OutputDic) != expected_count:
+        return "VoiceSplitSTTInspection, Input과 Output의 개수가 다름"
+    SeenSentenceNumbers = set()
+    for Output in OutputDic:
+        if ('문장번호' not in Output or '판정' not in Output or '이유' not in Output):
+            return "VoiceSplitSTTInspection, JSON에서 오류 발생: JSONKeyError"
+        try:
+            SentenceNumber = int(Output['문장번호'])
+        except (TypeError, ValueError):
+            return "VoiceSplitSTTInspection, JSON에서 오류 발생: 문장번호는 정수만 가능"
+        if SentenceNumber < 0 or SentenceNumber >= expected_count:
+            return "VoiceSplitSTTInspection, JSON에서 오류 발생: 문장번호 범위 오류"
+        if SentenceNumber in SeenSentenceNumbers:
+            return "VoiceSplitSTTInspection, JSON에서 오류 발생: 문장번호 중복"
+        SeenSentenceNumbers.add(SentenceNumber)
+        if Output['판정'] not in ['합격', '재생성']:
+            return "VoiceSplitSTTInspection, JSON에서 오류 발생: 판정은 '합격' 또는 '재생성'만 가능"
+    return OutputDic
+
+def VoiceSplitSTTInspection(projectName, email, name, exported_segments, LanguageCode = "ko-KR", Process = "VoiceSplitSTTInspection", MessagesReview = "off"):
+    if exported_segments == []:
+        return []
+
+    print(f"[[VoiceSplitSTTInspection: {name}]]")
+    client = OpenAI()
+    InspectionList = {"분할검수": []}
+    STTErrorIdList = []
+    for segment in exported_segments:
+        try:
+            with open(segment['분할파일경로'], "rb") as audio_file:
+                transcript = client.audio.transcriptions.create(
+                    file = audio_file,
+                    model = "whisper-1",
+                    response_format = "text",
+                    language = LanguageCode.split("-")[0]
+                )
+            SegmentSTT = str(transcript).strip()
+        except Exception as e:
+            SegmentSTT = f"STT_ERROR: {e}"
+            STTErrorIdList.append(int(segment["문장번호"]))
+        InspectionList["분할검수"].append({
+            "문장번호": segment["문장번호"],
+            "분할지정문장": segment["분할지정문장"],
+            "분할파일STT": SegmentSTT
+        })
+
+    Input = "\n<분할검수목록.json>\n" + json.dumps(InspectionList, ensure_ascii = False, indent = 2)
+    memoryNote = "\n- 매우중요: 이 검수는 발음 품질 평가나 의미 교정이 아니라 '명확한 문장 분할'과 '명백한 TTS 오독'을 잡는 작업입니다. 판단 순서는 (1) 분할지정문장과 분할파일STT의 대략적인 길이/시작 범위/끝 범위, (2) 핵심 발음 유사성입니다. 목표보다 명백히 길거나 짧으면 재생성입니다. 특히 '지금 생성될 내용은', '문장입니다', 이전/다음 문장 일부, 낭독용 안내 문구가 남으면 반드시 재생성입니다. 길이와 범위가 맞으면 '침하교처럼' -> '치마 그처럼/치마교처럼', '국가(일본)에' -> '국가일보는', '인질' -> '인재' 같은 단어 1개 수준의 발음/STT 오인식, 숫자 표기 차이, 띄어쓰기 차이는 합격입니다. 단어 1개가 의미상 달라 보여도 의미 차이만으로 재생성하지 마세요. 완전히 틀린 발음은 여러 핵심 단어 또는 연속된 핵심 구절이 발음상 거의 연결되지 않고 다른 문장을 읽은 것에 가까운 경우입니다. 애매할 때는 길이, 범위, 핵심 발음 뼈대가 대체로 맞으면 합격입니다. -\n"
+
+    for ErrorCount in range(3):
+        Response, Usage, Model = DEEPSEEK_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryNote = memoryNote, messagesReview = MessagesReview, JsonRepairLLM = "off")
+        Filter = VoiceSplitSTTInspectionFilter(Response, len(exported_segments))
+        if isinstance(Filter, str):
+            print(f"Project: {projectName} | Process: {Process} | {Filter}")
+        else:
+            print(f"Project: {projectName} | Process: {Process} | JSONDecode 완료")
+            RetryIdList = []
+            for Output in Filter:
+                if Output['판정'] == '재생성':
+                    RetryIdList.append(int(Output['문장번호']))
+                    print(f"VoiceSplitSTTInspection: 재생성 대상 {Output['문장번호']} | {Output['이유']}")
+            return sorted(list(set(RetryIdList + STTErrorIdList)))
+
+    print(f"Project: {projectName} | Process: {Process} | 검수 실패로 전체 재생성 진행")
+    return [segment["문장번호"] for segment in exported_segments]
 
 ## VoiceSplit 최종 함수
 def VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, VoiceLayerPath, SplitSents, BracketSentence, GenLang, LanguageCode = "ko-KR", MessagesReview = "off"):
@@ -1150,7 +1211,10 @@ def VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bra
             ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps 커팅 데이터 구축
             SplitTimeList = VoiceTimeStempsClassification(voiceTimeStemps, ResponseJson)
             ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps(음성 파일에서 커팅되어야 할 부분) 구축
-            segment_durations = VoiceFileSplit(SplitSents, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, VoiceLayerPath, SplitTimeList)
+            segment_durations, exported_segments = VoiceFileSplit(SplitSents, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, VoiceLayerPath, SplitTimeList)
+            ## 실제 분할된 음성파일을 STT로 검수하여 잘못 분할된 파일은 재생성 대상에 추가
+            STTRetryIdList = VoiceSplitSTTInspection(projectName, email, name, exported_segments, LanguageCode = LanguageCode, Process = "VoiceSplitSTTInspection", MessagesReview = MessagesReview)
+            RetryIdList = sorted(list(set(RetryIdList + STTRetryIdList)))
             
             return RetryIdList, segment_durations
         except TypeError as e:

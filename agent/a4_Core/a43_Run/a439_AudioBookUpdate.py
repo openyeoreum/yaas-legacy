@@ -11,12 +11,12 @@ from agent.a6_Generation.a63_AudioBook.a635_MusicLayerSelector import MusicLayer
 ###########################
 
 ### Creation에 오디오북 제작 및 업데이트 ###
-def CreationAudioBookUpdate(projectName, email, genLang, narrator, cloneVoiceName, readingStyle, voiceReverbe, mainLang, intro, audiobookSplitting = "Auto", musicDB = 'Template', endMusicVolume = -10, mode = "Manual", macro = "Manual", bracket = "Manual", volumeEqual = "Mixing", account = "None", voiceEnhance = "off", voiceFileGen = "on", bitrate = "320k", messagesReview = "off"):
+def CreationAudioBookUpdate(projectName, email, genLang, narrator, cloneVoiceName, readingStyle, voiceReverbe, mainLang, intro, audiobookSplitting = "Auto", musicDB = 'Template', endMusicVolume = -10, mode = "Manual", macro = "Manual", bracket = "Manual", volumeEqual = "Mixing", account = "None", voiceEnhance = "off", voiceFileGen = "on", bitrate = "320k", messagesReview = "off", asyncVoice = "off"):
     
     #####################
     ### 01_VoiceLayer ###
     #####################
-    VoiceLayerUpdate(projectName, email, GenLang = genLang, Narrator = narrator, CloneVoiceName = cloneVoiceName, ReadingStyle = readingStyle, VoiceReverbe = voiceReverbe, MainLang = mainLang, Mode = mode, Macro = macro, Bracket = bracket, VolumeEqual = volumeEqual, Account = account, VoiceEnhance = voiceEnhance, VoiceFileGen = voiceFileGen, MessagesReview = messagesReview)
+    VoiceLayerUpdate(projectName, email, GenLang = genLang, Narrator = narrator, CloneVoiceName = cloneVoiceName, ReadingStyle = readingStyle, VoiceReverbe = voiceReverbe, MainLang = mainLang, Mode = mode, Macro = macro, Bracket = bracket, VolumeEqual = volumeEqual, Account = account, VoiceEnhance = voiceEnhance, VoiceFileGen = voiceFileGen, MessagesReview = messagesReview, Async = asyncVoice)
     MusicLayerUpdate(projectName, email, CloneVoiceName = cloneVoiceName, MainLang = mainLang, Intro = intro, AudiobookSplitting = audiobookSplitting, MusicDB = musicDB, EndMusicVolume = endMusicVolume, VolumeEqual = volumeEqual, Bitrate = bitrate)
     
 if __name__ == "__main__":

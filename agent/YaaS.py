@@ -132,7 +132,8 @@ def YaasConfigUpdate(email, ProjectName, MainLang, Estimate, DataCollection, Sea
                 "Bitrate": "320k",
                 "Macro": "Auto",
                 "Bracket": "Auto",
-                "VolumeEqual": "Mastering"
+                "VolumeEqual": "Mastering",
+                "Async": 0.01
             }
         else:
             CloneVoiceName = AudioBook
@@ -157,7 +158,8 @@ def YaasConfigUpdate(email, ProjectName, MainLang, Estimate, DataCollection, Sea
                 "Bitrate": "320k",
                 "Macro": "Auto",
                 "Bracket": "Auto",
-                "VolumeEqual": "Mastering"
+                "VolumeEqual": "Mastering",
+                "Async": 0.01
             }
 
         ### Step3-8 : MarketingConfig 설정 ###
@@ -219,13 +221,13 @@ def TranslationUpdate(email, ProjectName, MainLang, Translation, BookGenre, Tone
 ### Step9 : TextBook 업데이트 ###
 
 ### Step10 : AudioBook 업데이트 ###
-def AudioBookUpdate(email, ProjectName, GenLang, IndexMode, BookGenre, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, MusicDB, EndMusicVolume, Macro, Bracket, VolumeEqual, Account, VoiceEnhance, VoiceFileGen, Bitrate, MessagesReview):
+def AudioBookUpdate(email, ProjectName, GenLang, IndexMode, BookGenre, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, MusicDB, EndMusicVolume, Macro, Bracket, VolumeEqual, Account, VoiceEnhance, VoiceFileGen, Bitrate, MessagesReview, Async = "off"):
     
     ### Step10-1 : AudioBook 데이터 프레임 ###
     SolutionDataFrameUpdate(email, ProjectName, MainLang, indexMode = IndexMode, messagesReview = MessagesReview)
     
     ### Step10-2 : AudioBook 제작 ###
-    CreationAudioBookUpdate(ProjectName, email, GenLang, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, audiobookSplitting = AudiobookSplitting, musicDB = MusicDB, endMusicVolume = EndMusicVolume, macro = Macro, bracket = Bracket, volumeEqual = VolumeEqual, account = Account, voiceEnhance = VoiceEnhance, voiceFileGen = VoiceFileGen, bitrate = Bitrate, messagesReview = MessagesReview)
+    CreationAudioBookUpdate(ProjectName, email, GenLang, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, audiobookSplitting = AudiobookSplitting, musicDB = MusicDB, endMusicVolume = EndMusicVolume, macro = Macro, bracket = Bracket, volumeEqual = VolumeEqual, account = Account, voiceEnhance = VoiceEnhance, voiceFileGen = VoiceFileGen, bitrate = Bitrate, messagesReview = MessagesReview, asyncVoice = Async)
     
 ### Step11 : Marketing 업데이트 ###
 
@@ -265,7 +267,7 @@ def YaaS(email, ProjectName, MainLang, EstimateConfig, DataCollectionConfig, Sea
     
     ### Step10 : AudioBook 업데이트 ###
     if AudioBookConfig != {}:
-        AudioBookUpdate(email, ProjectName, AudioBookConfig['GenLang'], AudioBookConfig['IndexMode'], AudioBookConfig['BookGenre'], AudioBookConfig['Narrator'], AudioBookConfig['CloneVoiceName'], AudioBookConfig['ReadingStyle'], AudioBookConfig['VoiceReverbe'], MainLang, AudioBookConfig['Intro'], AudioBookConfig['AudiobookSplitting'], AudioBookConfig['MusicDB'], AudioBookConfig['EndMusicVolume'], AudioBookConfig['Macro'], AudioBookConfig['Bracket'], AudioBookConfig['VolumeEqual'], Account, AudioBookConfig['VoiceEnhance'], AudioBookConfig['VoiceFileGen'], AudioBookConfig['Bitrate'], MessagesReview)
+        AudioBookUpdate(email, ProjectName, AudioBookConfig['GenLang'], AudioBookConfig['IndexMode'], AudioBookConfig['BookGenre'], AudioBookConfig['Narrator'], AudioBookConfig['CloneVoiceName'], AudioBookConfig['ReadingStyle'], AudioBookConfig['VoiceReverbe'], MainLang, AudioBookConfig['Intro'], AudioBookConfig['AudiobookSplitting'], AudioBookConfig['MusicDB'], AudioBookConfig['EndMusicVolume'], AudioBookConfig['Macro'], AudioBookConfig['Bracket'], AudioBookConfig['VolumeEqual'], Account, AudioBookConfig['VoiceEnhance'], AudioBookConfig['VoiceFileGen'], AudioBookConfig['Bitrate'], MessagesReview, AudioBookConfig.get('Async', 'off'))
     
     ### Step11 : Marketing 업데이트 ###
     if MarketingConfig != {}:

@@ -3,15 +3,27 @@ sys.path.append("/yaas")
 
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-from backend.routers import UserRouter
-from backend.b5_Domain.question.question_router import question_router
+from backend.b5_Domain.b56_AudioBook.audiobook_router import audiobook_router
+
+try:
+    from backend.routers import UserRouter
+    from backend.b5_Domain.question.question_router import question_router
+except ModuleNotFoundError:
+    UserRouter = None
+    question_router = None
 
 app = FastAPI(debug = True)
 
 # CORS 설정 - credentials와 * 동시 사용 불가
 origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
     "http://localhost:5174",
     "http://127.0.0.1:5174",
+    "http://localhost:5175",
+    "http://127.0.0.1:5175",
+    "http://localhost:15174",
+    "http://127.0.0.1:15174",
     "http://0.0.0.0:5174",
     "http://172.18.0.4:5174",
 ]
@@ -28,8 +40,11 @@ app.add_middleware(
 def hello():
     return {"message": "사랑해요. 아공이!"}
 
-app.include_router(UserRouter)
-app.include_router(question_router)
+if UserRouter is not None:
+    app.include_router(UserRouter)
+if question_router is not None:
+    app.include_router(question_router)
+app.include_router(audiobook_router)
 # app.include_router(a1112_UserHistoryRouter.router)
 # app.include_router(a1113_SubscriptionRouter.router)
 # app.include_router(a1114_SubscriptionHistoryRouter.router)

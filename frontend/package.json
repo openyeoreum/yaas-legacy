@@ -14,6 +14,12 @@
     "vite": "^6.3.5"
   },
   "dependencies": {
-    "svelte-spa-router": "^4.0.1"
+    "@lucide/svelte": "^1.14.0",
+    "@tailwindcss/vite": "^4.2.4",
+    "bits-ui": "^2.18.0",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.5.0",
+    "tailwind-variants": "^3.2.2",
+    "tailwindcss": "^4.2.4"
   }
 }

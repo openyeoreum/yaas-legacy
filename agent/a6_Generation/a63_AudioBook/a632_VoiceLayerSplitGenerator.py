@@ -12,6 +12,8 @@ import sox
 import subprocess
 import numpy as np
 import pyloudnorm as pyln
+import wave
+import base64
 import sys
 sys.path.append("/yaas")
 
@@ -22,13 +24,13 @@ from time import sleep
 from collections import OrderedDict
 from difflib import SequenceMatcher
 from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pydub import AudioSegment
 from collections import defaultdict
 from elevenlabs import Voice, VoiceSettings, save
 from elevenlabs.client import ElevenLabs
 from audoai.noise_removal import NoiseRemovalClient
 from agent.a4_Core.a42_Access.a424_GetProcessData import GetProject, SaveProject, GetSoundDataSet
-from agent.a6_Generation.a63_AudioBook.a633_TypeCastWebMacro import TypeCastMacro
 from agent.a6_Generation.a63_AudioBook.a634_VoiceSplit import VoiceSplit
 
 ###########################################
@@ -441,21 +443,24 @@ def ActorMatchingProcessOrHighestScoreVoiceCal(projectName, email, CharacterInfo
                 # 이름
                 NeuterActorName = ModifiedVoiceData['Name'][:-1] + ', 중성)'
                 ModifiedVoiceData['Name'] = NeuterActorName
-                # 감정
-                NeuterVoiceEmotion = ModifiedVoiceData['ApiSetting']['emotion_tone_preset']['neuter_emotion_tone_preset']
-                ModifiedVoiceData['ApiSetting']['emotion_tone_preset']['emotion_tone_preset'] = NeuterVoiceEmotion
-                # 볼륨
-                NeuterVoiceVolume = ModifiedVoiceData['ApiSetting']['volume'] * 1.05
-                ModifiedVoiceData['ApiSetting']['volume'] = NeuterVoiceVolume
-                # 속도
-                NeuterVoiceSpeed = [ModifiedVoiceData['ApiSetting']['speed_x'][0] * 100 / 105]
-                ModifiedVoiceData['ApiSetting']['speed_x'] = NeuterVoiceSpeed
-                # 피치
-                NeuterVoicePitch = ModifiedVoiceData['ApiSetting']['pitch'] + 1
-                ModifiedVoiceData['ApiSetting']['pitch'] = NeuterVoicePitch
-                # 라스트피치
-                NeuterVoiceLastPitch = [-2]
-                ModifiedVoiceData['ApiSetting']['last_pitch'] = NeuterVoiceLastPitch
+                ApiSetting = ModifiedVoiceData['ApiSetting']
+                if ApiSetting.get('Api') == 'Gemini':
+                    ApiSetting['StylePrompt'] = ApiSetting.get('StylePrompt', '') + ' Use a gender-neutral, balanced vocal tone.'
+                elif 'emotion_tone_preset' in ApiSetting:
+                    # 감정
+                    NeuterVoiceEmotion = ApiSetting['emotion_tone_preset'].get('neuter_emotion_tone_preset', ApiSetting['emotion_tone_preset'].get('emotion_tone_preset', ['None']))
+                    ApiSetting['emotion_tone_preset']['emotion_tone_preset'] = NeuterVoiceEmotion
+                    # 볼륨
+                    if 'volume' in ApiSetting:
+                        ApiSetting['volume'] = ApiSetting['volume'] * 1.05
+                    # 속도
+                    if 'speed_x' in ApiSetting:
+                        ApiSetting['speed_x'] = [ApiSetting['speed_x'][0] * 100 / 105]
+                    # 피치
+                    if 'pitch' in ApiSetting:
+                        ApiSetting['pitch'] = ApiSetting['pitch'] + 1
+                    # 라스트피치
+                    ApiSetting['last_pitch'] = [-2]
 
                 # 변경된 복사본을 HighestScoreVoice로 사용
                 HighestScoreVoice = ModifiedVoiceData
@@ -659,6 +664,28 @@ def VoiceLayerPathGen(projectName, email, FileName, Folder):
 
     return LayerPath
 
+def ChunkHasReadableText(ChunkText):
+    if ChunkText is None:
+        return False
+    CleanText = str(ChunkText).strip()
+    CleanText = re.sub(r'\*\[[^\]]*\]', '', CleanText)
+    CleanText = re.sub(r"<효과음시작[0-9]{1,5}>|<효과음끝[0-9]{1,5}>", "", CleanText)
+    return re.search(r'[^\W_]', CleanText, re.UNICODE) is not None
+
+def RemoveUnreadableActorChunks(EditChunks, Label = "AudioBook_Edit"):
+    RemovedCount = 0
+    for EditChunk in EditChunks:
+        ActorChunks = EditChunk.get('ActorChunk', [])
+        for Index in range(len(ActorChunks) - 1, -1, -1):
+            Chunk = ActorChunks[Index].get('Chunk', '')
+            if not ChunkHasReadableText(Chunk):
+                print(f"[ {Label} 특수문자-only Chunk 삭제 | EditId: {EditChunk.get('EditId')} | Chunk: {Chunk} ]")
+                del ActorChunks[Index]
+                RemovedCount += 1
+    if RemovedCount > 0:
+        EditChunks[:] = [EditChunk for EditChunk in EditChunks if EditChunk.get('ActorChunk', []) != []]
+    return EditChunks
+
 #######################################
 ##### VoiceLayerGenerator 파일 생성 #####
 #######################################
@@ -703,7 +730,7 @@ def EditGenerationKoChunksToList(EditGenerationKoChunks):
     
     return EditGenerationKoListChunks
 
-## TypecastVoice 생성 ##
+## Voice 생성 ##
 def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, voiceReverbe, tag, name, Chunk, EL_Chunk, BracketSentence, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, GenLang, MessagesReview):
     attempt = 0
 
@@ -726,6 +753,65 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
         tfm.build(CopyFilePath, VoicePath)
         
         os.remove(CopyFilePath)
+
+    def ExportModifyInspectionFile(fileName):
+        if len(SplitChunks) == 1 and Modify == "Yes":
+            Voice_Audio_Wav = AudioSegment.from_wav(fileName)
+            InspectionExportPath = fileName.replace("_(0)M.wav", "_(0)Modify.wav")
+            InspectionExportFolder, InspectionExportFile = os.path.split(InspectionExportPath)
+            InspectionExportMasterFilePath = os.path.join(ModifyFolderPath, InspectionExportFile)
+            Voice_Audio_Wav.export(InspectionExportMasterFilePath, format = "wav")
+
+    def ApplyVoiceReverbe(fileName, titleSpeed = 0.95, sectionSpeed = 0.95, characterSpeed = None):
+        if voiceReverbe == 'on':
+            if tag in ['Title', 'Logue']:
+                print(f"ChangeSpeed({titleSpeed}): ({tag}) Voice waiting 1-2 second")
+                ChangeSpeedIndexVoice(fileName, Volume = 1.04, Speed = titleSpeed, Pad = 0.5, Reverb = 'off')
+            if tag in ['Part', 'Chapter', 'Index']:
+                print(f"ChangeSpeed({sectionSpeed}): ({tag}) Voice waiting 1-2 second")
+                ChangeSpeedIndexVoice(fileName, Volume = 1.07, Speed = sectionSpeed, Pad = 1.0, Reverb = 'off')
+            if characterSpeed is not None and tag in ['Character']:
+                print(f"ChangeSpeed({characterSpeed}): ({tag}) Voice waiting 1-2 second")
+                ChangeSpeedIndexVoice(fileName, Volume = 1.00, Speed = characterSpeed, Pad = 0.5, Reverb = 'off')
+
+    def SplitGeneratedVoiceIfNeeded(fileName):
+        def SplitOutputPaths():
+            ExportPathText = voiceLayerPath.replace(".wav", "")
+            if Modify == "Yes" and ExportPathText.endswith("M"):
+                ExportPathText = ExportPathText[:-1]
+            OutputPaths = []
+            FileNumber = 0
+            for SplitChunk in SplitChunks:
+                if SplitChunk.get('제거') != 'No':
+                    continue
+                if BracketsSwitch and FileNumber < len(bracketsSplitChunksNumber):
+                    ExportNumber = bracketsSplitChunksNumber[FileNumber]
+                else:
+                    ExportNumber = SplitChunk.get('원본문장번호', FileNumber)
+                if Modify == "Yes":
+                    OutputPaths.append(ExportPathText + f"_({ExportNumber})M.wav")
+                else:
+                    OutputPaths.append(ExportPathText + f"_({ExportNumber}).wav")
+                FileNumber += 1
+            return OutputPaths
+
+        def RemoveSourceVoiceIfSplitCompleted():
+            if len(SplitChunks) <= 1 or not os.path.exists(voiceLayerPath):
+                return
+            OutputPaths = SplitOutputPaths()
+            if OutputPaths != [] and all(os.path.exists(OutputPath) for OutputPath in OutputPaths):
+                os.remove(voiceLayerPath)
+                print(f"[ VoiceSplit 원본 덩어리 파일 삭제: {os.path.basename(voiceLayerPath)} ]")
+
+        if len(SplitChunks) > 1:
+            try:
+                RetryIdList, segment_durations = VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, voiceLayerPath, SplitChunks, BracketSentence, GenLang, MessagesReview = MessagesReview)
+                if RetryIdList != []:
+                    return RetryIdList
+            finally:
+                RemoveSourceVoiceIfSplitCompleted()
+        ExportModifyInspectionFile(fileName)
+        return "Continue"
 
     ##################
     ### ElevenLabs ###
@@ -754,7 +840,7 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                 )
 
                 if len(SplitChunks) == 1:
-                    if "M.wav" in voiceLayerPath:
+                    if voiceLayerPath.endswith("M.wav"):
                         fileName = voiceLayerPath.replace("M.wav", "_(0)M.wav")
                     else:
                         fileName = voiceLayerPath.replace(".wav", "_(0).wav")
@@ -773,31 +859,10 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                 Voice_Audio_Mp3.export(fileName, format = "wav")
                 os.remove(fileNameMp3)
 
-                ## VoiceReverbe ##
-                if voiceReverbe == 'on':
-                    ## tag가 Title, Logue인 경우 ##
-                    if tag in ['Title', 'Logue']:
-                        print(f"ChangeSpeed(0.89): ({tag}) Voice waiting 1-2 second")
-                        ChangeSpeedIndexVoice(fileName, Volume = 1.04, Speed = 0.95, Pad = 0.5, Reverb = 'off')
-
-                    ## tag가 Title, Logue, Part, Chapter, Index인 경우 ##
-                    if tag in ['Part', 'Chapter', 'Index']:
-                        print(f"ChangeSpeed(0.91): ({tag}) Voice waiting 1-2 second")
-                        ChangeSpeedIndexVoice(fileName, Volume = 1.07, Speed = 0.95, Pad = 1.0, Reverb = 'off')
-                
-                if len(SplitChunks) > 1:
-                    ### 음성파일을 분할하는 코드 ###
-                    RetryIdList, segment_durations = VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, voiceLayerPath, SplitChunks, BracketSentence, GenLang, MessagesReview = MessagesReview)
-                    if RetryIdList != []:
-                        return RetryIdList
-                # 수정 파일 별도 저장
-                if len(SplitChunks) == 1 and Modify == "Yes":
-                    Voice_Audio_Wav = AudioSegment.from_wav(fileName)
-                    InspectionExportPath = fileName.replace("_(0)M.wav", "_(0)Modify.wav")
-                    InspectionExportFolder, InspectionExportFile = os.path.split(InspectionExportPath)
-                    InspectionExportMasterFilePath = os.path.join(ModifyFolderPath, InspectionExportFile)
-                    Voice_Audio_Wav.export(InspectionExportMasterFilePath, format = "wav")
-
+                ApplyVoiceReverbe(fileName, titleSpeed = 0.95, sectionSpeed = 0.95)
+                SplitResult = SplitGeneratedVoiceIfNeeded(fileName)
+                if SplitResult != "Continue":
+                    return SplitResult
                 return "Continue"
                 ########## ElevenLabs API 요청 ##########
             except KeyError as e:
@@ -926,7 +991,7 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                 
                 # 파일명 결정
                 if len(SplitChunks) == 1:
-                    if "M.wav" in voiceLayerPath:
+                    if voiceLayerPath.endswith("M.wav"):
                         fileName = voiceLayerPath.replace("M.wav", "_(0)M.wav")
                     else:
                         fileName = voiceLayerPath.replace(".wav", "_(0).wav")
@@ -937,33 +1002,17 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                 final_audio.export(fileName, format="wav")
                 print(f"VoiceGen: 완료, {name} 1-5초 대기")
                 
-                ## VoiceReverbe ##
-                if voiceReverbe == 'on':
-                    if tag in ['Title', 'Logue']:
-                        print(f"ChangeSpeed(0.89): ({tag}) Voice waiting 1-2 second")
-                        ChangeSpeedIndexVoice(fileName, Volume=1.04, Speed=0.95, Pad=0.5, Reverb='off')
-                    if tag in ['Part', 'Chapter', 'Index']:
-                        print(f"ChangeSpeed(0.91): ({tag}) Voice waiting 1-2 second")
-                        ChangeSpeedIndexVoice(fileName, Volume=1.07, Speed=0.95, Pad=1.0, Reverb='off')
-                
-                if len(SplitChunks) > 1:
-                    RetryIdList, segment_durations = VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, voiceLayerPath, SplitChunks, BracketSentence, GenLang, MessagesReview=MessagesReview)
-                    if RetryIdList != []:
-                        return RetryIdList
-                
-                if len(SplitChunks) == 1 and Modify == "Yes":
-                    Voice_Audio_Wav = AudioSegment.from_wav(fileName)
-                    InspectionExportPath = fileName.replace("_(0)M.wav", "_(0)Modify.wav")
-                    InspectionExportFolder, InspectionExportFile = os.path.split(InspectionExportPath)
-                    InspectionExportMasterFilePath = os.path.join(ModifyFolderPath, InspectionExportFile)
-                    Voice_Audio_Wav.export(InspectionExportMasterFilePath, format="wav")
-                
+                ApplyVoiceReverbe(fileName, titleSpeed = 0.95, sectionSpeed = 0.95)
+                SplitResult = SplitGeneratedVoiceIfNeeded(fileName)
+                if SplitResult != "Continue":
+                    return SplitResult
                 return "Continue"
                 ########## SuperTone API 요청 ##########
             except KeyError as e:
                 attempt += 1
                 print(f"[ KeyError 발생, 1분 후 재시도 {attempt}/65: {e} ]")
                 time.sleep(60)
+
             except Exception as e:
                 attempt += 1
                 if attempt >= 5:
@@ -972,107 +1021,77 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                     print(f"[ 예상치 못한 에러 발생: {e}, 5초 후 재시도 {attempt}/65: {e} ]")
                     time.sleep(5)
 
-    ################
-    ### TypeCast ###
-    ################
-    if Api == "TypeCast":
+    ##############
+    ### Gemini ###
+    ##############
+    if Api == "Gemini":
+        VoiceName = ApiSetting.get('voice_name', ApiSetting.get('name', 'Kore'))
+        Volume = ApiSetting.get('Volume', 0)
+        Speed = ApiSetting.get('Speed', 1.0)
+        ModelSetting = ApiSetting.get('models', {})
+        if isinstance(ModelSetting, dict):
+            Model = ModelSetting.get(GenLang) or ModelSetting.get('Ko') or ModelSetting.get('default') or "gemini-3.1-flash-tts-preview"
+        else:
+            Model = ModelSetting or "gemini-3.1-flash-tts-preview"
+        StylePrompt = ApiSetting.get('StylePrompt', 'Read the following Korean audiobook text naturally and clearly. Preserve the exact words, do not add or omit content, and use calm professional narration.')
+        PromptText = f"{StylePrompt}\n\nTranscript:\n{EL_Chunk}"
+
+        def wave_file(filename, pcm, channels = 1, rate = 24000, sample_width = 2):
+            if isinstance(pcm, str):
+                pcm = base64.b64decode(pcm)
+            with wave.open(filename, "wb") as wf:
+                wf.setnchannels(channels)
+                wf.setsampwidth(sample_width)
+                wf.setframerate(rate)
+                wf.writeframes(pcm)
+
         while attempt < 65:
             try:
-                ########## TypeCast API 요청 ##########
-                API_TOKEN = os.getenv("TYPECAST_API_TOKEN")
-                HEADERS = {'Authorization': f'Bearer {API_TOKEN}'}
+                ########## Gemini API 요청 ##########
+                from google import genai
+                from google.genai import types
 
-                # get my actor
-                r = requests.get('https://typecast.ai/api/actor', headers = HEADERS)
-                my_actors = r.json()['result']
-                
-                if my_actors[0]['name']['ko'] == name:
-                    # print(f'Chunk: {Chunk}')
-                    # print(f'RandomEMOTION: {RandomEMOTION}')
-                    # print(f'RandomSPEED: {RandomSPEED}')
-                    # print(f'Pitch: {Pitch}')
-                    # print(f'RandomLASTPITCH: {RandomLASTPITCH}')
-                    # print(f'voiceLayerPath: {voiceLayerPath}')
-                    # print(f'my_actors: {my_actors}')
-                    my_first_actor = my_actors[0]
-                    my_first_actor_id = my_first_actor['actor_id']
+                GeminiApiKey = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+                client = genai.Client(api_key = GeminiApiKey) if GeminiApiKey else genai.Client()
+                response = client.models.generate_content(
+                    model = Model,
+                    contents = PromptText,
+                    config = types.GenerateContentConfig(
+                        response_modalities = ["AUDIO"],
+                        speech_config = types.SpeechConfig(
+                            voice_config = types.VoiceConfig(
+                                prebuilt_voice_config = types.PrebuiltVoiceConfig(
+                                    voice_name = VoiceName
+                                )
+                            )
+                        )
+                    )
+                )
+                VoiceData = response.candidates[0].content.parts[0].inline_data.data
 
-                    # request speech synthesis
-                    r = requests.post('https://typecast.ai/api/speak', headers=HEADERS, json={
-                        'text': Chunk, # 음성을 합성하는 문장
-                        'lang': 'auto', # text의 언어 코드['en-us', 'ko-kr', 'ja-jp', 'es-es', 'auto'], auto는 자동 언어 감지
-                        'actor_id': my_first_actor_id, # 캐릭터 아이디로 Actor API에서 캐릭터를 검색
-                        'xapi_hd': True, # 샘플레이트로 True는 고품질(44.1KHz), False는 저품질(16KHz)
-                        'model_version': 'latest', # 모델(캐릭터) 버전으로 API를 참고, 최신 모델은 "latest"
-                        'xapi_audio_format': 'wav', # 오디오 포멧으로 기본값은 'wav', 'mp3'
-                        'emotion_tone_preset': RandomEMOTION,
-                        'emotion_prompt': None, # 감정 프롬프트(한/영)를 입력, 입력시 'emotion_tone_preset'는 'emotion_prompt'로 설정
-                        'volume': 120, # 오디오 볼륨으로 기본값은 100, 범위: 0.5배는 50 - 2배는 200
-                        'speed_x': RandomSPEED, # 말하는 속도로 기본값은 1, 범위: 0.5(빠름) - 1.5(느림)
-                        'tempo': 1.0, # 음성 재생속도로 기본값은 1, 범위: 0.5(0.5배 느림) - 2.0(2배 빠름)
-                        'pitch': Pitch, # 음성 피치로 기본값은 0, 범위: -12 - 12
-                        'max_seconds': 60, # 음성의 최대 길이로 기본값은 30, 범위: 1 - 60
-                    #     'force_length': 0, # text의 시간을 max_seconds에 맞추려면 1, 기본값은 0
-                        'last_pitch': RandomLASTPITCH
-                    })
-                    speak_url = r.json()['result']['speak_v2_url']
-
-                    # polling the speech synthesis result
-                    for _ in range(120):
-                        r = requests.get(speak_url, headers = HEADERS)
-                        ret = r.json()['result']
-                        # audio is ready
-                        if ret['status'] == 'done':
-                            # download audio file
-                            r = requests.get(ret['audio_download_url'])
-                            if len(SplitChunks) == 1:
-                                if "M.wav" in voiceLayerPath:
-                                    fileName = voiceLayerPath.replace("M.wav", "_(0)M.wav")
-                                else:
-                                    fileName = voiceLayerPath.replace(".wav", "_(0).wav")
-                            else:
-                                fileName = voiceLayerPath
-                            with open(fileName, 'wb') as f:
-                                f.write(r.content)
-                            break
-                        else:
-                            print(f"VoiceGen: {ret['status']}, {name} waiting 1 second")
-                            time.sleep(1)
-
-                    ## VoiceReverbe ##
-                    if voiceReverbe == 'on':
-                        ## tag가 Title, Logue인 경우 속도 ##
-                        if tag in ['Title', 'Logue']:
-                            print(f"ChangeSpeed(0.89): ({tag}) Voice waiting 1-2 second")
-                            ChangeSpeedIndexVoice(fileName, Volume = 1.07, Speed = 0.95, Pad = 0.5, Reverb = 'off')
-
-                        ## tag가 Title, Logue, Part, Chapter, Index인 경우 ##
-                        if tag in ['Part', 'Chapter', 'Index']:
-                            print(f"ChangeSpeed(0.91): ({tag}) Voice waiting 1-2 second")
-                            ChangeSpeedIndexVoice(fileName, Volume = 1.07, Speed = 0.97, Pad = 1.0, Reverb = 'off')
-
-                        ## tag가 Character인 경우 ##
-                        if tag in ['Character']:
-                            print(f"ChangeSpeed(1.07): ({tag}) Voice waiting 1-2 second")
-                            ChangeSpeedIndexVoice(fileName, Volume = 1.00, Speed = 1.07, Pad = 0.5, Reverb = 'off')
-
-                    if len(SplitChunks) > 1:
-                        ### 음성파일을 분할하는 코드 ###
-                        RetryIdList, segment_durations = VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, voiceLayerPath, SplitChunks, BracketSentence, GenLang, MessagesReview = MessagesReview)
-                        if RetryIdList != []:
-                            return RetryIdList
-                    # 수정 파일 별도 저장
-                    if len(SplitChunks) == 1 and Modify == "Yes":
-                        Voice_Audio_Wav = AudioSegment.from_wav(fileName)
-                        InspectionExportPath = fileName.replace("_(0)M.wav", "_(0)Modify.wav")
-                        InspectionExportFolder, InspectionExportFile = os.path.split(InspectionExportPath)
-                        InspectionExportMasterFilePath = os.path.join(ModifyFolderPath, InspectionExportFile)
-                        Voice_Audio_Wav.export(InspectionExportMasterFilePath, format = "wav")
-
-                    return "Continue"
+                if len(SplitChunks) == 1:
+                    if voiceLayerPath.endswith("M.wav"):
+                        fileName = voiceLayerPath.replace("M.wav", "_(0)M.wav")
+                    else:
+                        fileName = voiceLayerPath.replace(".wav", "_(0).wav")
                 else:
-                    return name
-                ########## TypeCast API 요청 ##########
+                    fileName = voiceLayerPath
+
+                wave_file(fileName, VoiceData)
+                if Volume != 0:
+                    Voice_Audio_Wav = AudioSegment.from_wav(fileName)
+                    Voice_Audio_Wav = Voice_Audio_Wav + Volume
+                    Voice_Audio_Wav.export(fileName, format = "wav")
+                if Speed != 1.0:
+                    ChangeSpeedIndexVoice(fileName, Volume = 1.0, Speed = Speed, Pad = 0, Reverb = 'off')
+
+                print(f"VoiceGen: completion, Gemini({VoiceName}), {name} waiting 1-5 second")
+                ApplyVoiceReverbe(fileName, titleSpeed = 0.95, sectionSpeed = 0.95)
+                SplitResult = SplitGeneratedVoiceIfNeeded(fileName)
+                if SplitResult != "Continue":
+                    return SplitResult
+                return "Continue"
+                ########## Gemini API 요청 ##########
             except KeyError as e:
                 attempt += 1
                 print(f"[ KeyError 발생, 1분 후 재시도 {attempt}/65: {e} ]")
@@ -1085,7 +1104,7 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                 else:
                     print(f"[ 예상치 못한 에러 발생: {e}, 5초 후 재시도 {attempt}/65: {e} ]")
                     time.sleep(5)
-        sys.exit("[ 1시간째 API 무응답, 요금을 충전하세요. ]")
+        sys.exit("[ 1시간째 Gemini API 무응답 또는 오류가 지속됩니다. ]")
 
 ## 생성된 음성 합치기 ##
 ## Pause 추출
@@ -1990,7 +2009,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
         return MatchedActors, SelectionGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
-def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'VoiceActor', CloneVoiceName = '저자명', ReadingStyle = 'AllCharacters', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Bracket = "Manual", VolumeEqual = "Mixing", Account = "None", VoiceEnhance = 'off', VoiceFileGen = 'on', MessagesReview = "off"):
+def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'VoiceActor', CloneVoiceName = '저자명', ReadingStyle = 'AllCharacters', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Bracket = "Manual", VolumeEqual = "Mixing", Account = "None", VoiceEnhance = 'off', VoiceFileGen = 'on', MessagesReview = "off", Async = "off"):
     MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationChunks(projectName, email, MainLang, MessagesReview)
 
     ## Modify 시간에 맞추어 폴더 생성 및 이전 끊긴 히스토리 합치기 ##
@@ -2108,6 +2127,8 @@ def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'Voi
                     # 새로운 OrderedDict 생성
                     _chunK.clear()
                     _chunK.update(OrderedDict(new_items))
+
+        MatchedChunks = RemoveUnreadableActorChunks(MatchedChunks)
         
         ### B-1. AudioBook_Edit Chunk에 'ActorName:'이 가장 앞부분에 존재할 경우 이를 'ActorName:'기준으로 Edit 나누기 추가 ###
         # Chunk 문자열의 선행 공백을 제거 함수
@@ -2177,6 +2198,7 @@ def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'Voi
                 })
 
         MatchedChunks = NewMatchedChunksList
+        MatchedChunks = RemoveUnreadableActorChunks(MatchedChunks, Label = "AudioBook_Edit ActorSplit")
             
         ### B-2. AudioBook_Edit에 새로운 ActorName이 발생한 경우 이를 MatchedActors에 추가 ###
         # voice_id 업데이트
@@ -2372,6 +2394,20 @@ def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'Voi
                                 chunk_count += 2
                             else:
                                 chunk_count += 1
+
+            FilteredNewActorChunk = []
+            for ActorChunkItem in NewActorChunk:
+                if ChunkHasReadableText(ActorChunkItem.get('Chunk', '')):
+                    FilteredNewActorChunk.append(ActorChunkItem)
+                else:
+                    print(f"[ AudioBook_Edit AutoSplit 특수문자-only Chunk 삭제 | EditId: {EditId} | Chunk: {ActorChunkItem.get('Chunk', '')} ]")
+            NewActorChunk = FilteredNewActorChunk
+            chunk_count = 0
+            for ActorChunkItem in NewActorChunk:
+                if ActorChunkItem['Chunk'].startswith('[') and ActorChunkItem['Chunk'].endswith(']'):
+                    chunk_count += 2
+                else:
+                    chunk_count += 1
 
             ### D. EditGenerationKoChunks에 Edit내 Chunk의 개수 및 텍스트 길이 적정히 조정하기 ###
             combined_text = ''.join([''.join(chunk['Chunk'].split()) for chunk in NewActorChunk])
@@ -2753,7 +2789,7 @@ def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'Voi
                     modified_ActorChunk = modified_ActorChunk.replace('[[', '[').replace(']]', ']')
                     EditGenerationKoChunks[i]['ActorChunk'][j] = modified_ActorChunk
                     # 빈 ActorChunk 삭제
-                    if extract_text(EditGenerationKoChunks[i]['ActorChunk'][j]) == '':
+                    if extract_text(EditGenerationKoChunks[i]['ActorChunk'][j]) == '' or not ChunkHasReadableText(EditGenerationKoChunks[i]['ActorChunk'][j]):
                         del EditGenerationKoChunks[i]['ActorChunk'][j]
                         del EditGenerationKoChunks[i]['Pause'][j]
                         del EditGenerationKoChunks[i]['EndTime'][j]
@@ -2896,6 +2932,85 @@ def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'Voi
         else:
             GenerationKoChunkHistorys = []
 
+        def ParseAsyncVoiceOption(Async):
+            if Async in [None, "", "off", "Off", "OFF", False]:
+                return False, 0
+            try:
+                Interval = float(Async)
+            except (TypeError, ValueError):
+                Interval = 1
+            if Interval < 0:
+                Interval = 0
+            return True, Interval
+
+        AsyncEnabled, AsyncInterval = ParseAsyncVoiceOption(Async)
+        AsyncMaxWorkers = min(6, max(1, len(GenerationKoChunks)))
+        AsyncExecutor = None
+        AsyncFutures = []
+        if AsyncEnabled:
+            print(f"[ VoiceLayerGenerator Async: on | interval={AsyncInterval}s | workers={AsyncMaxWorkers} ]")
+            AsyncExecutor = ThreadPoolExecutor(max_workers = AsyncMaxWorkers)
+
+        def RecordVoiceGenerationHistory(Job):
+            def SaveGenerationHistory():
+                GenerationKoChunkHistorys.sort(key = lambda x: (x.get("EditId", 0), x.get("ActorName", "")))
+                with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
+                    json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
+
+            if Job['BracketsSwitch']:
+                with open(MatchedChunksPath, 'w', encoding = 'utf-8') as MatchedChunksJson:
+                    json.dump(_EditGenerationKoChunks, MatchedChunksJson, ensure_ascii = False, indent = 4)
+
+            if Job['ChunkModify'] == "Yes":
+                SaveGenerationHistory()
+                return
+
+            AddSwitch = True
+            for history in GenerationKoChunkHistorys:
+                if history["EditId"] == Job['EditId'] and history["ActorName"] == Job['Name']:
+                    AddSwitch = False
+                    break
+
+            if AddSwitch:
+                GenerationKoChunkHistory = {
+                    "EditId": Job['EditId'],
+                    "Tag": Job['Tag'],
+                    "ActorName": Job['Name'],
+                    "ActorChunk": Job['OriginChunk'],
+                    "ActorChunks": Job['ActorChunks'],
+                    "Pause": Job['Pause']
+                }
+                GenerationKoChunkHistorys.append(GenerationKoChunkHistory)
+                SaveGenerationHistory()
+
+        def CollectAsyncVoiceJobs():
+            if not AsyncFutures:
+                return
+            BatchResults = []
+            BatchErrors = []
+            try:
+                for Future in as_completed(AsyncFutures):
+                    try:
+                        BatchResults.append(Future.result())
+                    except (Exception, SystemExit) as e:
+                        BatchErrors.append(e)
+            finally:
+                AsyncFutures.clear()
+
+            if BatchErrors:
+                ErrorMessages = " | ".join(str(e) for e in BatchErrors)
+                sys.exit(f"[ Async 음성 생성 배치 에러 발생: {ErrorMessages} ]")
+
+            for Result in BatchResults:
+                if Result['ChangedName'] != 'Continue':
+                    if isinstance(Result['ChangedName'], list):
+                        sys.exit(f"[ 분할 STT 검수 재생성 6회 초과 | EditId: {Result['Job']['EditId']} | Actor: {Result['Job']['Name']} | 재생성 대상: {Result['ChangedName']} ]")
+                    sys.exit(f"[ 음성 생성 실패 또는 지원하지 않는 음성 생성 결과 발생: {Result['ChangedName']} ]")
+
+            for Result in BatchResults:
+                if Result['RecordHistory']:
+                    RecordVoiceGenerationHistory(Result['Job'])
+
         ### 생성시작 ###
         _LastPitchSwitch = 0
         for Update in UpdateTQDM:
@@ -2905,7 +3020,7 @@ def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'Voi
             Name = Update['ActorName']
             Pause = Update['Pause']
             
-            ### ElevenLabs, TypeCast Chunk Modify ###
+            ### ElevenLabs, SuperTone, Gemini Chunk Modify ###
             ## 끝에서부터 3개의 문자에서 '.', ',', ' '가 있으면 이를 제거 후 마지막에 '.' 표기
             def ModifyELChunk(chunk):
                 # 1. Chunk 마지막 3개의 글자 중에 . 과 , 이 포함되어 있으면 이를 모두 삭제하고 .하나만 표기
@@ -2927,7 +3042,7 @@ def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'Voi
                 # Chunk 마지막 3개의 글자 중에 . 과 , 이 포함되어 있으면 이를 모두 삭제하고 ,하나만 표기
                 chunk = chunk[:-3] + chunk[-3:].replace('.', '').replace(',', '') + ','
                 return chunk
-            ### ElevenLabs, TypeCast Chunk Modify ###
+            ### ElevenLabs, SuperTone, Gemini Chunk Modify ###
             ### RetryVoiceGen ###
             def RetryVoiceGen(name, retry, RetryIdList, SplitChunks):
                 print(f"[[RetryVoiceGen: {name}]]")
@@ -2943,19 +3058,25 @@ def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'Voi
                 RetrySplitSents = []
                 RetryELChunks = []
                 RetryChunks = []
+                RetryOriginalNumbers = []
                 i = 1
                 for RetryId in RetryIdList:
-                    # RetryChunks 합치기
+                    # 재생성 대상만 [문장] 형태로 다시 감싸고, 기존 bracket 생성 규칙처럼 앞뒤 안내 문장을 붙인다.
                     FrontWords = BracketSentence[0]
-                    MiddleWords = RawSplitSents[RetryId]['낭독문장']
+                    RetrySplitSent = RawSplitSents[RetryId]
+                    MiddleWords = RetrySplitSent['낭독문장']
                     EndWords = BracketSentence[1]
-                    _retryChunk = f'{FrontWords}, "{MiddleWords}", {EndWords}'
+                    OriginalNumber = RetrySplitSent.get('원본문장번호', RetryId)
+                    RetryOriginalNumbers.append(OriginalNumber)
+                    BracketedMiddleWords = f'[{MiddleWords}]'
+                    RetryTargetWords = BracketedMiddleWords.strip().strip("[]")
+                    _retryChunk = f'{FrontWords}, "{RetryTargetWords}", -{EndWords}'
                     # RetryChunks 합치기
                     RetryChunks.append(ModifyTCChunk(_retryChunk))
                     RetryELChunks.append(ModifyELChunk(_retryChunk))
                     # RetrySplitSents 합치기
                     RetrySplitSents.append({'낭독문장번호': i, '낭독문장': FrontWords, '제거': 'Yes'})
-                    RetrySplitSents.append({'낭독문장번호': i + 1, '낭독문장': MiddleWords, '제거': 'No'})
+                    RetrySplitSents.append({'낭독문장번호': i + 1, '낭독문장': MiddleWords, '제거': 'No', '원본문장번호': OriginalNumber})
                     RetrySplitSents.append({'낭독문장번호': i + 2, '낭독문장': EndWords, '제거': 'Yes'})
                     i += 3
                 
@@ -2963,7 +3084,7 @@ def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'Voi
                 EL_Chunk = " ".join(RetryELChunks)
                 SplitChunks = RetrySplitSents
                 BracketsSwitch = True
-                bracketsSplitChunksNumber = RetryIdList
+                bracketsSplitChunksNumber = RetryOriginalNumbers
                 return retry, BracketsSwitch, bracketsSplitChunksNumber, Chunk, EL_Chunk, SplitChunks
             ### RetryVoiceGen ###
             ## Brackets 부분 생성 적용 ##
@@ -2989,9 +3110,9 @@ def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'Voi
                 # with open(MatchedChunksPath, 'w', encoding = 'utf-8') as MatchedChunksJson:
                 #     json.dump(_EditGenerationKoChunks, MatchedChunksJson, ensure_ascii = False, indent = 4)
             
-            ## ElevenLabs Chunk Modify ##
+            ## TTS Chunk Modify ##
             EL_Chunk = None
-            if Api in ['ElevenLabs', 'SuperTone']:
+            if Api in ['ElevenLabs', 'SuperTone', 'Gemini']:
                 ELChunks = []
                 BracketsELChunks = []
                 for idx, _ELChunk in enumerate(Update['ActorChunk']):
@@ -3002,34 +3123,18 @@ def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'Voi
                             BracketsELChunks.append(ELChunk)
                     ELChunk = ModifyELChunk(_ELChunk)
                     ELChunks.append(ELChunk)                    
-                if 'ElevenLabs':
+                if Api in ['ElevenLabs', 'Gemini']:
                     if BracketsSwitch:
                         EL_Chunk = " ".join(BracketsELChunks)
                     else:
                         EL_Chunk = " ".join(ELChunks)
-                elif 'SuperTone':
+                elif Api == 'SuperTone':
                     if BracketsSwitch:
                         EL_Chunk = "//".join(BracketsELChunks)
                     else:
                         EL_Chunk = "//".join(ELChunks)
             # print(f"ChunkModify: ({EL_Chunk})")
-            ## TypeCast Chunk Modify ##
             Chunk = None
-            if Api == 'TypeCast':
-                Chunks = []
-                BracketsChunks = []
-                for idx, _Chunk in enumerate(Update['ActorChunk']):
-                    if _Chunk.strip().startswith('[') and _Chunk.strip().endswith(']'):
-                        _Chunk = BracketSentence[0] + f', "{_ELChunk.strip().strip("[]")}", -' + BracketSentence[1]
-                        if idx + 1 in BracketsNumber:
-                            _Chunk = ModifyTCChunk(_Chunk)
-                            BracketsChunks.append(_Chunk)
-                    _chunk = ModifyTCChunk(_Chunk)
-                    Chunks.append(_chunk)
-                if BracketsSwitch:
-                    Chunk = " ".join(BracketsChunks)
-                else:
-                    Chunk = " ".join(Chunks)
             
             OriginChunk = " ".join(Update['ActorChunk'])
             ChunkCount = len(Update['ActorChunk']) - 1 # 파일의 마지막 순번을 표기
@@ -3084,11 +3189,18 @@ def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'Voi
                 rawSplitChunks = bracketsSplitChunks
                 removeSplitChunksNumber = removeBracketsSplitChunksNumber
             SplitChunks = []
+            ExportNumber = 0
             for i in range(len(rawSplitChunks)):
                 Remove = 'No'
                 if i + 1 in removeSplitChunksNumber:
                     Remove = 'Yes'
                 SplitChunk = {'낭독문장번호': i + 1, '낭독문장': rawSplitChunks[i], '제거': Remove}
+                if Remove == 'No':
+                    if BracketsSwitch and ExportNumber < len(bracketsSplitChunksNumber):
+                        SplitChunk['원본문장번호'] = bracketsSplitChunksNumber[ExportNumber]
+                    else:
+                        SplitChunk['원본문장번호'] = ExportNumber
+                    ExportNumber += 1
                 # print(f'SplitChunk: ({SplitChunk})')
                 SplitChunks.append(SplitChunk)
 
@@ -3148,29 +3260,8 @@ def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'Voi
                     if History['Pause'] != Pause:
                         History['Pause'] = Pause
 
-            ## TypeCast ApiSetting ##
-            if Api == 'TypeCast':
-                ## 보이스 선정 ##                
-                for VoiceData in VoiceDataSetCharacters:
-                    if Name == VoiceData['Name']:
-                        ApiSetting = VoiceData['ApiSetting']
-                        name = ApiSetting['name']
-                        EMOTION = ApiSetting['emotion_tone_preset']['emotion_tone_preset']
-                        SPEED = ApiSetting['speed_x']
-                        Pitch = ApiSetting['pitch']
-                
-                ## 'Narrator', 'Character' 태그가 아닌 경우 끝음 조절하기 ##
-                if Update['Tag'] not in ['Narrator', 'Character']:
-                    LASTPITCH = [-2]
-                    _LastPitchSwitch = 1
-                elif _LastPitchSwitch == 1:
-                    LASTPITCH = [-2]
-                    _LastPitchSwitch = 0
-                else:
-                    LASTPITCH = ApiSetting['last_pitch']
-            
-            ## ElevenLabs, SuperTone ApiSetting ##
-            elif Api in ['ElevenLabs', 'SuperTone']:
+            ## TTS ApiSetting ##
+            if Api in ['ElevenLabs', 'SuperTone', 'Gemini']:
                 ApiSetting = MatchedActor['ApiSetting']
                 name = ApiSetting['name']
                 EMOTION = ['None']
@@ -3178,100 +3269,136 @@ def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'Voi
                 Pitch = 0
                 LASTPITCH = [0]
             
-            ## TypeCastMacro에 따른 restart 코드 ##
-            restart = True
-            while restart:
-                restart = False  # 반복 시작 시 재시작 플래그를 초기화                   
-                # 단어로 끝나는 경우 끝음 조절하기
-                if '?' not in OriginChunk[-3:]:
-                    if '.' not in OriginChunk[-3:]:
-                        lastpitch = [-2]
-                    elif '다' not in OriginChunk[-3:]:
-                        lastpitch = [-2]
-                    else:
-                        lastpitch = LASTPITCH
+            # 단어로 끝나는 경우 끝음 조절하기
+            if '?' not in OriginChunk[-3:]:
+                if '.' not in OriginChunk[-3:]:
+                    lastpitch = [-2]
+                elif '다' not in OriginChunk[-3:]:
+                    lastpitch = [-2]
                 else:
                     lastpitch = LASTPITCH
-                ## 'Narrator', 'Character' 태그가 아닌 경우 감정은 가장 평범한 1번 감정으로 하기 ##
-                if Update['Tag'] in ['Narrator', 'Character']:
-                    RandomEMOTION = random.choice(EMOTION)
-                else:
-                    RandomEMOTION = EMOTION[0]
-                RandomSPEED = random.choice(SPEED)
-                RandomLASTPITCH = random.choice(lastpitch)
-                ## 수정 여부에 따라 파일명 변경 ##
-                if Modify == "Yes":
-                    FileName = projectName + '_' + str(EditId) + '_' + Name + 'M.wav'
-                else:
-                    FileName = projectName + '_' + str(EditId) + '_' + Name + '.wav'
-                if ChunkModify == "Yes":
-                    voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName, 'Mixed')
-                    retry = 0
-                    while retry <= 3:
-                        ChangedName = ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, VoiceReverbe, Update['Tag'], name, Chunk, EL_Chunk, BracketSentence, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, GenLang, MessagesReview)
-                        ## retry 시작 (잘못 짤린 음성의 재생성) ##
-                        if not isinstance(ChangedName, list):
-                            break
-                        RetryIdList = ChangedName
-                        retry, BracketsSwitch, bracketsSplitChunksNumber, Chunk, EL_Chunk, SplitChunks = RetryVoiceGen(name, retry, RetryIdList, SplitChunks)
+            else:
+                lastpitch = LASTPITCH
+            ## 'Narrator', 'Character' 태그가 아닌 경우 감정은 가장 평범한 1번 감정으로 하기 ##
+            if Update['Tag'] in ['Narrator', 'Character']:
+                RandomEMOTION = random.choice(EMOTION)
+            else:
+                RandomEMOTION = EMOTION[0]
+            RandomSPEED = random.choice(SPEED)
+            RandomLASTPITCH = random.choice(lastpitch)
+            ## 수정 여부에 따라 파일명 변경 ##
+            if Modify == "Yes":
+                FileName = projectName + '_' + str(EditId) + '_' + Name + 'M.wav'
+            else:
+                FileName = projectName + '_' + str(EditId) + '_' + Name + '.wav'
 
-                    if ChangedName != 'Continue':
-                        if Macro == "Auto":
-                            TypeCastMacro(ChangedName, Account)
-                            time.sleep(random.randint(3, 5))
-                            restart = True
-                        else:
-                            print(f'\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n@  캐릭터 불일치 -----> [TypeCastAPI의 캐릭터를 ( {ChangedName} ) 으로 변경하세요!] <-----  @\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
-                            sys.exit()
+            Job = {
+                "EditId": EditId,
+                "Tag": Update['Tag'],
+                "Name": Name,
+                "OriginChunk": OriginChunk,
+                "ActorChunks": copy.deepcopy(Update['ActorChunk']),
+                "Pause": Pause,
+                "BracketsSwitch": BracketsSwitch,
+                "Modify": Modify,
+                "ChunkModify": ChunkModify,
+                "bracketsSplitChunksNumber": copy.deepcopy(bracketsSplitChunksNumber),
+                "Chunk": Chunk,
+                "EL_Chunk": EL_Chunk,
+                "SplitChunks": copy.deepcopy(SplitChunks),
+                "FileName": FileName,
+                "ChunkCount": ChunkCount,
+                "VoiceTag": Update['Tag'],
+                "VoiceName": name,
+                "Api": Api,
+                "ApiSetting": copy.deepcopy(ApiSetting),
+                "RandomEMOTION": RandomEMOTION,
+                "RandomSPEED": RandomSPEED,
+                "Pitch": Pitch,
+                "RandomLASTPITCH": RandomLASTPITCH,
+                "RetryVoiceGen": RetryVoiceGen
+            }
+
+            def ExecuteVoiceJob(Job, ScheduledStart = None):
+                if ScheduledStart is not None:
+                    Delay = ScheduledStart - time.time()
+                    if Delay > 0:
+                        time.sleep(Delay)
+
+                _BracketsSwitch = Job['BracketsSwitch']
+                _bracketsSplitChunksNumber = copy.deepcopy(Job['bracketsSplitChunksNumber'])
+                _Chunk = Job['Chunk']
+                _EL_Chunk = Job['EL_Chunk']
+                _SplitChunks = copy.deepcopy(Job['SplitChunks'])
+                _Modify = Job['Modify']
+
+                def VoiceLayerPathFor(ModifyValue):
+                    if ModifyValue == "Yes":
+                        FileName = projectName + '_' + str(Job['EditId']) + '_' + Job['Name'] + 'M.wav'
                     else:
-                        ## [[내용]]을 [내용]으로 다시 되돌리기(다음에 다시 사용되기 위함)
-                        if BracketsSwitch:
-                            with open(MatchedChunksPath, 'w', encoding = 'utf-8') as MatchedChunksJson:
-                                json.dump(_EditGenerationKoChunks, MatchedChunksJson, ensure_ascii = False, indent = 4)
-                        ## [[내용]]을 [내용]으로 다시 되돌리기(다음에 다시 사용되기 위함)
-                        with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
-                            json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
-                else:
-                    voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName, 'Mixed')
-                    if not (os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount}).wav') or os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount})M.wav')):
-                        retry = 0
-                        while retry <= 3:
-                            ChangedName = ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, VoiceReverbe, Update['Tag'], name, Chunk, EL_Chunk, BracketSentence, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, GenLang, MessagesReview)
-                            ## retry 시작 (잘못 짤린 음성의 재생성) ##
-                            if not isinstance(ChangedName, list):
-                                break
-                            RetryIdList = ChangedName
-                            retry, BracketsSwitch, bracketsSplitChunksNumber, Chunk, EL_Chunk, SplitChunks = RetryVoiceGen(name, retry, RetryIdList, SplitChunks)
+                        FileName = projectName + '_' + str(Job['EditId']) + '_' + Job['Name'] + '.wav'
+                    return VoiceLayerPathGen(projectName, email, FileName, 'Mixed')
 
-                        if ChangedName == 'Continue':
-                            ## [[내용]]을 [내용]으로 다시 되돌리기(다음에 다시 사용되기 위함)
-                            if BracketsSwitch:
-                                with open(MatchedChunksPath, 'w', encoding = 'utf-8') as MatchedChunksJson:
-                                    json.dump(_EditGenerationKoChunks, MatchedChunksJson, ensure_ascii = False, indent = 4)
-                            ## [[내용]]을 [내용]으로 다시 되돌리기(다음에 다시 사용되기 위함)
-                            ## 히스토리 저장 ##
-                            # 동일한 EditId와 ActorName을 가진 항목이 있는지 확인
-                            AddSwitch = True  # 새 항목을 추가해야 하는지 여부를 나타내는 플래그
-                            for history in GenerationKoChunkHistorys:
-                                if history["EditId"] == EditId and history["ActorName"] == Name:
-                                    AddSwitch = False
-                                    break
+                def ExpectedVoiceNumbers():
+                    ExpectedNumbers = []
+                    for SplitChunk in Job['SplitChunks']:
+                        if SplitChunk.get('제거') == 'No':
+                            ExpectedNumbers.append(SplitChunk.get('원본문장번호', len(ExpectedNumbers)))
+                    if ExpectedNumbers == []:
+                        ExpectedNumbers = [0]
+                    return ExpectedNumbers
 
-                            # 동일한 EditId와 ActorName을 가진 항목이 없을 경우 새 항목 추가
-                            if AddSwitch:
-                                GenerationKoChunkHistory = {"EditId": EditId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": OriginChunk, "ActorChunks": Update['ActorChunk'], "Pause": Pause}
-                                GenerationKoChunkHistorys.append(GenerationKoChunkHistory)
-                                with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
-                                    json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
-                            ## 히스토리 저장 ##
+                def GeneratedVoiceFilesExist():
+                    BaseVoiceLayerPath = VoiceLayerPathFor("No")
+                    Stem = BaseVoiceLayerPath.replace(".wav", "")
+                    for ExpectedNumber in ExpectedVoiceNumbers():
+                        NormalPath = Stem + f"_({ExpectedNumber}).wav"
+                        ModifyPath = Stem + f"_({ExpectedNumber})M.wav"
+                        if Job['Modify'] == "Yes":
+                            if not os.path.exists(ModifyPath):
+                                return False
                         else:
-                            if Macro == "Auto":
-                                TypeCastMacro(ChangedName, Account)
-                                time.sleep(random.randint(3, 5))
-                                restart = True
-                            else:
-                                print(f'\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n@  캐릭터 불일치 -----> [TypeCastAPI의 캐릭터를 ( {ChangedName} ) 으로 변경하세요!] <-----  @\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
-                                sys.exit()
+                            if not (os.path.exists(NormalPath) or os.path.exists(ModifyPath)):
+                                return False
+                    return True
+
+                if Job['ChunkModify'] != "Yes":
+                    if GeneratedVoiceFilesExist():
+                        return {"ChangedName": "Continue", "RecordHistory": True, "Job": Job}
+
+                retry = 0
+                ChangedName = None
+                while retry <= 5:
+                    voiceLayerPath = VoiceLayerPathFor(_Modify)
+                    ChangedName = ActorVoiceGen(projectName, email, _Modify, ModifyFolderPath, _BracketsSwitch, _bracketsSplitChunksNumber, VoiceReverbe, Job['VoiceTag'], Job['VoiceName'], _Chunk, _EL_Chunk, BracketSentence, Job['Api'], Job['ApiSetting'], Job['RandomEMOTION'], Job['RandomSPEED'], Job['Pitch'], Job['RandomLASTPITCH'], voiceLayerPath, _SplitChunks, GenLang, MessagesReview)
+                    if not isinstance(ChangedName, list):
+                        break
+                    RetryIdList = ChangedName
+                    retry, _BracketsSwitch, _bracketsSplitChunksNumber, _Chunk, _EL_Chunk, _SplitChunks = Job['RetryVoiceGen'](Job['VoiceName'], retry, RetryIdList, _SplitChunks)
+                    _Modify = "Yes"
+
+                RecordHistory = ChangedName == 'Continue'
+                return {"ChangedName": ChangedName, "RecordHistory": RecordHistory, "Job": Job}
+
+            if AsyncEnabled:
+                ScheduledStart = time.time() + (len(AsyncFutures) * AsyncInterval)
+                AsyncFutures.append(AsyncExecutor.submit(ExecuteVoiceJob, Job, ScheduledStart))
+                if len(AsyncFutures) >= AsyncMaxWorkers:
+                    CollectAsyncVoiceJobs()
+            else:
+                Result = ExecuteVoiceJob(Job)
+                if Result['ChangedName'] != 'Continue':
+                    if isinstance(Result['ChangedName'], list):
+                        sys.exit(f"[ 분할 STT 검수 재생성 6회 초과 | EditId: {Result['Job']['EditId']} | Actor: {Result['Job']['Name']} | 재생성 대상: {Result['ChangedName']} ]")
+                    sys.exit(f"[ 음성 생성 실패 또는 지원하지 않는 음성 생성 결과 발생: {Result['ChangedName']} ]")
+                if Result['RecordHistory']:
+                    RecordVoiceGenerationHistory(Result['Job'])
+
+        if AsyncEnabled:
+            try:
+                CollectAsyncVoiceJobs()
+            finally:
+                AsyncExecutor.shutdown(wait = True)
 
     ## 최종 생성된 음성파일 합치기 ##
     time.sleep(0.1)
@@ -3282,9 +3409,9 @@ def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'Voi
     return EditGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 Json을 VoiceLayer에 업데이트
-def VoiceLayerUpdate(projectName, email, GenLang = 'Ko', Narrator = 'VoiceActor', CloneVoiceName = '저자명', ReadingStyle = 'AllCharacters', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Bracket = "Manual", VolumeEqual = "Mixing", Account = "None", Intro = "None", VoiceEnhance = 'off', VoiceFileGen = "on", MessagesReview = "off"):
+def VoiceLayerUpdate(projectName, email, GenLang = 'Ko', Narrator = 'VoiceActor', CloneVoiceName = '저자명', ReadingStyle = 'AllCharacters', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Bracket = "Manual", VolumeEqual = "Mixing", Account = "None", Intro = "None", VoiceEnhance = 'off', VoiceFileGen = "on", MessagesReview = "off", Async = "off"):
     print(f"< User: {email} | Project: {projectName} | VoiceLayerGenerator 시작 >")
-    EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, GenLang = GenLang, Narrator = Narrator, CloneVoiceName = CloneVoiceName, ReadingStyle = ReadingStyle, VoiceReverbe = VoiceReverbe, MainLang = MainLang, Mode = Mode, Macro = Macro, Bracket = Bracket, VolumeEqual = VolumeEqual, Account = Account, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen, MessagesReview = MessagesReview)
+    EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, GenLang = GenLang, Narrator = Narrator, CloneVoiceName = CloneVoiceName, ReadingStyle = ReadingStyle, VoiceReverbe = VoiceReverbe, MainLang = MainLang, Mode = Mode, Macro = Macro, Bracket = Bracket, VolumeEqual = VolumeEqual, Account = Account, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen, MessagesReview = MessagesReview, Async = Async)
         
     project = GetProject(projectName, email)
 

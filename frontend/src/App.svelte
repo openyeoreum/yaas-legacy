@@ -859,32 +859,6 @@
     playNext()
   }
 
-  function autoResizeTextArea(node) {
-    let frame
-    const resize = () => {
-      node.style.height = 'auto'
-      node.style.height = `${node.scrollHeight}px`
-    }
-    const queueResize = () => {
-      if (frame) cancelAnimationFrame(frame)
-      frame = requestAnimationFrame(resize)
-    }
-    const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(queueResize) : null
-
-    node.addEventListener('input', queueResize)
-    observer?.observe(node)
-    queueResize()
-
-    return {
-      update: queueResize,
-      destroy() {
-        if (frame) cancelAnimationFrame(frame)
-        node.removeEventListener('input', queueResize)
-        observer?.disconnect()
-      },
-    }
-  }
-
   onMount(() => {
     const timer = window.setInterval(() => {
       nowMs = Date.now()
@@ -1108,7 +1082,6 @@
                   >
                     <textarea
                       rows="1"
-                      use:autoResizeTextArea={chunk.text}
                       readonly={generationBusy}
                       value={chunk.text}
                       aria-label={`${selectedMetaLabel(chunk)} text`}

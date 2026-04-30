@@ -768,6 +768,8 @@ textarea {
 
 .chunk-index-row {
   position: relative;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 62px;
   display: grid;
   grid-template-columns: 28px minmax(0, 1fr);
   grid-template-rows: 23px 23px;
@@ -875,6 +877,8 @@ textarea {
 
 .text-line {
   position: relative;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 35px;
   display: block;
   margin: 0;
   padding: 2px 4px;
@@ -934,6 +938,7 @@ textarea {
   overflow: hidden;
   background: transparent;
   resize: none !important;
+  field-sizing: content;
   font-size: 12px;
   line-height: 1.55;
 }

@@ -15,7 +15,6 @@
     Play,
     RefreshCw,
     Rocket,
-    Save,
     Search,
     Settings2,
     Terminal,
@@ -949,7 +948,6 @@
         <RefreshCw size={15} />
       </button>
       <button class="button primary topbar-save" title={activeSaveTitle} on:click={activeSave.action} disabled={!selected || generationBusy || saving || !activeSave.dirty}>
-        <Save size={14} />
         {activeSave.label}
       </button>
       {#if locked || stopping}

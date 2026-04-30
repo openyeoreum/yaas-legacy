@@ -421,11 +421,16 @@ textarea {
   color: #cad5dc;
 }
 
-.topbar-save,
 .topbar-run {
   width: 94px;
   min-width: 94px;
   padding: 0 10px;
+}
+
+.topbar-save {
+  width: 76px;
+  min-width: 76px;
+  padding: 0 8px;
 }
 
 .topbar-metrics {

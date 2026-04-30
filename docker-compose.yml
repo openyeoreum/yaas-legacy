@@ -26,6 +26,10 @@ services:
       - ./storage-legacy/.env
     environment:
       - DATABASE_URL=postgres://yeoreum:0128@yaasdb:5432/yaasdb
+      - YAAS_STORAGE_ROOT=/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage
+      - YAAS_ASSET_ROOT=/yaas/storage/s1_Yeoreum
+    working_dir: /yaas
+    command: python -m uvicorn backend.b1_Main:app --host 0.0.0.0 --port 8000
     ports:
       - "15174:5174"
       - "18000:8000"

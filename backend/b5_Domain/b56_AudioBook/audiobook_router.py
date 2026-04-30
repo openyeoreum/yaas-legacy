@@ -150,6 +150,10 @@ def lock_path(project_dir: Path) -> Path:
     return project_dir / ".yaas_audio_job.lock"
 
 
+def stop_request_path(project_dir: Path) -> Path:
+    return project_dir / ".yaas_stop_requested"
+
+
 def log_dir(project_dir: Path) -> Path:
     return project_dir / ".yaas_workspace_logs"
 
@@ -168,8 +172,9 @@ def read_lock(project_dir: Path) -> dict[str, Any]:
     path = lock_path(project_dir)
     data = read_json_file(path, {}) or {}
     pid = data.get("pid")
-    running = data.get("status") == "running" and is_pid_alive(pid)
-    if data.get("status") == "running" and not running:
+    active_status = data.get("status") in {"running", "stopping"}
+    running = active_status and is_pid_alive(pid)
+    if active_status and not running:
         data = {**data, "status": "stale", "running": False}
     else:
         data = {**data, "running": running}
@@ -583,11 +588,16 @@ def get_audio(email: str, project: str, path: str) -> FileResponse:
     return FileResponse(target, media_type=media_type, filename=target.name)
 
 
+def process_key(email: str, project: str) -> str:
+    return f"{email}/{project}"
+
+
 def monitor_process(project_dir: Path, process: subprocess.Popen, log_path_value: Path) -> None:
     return_code = process.wait()
     current = read_json_file(lock_path(project_dir), {}) or {}
+    stopped_by_user = current.get("status") in {"stopping", "stopped"}
     current.update({
-        "status": "completed" if return_code == 0 else "failed",
+        "status": "stopped" if stopped_by_user else ("completed" if return_code == 0 else "failed"),
         "running": False,
         "returnCode": return_code,
         "endedAt": datetime.now().isoformat(),
@@ -607,6 +617,9 @@ async def run_project(email: str, project: str, request: Request) -> dict[str, A
     logs = log_dir(project_dir)
     logs.mkdir(parents=True, exist_ok=True)
     log_path_value = logs / f"{now_text()}_yaas.log"
+    stop_path_value = stop_request_path(project_dir)
+    if stop_path_value.exists():
+        stop_path_value.unlink()
     script = (
         "import sys\n"
         "from agent.YaaS import YaaSCore\n"
@@ -616,6 +629,7 @@ async def run_project(email: str, project: str, request: Request) -> dict[str, A
     )
     env = os.environ.copy()
     env["PYTHONPATH"] = f"{REPO_ROOT}:{env.get('PYTHONPATH', '')}"
+    env["YAAS_STOP_REQUEST_PATH"] = str(stop_path_value)
     with log_path_value.open("ab") as log_file:
         process = subprocess.Popen(
             [sys.executable, "-u", "-c", script, email, project, account, messages_review],
@@ -625,7 +639,7 @@ async def run_project(email: str, project: str, request: Request) -> dict[str, A
             env=env,
             start_new_session=True,
         )
-    key = f"{email}/{project}"
+    key = process_key(email, project)
     RUNNING_JOBS[key] = process
     lock_payload = {
         "status": "running",
@@ -642,6 +656,49 @@ async def run_project(email: str, project: str, request: Request) -> dict[str, A
     thread = threading.Thread(target=monitor_process, args=(project_dir, process, log_path_value), daemon=True)
     thread.start()
     return {"ok": True, "pid": process.pid, "logPath": str(log_path_value)}
+
+
+@audiobook_router.post("/{email}/{project}/stop")
+def stop_project(email: str, project: str) -> dict[str, Any]:
+    project_dir = safe_project_path(email, project)
+    current = read_lock(project_dir)
+    key = process_key(email, project)
+    process = RUNNING_JOBS.get(key)
+    pid = process.pid if process and process.poll() is None else current.get("pid")
+    if not pid or not is_pid_alive(pid):
+        current.update({
+            "status": "stopped",
+            "running": False,
+            "endedAt": datetime.now().isoformat(),
+        })
+        atomic_write_json(lock_path(project_dir), current)
+        return {"ok": True, "running": False, "signals": [], "lock": current}
+
+    stop_payload = {
+        "requestedAt": datetime.now().isoformat(),
+        "pid": pid,
+        "mode": "graceful-after-current-edit",
+    }
+    atomic_write_json(stop_request_path(project_dir), stop_payload)
+    current.update({
+        "status": "stopping",
+        "running": True,
+        "stopRequestedAt": datetime.now().isoformat(),
+        "stopMode": "graceful-after-current-edit",
+    })
+    atomic_write_json(lock_path(project_dir), current)
+    running = is_pid_alive(int(pid))
+    updated = read_json_file(lock_path(project_dir), {}) or current
+    updated.update({
+        "status": "stopping" if running else "stopped",
+        "running": running,
+        "stopSignals": [],
+        "stopCheckedAt": datetime.now().isoformat(),
+    })
+    if not running:
+        updated["endedAt"] = datetime.now().isoformat()
+    atomic_write_json(lock_path(project_dir), updated)
+    return {"ok": True, "running": running, "signals": [], "lock": updated}
 
 
 @audiobook_router.get("/{email}/{project}/logs/stream")

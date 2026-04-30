@@ -546,6 +546,19 @@ textarea {
   background: linear-gradient(180deg, rgba(43, 103, 138, 0.98), rgba(27, 71, 97, 0.98));
 }
 
+.button.danger,
+.mini-button.danger {
+  color: #fff3f0;
+  border-color: rgba(218, 111, 91, 0.62);
+  background: linear-gradient(180deg, rgba(131, 54, 42, 0.98), rgba(88, 35, 31, 0.98));
+}
+
+.button.danger:hover:not(:disabled),
+.mini-button.danger:hover:not(:disabled) {
+  border-color: rgba(244, 145, 119, 0.82);
+  background: linear-gradient(180deg, rgba(153, 63, 48, 0.98), rgba(103, 41, 35, 0.98));
+}
+
 .button.secondary,
 .button.compact {
   color: #cad5dc;

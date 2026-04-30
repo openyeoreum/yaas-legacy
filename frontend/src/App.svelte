@@ -52,6 +52,7 @@
   let loading = false
   let saving = false
   let runStarting = false
+  let stopping = false
   let statusText = '대기 중'
   let editDirty = false
   let voiceDirty = false
@@ -72,7 +73,7 @@
   let logoMissing = false
 
   $: locked = Boolean(state?.lock?.running)
-  $: generationBusy = locked || runStarting
+  $: generationBusy = locked || runStarting || stopping
   $: projectBase = projectApiBase(selected)
   $: logoSrc = LOGO_CANDIDATES[logoIndex] || ''
   $: masterFiles = state?.audio?.master || []
@@ -414,7 +415,9 @@
       voiceDirty = false
       musicDirty = false
       configDirty = false
-      statusText = stateData?.lock?.running ? '생성 중 · 읽기 전용' : '준비 완료'
+      statusText = stateData?.lock?.status === 'stopping'
+        ? '종료 요청됨 · 현재 Edit 완료 대기'
+        : (stateData?.lock?.running ? '생성 중 · 읽기 전용' : '준비 완료')
       if (stateData?.lock?.running && stateData?.lock?.logPath) openLogStream()
     } catch (error) {
       statusText = error.message
@@ -525,8 +528,28 @@
     }
   }
 
+  async function stopYaas() {
+    if (!selected || !locked || stopping) return
+    stopping = true
+    logsOpen = true
+    statusText = 'YaaS 종료 신호 전송 중'
+    try {
+      const stopData = await request(`${projectBase}/stop`, { method: 'POST', body: JSON.stringify({}) })
+      state = {
+        ...(state || {}),
+        lock: stopData.lock || state?.lock,
+      }
+      statusText = stopData.running ? 'YaaS 종료 대기 중' : 'YaaS 종료 완료'
+      await loadProjectData()
+    } catch (error) {
+      statusText = `종료 실패: ${error.message}`
+    } finally {
+      stopping = false
+    }
+  }
+
   async function releaseLock() {
-    if (!selected) return
+    if (!selected || locked) return
     try {
       await request(`${projectBase}/lock/release`, { method: 'POST', body: JSON.stringify({}) })
       await loadProjectData()
@@ -929,10 +952,17 @@
         <Save size={14} />
         {activeSave.label}
       </button>
-      <button class="button primary topbar-run" on:click={runYaas} disabled={!selected || generationBusy || loading}>
-        <Rocket size={14} />
-        YaaS 실행
-      </button>
+      {#if locked || stopping}
+        <button class="button danger topbar-run" on:click={stopYaas} disabled={!selected || !locked || stopping}>
+          <Pause size={14} />
+          {stopping || state?.lock?.status === 'stopping' ? '종료 대기' : 'YaaS 멈춤'}
+        </button>
+      {:else}
+        <button class="button primary topbar-run" on:click={runYaas} disabled={!selected || runStarting || loading}>
+          <Rocket size={14} />
+          {runStarting ? '실행 요청' : 'YaaS 실행'}
+        </button>
+      {/if}
     </div>
   </header>
 
@@ -1253,7 +1283,9 @@
         <h2><Terminal size={15} /> Logs</h2>
         <div>
           <button class="mini-button" on:click={openLogStream} disabled={!selected}>연결</button>
-          <button class="mini-button" on:click={releaseLock} disabled={!selected || !state?.lock?.exists}>Lock 해제</button>
+          {#if locked}
+            <button class="mini-button danger" on:click={stopYaas} disabled={stopping}>{stopping || state?.lock?.status === 'stopping' ? '종료 대기' : 'YaaS 멈춤'}</button>
+          {/if}
         </div>
       </div>
       <pre class="logs">{logLines.length ? logLines.join('\n') : '로그 스트림 대기 중'}</pre>

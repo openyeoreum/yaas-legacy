@@ -33,6 +33,15 @@ from audoai.noise_removal import NoiseRemovalClient
 from agent.a4_Core.a42_Access.a424_GetProcessData import GetProject, SaveProject, GetSoundDataSet
 from agent.a6_Generation.a63_AudioBook.a634_VoiceSplit import VoiceSplit
 
+def YaaSStopRequested():
+    StopRequestPath = os.getenv("YAAS_STOP_REQUEST_PATH")
+    return bool(StopRequestPath and os.path.exists(StopRequestPath))
+
+def StopYaaSIfRequested(Context):
+    if YaaSStopRequested():
+        print(f"[ YaaS 안전 종료 요청 확인: {Context}. 현재 Edit 단위 작업을 완료했으므로 다음 작업을 시작하지 않고 종료합니다. ]")
+        sys.exit(0)
+
 ###########################################
 ##### SelectionGenerationKoChunks 생성 #####
 ###########################################
@@ -3014,6 +3023,7 @@ def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'Voi
         ### 생성시작 ###
         _LastPitchSwitch = 0
         for Update in UpdateTQDM:
+            StopYaaSIfRequested("다음 Edit 시작 전")
             UpdateTQDM.set_description(f"ChunkToSpeech: ({Update['ActorName']}), {Update['EditId']}: {Update['ActorChunk']}")
             EditId = Update['EditId']
             Tag = Update['Tag']
@@ -3385,6 +3395,7 @@ def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'Voi
                 AsyncFutures.append(AsyncExecutor.submit(ExecuteVoiceJob, Job, ScheduledStart))
                 if len(AsyncFutures) >= AsyncMaxWorkers:
                     CollectAsyncVoiceJobs()
+                    StopYaaSIfRequested("현재 비동기 Edit 배치 완료 후")
             else:
                 Result = ExecuteVoiceJob(Job)
                 if Result['ChangedName'] != 'Continue':
@@ -3399,9 +3410,11 @@ def VoiceLayerSplitGenerator(projectName, email, GenLang = 'Ko', Narrator = 'Voi
                 CollectAsyncVoiceJobs()
             finally:
                 AsyncExecutor.shutdown(wait = True)
+            StopYaaSIfRequested("마지막 비동기 Edit 배치 완료 후")
 
     ## 최종 생성된 음성파일 합치기 ##
     time.sleep(0.1)
+    StopYaaSIfRequested("음성 생성 완료 후 최종 병합 전")
     EditGenerationKoChunks = VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath, Narrator, CloneVoiceName, CloneVoiceActorPath, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen, VolumeEqual = VolumeEqual)
     ## 최종 생성된 수정부분 음성파일 합치기 ##
     ModifiedVoiceGenerator(ModifyFolderPath, ModifyFolder, VolumeEqual)
